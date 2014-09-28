@@ -1,0 +1,34 @@
+<h1>Datacenter List</h1>
+<script>
+    var options = {
+    valueNames: ['id', 'name', 'code', 'city', 'country']
+    };
+
+    var datacenterList = new List('datacenter', options);
+</script>
+<div class='datacenter'>
+  <input type="text" class="search form-control" placeholder="Search datacenter" />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="id" style="display:none"></th>
+                <th class="sort" data-sort="name">Name</th>
+                <th class="sort" data-sort="code">Code</th>
+                <th class="sort" data-sort="city">City</th>
+                <th class="sort" data-sort="country">Country</th>
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each datacenters}}
+            <tr>
+                <td class="id" style="display:none;">{{@index}}</td>
+                <td class="name">{{name}}</td>
+                <td class="code"><a href=/location/datacenter/{{abb}}> {{abb}} </a></td>
+                <td class="city">{{city}}</td>
+                <td class="country">{{country}}</td>
+            </tr>  
+        {{/each}}
+        </tbody>
+    </table>
+    v2
+</div>

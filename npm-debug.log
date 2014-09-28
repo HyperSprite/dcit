@@ -1,0 +1,165 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose node symlink /usr/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ '/home/cdunavan/Dropbox/node/webdev-w-node-express/book',
+6 verbose install   [ 'body-parser',
+6 verbose install     'chai',
+6 verbose install     'connect',
+6 verbose install     'connect-bundle',
+6 verbose install     'connect-rest',
+6 verbose install     'cookie-parser',
+6 verbose install     'cors',
+6 verbose install     'csurf',
+6 verbose install     'express',
+6 verbose install     'express-logger',
+6 verbose install     'express-session',
+6 verbose install     'express-handlebars',
+6 verbose install     'formidable',
+6 verbose install     'grunt-contrib-less',
+6 verbose install     'loadtest',
+6 verbose install     'mongoose',
+6 verbose install     'morgan',
+6 verbose install     'nodemailer',
+6 verbose install     'q',
+6 verbose install     'session-mongoose',
+6 verbose install     'underscore',
+6 verbose install     'vhost',
+6 verbose install     'grunt',
+6 verbose install     'grunt-cafe-mocha',
+6 verbose install     'grunt-contrib-cssmin',
+6 verbose install     'grunt-contrib-jshint',
+6 verbose install     'grunt-contrib-uglify',
+6 verbose install     'grunt-exec',
+6 verbose install     'grunt-hashres',
+6 verbose install     'grunt-lint-pattern',
+6 verbose install     'mocha',
+6 verbose install     'restler',
+6 verbose install     'zombie' ] ]
+7 info preinstall dcit@0.0.1
+8 verbose readDependencies using package.json deps
+9 verbose already installed skipping connect@^2.19.5 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+10 verbose already installed skipping connect-bundle@0.0.5-beta /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+11 verbose already installed skipping connect-rest@^0.9.12 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+12 verbose already installed skipping cookie-parser@^1.1.0 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+13 verbose already installed skipping cors@^2.3.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+14 verbose already installed skipping csurf@^1.4.0 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+15 verbose already installed skipping express@~4.4.2 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+16 verbose already installed skipping express-logger@0.0.3 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+17 verbose already installed skipping express-session@^1.2.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+18 verbose cache add [ 'express-handlebars@~0.5.0', null ]
+19 verbose cache add name=undefined spec="express-handlebars@~0.5.0" args=["express-handlebars@~0.5.0",null]
+20 verbose parsed url { protocol: null,
+20 verbose parsed url   slashes: null,
+20 verbose parsed url   auth: null,
+20 verbose parsed url   host: null,
+20 verbose parsed url   port: null,
+20 verbose parsed url   hostname: null,
+20 verbose parsed url   hash: null,
+20 verbose parsed url   search: null,
+20 verbose parsed url   query: null,
+20 verbose parsed url   pathname: 'express-handlebars@~0.5.0',
+20 verbose parsed url   path: 'express-handlebars@~0.5.0',
+20 verbose parsed url   href: 'express-handlebars@~0.5.0' }
+21 verbose already installed skipping formidable@~1.0.14 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+22 verbose already installed skipping grunt-contrib-less@^0.11.3 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+23 verbose cache add name="express-handlebars" spec="~0.5.0" args=["express-handlebars","~0.5.0"]
+24 verbose parsed url { protocol: null,
+24 verbose parsed url   slashes: null,
+24 verbose parsed url   auth: null,
+24 verbose parsed url   host: null,
+24 verbose parsed url   port: null,
+24 verbose parsed url   hostname: null,
+24 verbose parsed url   hash: null,
+24 verbose parsed url   search: null,
+24 verbose parsed url   query: null,
+24 verbose parsed url   pathname: '~0.5.0',
+24 verbose parsed url   path: '~0.5.0',
+24 verbose parsed url   href: '~0.5.0' }
+25 verbose addNamed [ 'express-handlebars', '~0.5.0' ]
+26 verbose addNamed [ null, '>=0.5.0-0 <0.6.0-0' ]
+27 verbose already installed skipping loadtest@~0.2.11 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+28 verbose already installed skipping mongoose@^3.8.12 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+29 silly lockFile ccc78e5e-express-handlebars-0-5-0 express-handlebars@~0.5.0
+30 verbose lock express-handlebars@~0.5.0 /home/cdunavan/.npm/ccc78e5e-express-handlebars-0-5-0.lock
+31 verbose already installed skipping morgan@~1.1.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+32 verbose already installed skipping nodemailer@~0.6.5 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+33 silly addNameRange { name: 'express-handlebars',
+33 silly addNameRange   range: '>=0.5.0-0 <0.6.0-0',
+33 silly addNameRange   hasData: false }
+34 verbose already installed skipping q@^1.0.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+35 verbose already installed skipping session-mongoose@^0.4.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+36 verbose already installed skipping underscore@^1.6.0 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+37 verbose already installed skipping vhost@^2.0.0 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+38 verbose already installed skipping grunt@^0.4.5 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+39 verbose already installed skipping grunt-cafe-mocha@^0.1.12 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+40 verbose already installed skipping grunt-contrib-cssmin@^0.10.0 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+41 verbose already installed skipping grunt-contrib-jshint@^0.10.0 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+42 verbose already installed skipping grunt-contrib-uglify@^0.5.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+43 verbose already installed skipping grunt-exec@^0.4.5 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+44 verbose already installed skipping grunt-hashres@^0.4.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+45 verbose already installed skipping grunt-lint-pattern@^0.1.4 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+46 verbose already installed skipping mocha@~1.20.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+47 verbose already installed skipping restler@^3.2.2 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+48 verbose already installed skipping zombie@~2.0.0-alpha31 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+49 verbose already installed skipping body-parser@~1.3.0 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+50 verbose already installed skipping chai@~1.9.1 /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+51 verbose request where is /express-handlebars
+52 verbose request registry https://registry.npmjs.org/
+53 verbose request id b7094afdae299773
+54 verbose url raw /express-handlebars
+55 verbose url resolving [ 'https://registry.npmjs.org/', './express-handlebars' ]
+56 verbose url resolved https://registry.npmjs.org/express-handlebars
+57 verbose request where is https://registry.npmjs.org/express-handlebars
+58 info trying registry request attempt 1 at 13:06:01
+59 verbose etag "494DKWY45L2FC4UPU0KN5KQ6"
+60 http GET https://registry.npmjs.org/express-handlebars
+61 http 200 https://registry.npmjs.org/express-handlebars
+62 silly registry.get cb [ 200,
+62 silly registry.get   { date: 'Fri, 19 Sep 2014 20:06:01 GMT',
+62 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+62 silly registry.get     etag: '"6OA8R8XO49NPC92W2AW1KWO0X"',
+62 silly registry.get     'content-type': 'application/json',
+62 silly registry.get     'cache-control': 'max-age=60',
+62 silly registry.get     'content-length': '35545',
+62 silly registry.get     'accept-ranges': 'bytes',
+62 silly registry.get     via: '1.1 varnish',
+62 silly registry.get     age: '6945',
+62 silly registry.get     'x-served-by': 'cache-lax1421-LAX',
+62 silly registry.get     'x-cache': 'HIT',
+62 silly registry.get     'x-cache-hits': '1',
+62 silly registry.get     'x-timer': 'S1411157161.359469,VS0,VE42',
+62 silly registry.get     vary: 'Accept',
+62 silly registry.get     'keep-alive': 'timeout=10, max=50',
+62 silly registry.get     connection: 'Keep-Alive' } ]
+63 silly addNameRange number 2 { name: 'express-handlebars',
+63 silly addNameRange   range: '>=0.5.0-0 <0.6.0-0',
+63 silly addNameRange   hasData: true }
+64 silly addNameRange versions [ 'express-handlebars',
+64 silly addNameRange   [ '0.0.1',
+64 silly addNameRange     '0.0.2',
+64 silly addNameRange     '1.0.0-rc-1',
+64 silly addNameRange     '1.0.0-rc-2',
+64 silly addNameRange     '1.0.0',
+64 silly addNameRange     '1.0.1',
+64 silly addNameRange     '1.0.2',
+64 silly addNameRange     '1.0.3',
+64 silly addNameRange     '1.1.0' ] ]
+65 silly lockFile ccc78e5e-express-handlebars-0-5-0 express-handlebars@~0.5.0
+66 silly lockFile ccc78e5e-express-handlebars-0-5-0 express-handlebars@~0.5.0
+67 error notarget No compatible version found: express-handlebars@'>=0.5.0-0 <0.6.0-0'
+67 error notarget Valid install targets:
+67 error notarget ["0.0.1","0.0.2","1.0.0-rc-1","1.0.0-rc-2","1.0.0","1.0.1","1.0.2","1.0.3","1.1.0"]
+67 error notarget
+67 error notarget This is most likely not a problem with npm itself.
+67 error notarget In most cases you or one of your dependencies are requesting
+67 error notarget a package version that doesn't exist.
+68 error System Linux 3.13.0-35-generic
+69 error command "/usr/bin/node" "/usr/bin/npm" "install"
+70 error cwd /home/cdunavan/Dropbox/node/webdev-w-node-express/book
+71 error node -v v0.10.32
+72 error npm -v 1.4.28
+73 error code ETARGET
+74 verbose exit [ 1, true ]
