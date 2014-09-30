@@ -20,28 +20,43 @@ function smartJoin(arr, separator){
 	}).join(separator);
 }
 
+var dbqCity = {
+    dKey: 'conType',
+    dVal: 'Main',
+    dRet: 'city'
+};
+var dbqCountry = {
+    dKey: 'conType',
+    dVal: 'Main',
+    dRet: 'country'
+};
 
 
 //working
 exports.datacenterOne = function(req,res,next){
     console.log(req.params.datacenter);
     if (req.params.datacenter === 'list'){
-    // this looks for "list" as the / url. if it exists, ot prints the datacenter list
+    // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
             var context = {
                 datacenters: datacenters.map(function(datacenter){
                     var dc = datacenter;
+                    //console.log(datacenter);
                     return {
                         name: dc.fullName,
                         abb: dc.abbreviation,
                         id: dc._id,
-                        city: dc.city,
-                        country: dc.country,
-                        };
+                        city:stringThings.arrayByType(dc.contacts,dbqCity),
+                        country:stringThings.arrayByType(dc.contacts,dbqCountry),
+                    };
                 })
             };
             res.render('location/datacenter-list', context);
         });    
+    //} else {
+    //this is the DC edit block. Looks for "edit" in the URL and redirects to a form.
+    
+    
     } else {
     // this takes the abbreviation and displays the matching datacenter
     Datacenter.findOne({abbreviation: req.params.datacenter},function(err,datacenter){
@@ -52,18 +67,41 @@ exports.datacenterOne = function(req,res,next){
             var context ={
                 id:dc._id,
                 name:dc.fullName,
-                address: stringThings.addressCleaner(dc),
-                city:dc.city,
-                state:dc.state,
-                zip:dc.zip,
-                lat:dc.lat,
-                lon:dc.lon,
-                crOn: stringThings.dateMod(dc.createdOn),               
+                crOn: stringThings.dateMod(dc.createdOn),
+                contacts: dc.contacts.map(function(contact){
+                    var ct = contact;
+                    return {
+                        conType: ct.conType,
+                        conName: ct.conName,
+                        address1: ct.address1,
+                        address: stringThings.addressCleaner(ct),
+                        city:ct.city,
+                        state:ct.state,
+                        zip:ct.zip,
+                        lat:ct.lat,
+                        lon:ct.lon,
+                        conEmail: ct.conEmail,
+                        conURL: ct.conURL,
+                        conPhones: ct.conPhones.map(function(phone){
+                            var po = phone;
+                            return {
+                                conPhoNum: po.conPhoNumber,
+                                conPhoType: po.conPhoType,
+                            };
+                        }),
+                        conNotes: ct.conNotes.map(function(note){
+                            return {
+                                conNoteDate: note.conNoteDate,
+                                conNote: note.conNote,
+                            };
+                        }),
+                    };
+                }),
                 };
         console.log(context);
         res.render('location/datacenter', context);  
         });
-     };   
+     }
 };
 
 // saving this block of code, it displays the datacenter details but I want to make it a view

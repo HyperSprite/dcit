@@ -135,47 +135,73 @@ switch(app.get('env')){
 // initialize datacenters
 Datacenter.find(function(err, datacenters){
     if(datacenters.length) return;
+
+    new Datacenter({
+        fullName: 'Test Datacenter',
+        abbreviation: 'Test-dc',
+        createdOn: Date(),
+        modifiedOn: Date(),
+        contacts:[{
+            conType:'Main',
+            conName:'Main',
+            address1: 'Test Datacenter Inc.',
+            address2: '1122 Boogieboogie Ave.',
+            city: 'Central',
+            state: 'CA',
+            country: 'US',
+            zip: '95111',
+            lat: 37.3007582,
+            lon: 121.8336904,
+            conURL:'www.google.com',
+            conPhones:[{conPhoNumber:5555551212,conPhoType:'Main'}],
+            conNotes: [{conNoteDate: Date(),conNote: '1 - No notes'}],
+            },
+            {
+            conType:'Support',
+            conName:'Support',
+            conEmail:'support@testcompany.com',
+            conPhones:[{conPhoNumber:5555551100,conPhoType:'Support'}],
+            conNotes:[{conNoteDate: Date(),conNote: '2 - No notes'}],
+            }
+        ],
+   
+    }).save();
     
     new Datacenter({
         fullName: 'RagingWire Sacramento',
         abbreviation: 'rsys-dc02',
-        address1: 'Oracle/Responsys\n CO Raging Wire Data Center',
-        address2: '1200 Striker Ave.',
-        city: 'Sacramento',
-        state: 'CA',
-        country: 'US',
-        zip: '95834-1157',
-        lat: 38.6505624,
-        lon: -121.4895199,
         createdOn: Date(),
         modifiedOn: Date(),
-        contact:[{
-                        conType:'Administrative',
-                        conName:'Main',
-                        conURL:'www.ragingwire.com',
-                        conPhone:[{
-                                            conPhoNumber:9162863000,
-                                            conPhoType:'Main',
-                                            }],
-
-                        },
-                        {
-                        conType:'Support',
-                        conName:'Support',
-                        conEmail:'support@ragingwire.com',
-                        conPhone:[{
-                                            conPhoNumber:9162864090,
-                                            conPhoType:'Operation Control Center 24/7',
-                                            }],
-                        notes: [{
-                                        date: Date(),
-                                        notes: 'Current Contract End Date: 11/30/2016',
-                                        }],
-                        },
-                        ],
-    
+        contacts:[{
+            conType:'Main',
+            conName:'Main',
+            address1: 'Oracle/Responsys - CO Raging Wire Data Center',
+            address2: '1200 Striker Ave.',
+            city: 'Sacramento',
+            state: 'CA',
+            country: 'US',
+            zip: '95834-1157',
+            lat: 38.6505624,
+            lon: -121.4895199,
+            conURL:'www.ragingwire.com',
+            conPhones:[{conPhoNumber:9162863000,conPhoType:'Main',}],
+            },
+            {
+            conType:'Support',
+            conName:'Support',
+            conEmail:'support@ragingwire.com',
+            conPhones:[{
+                conPhoNumber:9162864090,
+                conPhoType:'Operation Control Center 24/7'}],
+            conNotes: [{conNoteDate: Date(),conNote: 'Current Contract End Date: 11/30/2016'}],
+            },
+        ],
+   
     }).save();
-});
+    console.log("created new Datacenters");
+
+
+    });
 
 // initialize vacations
 Vacation.find(function(err, vacations){

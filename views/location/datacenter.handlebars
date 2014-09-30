@@ -1,11 +1,20 @@
 <h2>{{name}}</h2>
 
 <div class="datacenter">
-<p>{{{address}}}<br>
-{{city}}, {{state}} {{zip}}<br>
-<a href="https://www.google.com/maps/place/{{lat}},{{lon}}">Find on Google</a><br>
-Created On: {{crOn}}</p>
 
-
+    {{#each contacts}}
+    {{#if conName}}Name: {{conName}}<br>{{/if}}
+    {{#if conType}}Type: {{conType}}<br>{{/if}}
+    {{#if address1}}Address: {{{address}}}<br>{{/if}}
+    {{#if city}}{{city}}, {{state}} {{zip}}<br>{{/if}}
+    {{#if lat}}<a href="https://www.google.com/maps/place/{{lat}},{{lon}}">Find on Google</a><br>{{/if}}
+    {{#if conEmail}}Email: <a href="mailto:{{conEmail}}" target="_top">{{conEmail}}</a><br>{{/if}}
+    {{#if conURL}}URL: <a href="{{conURL}}" target="_top">{{conURL}}</a><br>{{/if}}
+            {{#each conPhones}}
+            Phone: {{conPhoNum}} Type: {{conPhoType}}<br>
+            {{/each}}
+    <br>
+    {{/each}}
+    Created On: {{crOn}}
 </div>
 

@@ -1,13 +1,14 @@
 <h1>Datacenter List</h1>
 <script>
+    
     var options = {
     valueNames: ['id', 'name', 'code', 'city', 'country']
     };
-
     var datacenterList = new List('datacenter', options);
 </script>
-<div class='datacenter'>
-  <input type="text" class="search form-control" placeholder="Search datacenter" />
+<div id="datacenter">
+  <input class="search form-control" placeholder="Search" />
+  <button class="sort" data-sort"name">Sort by Name</button>
     <table class="table table-striped">
         <thead>
             <tr>
