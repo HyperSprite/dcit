@@ -1,0 +1,338 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/asset/equipment/list">Equipment</a></li>
+  {{#if abbreviation}} <li><a href="/asset/equipment/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>{{/if}}
+  <li>{{equipSN}}</li>
+</ol>
+
+<hr>
+<div class="racks">
+    <h4>{{#if equipSN}}Equipment{{else}}New Equipmnt{{/if}}</h4>
+    <div class="datacenter"> 
+
+<div class="formContainer">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/asset/equipment/{{equipSN}}" method="POST">
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        {{#if equipSN}}
+        <div class="form-group">
+            <label for="field-equipSN" class="col-sm-2 control-label">Serial Number</label>
+            <div class="col-sm-4">
+                {{equipSN}}<br>
+            </div>
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldNickname" name="rackNickname" placeholder="*Required" required>
+            </div>
+        </div>
+        {{/if}}        
+        <div class="form-group">
+            <label for="field-equipLocationRack" class="col-sm-2 control-label" >Location</label>
+            <div class="col-sm-3">
+                <input list="equipLocationRack" id="field-equipLocationRack" class="form-control" value="{{equipLocationRack}}" > <!-- may need name= name="equipType" -->
+                    <datalist id="equipLocationRack">
+                        {{#each rackUnique}}
+                        <option {{{this}}} >{{this}}</option>
+                        {{/each}}
+                    </datalist>
+            </div>
+            <div class="col-sm-1">
+                <select id="field-equipLocationRu"  name="equipLocationRu" class="form-control"  >
+                <!-- <option {{{selOption "" equipStatus}}}  >Current Status</option> -->
+                    {{#each rackrUs}}
+                    <option {{{selOption this ../equipLocationRu}}} >{{this}}</option>
+                    {{/each}}
+                    
+				</select>
+            </div>
+         </div>
+
+        
+        <div class="form-group">
+            <label for="field-InventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
+            <div class="col-sm-4">
+                <input type="checkbox" name="InventoryStatus" checked="{{InventoryStatus}}">
+            </div>
+        </div>
+                <div class="form-group">
+            <label for="field-equipIsVirtual" class="col-sm-2 control-label"  >Is Virtual</label>
+            <div class="col-sm-4">
+                <input type="checkbox" name="equipIsVirtual" checked="{{equipIsVirtual}}">
+            </div>
+        </div>
+        <hr>
+        <ul id="eachUl"class="list-unstyled">    
+            <li id="eachLi" class="eachLi">
+       
+
+ 
+        <div class="form-group">
+            <label for="field-Status" class="col-sm-2 control-label" >Status</label>
+            <div class="col-sm-4">
+                <select id="fieldrackStatus" name="rackStatus" class="form-control"  >
+                <!-- <option {{{selOption "" equipStatus}}}  >Current Status</option> -->
+                    {{#each optEquipStatus}}
+                    <option {{{selOption this ../equipStatus}}} >{{this}}</option>
+                    {{/each}}
+                    
+				</select>
+
+            </div>
+        </div>  
+        
+                <div class="form-group">
+            <label for="field-equipType" class="col-sm-2 control-label" >Type</label>
+            <div class="col-sm-4">
+               <select id="field-equipType" name="equipType" class="form-control" > 
+                <!--     <option {{{selOption "" equipType}}}  >Current Status</option>-->
+                    {{#each optEquipType}}
+                    <option {{{selOption this ../equipType}}} >{{this}}</option>
+                    {{/each}}
+                    
+				</select>
+
+            </div>
+        </div> 
+        
+        <div class="form-group">
+            <label for="field-equipAssetTag" class="col-sm-2 control-label" >Asset Tag</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipAssetTag" name="equipAssetTag"  value="{{equipAssetTag}}" placeholder="If availible">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-equipTicketNumber" class="col-sm-2 control-label" >Ticket Number</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipTicketNumber" name="equipTicketNumber"  value="{{equipTicketNumber}}" placeholder="Internal">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-equipMake" class="col-sm-2 control-label" >Make</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipMake" name="equipMake"  value="{{equipMake}}" placeholder="Oracle, Dell, HP">
+            </div>
+        </div>
+        <h4>Hardware</h4>
+        <div class="form-group">
+            <label for="field-equipModel" class="col-sm-2 control-label" >Model</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipModel" name="equipModel"  value="{{equipModel}}" placeholder="Sun x4-2, DL360 G6">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-equipSubModel" class="col-sm-2 control-label" >Sub Model</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipSubModel" name="equipSubModel"  value="{{equipSubModel}}" placeholder="v3, Type 10">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-equipRUHieght" class="col-sm-2 control-label" >Hieght in RU</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-equipFirmware" class="col-sm-2 control-label" >Firmware</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipFirmware" name="equipFirmware"  value="{{equipFirmware}}" >
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-equipIPMIv" class="col-sm-2 control-label" >IPMI version</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipIPMIv" name="equipIPMIv"  value="{{equipIPMIv}}">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-equipMobo" class="col-sm-2 control-label" >Motherboard</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipMobo" name="equipMobo"  value="{{equipMobo}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-equipCPUCount" class="col-sm-2 control-label" >CPU count</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="equipCPUCount" name="equipCPUCount"  value="{{equipCPUCount}}" placeholder="Physical CPUs">
+            </div>
+        </div>
+                <div class="form-group">
+            <label for="field-equipCPUCores" class="col-sm-2 control-label" >CPU Cores</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="equipCPUCores" name="equipCPUCores"  value="{{equipCPUCores}}" placeholder="Cores per proc">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipCPUType" class="col-sm-2 control-label" >CPU Type</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipCPUType" name="equipCPUType"  value="{{equipCPUType}}" placeholder="Make, model, speed etc.">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipMemTotal" class="col-sm-2 control-label" >Memory Total</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="equipMemTotal" name="equipMemTotal"  value="{{equipMemTotal}}" placeholder="16, 256 Numbers only">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipMemType" class="col-sm-2 control-label" >Memory Type</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipMemType" name="equipMemType"  value="{{equipMemType}}" placeholder="16gb DDR3 Hynix PN">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipRaidType" class="col-sm-2 control-label" >Raid Card Type</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipRaidType" name="equipRaidType"  value="{{equipRaidType}}" placeholder="Adaptec 256gb BBU">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipRaidLayout" class="col-sm-2 control-label" >Raid Layout</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipRaidLayout" name="equipRaidLayout"  value="{{equipRaidLayout}}" placeholder="1,10 csv">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipHDDCount" class="col-sm-2 control-label" >HDD count</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipHDDCount" name="equipHDDCount"  value="{{equipHDDCount}}" placeholder="8">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipHDDType" class="col-sm-2 control-label" >HDD Type</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipHDDType" name="equipHDDType"  value="{{equipHDDType}}" placeholder="250gb SAS 10k 2.5">
+            </div>
+        </div>     
+                <div class="form-group">
+            <label for="field-equipPSUCount" class="col-sm-2 control-label" >PSU Count</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipPSUCount" name="equipPSUCount"  value="{{equipPSUCount}}" placeholder="If availible">
+            </div>
+        </div>     
+        <div class="form-group">
+            <label for="field-equipPSUDraw" class="col-sm-2 control-label" >Power Draw in W</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="equipPSUDraw" name="equipPSUDraw"  value="{{equipPSUDraw}}" placeholder="200 in Watts">
+            </div>
+        </div>   
+        <div class="form-group">
+            <label for="field-equipAddOns" class="col-sm-2 control-label" >Add Ons</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipAddOns" name="equipAddOns"  value="{{equipAddOns}}" placeholder="1.2gb FusionIO">
+            </div>
+        </div>   
+        <div class="form-group">
+            <label for="field-equipRecieved" class="col-sm-2 control-label" >Date Recieved</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="equipRecieved" name="equipRecieved"  value="{{equipRecieved}}" >
+            </div>
+        </div>   
+        <div class="form-group">
+            <label for="field-equipAcquisition" class="col-sm-2 control-label" >Date Aquired</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" >
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipInService" class="col-sm-2 control-label" >Date First in Serivce</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="equipInService" name="equipInService"  value="{{equipInService}}" >
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipPONum" class="col-sm-2 control-label" >PO Number</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipPONum" name="equipPONum"  value="{{equipPONum}}">
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipInvoice" class="col-sm-2 control-label" >Invoice</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipInvoice" name="equipInvoice"  value="{{equipInvoice}}">
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipProjectNum" class="col-sm-2 control-label" >Project Number</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipProjectNum" name="equipProjectNum"  value="{{equipProjectNum}}">
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipLicense" class="col-sm-2 control-label" >License</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipLicense" name="equipLicense"  value="{{equipLicense}}">
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipMaintAgree" class="col-sm-2 control-label" >Maintenance Agreement</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipMaintAgree" name="equipMaintAgree"  value="{{equipMaintAgree}}" >
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipPurchaseType" class="col-sm-2 control-label" >Purchase Type</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipPurchaseType" name="equipPurchaseType"  value="{{equipPurchaseType}}" placeholder="Purchase, Lease">
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipPurchaser" class="col-sm-2 control-label" >Purchaser</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipPurchaser" name="equipPurchaser"  value="{{equipPurchaser}}" placeholder="Oracle, Company before M&A">
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipPurchaseTerms" class="col-sm-2 control-label" >Purchase Terms</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipPurchaseTerms" name="equipPurchaseTerms"  value="{{equipPurchaseTerms}}" placeholder="3 year lease">
+            </div>
+        </div>          
+                        <div class="form-group">
+            <label for="field-equipPurchaseEnd" class="col-sm-2 control-label" >Purcahse End</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="equipPurchaseEnd" name="equipPurchaseEnd"  value="{{equipPurchaseEnd}}" placeholder="3 year lease">
+            </div>
+        </div>   
+                <div class="form-group">
+            <label for="field-equipNotes" class="col-sm-2 control-label">Notes</label>
+            <div class="col-sm-4">
+                <textarea rows="3" class="form-control" id="fieldequipNotes" name="equipNotes">{{equipNotes}}</textarea>
+            </div>
+        </div>
+        
+
+    </ul>    
+     <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if equipSN}} formaction='/asset/equipment/{{equipSN}}' {{else}}formaction='/asset/equipment/{{abbreviation}}'{{/if}} >
+            </div>
+        </div>
+     </form><form id="formCancel"></form> 
+     
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script> 
+            (function($){ 
+                function processForm( e ){
+                $.ajax({ 
+                    url: '/go/input', 
+                    dataType: 'text', 
+                    type: 'get', 
+                    contentType: 'application/x-www-form-urlencoded', 
+                    data: $(this).serialize(), 
+                    success: function( data, textStatus, jQxhr ){
+                        $('#response pre').html( data ); 
+                        }, error: function( jqXhr, textStatus, errorThrown ){
+                            console.log( errorThrown ); 
+                        } 
+                }); 
+                e.preventDefault(); 
+                } $('#my-form').submit( processForm ); 
+            })(jQuery); 
+        </script>
+     
+
+        

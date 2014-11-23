@@ -1,0 +1,86 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/asset/equipment/list">Equipment</a></li>
+  {{#if abbreviation}} <li><a href="/asset/equipment/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>{{/if}}
+  
+  <li>{{equipSN}}</li>
+</ol>
+
+<hr>
+<div class="racks">
+    <h4>Equipment SN: {{equipSN}}</h4>
+    <ul id="eachUl"class="list-unstyled"> 
+            <li>
+            <div class="row">
+                <div class="col-sm-9">
+                {{#if systemName}}System: <a href="/asets/system/{{systemName}}">{{systemName}} {{{systemStatus}}}</a>{{/if}} 
+                {{#if equipLocation}}Location: <a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a>{{/if}}
+                {{#if equipTicketNumber}}Ticket: {{{equipTicketNumberlit}}}<br>{{/if}}
+                {{#if equipStatus}}Status: {{{equipStatuslit}}}<br>{{/if}}
+                {{#if equipAssetTag}}Asset Tag: {{equipAssetTag}}<br>{{/if}}
+                </div>
+                <hr>
+    
+                {{> assets/equipport-list}}
+                
+                <hr>
+                <div class="col-sm-9">
+                <br>
+                {{#if equipIsVirtual}} Is Virtual {{/if}}
+                {{#if equipMake}}<srong>{{equipMake}}</srong><br>{{/if}}
+                {{#if equipModel}}<srong>{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}</srong><br>{{/if}}
+                {{#if equipType}}Type: {{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
+                <br>
+                <strong>Hardware Details</strong><br>
+                {{#if equipFirmware}}Firmware: {{equipFirmware}}<br>{{/if}}
+                {{#if equipMobo}}Motherboard: {{equipMobo}}<br>{{/if}}
+                {{#if equipCPUCount}}CPU: {{equipCPUCount}} {{#if equipCPUCores}}x {{equipCPUCores}}{{/if}} {{#if equipCPUType}}: {{equipCPUType}}{{/if}}<br>{{/if}}
+                {{#if equipMemTotal}}Memory: {{equipCPUType}}{{#if equipMemType}} : {{equipMemType}}{{/if}}<br>{{/if}}
+                {{#if equipRaidType}}Raid: {{equipRaidType}}{{#if equipRaidLayout}} : {{equipRaidLayout}}{{/if}}<br>{{/if}}
+                {{#if equipHDDCount}}HDD: {{equipHDDCount}}{{#if equipHDDType}} : {{equipHDDType}}{{/if}}<br>{{/if}}
+                {{#if equipPSUCount}}PSU: {{equipPSUCount}}{{#if equipPSUDraw}} Total Draw: {{equipPSUDraw}}{{/if}}<br>{{/if}}
+                {{#if equipAddOns}}Add On Card: {{equipAddOns}}<br>{{/if}}
+                <br>
+                <strong>Timing</strong><br>
+                {{#if equipRecieved}}Received: {{equipRecieved}}<br>{{/if}}
+                {{#if equipAcquisition}}Acquisition: {{equipAcquisition}}<br>{{/if}}
+                {{#if equipInService}}In Service: {{equipInService}}<br>{{/if}}
+                <br>
+                <strong>Purchasing</strong><br>
+                {{#if equipPONum}}PO: {{equipPONum}}<br>{{/if}}
+                {{#if equipInvoice}}Invoice: {{equipInvoice}}<br>{{/if}}
+                {{#if equipProjectNum}}Project: {{equipProjectNum}}<br>{{/if}}
+                {{#if equipLicense}}License: {{equipLicense}}<br>{{/if}}
+                {{#if equipMaintAgree}}Maintenance Agreement: {{equipMaintAgree}}<br>{{/if}}
+                {{#if equipPurchaseType}}Type: {{equipPurchaseType}}<br>{{/if}}
+                {{#if equipPurchaser}}Purchaser: {{equipPurchaser}}<br>{{/if}}
+                {{#if equipPurchaseTerms}}Terms: {{equipPurchaseTerms}}<br>{{/if}}
+                {{#if equipPurchaseEnd}}End: {{equipPurchaseEnd}}<br>{{/if}}
+                <br>
+                {{#if equipNotes}}Notes: {{equipNotes}}<br>{{/if}}
+                {{#if createdBy}}Created By: {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
+                {{#if modifiedBy}}Modified By: {{modifiedBy}}{{#if modifiedOn}} {{modifiedOn}}{{/if}}<br>{{/if}}
+                
+                
+                <form id="deleteform" action="/asset/equipmentkdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
+                    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                    <input type="hidden" name="rackUnique" value="{{rackUnique}}">
+                    <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+                </form>
+                <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+                <form id=formCopy></form>
+                <input type='submit' class='btn btn-warning btn-xs' formaction='/asset/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='Edit Equipment'>
+                <input type='submit' class='btn btn-info btn-xs' formaction='/asset/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='Copy Equipment'>
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete Equipment</button>
+                </div>
+            </div>
+            </li><br>
+        </ul>
+     
+
+
+    
+    
+</div>
+
+

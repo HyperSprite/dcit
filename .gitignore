@@ -1,5 +1,6 @@
 # ignore packages installed by npm
 node_modules*
+dunp*
 
 # put any other files you don't want to check in here,
 # such as .DS_Store (OSX), *.bak, etc.
@@ -7,6 +8,8 @@ node_modules*
 
 # we don't want to accidentally check our secret credentials into the repo
 credentials.js
+seedDataLoad.js
+scraps2.html
 
 # don't commit log files
 log

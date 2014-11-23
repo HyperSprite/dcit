@@ -1,67 +1,63 @@
 var main = require('./handlers/main.js'),
-	contest = require('./handlers/contest.js'),
-	vacation = require('./handlers/vacation.js'),
-	cart = require('./handlers/cart.js'),
-	cartValidation = require('./lib/cartValidation.js'),
-	contact = require('./handlers/contact.js'),
 	samples = require('./handlers/sample.js'),
-	customerController = require('./controllers/customer.js'),
-    location = require('./handlers/location.js');
+    location = require('./handlers/location.js'),
+    rack = require('./handlers/rack.js'),
+    equipment = require('./handlers/equipment.js'),
+    admin = require('./handlers/admin.js'),
+    ajax = require('./handlers/ajax.js');
 
 module.exports = function(app){
 
 	// miscellaneous routes
 	app.get('/', main.home);
-	app.get('/about', main.about);
-	app.get('/newsletter', main.newsletter);
-	app.post('/newsletter', main.newsletterProcessPost);
-	app.get('/newsletter/archive', main.newsletterArchive);
-	app.get('/thank-you', main.genericThankYou);
+    app.get('/about', main.about);
 
-	// contest routes
-	app.get('/contest/vacation-photo', contest.vacationPhoto);
-	app.post('/contest/vacation-photo/:year/:month', contest.vacationPhotoProcessPost);
-	app.get('/contest/vacation-photo/entries', contest.vacationPhotoEntries);
-
-	// vacation routes
-	app.get('/vacations', vacation.list);
-	app.get('/vacation/:vacation', vacation.detail);
-	app.get('/notify-me-when-in-season', vacation.notifyWhenInSeason);
-	app.post('/notify-me-when-in-season', vacation.notifyWhenInSeasonProcessPost);
-
-	// shopping cart routes
-	app.get('/cart', cart.middleware, cartValidation.checkWaivers, cartValidation.checkGuestCounts, cart.home);
-	app.get('/cart/add', cart.addProcessGet);
-	app.post('/cart/add', cart.addProcessPost);
-	app.get('/cart/checkout', cart.checkout);
-	app.post('/cart/checkout', cart.checkoutProcessPost);
-	app.get('/cart/thank-you', cart.thankYou);
-	app.get('/email/cart/thank-you', cart.emailThankYou);
-	app.get('/set-currency/:currency', cart.setCurrency);
-
-	// contact
-	app.get('/request-group-rate', contact.requestGroupRate);
-	app.post('/request-group-rate', contact.requestGroupRateProcessPost);
-	app.get('/contact', contact.home);
-	app.post('/contact', contact.homeProcessPost);
 
 	// testing/sample routes
 	app.get('/jquery-test', samples.jqueryTest);
-	app.get('/nursery-rhyme', samples.nurseryRhyme);
-	app.get('/data/nursery-rhyme', samples.nurseryRhymeData);
 	app.get('/epic-fail', samples.epicFail);
 
-	// customer routes
-	customerController.registerRoutes(app);
-    
+   
     // locations
-        //datacenter
-        app.get('/location/datacenter/:datacenter', location.datacenterOne);
-        //working, do not touch
-        //app.get('/location/datacenter-list', location.datacenterList);
-        //app.get('/location/datacenter',locatioin.datacenterOne);
-        app.get('/location/datacenter-new', location.datacenterNew);
-        app.post('/location/datacenter-new', location.datacenterNewPost);
+        // URL is incoming / :datacenter is the req storage (this could have had a better name) 
+        // Next part is the export file.name in handlers dir.
+        app.get('/location/datacenter/:datacenter', location.datacenterPages);
+        app.post('/location/datacentercontact/:datacenter', location.datacenterContactPost);
+        app.post('/location/datacenterdelete/:datacenter', location.datacenterDelete);
+        app.post('/location/datacentersubdelete/:datacenter', location.datacenterSubDelete);
+        
+        app.post('/location/datacenterpost', location.datacenterPost);
         
 
+        
+        app.get('/location/datacentercage/:datacenter', location.datacenterCagePages);
+        app.post('/location/datacentercage/:datacenter', location.datacenterCagePost);
+        app.get('/location/datacenterpower/:datacenter', location.datacenterPowerPages);
+        app.post('/location/datacenterpower/:datacenter', location.datacenterPowerPost);
+        app.get('/location/rack/:datacenter', rack.dcRackPages);
+        app.post('/location/rack/:datacenter', rack.dcRackPost);
+        app.post('/location/rackdelete/:datacenter', rack.rackDelete);
+        app.post('/location/rackpower/:datacenter', rack.dcRackPowPost);
+        app.post('/location/racksubdelete/:datacenter', rack.rackSubDelete);
+
+        app.get('/asset/equipment/:datacenter', equipment.dcEquipPages);
+        app.get('/asset/equipmentsystem/:datacenter', equipment.dcEquipSysPages);
+        
+        // Admin 
+        
+        app.get('/admin/options/:datacenter', admin.optionsEdit);
+        app.post('/admin/optionspost', admin.optionsEditPost);
+        app.get('/admin/options', admin.options);
+        app.get('/admin/optionsadmin/dropDatacenter', admin.dropDatacenterGet);
+        app.get('/admin/optionsadmin/dropRack', admin.dropRackGet);
+        app.get('/admin/optionsadmin/dropOptionsdb', admin.dropOptionsdbGet);
+        app.get('/admin/optionsadmin/dropEquipment', admin.dropEquipmentGet);
+        app.get('/admin/optionsadmin/dropSystem', admin.dropSystemGet);
+        app.get('/admin/optionsadmin/seedDatacenter', admin.seedDatacetnerGet);
+        app.get('/admin/optionsadmin/seedOptionsdb', admin.seedOptionsdbGet);
+        app.get('/admin/optionsadmin/seedEquipment', admin.seedEquipmentGet);
+        app.get('/admin/optionsadmin/seedSystem', admin.seedSystemGet);
+
+        app.get('/go/input', ajax.get);
+        
 };

@@ -1,0 +1,43 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/location/datacenter/list">Datacenters</a></li>
+  <li><a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>
+  <li>Edit Power Mains<li>
+</ol>
+<h2>{{fullName}} - {{abbreviation}}</h2>
+{{#if foundingCompany}}{{foundingCompany}}{{/if}}<br>
+
+
+<script>
+$('form#datacenterForm').serializeJSON();
+</script>
+
+<div class="datacenter">
+
+
+<div class="formContainer">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/datacenterpower/{{abbreviation}}" method="POST">
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="id" value="{{id}}">
+        <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+
+       
+        <div class="form-group">
+            <label for="cageNotes" class="col-sm-2 control-label">Power Mains</label>
+            <div class="col-sm-4">
+                <textarea rows="6" class="form-control" id="fieldpowerNames" name="powerNames" placeholder="Comma Separated">{{powerNames}}</textarea>
+            </div>
+        </div>
+        
+         
+     <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                        
+                        <button type="submit" class="btn btn-default btn-xs">Submit</button>
+                        <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                        <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/location/datacenter/{{abbreviation}}'>
+            </div>
+        </div>
+     </form><form id="formCancel"></form> 
+</div>
+</div>

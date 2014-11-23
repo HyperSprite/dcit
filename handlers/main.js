@@ -1,8 +1,31 @@
-var fortune = require('../lib/fortune.js');
+var Datacenter = require('../models/datacenter.js'),
+    Rack = require('../models/rack.js');
 
+
+var fortune = require('../lib/fortune.js');
+    
 exports.home = function(req, res){
 	res.render('home');
 };
+
+exports.dropDatacenterGet = function(req,res){
+    dcit.dropDatacenter(Datacenter);
+	console.log("dropDatacenterGet");
+    res.render('home');    
+};
+
+exports.dropRackGet = function(req,res){
+    dcit.dropRack(Rack);
+    console.log('dropRackGet');
+	res.render('home');    
+};
+
+exports.seedDatacetnerGet = function(req,res){
+    seedDataLoad.seedDatacenter(Datacenter);
+    console.log('seedDatacetnerGet');
+	res.render('home');    
+};
+
 
 exports.about = function(req, res){
 	res.render('about', { 
@@ -54,12 +77,17 @@ exports.newsletterProcessPost = function(req, res){
 		};
 		return res.redirect(303, '/newsletter/archive');
 	});
-}
+};
 
 exports.newsletterArchive = function(req, res){
 	res.render('newsletter/archive');
-}
+};
 
 exports.genericThankYou = function(req, res){
 	res.render('thank-you');
-}
+};
+
+
+
+
+

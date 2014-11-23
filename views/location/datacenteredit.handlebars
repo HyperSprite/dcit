@@ -1,0 +1,67 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/location/datacenter/list">Datacenters</a></li>
+  <li>{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a>{{else}}New{{/if}}</li>
+  <li>Edit Datacenter<li>
+</ol>
+<h2>{{#if abbreviation}}{{fullName}} - {{abbreviation}}{{else}}New{{/if}}</h2>
+{{#if foundingCompany}}{{foundingCompany}}<br>{{/if}}
+<hr>
+
+
+<div class="formContainer">
+    <form class="form-horizontal datacenterForm" role="form" action="/location/datacenterpost" method="POST">
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="id" value="{{id}}">
+        
+        <div class="form-group">
+            <label for="fieldFullName" class="col-sm-2 control-label">Full Name *</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldFullName" name="fullName" value="{{fullName}}" placeholder="Name (required!)" required>
+            </div>
+        </div>
+        {{#if abbreviation}}
+        <div class="form-group">
+            <label for="fieldAbbreviation" class="col-sm-2 control-label">Code</label>
+            <div class="col-sm-4">
+        <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+        {{abbreviation}}<br>
+            </div>
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label for="fieldAbbreviation" class="col-sm-2 control-label">Code</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldAbbreviation" name="abbreviation"  value="{{abbreviation}}"placeholder="Abbreviation" required>
+            </div>
+        </div>
+        {{/if}}
+        <div class="form-group">
+            <label for="fieldFoundingCompany" class="col-sm-2 control-label"  >Founding Company</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldFoundingCompany" name="foundingCompany"  value="{{foundingCompany}}"placeholder="Founding Company">
+            </div>
+        </div>       
+        
+  
+     <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class='btn btn-default btn-xs'>Submit</button>        
+                {{#if id}}<button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>{{/if}}
+                
+            </div>
+        </div>
+     </form>
+
+
+            <form id="deleteform" action="/location/datacenterdelete/{{abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{abbreviation}}. This operation can not be undun')">
+            <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+            <input type="hidden" name="collectionName" value="datacenter">
+            </form>
+
+     
+     
+     
+</div>

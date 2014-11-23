@@ -1,0 +1,123 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/location/rack/list">Rack List</a></li>
+  <li><a href="/location/rack/{{rackUnique}}">{{rackUnique}}</a></li>
+  {{#if rackPowUnique}}<li>Edit {{rackPowUnique}}</li>
+  {{else}}<li>New Rack Circuit<li>
+  {{/if}}
+</ol>
+<h4>Rack: {{rackUnique}}</h>
+
+<div class="datacenter"> 
+
+<div class="formContainer">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/rackpower/{{rackUnique}}" method="POST">
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+        <input type="hidden" name="cageNickname" value="{{cageNickname}}">
+        <input type="hidden" name="cageName" value="{{cageName}}">
+        <input type="hidden" name="cageAbbreviation" value="{{cageAbbreviation}}">
+        <input type="hidden" name="id" value="{{rackParentDC}}">
+        <input type="hidden" name="cageId" value="{{rackParentCage}}">
+        <input type="hidden" name="rackUnique" value="{{rackUnique}}">
+        {{#if rackPowUnique}}
+        <input type="hidden" name="rackPowUnique" value="{{rackPowUnique}}">
+        <input type="hidden" name="rackPowId" value="{{rackPowId}}">
+        {{else}}
+        <input type="hidden" name="rackPowUnique" value="new">        
+        {{/if}}
+
+        {{#if wasCopy}}
+        <input type="hidden" name="wasCopy" value="{{wasCopy}}">
+        {{/if}}
+   
+    <ul id="eachUl"class="list-unstyled">    
+        <li id="eachLi" class="eachLi">
+        <hr>
+     
+        {{#if rackPowMain}}
+        <div class="form-group">
+            <label for="fieldrackPowMain" class="col-sm-2 control-label">Circuit</label>
+            <div class="col-sm-4">
+            {{rackPowMain}}_{{rackPowCircuit}}<br>
+            </div>
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label for="fieldrackPowMain" class="col-sm-2 control-label" >Power Main</label>
+            <div class="col-sm-4">
+				<select id="fieldrackPowMain" class="form-control" name="rackPowMain" >
+                    <option {{{selOption "" rackPowMain}}} >Choose One</option>
+                    {{#each powerNames}}
+                    <option {{{selOption this rackPowMain}}} >{{this}}</option>
+                    {{/each}}
+				</select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fieldrackPowCircuit" class="col-sm-2 control-label"  >Nickname</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackPowCircuit" name="rackPowCircuit"  value="{{rackPowCircuit}}" placeholder="Phases seperated by , " required>
+            </div>
+        </div>        
+        {{/if}}
+      
+        <div class="form-group">
+            <label for="fieldrackPowStatus" class="col-sm-2 control-label" >Status</label>
+            <div class="col-sm-4">
+				<select id="fieldrackPowStatus" class="form-control"  name="rackPowStatus" >
+                    <option {{{selOption "" rackPowStatus}}}  >Current Status</option>
+                    {{#each optEquipStatus}}
+                    <option {{{selOption this ../rackPowStatus}}} >{{this}}</option>
+                    {{/each}}
+				</select>
+                
+            </div>
+        </div>        
+         <div class="form-group">
+            <label for="fieldrackPowVolts" class="col-sm-2 control-label">Volts</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="fieldrackPowVolts" name="rackPowVolts" value="{{rackPowVolts}}" placeholder="Volts?">
+            </div>
+        </div>        
+         <div class="form-group">
+            <label for="fieldrackPowPhase" class="col-sm-2 control-label" >Phase</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="fieldrackPowPhase" name="rackPowPhase" value="{{rackPowPhase}}" placeholder="1, 3 ?">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="fieldrackPowAmps" class="col-sm-2 control-label" >Amps</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="fieldrackPowAmps" name="rackPowAmps" value="{{rackPowAmps}}" placeholder="20, 30, 50 ?">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="fieldrackPowReceptacle" class="col-sm-2 control-label" >Receptical</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackPowReceptacle" name="rackPowReceptacle" value="{{rackPowReceptacle}}" placeholder="L5-20, L6-30 ?">
+            </div>
+        </div>        
+         
+        
+    </ul>    
+     <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/location/rack/{{rackUnique}}' >
+                {{#if rackPowUnique}}<button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button>{{/if}}
+            </div>
+        </div>
+     </form>
+     <form id="formCancel"></form>
+
+        <form id="deleteform" action="/location/racksubdelete/{{abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{conName}}')">
+                    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                    <input type="hidden" name="id" value="{{rackId}}">
+                    <input type="hidden" name="abbreviation" value="{{rackUnique}}">
+                    <input type="hidden" name="subId" value="{{rackPowId}}">
+                    <input type="hidden" name="subName" value="{{rackPowUnique}}">
+                    </form>
+</div>
+</div>

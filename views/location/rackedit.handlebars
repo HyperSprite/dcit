@@ -1,0 +1,162 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/location/rack/list">Rack List</a></li>
+  {{#if rackUnique}}<li>Edit {{rackUnique}}</li>
+  {{else}}<li>New Rack<li>
+  {{/if}}
+</ol>
+<h2>{{fullName}} - {{abbreviation}}</h2>
+{{#if foundingCompany}}{{foundingCompany}}{{/if}}<br>
+
+<div class="datacenter"> 
+
+<div class="formContainer">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/rack/{{abbreviation}}" method="POST">
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+
+        <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+
+        <input type="hidden" name="cageNickname" value="{{cageNickname}}">
+        <input type="hidden" name="cageName" value="{{cageName}}">
+        <input type="hidden" name="cageAbbreviation" value="{{cageAbbreviation}}">
+        {{#if rackParentDC}}
+            <input type="hidden" name="id" value="{{rackParentDC}}">
+            <input type="hidden" name="cageId" value="{{rackParentCage}}">
+            <input type="hidden" name="wasCopy" value="{{wasCopy}}">
+        {{else}}
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="cageId" value="{{cageId}}">
+        {{/if}}
+   
+    <ul id="eachUl"class="list-unstyled">    
+        <li id="eachLi" class="eachLi">
+        <hr>
+        <input type="hidden" name="rackId" value="{{rackId}}">
+        
+        {{#if rackUnique}}
+        <div class="form-group">
+            <label for="fieldrackUnique" class="col-sm-2 control-label">Rack ID</label>
+            <div class="col-sm-4">
+        <input type="hidden" name="rackUnique" value="{{rackUnique}}">
+        {{rackUnique}}<br>
+            </div>
+        </div>
+        {{/if}}
+        {{#if rackNickname}}
+        <div class="form-group">
+            <label for="fieldrackNickname" class="col-sm-2 control-label">Nickname</label>
+            <div class="col-sm-4">
+                {{rackNickname}}<br>
+            </div>
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label for="fieldNickname" class="col-sm-2 control-label"  >Nickname</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldNickname" name="rackNickname"  value="{{rackNickname}}" placeholder="Rack Nickname?" required>
+            </div>
+        </div>
+        {{/if}}
+         <div class="form-group">
+            <label for="fieldrackName" class="col-sm-2 control-label"  >Name</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackName" name="rackName"  value="{{rackName}}" placeholder="Facility Rack Name?" required>
+            </div>
+        </div>
+
+         <div class="form-group">
+            <label for="fieldrUs" class="col-sm-2 control-label" >Rack Us</label>
+            <div class="col-sm-4">
+                <input type="number" max="99" class="form-control" id="fieldrUs" name="rUs" value="{{rUs}}" placeholder="Total Rack RUs">
+            </div>
+        </div> 
+     
+        <div class="form-group">
+            <label for="fieldStatus" class="col-sm-2 control-label" >Status</label>
+            <div class="col-sm-4">
+                <select id="fieldrackStatus" class="form-control"  name="rackStatus" >
+                    <option {{{selOption "" rackStatus}}}  >Current Status</option>
+                    {{#each optRackStatus}}
+                    <option {{{selOption this ../rackStatus}}} >{{this}}</option>
+                    {{/each}}
+				</select>
+            </div>
+        </div>        
+         <div class="form-group">
+            <label for="fieldrackDescription" class="col-sm-2 control-label"  >Description</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackDescription" name="rackDescription" value="{{rackDescription}}" placeholder="Description?">
+            </div>
+        </div>        
+         <div class="form-group">
+            <label for="fieldrackSN" class="col-sm-2 control-label" >SN</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackSN" name="rackSN" value="{{rackSN}}" placeholder="Serial Number">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="fieldrackHeight" class="col-sm-2 control-label" >Rack Height</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="fieldrackHeight" name="rackHeight" value="{{rackHeight}}" placeholder="Hight in CM">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="fieldrackWidth" class="col-sm-2 control-label" >Rack Width</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="fieldrackWidth" name="rackWidth" value="{{rackWidth}}" placeholder="Width in CM">
+            </div>
+        </div>        
+         <div class="form-group">
+            <label for="fieldrackDepth" class="col-sm-2 control-label" >Rack Depth</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" id="fieldrackDepth" name="rackDepth" value="{{rackDepth}}" placeholder="Rack Depth in CM">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="fieldrackLat" class="col-sm-2 control-label" >Floor X</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackLat" name="rackLat" value="{{rackLat}}" placeholder="Floor X position ">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="fieldrackLon" class="col-sm-2 control-label" >Floor Y</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackLon" name="rackLon" value="{{rackLon}}" placeholder="Floor Y position">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="fieldrackMake" class="col-sm-2 control-label" >Rack Make</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackMake" name="rackMake" value="{{rackMake}}" placeholder="Sun, CPI, etc.">
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="fieldrackModel" class="col-sm-2 control-label" >Rack Model</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldrackModel" name="rackModel" value="{{rackModel}}" placeholder="Exadata, ZFS, etc.">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="fieldrackNotes" class="col-sm-2 control-label">Notes</label>
+            <div class="col-sm-4">
+                <textarea rows="3" class="form-control" id="fieldrackNotes" name="rackNotes">{{rackNotes}}</textarea>
+            </div>
+        </div>
+        
+
+    </ul>    
+     <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if rackUnique}} formaction='/location/rack/{{rackUnique}}' {{else}}formaction='/location/datacenter/{{abbreviation}}'{{/if}} >
+            </div>
+        </div>
+     </form><form id="formCancel"></form> 
+               
+     
+</div>
+</div>

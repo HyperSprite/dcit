@@ -1,0 +1,34 @@
+    
+<h4>Equipment and Systems</h4>
+    <table class="table-sort table-sort-search ">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="rUs">DC_Cage_Rack_RU</th>
+                <th class="table-sort" data-sort="systemName">System Name</th>
+                <th class="table-sort" data-sort="systemStatus">System Status</th>
+                <th class="table-sort" data-sort="systemEnvironment">Environment</th>
+                <th class="table-sort" data-sort="systemRole">Role</th>                
+                <th class="table-sort" data-sort="equipmentName ">Equipment Name</th>
+                <th class="table-sort" data-sort="equipmentStatus">Equipment Status</th>
+                <th class="table-sort" data-sort="createdOn">Created On</th> 
+                <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each rUs}}
+            <tr>
+                
+                <td class="rUs">{{rUs}}</td>
+                <td class="systemName"><a href="/location/rack/{{systemName}}">{{systemName}}</a></td>
+                <td class="systemStatus">{{systemStatus}}</td>
+                <td class="systemEnvironment">{{systemEnvironment}}</td>
+                <td class="systemRole">{{systemRole}}</td>
+                <td class="equipmentName">{{equipmentName}}</td>
+                <td class="equipmentStatus">{{equipmentStatus}}</td>
+                <td class="createdOn">{{createdOn}}</td>
+                <td class="modifiedOn">{{modifiedOn}}</td>
+            </tr>  
+        {{/each}}
+  
+        </tbody>
+    </table>

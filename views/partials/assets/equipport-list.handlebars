@@ -1,0 +1,34 @@
+    
+<h4>Equipment and Systems</h4>
+    <table class="table-sort table-sort-search ">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="equipSN">Equipment</th>
+                <th class="table-sort" data-sort="equipPortsType">Type</th>
+                <th class="table-sort" data-sort="equipPortName">Name</th>
+                <th class="table-sort" data-sort="equipPortsAddr">Address</th>
+                <th class="table-sort" data-sort="equipPortsOpt">Options</th>                
+                <th class="table-sort" data-sort="createdOn">Created On</th> 
+                <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
+                <th class="table-sort" data-sort="portEdit">Edit<th>
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each equipPorts}}
+            <tr>
+                <td class="systemName"><a href="/asset/equipment/{{../equipSN}}">{{../equipSN}}</a></td>
+                <td class="systemStatus">{{equipPortsType}}</td>
+                <td class="systemEnvironment">{{equipPortName}}</td>
+                <td class="systemRole">{{equipPortsAddr}}</td>
+                <td class="equipmentStatus">{{equipPortsOpt}}</td>
+                <td class="createdOn">{{createdOn}}</td>
+                <td class="modifiedOn">{{modifiedOn}}</td>
+                <td class="portEdit"><form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+                <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
+                <input type='submit' class='btn btn-warning btn-xs' formaction='/asset/equipment/edit~{{equipPortsId}}-{{../equipSN}}' form="formEdit" formmethod="get" value='E'>
+                <input type='submit' class='btn btn-info btn-xs' formaction='/asset/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='C'></td>
+            </tr>  
+        {{/each}}
+  
+        </tbody>
+    </table>

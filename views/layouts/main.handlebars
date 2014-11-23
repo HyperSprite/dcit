@@ -3,30 +3,40 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+
+
+
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	    <title>Data Center Chronicle</title>
+	    <title>{{#if titleNow}}{{titleNow}} - {{/if}}DCIT</title>
 		{{#if showTests}}
 			<link rel="stylesheet" href="{{static '/vendor/mocha.css'}}">
 		{{/if}}
 		{{{_sections.head}}}
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        
+        <link rel="stylesheet" href="{{static '/vendor/tablesort/css/tablesort.css'}}">
+        <link rel="stylesheet" href="{{static '/vendor/tablesort/css/styles.css'}}">
 		<link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap.min.css'}}">
+        <link rel="stylesheet" href="{{static '/css/custom.css'}}">
         <style>
             body {
-                padding-top: 50px;
-                padding-bottom: 20px;
+                padding-top: 14px;
+                padding-bottom: 14px;
             }
         </style>
 		<link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap-theme.min.css'}}">
-		{{#each _bundles.css}}
+		{{!--
+        {{#each _bundles.css}}
 			<link rel="stylesheet" href="{{static .}}">
 		{{/each}}
+        --}}
 
 		<script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
+
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -37,17 +47,6 @@
 <!--			<div class="row">
 				<div class="col-sm-4">
 					<img src="{{logoImage}}" alt="Data Center Chronicle Logo">
-				</div>
-				<div class="col-sm-2 pull-right">
-					{{! The following represents a lot of code duplication, so we will probably want to
-						change this in the future }}
-					{{#if cartItems}}
-						<a href="/cart"><img class="cartIcon" src="{{static '/img/shop/cart_full.png'}}"
-							alt="Cart Empty"></a>
-					{{else}}
-						<a href="/cart"><img class="cartIcon" src="{{static '/img/shop/cart_empty.png'}}"
-							alt="Cart Contains {{cartItems}} Items"></a>
-					{{/if}}
 				</div>
 			</div>
 -->            
@@ -68,11 +67,22 @@
 
 			<footer>
             <ul>
-                <li><a href="/location/datacenter/list">List All Datacenters</a></li>
-                <li><a href="/jquery-test">jquery Test</a></li>
-                <li><a href="/nursery-rhyme">Nursery Rhyme</a></li>
-                <li><a href="/epic-fail">Epic Fail</a></li>
+                <li><a href="/location/datacenter/list">Datacenters</a></li>
+                <li><a href="/location/rack/list">Racks</a></li>
+                <li><a href="/asset/equipmentsystem/list">Equipment & Systems</a></li>
+                <li><a href="/asset/equipment/list">Equipment</a></li>
+                <li><a href="/admin/options">Options</a></li>
                 <li><a href="/">Home</a></li>
+                <br>
+                <li><a href="/jquery-test">jquery Test</a></li>
+                <li><a href="/epic-fail">Epic Fail</a></li>
+                <li><a href="/samples/base-css.html">Bootstrap sample Base CSS</a></li>
+                <li><a href="/samples/fluid-reverse.html">Bootstrap sample Fluid Reverese</a></li>
+                <li><a href="/samples/fluid.html">Bootstrap sample Fluid</a></li>
+                <li><a href="/samples/hero.html">Bootstrap sample Hero</a></li>
+                <li><a href="/samples/container-app.html">Bootstrap samples Container App</a></li>
+                <br>
+                
                 <li><a href="/about">About</a></li>
             </ul>
 				<p>&copy; Data Center Chronicle 2014</p>
@@ -81,13 +91,13 @@
 
         <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script>window.jQuery || document.write('<script src="{{static '/vendor/js/jquery-2.1.1.min.js'}}"><\/script>')</script>
-		{{! since we've move jquery to the end of the body (instead of in head), we should really rename this bundle
-			to something other than "head", but i'm leaving it for consistency with the book. }}
+		{{!-- since we've move jquery to the end of the body (instead of in head), we should really rename this bundle
+			to something other than "head", but i'm leaving it for consistency with the book. 
 		{{#each _bundles.js.head}}
 			<script src="{{static .}}"></script>
 		{{/each}}
     	{{{_sections.jquery}}}
-
+        --}}
 		{{#if showTests}}
 			<div id="mocha"></div>
 			<script src="{{static '/vendor/mocha.js'}}"></script>
@@ -104,7 +114,16 @@
 		{{/if}}
 
 		<script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
+        <script src="{{static '/vendor/tablesort/tablesort.js'}}"></script>
 		<script src="{{static '/js/main.js'}}"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js" />
+        <script src="{{static '/vendor/js/handlebars.min.js'}}"></script>
+        <script type="text/javascript">
+            
+            $(function () {
+                $('table.table-sort').tablesort();
+                // http://www.jqueryscript.net/table/jQuery-Plugin-For-Sortable-Searchable-Tables-Tablesort.html
+            });
+        </script>
+
     </body>
 </html>

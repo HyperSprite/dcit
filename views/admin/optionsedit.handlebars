@@ -1,0 +1,69 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/admin/">Admin</a></li>
+  <li><a href="/admin/options">Options</a></li>
+  <li>Edit {{optListName}}<li>
+</ol>
+
+
+<script>
+$('form#datacenterForm').serializeJSON();
+</script>
+
+<div class="datacenter">
+
+
+<div class="formContainer">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/admin/optionspost" method="POST">
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        {{#if optListName}}
+        <div class="form-group">
+        
+        <label for="optListName" class="col-sm-2 control-label">Option List Name</label>
+            <div class="col-sm-4">
+                {{optListName}}
+                <input type="hidden" name="id" value="{{id}}">
+            </div>
+        </div> 
+        {{else}}
+        <div class="form-group">
+        <label for="optListName" class="col-sm-2 control-label">Option List Name</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldoptListName" name="optListName"  value="{{optListName}}" placeholder="Name">
+            </div>
+        </div>
+        {{/if}}
+        {{#if optListKey}}
+        <div class="form-group">
+            <label for="optListKey" class="col-sm-2 control-label">Option List Key</label>
+            <div class="col-sm-4">
+                {{optListKey}}
+            </div>
+        </div> 
+        {{else}}
+        <div class="form-group">
+            <label for="optListKey" class="col-sm-2 control-label">Option List Key</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldoptListKey" name="optListKey"  value="{{optListKey}}" placeholder="optSomeThing">
+            </div>
+        </div>
+        {{/if}}
+        <div class="form-group">
+            <label for="optList" class="col-sm-2 control-label">Option Array</label>
+            <div class="col-sm-4">
+                <textarea rows="6" class="form-control" id="fieldpowerNames" name="optListArray" placeholder="Comma Separated">{{optListArray}}</textarea>
+            </div>
+        </div>
+        
+         
+     <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                        
+                        <button type="submit" class="btn btn-default btn-xs">Submit</button>
+                        <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                        <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/admin/options'>
+            </div>
+        </div>
+     </form><form id="formCancel"></form> 
+</div>
+</div>

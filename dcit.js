@@ -5,11 +5,20 @@ var http = require('http'),
 	formidable = require('formidable'),
 	fs = require('fs'),
 	vhost = require('vhost'),
-	Vacation = require('./models/vacation.js'),
-	VacationInSeasonListener = require('./models/vacationInSeasonListener.js'),
-    Datacenter = require('./models/datacenter.js');
+    Datacenter = require('./models/datacenter.js'),
+    Rack = require('./models/rack.js'),
+    Equipment = require('./models/equipment.js'),
+    Systemdb = require('./models/system.js'),
+    Optionsdb = require('./models/options.js'),
+    seedDataLoad = require('./seedDataLoad.js');
+
 
 var app = express();
+
+var LIUser = {'account':'admin',
+                'name':'Superuser',
+                'groups':['admin','base'],
+                };
 
 var credentials = require('./credentials.js');
 
@@ -26,7 +35,19 @@ var handlebars = require('express-handlebars').create({
         },
         static: function(name) {
             return require('./lib/static.js').map(name);
-        }
+        },
+        // for selects to have a default option
+        selOption: function (current, field) {
+          var results = ""; 
+          results = 'value="' + current + '" ' + (field === current ? 'selected="selected"' : "");
+          /*console.log("selOption r >"+results);
+          console.log("selOption f >"+field);
+          console.log("selOption c >"+current);
+          */
+          return (results);
+          }
+        
+
     }
 });
 app.engine('handlebars', handlebars.engine);
@@ -117,9 +138,9 @@ app.use(function(req, res, next){
 // database configuration
 var mongoose = require('mongoose');
 var options = {
-    server: {
-       socketOptions: { keepAlive: 1 } 
-    }
+                server: {
+                    socketOptions: { keepAlive: 1 } 
+                }
 };
 switch(app.get('env')){
     case 'development':
@@ -132,126 +153,49 @@ switch(app.get('env')){
         throw new Error('Unknown execution environment: ' + app.get('env'));
 }
 
-// initialize datacenters
-Datacenter.find(function(err, datacenters){
-    if(datacenters.length) return;
 
-    new Datacenter({
-        fullName: 'Test Datacenter',
-        abbreviation: 'Test-dc',
-        createdOn: Date(),
-        modifiedOn: Date(),
-        contacts:[{
-            conType:'Main',
-            conName:'Main',
-            address1: 'Test Datacenter Inc.',
-            address2: '1122 Boogieboogie Ave.',
-            city: 'Central',
-            state: 'CA',
-            country: 'US',
-            zip: '95111',
-            lat: 37.3007582,
-            lon: 121.8336904,
-            conURL:'www.google.com',
-            conPhones:[{conPhoNumber:5555551212,conPhoType:'Main'}],
-            conNotes: [{conNoteDate: Date(),conNote: '1 - No notes'}],
-            },
-            {
-            conType:'Support',
-            conName:'Support',
-            conEmail:'support@testcompany.com',
-            conPhones:[{conPhoNumber:5555551100,conPhoType:'Support'}],
-            conNotes:[{conNoteDate: Date(),conNote: '2 - No notes'}],
-            }
-        ],
-   
-    }).save();
-    
-    new Datacenter({
-        fullName: 'RagingWire Sacramento',
-        abbreviation: 'rsys-dc02',
-        createdOn: Date(),
-        modifiedOn: Date(),
-        contacts:[{
-            conType:'Main',
-            conName:'Main',
-            address1: 'Oracle/Responsys - CO Raging Wire Data Center',
-            address2: '1200 Striker Ave.',
-            city: 'Sacramento',
-            state: 'CA',
-            country: 'US',
-            zip: '95834-1157',
-            lat: 38.6505624,
-            lon: -121.4895199,
-            conURL:'www.ragingwire.com',
-            conPhones:[{conPhoNumber:9162863000,conPhoType:'Main',}],
-            },
-            {
-            conType:'Support',
-            conName:'Support',
-            conEmail:'support@ragingwire.com',
-            conPhones:[{
-                conPhoNumber:9162864090,
-                conPhoType:'Operation Control Center 24/7'}],
-            conNotes: [{conNoteDate: Date(),conNote: 'Current Contract End Date: 11/30/2016'}],
-            },
-        ],
-   
-    }).save();
-    console.log("created new Datacenters");
-
-
+exports.dropDatacenter = (function(Datacenter){
+    Datacenter.find(function(err, datacenters){
+    // this will need to be removed once we start using real data
+    // or it will delete the real data
+        if(datacenters.length) mongoose.connection.collections.datacenters.drop( function(err) {
+        console.log('Datacenters collection dropped');
+        });
     });
-
-// initialize vacations
-Vacation.find(function(err, vacations){
-    if(vacations.length) return;
-
-    new Vacation({
-        name: 'Hood River Day Trip',
-        slug: 'hood-river-day-trip',
-        category: 'Day Trip',
-        sku: 'HR199',
-        description: 'Spend a day sailing on the Columbia and ' + 
-            'enjoying craft beers in Hood River!',
-        priceInCents: 9995,
-        tags: ['day trip', 'hood river', 'sailing', 'windsurfing', 'breweries'],
-        inSeason: true,
-        maximumGuests: 16,
-        available: true,
-        packagesSold: 0,
-    }).save();
-
-    new Vacation({
-        name: 'Oregon Coast Getaway',
-        slug: 'oregon-coast-getaway',
-        category: 'Weekend Getaway',
-        sku: 'OC39',
-        description: 'Enjoy the ocean air and quaint coastal towns!',
-        priceInCents: 269995,
-        tags: ['weekend getaway', 'oregon coast', 'beachcombing'],
-        inSeason: false,
-        maximumGuests: 8,
-        available: true,
-        packagesSold: 0,
-    }).save();
-
-    new Vacation({
-        name: 'Rock Climbing in Bend',
-        slug: 'rock-climbing-in-bend',
-        category: 'Adventure',
-        sku: 'B99',
-        description: 'Experience the thrill of rock climbing in the high desert.',
-        priceInCents: 289995,
-        tags: ['weekend getaway', 'bend', 'high desert', 'rock climbing', 'hiking', 'skiing'],
-        inSeason: true,
-        requiresWaiver: true,
-        maximumGuests: 4,
-        available: false,
-        packagesSold: 0,
-        notes: 'The tour guide is currently recovering from a skiing accident.',
-    }).save();
 });
+exports.dropRack = (function(Rack){
+    Rack.find(function(err, racks){
+        if(racks.length) mongoose.connection.collections.racks.drop(function(err) {
+        console.log('Racks collection dropped');
+        });
+    });
+});
+
+exports.dropOptionsdb = (function(Optionsdb){
+    Optionsdb.find(function(err, optionsdbs){
+        if(optionsdbs.length) mongoose.connection.collections.optionsdbs.drop(function(err) {
+        console.log('Optionsdbs collection dropped');
+        });
+    });    
+});
+
+exports.dropEquipment = (function(Equipment){
+    Equipment.find(function(err, equipment){
+        if(equipment.length) mongoose.connection.collections.equipment.drop(function(err) {
+        console.log('Equipment collection dropped');
+        });
+    });    
+});
+
+exports.dropSystem = (function(Systemdb){
+    Systemdb.find(function(err, systemdb){
+        if(systemdb.length) mongoose.connection.collections.systemdb.drop(function(err) {
+        console.log('Systemdb collection dropped');
+        });
+    });    
+});
+
+// stuff from the book
 
 // flash message middleware
 app.use(function(req, res, next){
@@ -269,162 +213,8 @@ app.use(function(req, res, next){
 	next();
 });
 
-// mocked weather data
-function getWeatherData(){
-    return {
-        locations: [
-            {
-                name: 'Portland',
-                forecastUrl: 'http://www.wunderground.com/US/OR/Portland.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
-                weather: 'Overcast',
-                temp: '54.1 F (12.3 C)',
-            },
-            {
-                name: 'Bend',
-                forecastUrl: 'http://www.wunderground.com/US/OR/Bend.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/partlycloudy.gif',
-                weather: 'Partly Cloudy',
-                temp: '55.0 F (12.8 C)',
-            },
-            {
-                name: 'Manzanita',
-                forecastUrl: 'http://www.wunderground.com/US/OR/Manzanita.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/rain.gif',
-                weather: 'Light Rain',
-                temp: '55.0 F (12.8 C)',
-            },
-        ],
-    };
-}
-
-// middleware to add weather data to context
-app.use(function(req, res, next){
-	if(!res.locals.partials) res.locals.partials = {};
- 	res.locals.partials.weather = getWeatherData();
- 	next();
-});
-
-// middleware to handle logo image easter eggs
-var static = require('./lib/static.js').map;
-app.use(function(req, res, next){
-	var now = new Date();
-	res.locals.logoImage = now.getMonth()==11 && now.getDate()==19 ?
-	static('/img/logo_bud_clark.png') :
-	static('/img/logo.png');
-	next();
-});
-
-// middleware to provide cart data for header
-app.use(function(req, res, next) {
-	var cart = req.session.cart;
-	res.locals.cartItems = cart && cart.items ? cart.items.length : 0;
-	next();
-});
-
-// create "admin" subdomain...this should appear
-// before all your other routes
-var admin = express.Router();
-app.use(require('vhost')('admin.*', admin));
-
-// create admin routes; these can be defined anywhere
-admin.get('/', function(req, res){
-	res.render('admin/home');
-});
-admin.get('/users', function(req, res){
-	res.render('admin/users');
-});
-
-
 // add routes
 require('./routes.js')(app);
-
-// api
-
-var Attraction = require('./models/attraction.js');
-
-var rest = require('connect-rest');
-
-rest.get('/attractions', function(req, content, cb){
-    Attraction.find({ approved: true }, function(err, attractions){
-        if(err) return cb({ error: 'Internal error.' });
-        cb(null, attractions.map(function(a){
-            return {
-                name: a.name,
-                description: a.description,
-                location: a.location,
-            };
-        }));
-    });
-});
-
-rest.post('/attraction', function(req, content, cb){
-    var a = new Attraction({
-        name: req.body.name,
-        description: req.body.description,
-        location: { lat: req.body.lat, lng: req.body.lng },
-        history: {
-            event: 'created',
-            email: req.body.email,
-            date: new Date(),
-        },
-        approved: false,
-    });
-    a.save(function(err, a){
-        if(err) return cb({ error: 'Unable to add attraction.' });
-        cb(null, { id: a._id });
-    }); 
-});
-
-rest.get('/attraction/:id', function(req, content, cb){
-    Attraction.findById(req.params.id, function(err, a){
-        if(err) return cb({ error: 'Unable to retrieve attraction.' });
-        cb(null, { 
-            name: a.name,
-            description: a.description,
-            location: a.location,
-        });
-    });
-});
-
-// API configuration
-var apiOptions = {
-    context: '/',
-    domain: require('domain').create(),
-};
-
-apiOptions.domain.on('error', function(err){
-    console.log('API domain error.\n', err.stack);
-    setTimeout(function(){
-        console.log('Server shutting down after API domain error.');
-        process.exit(1);
-    }, 5000);
-    server.close();
-    var worker = require('cluster').worker;
-    if(worker) worker.disconnect();
-});
-
-// link API into pipeline
-// currently commented out to reduce console noise
-//app.use(vhost('api.*', rest.rester(apiOptions)));
-
-// add support for auto views
-var autoViews = {};
-
-app.use(function(req,res,next){
-    var path = req.path.toLowerCase();  
-    // check cache; if it's there, render the view
-    if(autoViews[path]) return res.render(autoViews[path]);
-    // if it's not in the cache, see if there's
-    // a .handlebars file that matches
-    if(fs.existsSync(__dirname + '/views' + path + '.handlebars')){
-        autoViews[path] = path.replace(/^\//, '');
-        return res.render(autoViews[path]);
-    }
-    // no view found; pass on to 404 handler
-    next();
-});
-
 
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){

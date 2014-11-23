@@ -1,0 +1,182 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/tablesort.css">
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<title>jQuery Tablesort Plugin Demo</title>
+</head>
+<body>
+<h1>jQuery Tablesort Plugin Demos</h1>
+<p>If you want a table to be sortable use $([tablename]).tablesort()</p>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<p>&nbsp;</p>
+<p><a href="http://www.jqueryscript.net/table/jQuery-Plugin-For-Sortable-Searchable-Tables-Tablesort.html">Download This Plugin<br/>
+</a><br/>
+<strong>Example:</strong></p>
+<pre><code>$(function () { $('.table-sort').tablesort(); });</code></pre>
+<p>To make a column sortable, add the class 'table-sort' to it's &lt;th&gt; tag. Or else it won't be sorted, like the Phone Number column.<br/>
+<br/>
+<strong>Example:</strong></p>
+<pre><code>&lt;th class="table-sort"&gt;First Name&lt;/th&gt;</code><br/>
+</pre>
+<table class="table-sort">
+<thead>
+<tr>
+<th class="table-sort">First Name</th>
+<th class="table-sort">Last Name</th>
+<th class="table-sort">Email</th>
+<th>Phone Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>John</td>
+<td>Smith</td>
+<td><a href="mailto:john.s@gmail.com">john.s@gmail.com</a></td>
+<td>(613) 873-2982</td>
+</tr>
+<tr>
+<td>Sean</td>
+<td>MacIsaac</td>
+<td><a href="mailto:seanjmacisaac@gmail.com">seanjmacisaac@gmail.com</a></td>
+<td>(613) 871-6191</td>
+</tr>
+<tr>
+<td>Tim</td>
+<td>Zarby</td>
+<td><a href="mailto:zarbytown214@hotmail.com">zarbytown214@hotmail.com</a></td>
+<td>(613) 743-5389</td>
+</tr>
+<tr>
+<td>Andrew</td>
+<td>Nichols</td>
+<td><a href="mailto:andy_money2003@gmail.com">andy_money2003@gmail.com</a></td>
+<td>(613) 741-3384</td>
+</tr>
+<tr>
+<td>Ally</td>
+<td>O'Neil</td>
+<td><a href="mailto:allyoneil@gmail.com">allyoneil@gmail.com</a></td>
+<td>(613) 642-9831</td>
+</tr>
+</tbody>
+</table>
+<br/>
+<p>To make a table searchable, add the class 'table-sort-search' to the &lt;table&gt; tag.<br/>
+<br/>
+<strong>Example:</strong></p>
+<pre><code class="html">&lt;table class="table-sort table-sort-search"&gt;&lt;/table&gt;</code></pre>
+<br/>
+<table class="table-sort table-sort-search">
+<thead>
+<tr>
+<th class="table-sort">First Name</th>
+<th class="table-sort">Last Name</th>
+<th class="table-sort">Email</th>
+<th>Phone Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>John</td>
+<td>Smith</td>
+<td><a href="mailto:john.s@gmail.com">john.s@gmail.com</a></td>
+<td>(613) 873-2982</td>
+</tr>
+<tr>
+<td>Sean</td>
+<td>MacIsaac</td>
+<td><a href="mailto:seanjmacisaac@gmail.com">seanjmacisaac@gmail.com</a></td>
+<td>(613) 871-6191</td>
+</tr>
+<tr>
+<td>Tim</td>
+<td>Zarby</td>
+<td><a href="mailto:zarbytown214@hotmail.com">zarbytown214@hotmail.com</a></td>
+<td>(613) 743-5389</td>
+</tr>
+<tr>
+<td>Andrew</td>
+<td>Nichols</td>
+<td><a href="mailto:andy_money2003@gmail.com">andy_money2003@gmail.com</a></td>
+<td>(613) 741-3384</td>
+</tr>
+<tr>
+<td>Ally</td>
+<td>O'Neil</td>
+<td><a href="mailto:allyoneil@gmail.com">allyoneil@gmail.com</a></td>
+<td>(613) 642-9831</td>
+</tr>
+</tbody>
+</table>
+<br/>
+<p>To make the search text input show the search match count, add the class 'table-sort-show-search-count' to the &lt;table&gt; tag.<br/>
+<br/>
+<strong>Example</strong></p>
+<pre><code>&lt;table class="table-sort table-sort-search table-sort-show-search-count"&gt;&lt;/table&gt;</code></pre>
+<br/>
+<table class="table-sort table-sort-search table-sort-show-search-count">
+<thead>
+<tr>
+<th class="table-sort">First Name</th>
+<th class="table-sort">Last Name</th>
+<th class="table-sort">Email</th>
+<th>Phone Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>John</td>
+<td>Smith</td>
+<td><a href="mailto:john.s@gmail.com">john.s@gmail.com</a></td>
+<td>(613) 873-2982</td>
+</tr>
+<tr>
+<td>Sean</td>
+<td>MacIsaac</td>
+<td><a href="mailto:seanjmacisaac@gmail.com">seanjmacisaac@gmail.com</a></td>
+<td>(613) 871-6191</td>
+</tr>
+<tr>
+<td>Tim</td>
+<td>Zarby</td>
+<td><a href="mailto:zarbytown214@hotmail.com">zarbytown214@hotmail.com</a></td>
+<td>(613) 743-5389</td>
+</tr>
+<tr>
+<td>Andrew</td>
+<td>Nichols</td>
+<td><a href="mailto:andy_money2003@gmail.com">andy_money2003@gmail.com</a></td>
+<td>(613) 741-3384</td>
+</tr>
+<tr>
+<td>Ally</td>
+<td>O'Neil</td>
+<td><a href="mailto:allyoneil@gmail.com">allyoneil@gmail.com</a></td>
+<td>(613) 642-9831</td>
+</tr>
+</tbody>
+</table>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script> 
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script> 
+<script type="text/javascript" src="tablesort.js"></script> 
+<script type="text/javascript">
+            // For Demo Purposes
+            $(function () {
+                $('table.table-sort').tablesort();
+                hljs.initHighlightingOnLoad(); // Syntax Hilighting
+            });
+        </script>
+</body>
+</html>

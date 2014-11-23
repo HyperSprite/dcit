@@ -1,0 +1,83 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/admin/">Admin</a></li>
+  <li><a href="/admin/options">Options</a></li>
+  <li>Here be Dragons!<li>
+</ol>
+
+<div>
+<h3>Options</h3>
+{{#each optList}}
+<div>
+<h4><a href="/admin/options/edit-{{optListKey}}">{{optListName}}</a></h4>
+    <ul id="{{optListKey}}" class="list-unstyled">    
+        {{#each optListArray}}
+        <li>
+            {{this}}<br>
+        </li>
+        {{/each}}
+    </ul>
+   <hr>
+   </div>
+{{/each}}
+<form id="newList">
+<input type='submit' class='btn btn-success btn-xs' formaction='/admin/options/edit-new' formmethod="get" novalidate value='New List'>
+</form>
+<h4>Demos<h4>
+<div>
+        <h5> input type="text" </h5>
+        <div class="form-group">
+            <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldNickname" name="rackNickname"  value="" placeholder="*Required" required>
+            </div>
+        </div>
+        <h5> select </h5>
+       
+       <div class="form-group">
+            <label for="field-equipType" class="col-sm-2 control-label" >Type</label>
+            <div class="col-sm-4">
+                <select id="field-equipType1" name="equipType" class="form-control" >
+                    <option {{{selOption "" equipType}}}  >Current Status</option>
+                    {{#each optEquipType}}
+                    <option {{{selOption this ../equipType}}} >{{this}}</option>
+                    {{/each}}
+                    
+				</select>
+
+            </div>
+        </div> 
+        <h5> input datalist </h5>
+        <div class="form-group">
+            <label for="field-equipType2" class="col-sm-2 control-label" >Type2</label>
+            <div class="col-sm-4">
+                <input list="equipType" id="field-equipType2" class="form-control" value="{{equipType}}" > <!-- may need name= name="equipType" -->
+                    <datalist id="equipType">
+                        {{#each optEquipType}}
+                        <option {{{this}}} >{{this}}</option>
+                        {{/each}}
+                    </datalist>
+            </div>
+        </div> 
+<div>
+
+<hr>
+    <h4>Seed Data</h4>    
+<form>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropDatacenter' formmethod="get" novalidate value='Drop Datacenter'>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/seedDatacenter' formmethod="get" novalidate value='Seed Datacenter'><br>
+<br>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropRack' formmethod="get" novalidate value='Drop Rack'><br>
+<br>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropOptionsdb' formmethod="get" novalidate value='Drop Options'>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/seedOptionsdb' formmethod="get" novalidate value='Seed Options'><br>
+<br>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropEquipment' formmethod="get" novalidate value='Drop Equipent'>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/seedEquipment' formmethod="get" novalidate value='Seed Equipment'><br>
+<br>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropSystem' formmethod="get" novalidate value='Drop Systems'>
+<input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/seedSystem' formmethod="get" novalidate value='Seed Systems'><br>
+</form>
+    
+</div>
+

@@ -1,0 +1,68 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/location/datacenter/list">Datacenters</a></li>
+  <li><a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>
+  <li>{{cageNickname}}</li>
+  <li>Rack View <a href="/asset/equipmentsystem/{{rackUnique}}">{{rackUnique}}</a></li>
+</ol>
+
+<h2>{{fullName}} - <a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></h2>
+{{#if foundingCompany}}{{foundingCompany}}{{/if}}
+<br>
+<hr>
+<div class="racks">
+    <h4>Rack ID: {{rackUnique}}</h4>
+    <ul id="eachUl"class="list-unstyled"> 
+            <li>
+            <div class="row">
+                <div class="col-sm-9">
+                {{#if rackNickname}}Rack Nickname: {{rackNickname}}<br>{{/if}}
+                {{#if rackName}}Facility Name: {{rackName}}<br>{{/if}}
+                {{#if rackStatus}}Status: {{rackStatus}}<br>{{/if}}
+                {{#if rUs}}RUs: {{rUs}}<br>{{/if}}                
+                {{#if rackDescription}}Description: {{rackDescription}}<br>{{/if}}
+                <br>
+                <strong>Location and Dimentions</strong><br>
+                {{#if fullName}}Datacenter: {{fullName}} - {{abbreviation}}<br>{{/if}}
+                {{#if cageNickname}}Cage Nickname: {{cageNickname}}<br>{{/if}}
+                {{#if cageAbbreviation}}Cage Code: {{cageAbbreviation}}<br>{{/if}}
+                {{#if cageName}}Facility Cage ID: {{cageName}}<br>{{/if}}
+                {{#if rackLat}}X: {{rackLat}}<br>{{/if}}
+                {{#if rackLon}}Y: {{rackLon}}<br>{{/if}}                
+                {{#if rackHeight}}Height in CM: {{rackHeight}}<br>{{/if}}
+                {{#if rackWidth}}Width in CM: {{rackWidth}}<br>{{/if}}
+                {{#if rackDepth}}Depth in CM: {{rackDepth}}<br>{{/if}}                
+                <br>
+                <strong>Details</strong><br>
+                {{#if rackMake}}Make: {{rackMake}}<br>{{/if}}
+                {{#if rackModel}}Model: {{rackModel}}<br>{{/if}}
+                {{#if rackSN}}Serial Number: {{rackSN}}<br>{{/if}}
+                {{#if rackNotes}}Notes: {{rackNotes}}<br>{{/if}}
+                {{#if createdBy}}Created By: {{createdBy}}<br>{{/if}}
+                {{#if createdOn}}Created On: {{createdOn}}<br>{{/if}}
+                {{#if modifiedBy}}Modified By: {{modifiedBy}}<br>{{/if}}
+                {{#if modifiedOn}}Modified On: {{modifiedOn}}<br>{{/if}}
+                <br>
+               
+                    <form id="deleteform" action="/location/rackdelete/{{rackUnique}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{rackUnique}}. This can not be undone!')">
+                    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                    <input type="hidden" name="rackUnique" value="{{rackUnique}}">
+                    <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+                   
+                    </form>
+                    <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+                    <form id=formCopy></form>
+                    <input type='submit' class='btn btn-warning btn-xs' formaction='/location/rack/edit-{{rackUnique}}' form="formEdit" formmethod="get" value='Edit Rack'>
+                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='Copy Rack'>
+                    <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete Rack</button>
+                </div>
+            </div>
+            </li><br>
+        </ul>
+    <hr>
+
+    {{> location/power-list}}
+    
+</div>
+
+

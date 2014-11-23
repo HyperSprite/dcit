@@ -1,20 +1,106 @@
-<h2>{{name}}</h2>
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/location/datacenter/list">Datacenters</a></li>
+  <li><a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>
+  <li>Datacenter View</li>
+</ol>
 
-<div class="datacenter">
+<h2>{{fullName}} - <a href="/location/datacenter/edit-{{abbreviation}}">{{abbreviation}}</a></h2>
+{{#if foundingCompany}}{{foundingCompany}}{{/if}}
+<br>
+<hr>
+<div class="racks">
+    <h4><a href="/location/datacenter/contact~{{id}}-new">Contacts</a></h4>
+    <ul id="eachUl"class="list-unstyled"> 
+        {{#each contacts}}
+            <li>
+            <div class="row">
+                <div class="col-sm-9">
+                <address>
+                <strong>{{#if conName}}<a href="/location/datacenter/contact~{{../../id}}-{{conId}}">{{conName}}</a><br>{{/if}}</strong>
+                {{#if conType}}{{conType}}<br>{{/if}}
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-6">
+                        {{#if conURL}}<a href="http://{{conURL}}" target="_top">{{conURL}}</a><br>{{/if}}
+                        {{#if conPho1Num}}{{conPho1Num}} - {{conPho1Typ}}<br>{{/if}}
+                        {{#if conPho2Num}}{{conPho2Num}} - {{conPho2Typ}}<br>{{/if}}
+                        {{#if conPho3Num}}{{conPho3Num}} - {{conPho3Typ}}<br>{{/if}}
+                        {{#if conPho4Num}}{{conPho4Num}} - {{conPho4Typ}}<br>{{/if}} 
+                        {{#if conEmail}}<a href="mailto:{{conEmail}}" target="_top">{{conEmail}}</a><br>{{/if}}
+                        {{#if conNotes}}<div class="col-md-6"> <strong>Notes:</strong> {{conNotes}}</div>{{/if}}
+                        </div>
+                        <div class="col-xs-8 col-sm-6">
+                        {{#if address1}}{{address1}}<br>{{/if}}
+                        {{#if address2}}{{address2}}<br>{{/if}}
+                        {{#if address3}}{{address3}}<br>{{/if}}
+                        {{#if address4}}{{address4}}<br>{{/if}}
+                        {{#if city}}{{city}}, {{state}} {{zip}}<br>{{/if}}
+                        {{#if country}}{{country}}<br>{{/if}}
+                        {{#if lat}}<a href="https://www.google.com/maps/place/{{lat}},{{lon}}">Map</a><br>{{/if}}                        
+                        </div>
+                    </div>
+                    <!--<form id="editform{{@index}}" action="/location/datacenter/contact~{{../id}}-{{conId}}" method="get">
+                    <button type="submit" class="btn btn-warning btn-xs">Edit</button>
 
-    {{#each contacts}}
-    {{#if conName}}Name: {{conName}}<br>{{/if}}
-    {{#if conType}}Type: {{conType}}<br>{{/if}}
-    {{#if address1}}Address: {{{address}}}<br>{{/if}}
-    {{#if city}}{{city}}, {{state}} {{zip}}<br>{{/if}}
-    {{#if lat}}<a href="https://www.google.com/maps/place/{{lat}},{{lon}}">Find on Google</a><br>{{/if}}
-    {{#if conEmail}}Email: <a href="mailto:{{conEmail}}" target="_top">{{conEmail}}</a><br>{{/if}}
-    {{#if conURL}}URL: <a href="{{conURL}}" target="_top">{{conURL}}</a><br>{{/if}}
-            {{#each conPhones}}
-            Phone: {{conPhoNum}} Type: {{conPhoType}}<br>
-            {{/each}}
-    <br>
-    {{/each}}
-    Created On: {{crOn}}
+                    <form id=formEdit{{@index}}></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+                    <input type='submit' class='btn btn-default btn-xs' formaction='/location/datacenter/contact~{{../id}}-{{conId}}' form="formEdit{{@index}}" formmethod="get" value='Edit'>-->
+                    
+                    
+                </address>
+                </div>
+            </div>
+            </li><br>
+        {{/each}}
+        </ul>
+        
+            <input form="formNewEquip" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Equipment' formaction='/location/rack/newequip~{{id}}'>
+            <input form="formNewSyst" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Systems' formaction='/location/rack/newsyst~{{id}}'>
+            <form id="formNewEquip"></form>
+            <form id="formNewSyst"></form>
+        
+        
+        
+    <hr>        
+    <h4><a href="/location/datacentercage/edit-{{id}}">Cages</a></h4>
+    <ul id="eachUl"class="list-unstyled"> 
+
+        {{#each cages}}
+            <li>
+            <strong>{{cageNickname}}</strong><br> 
+            <strong>Code: {{cageAbbreviation}}</strong><br>
+            <strong>Facility name: {{cageName}}</strong><br>
+            {{#if cageInMeters}}Cage in Meters: {{cageInMeters}} - Feet: {{cageInFeet}}<br>{{/if}}
+            {{#if cageWattPSM}}Watts Per Sq. Meter: {{cageWattPSM}} - Foot:{{cageWattPSF}}<br>{{/if}}
+            {{#if cageMap}}Cage Map: {{cageMap}}<br>{{/if}}
+            {{#if cageNotes}}Notes:{{cageNotes}}<br>{{/if}}
+            <br>
+            <ul id="racksUl" class="list-unstyled">
+            <li>
+            <input form="formNewRack{{@index}}" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Rack' formaction='/location/rack/newrack~{{../id}}-{{id}}'>
+            <form id="formNewRack{{@index}}"></form>
+            </li>
+            <li>
+            
+            </li>
+            </ul>
+            </li><br>
+        {{/each}}
+    </ul>
+    <hr>
+        
+        {{> location/rack-list}}
+   
+   <hr>
+    <h4><a href="/location/datacenterpower/edit-{{id}}">Power Mains</a></h4>
+    <ul id="powerUl" class="list-unstyled">    
+        {{#each powerNames}}
+        <li>
+        <a href="/location/datacenterpower/show-{{this}}">{{this}}</a><br>
+        </li>
+        {{/each}}
+    </ul>
+    Datacenter Created On: {{createdOn}}
+    
 </div>
+
 
