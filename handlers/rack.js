@@ -380,6 +380,8 @@ exports.dcRackPost = function(req,res){
     console.log("dcRackPost abbreviation>"+res.abbreviation);
     console.log("rUs >"+req.body.rUs);
     //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
+    // rackUniqe is created when making a new rack so it does not exist on new 
+    // or copied racks
     if (!req.body.rackUnique){
     if (req.body.wasCopy){
     res.abbreviation = req.body.wasCopy;

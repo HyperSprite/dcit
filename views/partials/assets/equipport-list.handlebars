@@ -1,10 +1,10 @@
     
-<h4>Equipment and Systems</h4>
-    <table class="table-sort table-sort-search ">
+<h4>Equipment Ports</h4>
+    <table class="table-sort table-sort-search">
         <thead>
             <tr>
                 <th class="table-sort" data-sort="equipSN">Equipment</th>
-                <th class="table-sort" data-sort="equipPortsType">Type</th>
+                <th class="table-sort" data-sort="equipPortType">Type</th>
                 <th class="table-sort" data-sort="equipPortName">Name</th>
                 <th class="table-sort" data-sort="equipPortsAddr">Address</th>
                 <th class="table-sort" data-sort="equipPortsOpt">Options</th>                
@@ -17,7 +17,7 @@
         {{#each equipPorts}}
             <tr>
                 <td class="systemName"><a href="/asset/equipment/{{../equipSN}}">{{../equipSN}}</a></td>
-                <td class="systemStatus">{{equipPortsType}}</td>
+                <td class="systemStatus">{{equipPortType}}</td>
                 <td class="systemEnvironment">{{equipPortName}}</td>
                 <td class="systemRole">{{equipPortsAddr}}</td>
                 <td class="equipmentStatus">{{equipPortsOpt}}</td>
@@ -32,3 +32,5 @@
   
         </tbody>
     </table>
+    
+ 

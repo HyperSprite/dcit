@@ -42,6 +42,7 @@ module.exports = function(app){
 
         app.get('/asset/equipment/:datacenter', equipment.dcEquipPages);
         app.get('/asset/equipmentsystem/:datacenter', equipment.dcEquipSysPages);
+        app.post('/asset/equipment/:datacenter', equipment.dcEquipmentPost);
         
         // Admin 
         

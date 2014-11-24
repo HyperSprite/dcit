@@ -16,7 +16,7 @@ var equipRMASchema = mongoose.Schema({
 });
 
 var equipPortSchema = mongoose.Schema({
-    equipPortsType: String,
+    equipPortType: String,
     equipPortsAddr: {type: String, unique: true,sparse: true},
     equipPortName: String,
     equipPortsOpt: String,
@@ -28,14 +28,14 @@ var equipPortSchema = mongoose.Schema({
 
 var equipmentSchema = mongoose.Schema({
     equipLocation: {type: String, index:1},
-    equipSN: {type: String, unique: true, index:1,sparse: true},
+    equipSN: {type: String, unique: true, index:1,sparse: true, required: true},
     equipAssetTag: String,
     equipRMAs: [equipRMASchema],
     equipPorts:[equipPortSchema],
     equipTicketNumber: String,
-    equipInventoryStatus: Boolean,
+    equipInventoryStatus: {type: Boolean, default: false},
     equipStatus: String,
-    equipIsVirtual: Boolean,
+    equipIsVirtual: {type: Boolean, default: false},
     equipType: String,
     equipMake: String,
     equipModel: String,
@@ -59,7 +59,7 @@ var equipmentSchema = mongoose.Schema({
     equipPSUCount: Number,
     equipPSUDraw: Number,
     equipAddOns: String,
-    equipRecieved: Date,
+    equipRecieved: {type: Date, default: Date.now},
     equipAcquisition: Date,
     equipInService: Date,
     equipPONum: String,

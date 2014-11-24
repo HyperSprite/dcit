@@ -11,56 +11,163 @@
     <div class="datacenter"> 
 
 <div class="formContainer">
-    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/asset/equipment/{{equipSN}}" method="POST">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/asset/equipment/{{#if equipSN}}{{equipSN}}{{else}}new{{/if}}" method="POST">
 		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
-        {{#if equipSN}}
+        <p class="form-control-static">{{#if equipSN}}</p>
         <div class="form-group">
+            <input type="hidden" name="isEdit" value="{{equipSN}}">
             <label for="field-equipSN" class="col-sm-2 control-label">Serial Number</label>
             <div class="col-sm-4">
                 {{equipSN}}<br>
+                <input type="hidden" name="equipSN" value="{{equipSN}}">
             </div>
         </div>
         {{else}}
+        <input type="hidden" name="wasCopy" value="{{wasCopy}}">
         <div class="form-group">
             <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldNickname" name="rackNickname" placeholder="*Required" required>
+                <input type="text" class="form-control" id="equipSN" name="equipSN" placeholder="*Required" required>
             </div>
         </div>
-        {{/if}}        
+        {{/if}}
+        
         <div class="form-group">
             <label for="field-equipLocationRack" class="col-sm-2 control-label" >Location</label>
-            <div class="col-sm-3">
-                <input list="equipLocationRack" id="field-equipLocationRack" class="form-control" value="{{equipLocationRack}}" > <!-- may need name= name="equipType" -->
+            
+            <div class="col-xs-3">
+                
+                <input list="equipLocationRack" id="field-equipLocationRack" class="form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" > 
                     <datalist id="equipLocationRack">
                         {{#each rackUnique}}
-                        <option {{{this}}} >{{this}}</option>
+                        <option {{{this}}}>{{this}}</option>
                         {{/each}}
                     </datalist>
+            
             </div>
-            <div class="col-sm-1">
-                <select id="field-equipLocationRu"  name="equipLocationRu" class="form-control"  >
-                <!-- <option {{{selOption "" equipStatus}}}  >Current Status</option> -->
+            <div class="col-xs-2">
+                <select id="field-equipLocationRu"  name="equipLocationRu" class="form-control form-group-sm col-xs-2"  >
+                 
                     {{#each rackrUs}}
                     <option {{{selOption this ../equipLocationRu}}} >{{this}}</option>
                     {{/each}}
                     
 				</select>
             </div>
+            
+            
          </div>
 
         
         <div class="form-group">
-            <label for="field-InventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
+            <label for="field-equipInventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
             <div class="col-sm-4">
-                <input type="checkbox" name="InventoryStatus" checked="{{InventoryStatus}}">
+                <input type="checkbox" name="equipInventoryStatus" value="true" {{equipInventoryStatusChecked}}>
             </div>
-        </div>
-                <div class="form-group">
+        </div>  
+        <div class="form-group">
             <label for="field-equipIsVirtual" class="col-sm-2 control-label"  >Is Virtual</label>
             <div class="col-sm-4">
-                <input type="checkbox" name="equipIsVirtual" checked="{{equipIsVirtual}}">
+                <input type="checkbox" name="equipIsVirtual" value="true" {{equipIsVirtualChecked}}>
             </div>
+        </div>
+
+        <table id="portsTable" class="portsTable table table-condensed">
+            <thead>
+                <tr>
+                    <th><div class="col-md-4">Type</div></th>
+                    <th><div class="col-md-3">Name</div></th>
+                    <th><div class="col-md-2">Address</div></th>
+                    <th><div class="col-md-3">Options</div></th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                <tr>
+                {{#if equipPorts}}
+                {{#each equipPorts}}
+                <input type="hidden" name="index[]" value="{{@index}}">
+                <input type="hidden" name="equipPortsId[]" value="{{id}}">
+                    <td>
+                        <input class="portsTable{{@index}}" type="hidden" name="index{{@index}}" value="{{@index}}">   
+                        <input list="equipPortType{{@index}}" id="form-equipPortType{{@index}}" class="form-control form-group-sm" name="equipPortType[]" value="{{equipPortType}}" > 
+                    <datalist id="equipPortType{{@index}}">
+                        {{#each ../optSystPortType}}
+                            <option {{{this}}}>{{this}}</option>
+                        {{/each}}
+                    </datalist>
+                        
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortName{{@index}}" name="equipPortName[]"value="{{equipPortName}}" placeholder="e0, con, netmgmt">
+                        
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[]"value="{{equipPortsAddr}}" placeholder="Options">
+                        
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[]"value="{{equipPortsOpt}}" placeholder="Options">
+                        
+                    </td>
+                {{/each}}
+                {{else}}
+                    <td>
+                    <input class="portsTable0" type="hidden" name="index0" value="0">
+                        <input list="equipPortType0" id="form-equipPortType0" class="form-control form-group-sm" name="equipPortType[]" value="{{equipPortType}}" > 
+                    <datalist id="equipPortType0">
+                        {{#each ../optSystPortType}}
+                        <option {{{this}}}>{{this}}</option>
+                        {{/each}}
+                    </datalist>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortName{{@index}}" name="equipPortName[]"value="{{equipPortName}}" placeholder="e0, con, netmgmt">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[]"value="{{equipPortsAddr}}" placeholder="01:23:45:67:89:AB:CD"> 
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[]"value="{{equipPortsOpt}}" placeholder="Options">
+                    </td>
+                {{/if}}
+                
+             <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('portsTable','portsTable',10);">+ 1</button>   
+                
+                <script language="Javascript" type="text/javascript">
+<!--
+//Add more fields dynamically.
+function addField(area,field,limit) {
+	if(!document.getElementById) return; //Prevent older browsers from getting any further.
+	var field_area = document.getElementById(area);    
+    var all_inputs = field_area.getElementsByClassName("portsTable");
+    //Get all the input fields in the given area.
+    //Find the count of the last element of the list. It will be in the format '<field><number>'. If the 
+	//		field given in the argument is 'friend_' the last id will be 'friend_4'.
+	var last_item = all_inputs.length - 1;
+    var last = all_inputs[last_item].id;
+    var count = Number(last.split("-")[1]) + 1;
+    if (isNaN=count)count=0;
+	//If the maximum number of elements have been reached, exit the function.
+	//		If the given limit is lower than 0, infinite number of fields can be created.
+	if(count > limit && limit > 0) return;
+ 	
+	if(document.createElement) { 
+		 //Older Method
+		field_area.insertAdjacentHTML('beforeend', '{{> location/datacentercagePlus1}}');
+	}
+    
+}
+//-->
+</script> 
+ 
+                
+                
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/asset/equipment/{{equipSN}}' {{else}}formaction='/asset/equipment/{{abbreviation}}'{{/if}} >
         </div>
         <hr>
         <ul id="eachUl"class="list-unstyled">    
@@ -71,14 +178,14 @@
         <div class="form-group">
             <label for="field-Status" class="col-sm-2 control-label" >Status</label>
             <div class="col-sm-4">
-                <select id="fieldrackStatus" name="rackStatus" class="form-control"  >
-                <!-- <option {{{selOption "" equipStatus}}}  >Current Status</option> -->
+                <select id="equipStatus" name="equipStatus" class="form-control"  >
+               
                     {{#each optEquipStatus}}
                     <option {{{selOption this ../equipStatus}}} >{{this}}</option>
                     {{/each}}
                     
 				</select>
-
+                
             </div>
         </div>  
         
@@ -313,26 +420,7 @@
         </div>
      </form><form id="formCancel"></form> 
      
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script> 
-            (function($){ 
-                function processForm( e ){
-                $.ajax({ 
-                    url: '/go/input', 
-                    dataType: 'text', 
-                    type: 'get', 
-                    contentType: 'application/x-www-form-urlencoded', 
-                    data: $(this).serialize(), 
-                    success: function( data, textStatus, jQxhr ){
-                        $('#response pre').html( data ); 
-                        }, error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( errorThrown ); 
-                        } 
-                }); 
-                e.preventDefault(); 
-                } $('#my-form').submit( processForm ); 
-            })(jQuery); 
-        </script>
-     
+
+
 
         

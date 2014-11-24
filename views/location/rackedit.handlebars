@@ -19,7 +19,7 @@
         <input type="hidden" name="cageNickname" value="{{cageNickname}}">
         <input type="hidden" name="cageName" value="{{cageName}}">
         <input type="hidden" name="cageAbbreviation" value="{{cageAbbreviation}}">
-        {{#if rackParentDC}}
+        {{#if rackParentDC}}{{!-- this is how I work with copied racks--}}
             <input type="hidden" name="id" value="{{rackParentDC}}">
             <input type="hidden" name="cageId" value="{{rackParentCage}}">
             <input type="hidden" name="wasCopy" value="{{wasCopy}}">

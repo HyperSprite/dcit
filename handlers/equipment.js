@@ -33,7 +33,7 @@ exports.dcEquipPages = function(req,res,next){
             var context = {
                 eqs: eqs.map(function(eq){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                    console.log(eq);
+                    //console.log(eq);
                     return {
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
@@ -277,18 +277,24 @@ exports.dcEquipPages = function(req,res,next){
 
              context = {    
                                 
+                                optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
                                 rackUnique: rackUni,
                                 rackrUs: getRackrUs(52),
                                 equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                                 equipLocationRu: strTgs.ruElevation(eq.equipLocation),
+                                equipLocation: eq.equipLocation,
                                 equipSN: eq.equipSN,
                                 equipAssetTag: eq.equipAssetTag,
                                 equipTicketNumber: eq.equipTicketNumber,
                                 equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
+                                equipInventoryStatus: eq.equipInventoryStatus,
                                 equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
+                                equipInventoryStatusChecked: strTgs.setCheckBox(eq.equipInventoryStatus),
                                 equipStatus: eq.equipStatus,
+                                equipIsVirtual: eq.equipIsVirtual,
+                                equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
                                 equipType: eq.equipType,
                                 equipMake: eq.equipMake,
                                 equipModel: eq.equipModel,
@@ -331,7 +337,7 @@ exports.dcEquipPages = function(req,res,next){
                             equipPorts: eq.equipPorts.map(function(ep){
                             return {
                                 equipPortsId: ep.id,
-                                equipPortsType: ep.equipPortsType,
+                                equipPortType: ep.equipPortType,
                                 equipPortsAddr: ep.equipPortsAddr,
                                 equipPortName: ep.equipPortName,
                                 equipPortsOpt: ep.equipPortsOpt,
@@ -361,13 +367,16 @@ exports.dcEquipPages = function(req,res,next){
            context = {    
                                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
-                                rackUnique: rk.rackUnique,
+                                rackrUs: getRackrUs(52),
+                                rackUnique: rackUni,
                                 rUs: rk.rUs,
-                                copyOfEquipSN: eq.equipSN,
+                                wasCopy: eq.equipSN,
                                 equipTicketNumber: eq.equipTicketNumber,
                                 equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
+                                equipInventoryStatus: eq.equipInventoryStatus,
                                 equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
                                 equipStatus: eq.equipStatus,
+                                equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
                                 equipType: eq.equipType,
                                 equipMake: eq.equipMake,
                                 equipModel: eq.equipModel,
@@ -418,41 +427,67 @@ exports.dcEquipPages = function(req,res,next){
     
 
 /* ---------------------------------------------------------------------
------------------------   New Rack working   ---------------------------
+-----------------------   New equipment not yet working   ---------------------------
 ------------------------------------------------------------------------
 */
-exports.dcRackPost = function(req,res){
+exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
-    res.abbreviation = req.body.abbreviation;
+    res.abbreviation = req.body.isEdit;
     console.log("dcRackPost abbreviation>"+res.abbreviation);
-    console.log("rUs >"+req.body.rUs);
     //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
-    if (!req.body.rackUnique){
+    if (!req.body.isEdit){
     if (req.body.wasCopy){
     res.abbreviation = req.body.wasCopy;
     }
-    console.log("new rack in DC "+req.body.id);
-    Rack.create({
-                    	rackParentDC:req.body.id,
-                        rackParentCage:req.body.cageId,
-                        rackNickname:req.body.rackNickname.trim().toUpperCase(),
-                        rackName:req.body.rackName.trim().toUpperCase(),
-                        rackUnique:(req.body.abbreviation+"_"+req.body.cageAbbreviation+"_"+req.body.rackNickname.trim().toUpperCase()),
-                        rackDescription:req.body.rackDescription.trim(),
-                        rackSN:req.body.rackSN.trim().toUpperCase(),
-                        rackHeight:req.body.rackHeight,
-                        rackWidth:req.body.rackWidth,
-                        rackDepth:req.body.rackDepth,
-                        rackLat:req.body.rackLat.toUpperCase(),
-                        rackLon:req.body.rackLon.toUpperCase(),
-                        rackStatus:req.body.rackStatus,
-                        rackMake:req.body.rackMake.trim(),
-                        rackModel:req.body.rackModel.trim(),
-                        rUs:strTgs.compUs(req.body.rUs,req.body.abbreviation,req.body.cageAbbreviation,req.body.rackNickname.trim().toUpperCase()),
-                        rackNotes:req.body.rackNotes.trim(),
-                        createdOn: Date.now(),
-                        createdBy:'Admin',                        
-
+    console.log("new Equipment in DC");
+    
+    Equipment.create({
+                                equipLocation: req.body.equipLocationRack+"_"+req.body.equipLocationRu,
+                                equipSN: req.body.equipSN,
+                                equipAssetTag: req.body.equipAssetTag,
+                                equipTicketNumber: req.body.equipTicketNumber,
+                                equipInventoryStatus: req.body.equipInventoryStatus,
+                                equipStatus: req.body.equipStatus,
+                                equipIsVirtual: req.body.equipIsVirtual,
+                                equipType: req.body.equipType,
+                                equipMake: req.body.equipMake,
+                                equipModel: req.body.equipModel,
+                                equipSubModel: req.body.equipSubModel,
+                                equipRUHieght: req.body.equipRUHieght,
+                                equipImgFront: req.body.equipImgFront,
+                                equipImgRear: req.body.equipImgRear,
+                                equipImgInternal: req.body.equipImgInternal,
+                                equipFirmware: req.body.equipFirmware,
+                                equipMobo: req.body.equipMobo,
+                                equipCPUCount: req.body.equipCPUCount,
+                                equipCPUCores: req.body.equipCPUCores,
+                                equipCPUType: req.body.equipCPUType,
+                                equipMemType: req.body.equipMemType,
+                                equipMemTotal: req.body.equipMemTotal,
+                                equipRaidType: req.body.equipRaidType,
+                                equipRaidLayout: req.body.equipRaidLayout,
+                                equipHDDCount: req.body.equipHDDCount,
+                                equipHDDType: req.body.equipHDDType,
+                                equipPSUCount: req.body.equipPSUCount,
+                                equipPSUDraw: req.body.equipPSUDraw,
+                                equipAddOns: req.body.equipAddOns,
+                                equipRecieved: req.body.equipRecieved,
+                                equipAcquisition: req.body.equipAcquisition,
+                                equipInService: req.body.equipInService,
+                                equipPONum: req.body.equipPONum,
+                                equipInvoice: req.body.equipInvoice,
+                                equipProjectNum: req.body.equipProjectNum,
+                                equipLicense: req.body.equipLicense,
+                                equipMaintAgree: req.body.equipMaintAgree,
+                                equipPurchaseType: req.body.equipPurchaseType,
+                                equipPurchaser: req.body.equipPurchaser,
+                                equipPurchaseTerms: req.body.equipPurchaseTerms,
+                                equipPurchaseEnd: req.body.equipPurchaseEnd,
+                                equipNotes: req.body.equipNotes,
+                                createdBy:'Admin',
+                                createdOn: Date.now(),
+                                modifiedBy: req.body.modifiedBy,
+                                modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
 	        	console.error(err.stack);
@@ -460,7 +495,7 @@ exports.dcRackPost = function(req,res){
                 req.session.flash = {
 	                type: 'danger',
 	                intro: 'Duplicate!',
-	                message: 'Looks like there is already a rack by that name.',
+	                message: 'Looks like there is already a Equipment SN like that.',
 	            };
                 
                 } else { 
@@ -469,7 +504,7 @@ exports.dcRackPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };}
-                return res.redirect(303, '/location/rack/list');
+                return res.redirect(303, '/asset/equipment/list');
 	        }
             if (!req.body.wasCopy){
 	        req.session.flash = {
@@ -477,45 +512,73 @@ exports.dcRackPost = function(req,res){
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
+	        return res.redirect(303, '/asset/equipment/'+ res.abbreviation);
             } else { 
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/location/rack/copy~edit-'+ res.abbreviation);
+	        return res.redirect(303, '/asset/equipment/copy~edit-'+ res.abbreviation);
 
             }
 	    }
         );
         
 	} else {
-    Rack.findOne({rackUnique: req.body.rackUnique},function(err,rack){
-    res.abbreviation = req.body.rackUnique;
-    var thisDoc = rack;
+    Equipment.findOne({equipSN: req.body.equipSN},function(err,eq){
+    res.abbreviation = req.body.equipSN;
+    var thisDoc = eq;
     console.log("existing id>"+thisDoc);
         if (err) {
             console.log(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
-
-                        thisDoc.rackName = strTgs.uCleanUp(thisDoc.rackName,req.body.rackName);
-                        thisDoc.rackDescription = strTgs.uCleanUp(thisDoc.rackDescription,req.body.rackDescription);
-                        thisDoc.rackSN = strTgs.uCleanUp(thisDoc.rackSN,req.body.rackSN);
-                        thisDoc.rackHeight = strTgs.uCleanUp(thisDoc.rackHeight,req.body.rackHeight);
-                        thisDoc.rackWidth = strTgs.uCleanUp(thisDoc.rackWidth,req.body.rackWidth);
-                        thisDoc.rackDepth = strTgs.uCleanUp(thisDoc.rackDepth,req.body.rackDepth);
-                        thisDoc.rackLat = strTgs.uCleanUp(thisDoc.rackLat,req.body.rackLat);
-                        thisDoc.rackLon = strTgs.uCleanUp(thisDoc.rackLon,req.body.rackLon);
-                        thisDoc.rackStatus = strTgs.uCleanUp(thisDoc.rackStatus,req.body.rackStatus);
-                        thisDoc.rackMake = strTgs.uCleanUp(thisDoc.rackMake,req.body.rackMake);
-                        thisDoc.rackModel = strTgs.uCleanUp(thisDoc.rackModel,req.body.rackModel);
-                        thisDoc.rackNotes = strTgs.uCleanUp(thisDoc.rackNotes,req.body.rackNotes);
+                        thisDoc.equipLocation = req.body.equipLocationRack+"_"+req.body.equipLocationRu;
+                        thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,req.body.equipAssetTag);
+                        thisDoc.equipTicketNumber = strTgs.uCleanUp(thisDoc.equipTicketNumber,req.body.equipTicketNumber);
+                        thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus,req.body.equipInventoryStatus);
+                        thisDoc.equipStatus = strTgs.uCleanUp(thisDoc.equipStatus,req.body.equipStatus);
+                        thisDoc.equipIsVirtual = strTgs.uCleanUp(thisDoc.equipIsVirtual,req.body.equipIsVirtual);
+                        thisDoc.equipType = strTgs.uCleanUp(thisDoc.equipType,req.body.equipType);
+                        thisDoc.equipMake = strTgs.uCleanUp(thisDoc.equipMake,req.body.equipMake);
+                        thisDoc.equipModel = strTgs.uCleanUp(thisDoc.equipModel,req.body.equipModel);
+                        thisDoc.equipSubModel = strTgs.uCleanUp(thisDoc.equipSubModel,req.body.equipSubModel);
+                        thisDoc.equipRUHieght = strTgs.uCleanUp(thisDoc.equipRUHieght,req.body.equipRUHieght);
+                        thisDoc.equipImgFront = strTgs.uCleanUp(thisDoc.equipImgFront,req.body.equipImgFront);
+                        thisDoc.equipImgRear = strTgs.uCleanUp(thisDoc.equipImgRear,req.body.equipImgRear);
+                        thisDoc.equipImgInternal = strTgs.uCleanUp(thisDoc.equipImgInternal,req.body.equipImgInternal);
+                        thisDoc.equipFirmware = strTgs.uCleanUp(thisDoc.equipFirmware,req.body.equipFirmware);
+                        thisDoc.equipMobo = strTgs.uCleanUp(thisDoc.equipMobo,req.body.equipMobo);
+                        thisDoc.equipCPUCount = strTgs.uCleanUp(thisDoc.equipCPUCount,req.body.equipCPUCount);
+                        thisDoc.equipCPUCores = strTgs.uCleanUp(thisDoc.equipCPUCores,req.body.equipCPUCores);
+                        thisDoc.equipCPUType = strTgs.uCleanUp(thisDoc.equipCPUType,req.body.equipCPUType);
+                        thisDoc.equipMemType = strTgs.uCleanUp(thisDoc.equipMemType,req.body.equipMemType);
+                        thisDoc.equipMemTotal = strTgs.uCleanUp(thisDoc.equipMemTotal,req.body.equipMemTotal);
+                        thisDoc.equipRaidType = strTgs.uCleanUp(thisDoc.equipRaidType,req.body.equipRaidType);
+                        thisDoc.equipRaidLayout = strTgs.uCleanUp(thisDoc.equipRaidLayout,req.body.equipRaidLayout);
+                        thisDoc.equipHDDCount = strTgs.uCleanUp(thisDoc.equipHDDCount,req.body.equipHDDCount);
+                        thisDoc.equipHDDType = strTgs.uCleanUp(thisDoc.equipHDDType,req.body.equipHDDType);
+                        thisDoc.equipPSUCount = strTgs.uCleanUp(thisDoc.equipPSUCount,req.body.equipPSUCount);
+                        thisDoc.equipPSUDraw = strTgs.uCleanUp(thisDoc.equipPSUDraw,req.body.equipPSUDraw);
+                        thisDoc.equipAddOns = strTgs.uCleanUp(thisDoc.equipAddOns,req.body.equipAddOns);
+                        thisDoc.equipRecieved = strTgs.uCleanUp(thisDoc.equipRecieved,req.body.equipRecieved);
+                        thisDoc.equipAcquisition = strTgs.uCleanUp(thisDoc.equipAcquisition,req.body.equipAcquisition);
+                        thisDoc.equipInService = strTgs.uCleanUp(thisDoc.equipInService,req.body.equipInService);
+                        thisDoc.equipPONum = strTgs.uCleanUp(thisDoc.equipPONum,req.body.equipPONum);
+                        thisDoc.equipInvoice = strTgs.uCleanUp(thisDoc.equipInvoice,req.body.equipInvoice);
+                        thisDoc.equipProjectNum = strTgs.uCleanUp(thisDoc.equipProjectNum,req.body.equipProjectNum);
+                        thisDoc.equipLicense = strTgs.uCleanUp(thisDoc.equipLicense,req.body.equipLicense);
+                        thisDoc.equipMaintAgree = strTgs.uCleanUp(thisDoc.equipMaintAgree,req.body.equipMaintAgree);
+                        thisDoc.equipPurchaseType = strTgs.uCleanUp(thisDoc.equipPurchaseType,req.body.equipPurchaseType);
+                        thisDoc.equipPurchaser = strTgs.uCleanUp(thisDoc.equipPurchaser,req.body.equipPurchaser);
+                        thisDoc.equipPurchaseTerms = strTgs.uCleanUp(thisDoc.equipPurchaseTerms,req.body.equipPurchaseTerms);
+                        thisDoc.equipPurchaseEnd = strTgs.uCleanUp(thisDoc.equipPurchaseEnd,req.body.equipPurchaseEnd);
+                        thisDoc.equipNotes = strTgs.uCleanUp(thisDoc.equipNotes,req.body.equipNotes);
                         thisDoc.modifiedOn = Date.now();
                         thisDoc.modifiedBy ='Admin';
                     }
-	    rack.save(function(err){
+	    eq.save(function(err){
 	        if(err) {
 	        	console.error(err.stack);
 	            req.session.flash = {
@@ -523,14 +586,14 @@ exports.dcRackPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, 'location/rack/'+ res.abbreviation);
+	            return res.redirect(303, '/asset/equipment/'+ res.abbreviation);
 	        }
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
 	        };
-	        return res.redirect(303, '/location/rack/'+ res.abbreviation);
+	        return res.redirect(303, '/asset/equipment/'+ res.abbreviation);
 	    });
 	});
 }
@@ -620,7 +683,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipPorts: eq.equipPorts.map(function(ep){
                            return {
                                 equipPortsId: ep.id,
-                                equipPortsType: ep.equipPortsType,
+                                equipPortType: ep.equipPortType,
                                 equipPortsAddr: ep.equipPortsAddr,
                                 equipPortName: ep.equipPortName,
                                 equipPortsOpt: ep.equipPortsOpt,
@@ -684,7 +747,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipPorts: eq.equipPorts.map(function(ep){
                            return {
                                 equipPortsId: ep.id,
-                                equipPortsType: ep.equipPortsType,
+                                equipPortType: ep.equipPortType,
                                 equipPortsAddr: ep.equipPortsAddr,
                                 equipPortName: ep.equipPortName,
                                 equipPortsOpt: ep.equipPortsOpt,

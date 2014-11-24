@@ -1,0 +1,36 @@
+
+<h4>Equipment</h4>
+    <table class="table-sort table-sort-search">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="equipLocation">Location</th>
+                <th class="table-sort" data-sort="equipSN">SN</th>
+                <th class="table-sort" data-sort="equipStatus">Status</th>
+                <th class="table-sort" data-sort="equipType">Type</th>
+                <th class="table-sort" data-sort="equipMake">Make & Model</th>
+                <th class="table-sort" data-sort="equipRecieved">Received</th>
+                <th class="table-sort" data-sort="equipPONum">PO</th>
+                <th class="table-sort" data-sort="equipProjectNum">Project</th>
+                <th class="table-sort" data-sort="equipticketNumber">Ticket</th>
+                <th class="table-sort" data-sort="modifiedOn">Modified</th>
+                <th class="table-sort" data-sort="rackEdit">Edit<th>
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each eqs}}
+            <tr>
+                <td class="name"><a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a></td>
+                <td class="code"><a href="/asset/equipment/{{equipSN}}">{{equipSN}}</a></td>
+                <td class="equipStatus">{{{equipStatusLight}}}</td>
+                <td class="equipType">{{equipType}}</td>
+                <td class="equipMake">{{equipMake}} {{equipModel}} {{equipSubModel}}</td>
+                <td class="equipRecieved">{{equipRecieved}}</td>
+                <td class="equipPONum">{{equipPONum}}</td>
+                <td class="equipProjectNum">{{equipProjectNum}}</td>
+                <td class="equipticketNumber">{{{equipInventoryStatus}}}</td>
+                <td class="modifiedOn">{{modifiedOn}}</td>
+                <td class="rackEdit">{{> assets/equipment-e-c}}</td>
+            </tr>  
+        {{/each}}
+        </tbody>
+    </table>

@@ -12,20 +12,21 @@
     <ul id="eachUl"class="list-unstyled"> 
             <li>
             <div class="row">
-                <div class="col-sm-9">
-                {{#if systemName}}System: <a href="/asets/system/{{systemName}}">{{systemName}} {{{systemStatus}}}</a>{{/if}} 
-                {{#if equipLocation}}Location: <a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a>{{/if}}
-                {{#if equipTicketNumber}}Ticket: {{{equipTicketNumberlit}}}<br>{{/if}}
-                {{#if equipStatus}}Status: {{{equipStatuslit}}}<br>{{/if}}
-                {{#if equipAssetTag}}Asset Tag: {{equipAssetTag}}<br>{{/if}}
-                </div>
+              <div class="col-md-8">{{#if systemName}}System: <a href="/asets/system/{{systemName}}">{{systemName}} {{{systemStatus}}}</a>{{/if}} 
+                Location: <a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a><br>
+                Ticket: {{{equipTicketNumberlit}}}<br>
+                Status: {{{equipStatuslit}}}<br>
+                {{#if equipAssetTag}}Asset Tag: {{equipAssetTag}}<br>{{/if}}</div>
+              <div class="col-md-4">{{> assets/equipment-e-c}}</div>
+            </div>
+            <div class="row">
                 <hr>
     
                 {{> assets/equipport-list}}
                 
                 <hr>
                 <div class="col-sm-9">
-                <br>
+                
                 {{#if equipIsVirtual}} Is Virtual {{/if}}
                 {{#if equipMake}}<srong>{{equipMake}}</srong><br>{{/if}}
                 {{#if equipModel}}<srong>{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}</srong><br>{{/if}}
@@ -38,8 +39,9 @@
                 {{#if equipMemTotal}}Memory: {{equipCPUType}}{{#if equipMemType}} : {{equipMemType}}{{/if}}<br>{{/if}}
                 {{#if equipRaidType}}Raid: {{equipRaidType}}{{#if equipRaidLayout}} : {{equipRaidLayout}}{{/if}}<br>{{/if}}
                 {{#if equipHDDCount}}HDD: {{equipHDDCount}}{{#if equipHDDType}} : {{equipHDDType}}{{/if}}<br>{{/if}}
-                {{#if equipPSUCount}}PSU: {{equipPSUCount}}{{#if equipPSUDraw}} Total Draw: {{equipPSUDraw}}{{/if}}<br>{{/if}}
-                {{#if equipAddOns}}Add On Card: {{equipAddOns}}<br>{{/if}}
+                {{#if equipPSUCount}}PSU: {{equipPSUCount}}<br>{{/if}}
+                {{#if equipPSUDraw}} Draw: {{equipPSUDraw}}Watts<br>{{/if}}
+                {{#if equipAddOns}}Add On Items: {{equipAddOns}}<br>{{/if}}
                 <br>
                 <strong>Timing</strong><br>
                 {{#if equipRecieved}}Received: {{equipRecieved}}<br>{{/if}}

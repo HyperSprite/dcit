@@ -23,7 +23,7 @@ var systemPortSchema = mongoose.Schema({
 });
 
 var systemdbSchema = mongoose.Schema({
-    systemName: {type: String, unique: true,sparse: true, index:1},
+    systemName: {type: String, unique: true,sparse: true, index:1, required: true},
     systemEquipSN: {type: String, index:1},
     systemEnviron: String,
     systemRole: String,
