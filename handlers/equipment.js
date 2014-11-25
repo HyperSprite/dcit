@@ -693,11 +693,13 @@ exports.dcEquipSysPages = function(req,res,next){
                                 modifiedOn: strTgs.dateMod(ep.modifiedOn),
                             };
                             }),
+                            
                             systemName: tempSys.systemName,
-                           systemEnviron: tempSys.systemEnviron,
+                            systemEnviron: tempSys.systemEnviron,
                             systemRole: tempSys.systemRole,
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
+                            
                     };
                 })
             };
