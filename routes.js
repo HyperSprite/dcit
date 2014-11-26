@@ -3,6 +3,7 @@ var main = require('./handlers/main.js'),
     location = require('./handlers/location.js'),
     rack = require('./handlers/rack.js'),
     equipment = require('./handlers/equipment.js'),
+    system = require('./handlers/system.js'),
     admin = require('./handlers/admin.js'),
     ajax = require('./handlers/ajax.js');
 
@@ -34,15 +35,23 @@ module.exports = function(app){
         app.post('/location/datacentercage/:datacenter', location.datacenterCagePost);
         app.get('/location/datacenterpower/:datacenter', location.datacenterPowerPages);
         app.post('/location/datacenterpower/:datacenter', location.datacenterPowerPost);
+        app.get('/location/rack', rack.dcRackPages);
         app.get('/location/rack/:datacenter', rack.dcRackPages);
         app.post('/location/rack/:datacenter', rack.dcRackPost);
         app.post('/location/rackdelete/:datacenter', rack.rackDelete);
         app.post('/location/rackpower/:datacenter', rack.dcRackPowPost);
         app.post('/location/racksubdelete/:datacenter', rack.rackSubDelete);
-
-        app.get('/asset/equipment/:datacenter', equipment.dcEquipPages);
-        app.get('/asset/equipmentsystem/:datacenter', equipment.dcEquipSysPages);
-        app.post('/asset/equipment/:datacenter', equipment.dcEquipmentPost);
+        
+        app.get('/equipment', equipment.dcEquipPages);
+        app.get('/equipment/:datacenter', equipment.dcEquipPages);
+        app.get('/equipment-systems', equipment.dcEquipSysPages);
+        app.get('/equipment-systems/:datacenter', equipment.dcEquipSysPages);
+        app.post('/equipment/:datacenter', equipment.dcEquipmentPost);
+        
+      /*  
+        app.get('/systems', system.dcSystemPages);
+        app.get('/systems/:datacenter', system.dcSystemPages);
+      */
         
         // Admin 
         

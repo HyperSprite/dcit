@@ -22,7 +22,7 @@ this is the Rack List block. Looks for "List" in the URL and returns list of dat
 */
 exports.dcRackPages = function(req,res,next){
     console.log('***********exports.dcRackPages First >' +req.params.datacenter);
-    if (req.params.datacenter === 'list'){
+    if (!req.params.datacenter){
     console.log("in List");
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
         Rack.find({}).sort('rackUnique').exec(function(err, racks){
@@ -424,7 +424,7 @@ exports.dcRackPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };}
-                return res.redirect(303, '/location/rack/list');
+                return res.redirect(303, '/location/rack');
 	        }
             if (!req.body.wasCopy){
 	        req.session.flash = {
@@ -519,7 +519,7 @@ if (req.body.rackUnique){
                     intro: 'Done!',
                     message: 'Contact '+ req.body.rackUnique +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/location/rack/list');
+                return res.redirect(303, '/location/rack');
                 }
             });
         }

@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
-  <li><a href="/asset/equipment/list">Equipment</a></li>
-  {{#if abbreviation}} <li><a href="/asset/equipment/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>{{/if}}
+  <li><a href="/equipment">Equipment</a></li>
+  {{#if abbreviation}} <li><a href="/equipment/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>{{/if}}
   
   <li>{{equipSN}}</li>
 </ol>
@@ -71,8 +71,8 @@
                 </form>
                 <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
                 <form id=formCopy></form>
-                <input type='submit' class='btn btn-warning btn-xs' formaction='/asset/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='Edit Equipment'>
-                <input type='submit' class='btn btn-info btn-xs' formaction='/asset/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='Copy Equipment'>
+                <input type='submit' class='btn btn-warning btn-xs' formaction='/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='Edit Equipment'>
+                <input type='submit' class='btn btn-info btn-xs' formaction='/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='Copy Equipment'>
                 <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete Equipment</button>
                 </div>
             </div>

@@ -3,6 +3,7 @@
     <table class="table-sort table-sort-search " style="overflow: scroll;">
         <thead>
             <tr>
+                <th class="table-sort" data-sort="rackEdit">Edit</th>
                 <th class="table-sort" data-sort="rackNickname">DC_Cage_Rack</th>
                 <th class="table-sort" data-sort="rackStatus">Facility ID</th>
                 <th class="table-sort" data-sort="rackStatus">Status</th>
@@ -11,12 +12,16 @@
                 <th class="table-sort" data-sort="rUs">RUs</th>
                 <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
                 <th class="table-sort" data-sort="rackDescription">Description</th>
-                <th class="table-sort" data-sort="rackEdit">Edit<th>
+                
             </tr>
         </thead>
         <tbody class="list">
             {{#each racks}}
                 <tr>
+                    <td class="rackEdit"><form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+                    <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
+                    <input type='submit' class='btn btn-warning btn-xs' formaction='/location/rack/edit-{{rackUnique}}' form="formEdit" formmethod="get" value='E'>
+                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='C'></td>                
                     <td class="rackNickname">{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}">{{rackUnique}}</a>{{else}}{{rackUnique}}{{/if}}</td>
                     <td class="rackName"><a href="/location/rack/{{rackUnique}}">{{rackName}}</a></td>
                     <td class="rackStatus">{{{rackStatus}}}</td>
@@ -25,10 +30,7 @@
                     <td class="rUs">{{rUs}}</td>
                     <td class="modifiedOn">{{modifiedOn}}</td>
                     <td class="rackDescription">{{rackDescription}}</td>
-                    <td class="rackEdit"><form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
-                    <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
-                    <input type='submit' class='btn btn-warning btn-xs' formaction='/location/rack/edit-{{rackUnique}}' form="formEdit" formmethod="get" value='E'>
-                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='C'></td>
+
                 </tr>  
             {{/each}}
         </tbody>

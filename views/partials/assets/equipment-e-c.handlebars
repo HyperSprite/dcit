@@ -1,4 +1,4 @@
 <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
 <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
-<input type='submit' class='btn btn-warning btn-xs' formaction='/asset/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='E'>
-<input type='submit' class='btn btn-info btn-xs' formaction='/asset/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='C'>
+<input type='submit' class='btn btn-warning btn-xs' formaction='/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='E'>
+<input type='submit' class='btn btn-info btn-xs' formaction='/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='C'>

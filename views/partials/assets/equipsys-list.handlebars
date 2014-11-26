@@ -1,5 +1,5 @@
     
-<h4>Equipment and Systems</h4>
+<h4>Equipment and Systems {{#if rackView}} for Rack {{rackView}}{{/if}}</h4>
     <table class="table-sort table-sort-search">
         <thead>
             <tr>
@@ -23,7 +23,7 @@
                 <td class="systemStatus" >{{{systemStatus}}}</td>
                 <td class="systemEnviron">{{systemEnviron}}</td>
                 <td class="systemRole">{{systemRole}}</td>
-                <td class="equipSN"><a href="/asset/equipment/{{equipSN}}">{{equipSN}}</a></td>
+                <td class="equipSN"><a href="/equipment/{{equipSN}}">{{equipSN}}</a></td>
                 <td class="equipStatus">{{{equipStatusLight}}}</td>
                 <td class="sysmodifiedOn">{{sysmodifiedOn}}</td>
                 <td class="modifiedOn">{{modifiedOn}}</td>

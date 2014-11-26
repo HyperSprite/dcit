@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
-  <li><a href="/asset/equipment/list">Equipment</a></li>
-  {{#if abbreviation}} <li><a href="/asset/equipment/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>{{/if}}
+  <li><a href="/equipment">Equipment</a></li>
+  {{#if abbreviation}} <li><a href="/equipment/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>{{/if}}
   <li>{{equipSN}}</li>
 </ol>
 
@@ -11,7 +11,7 @@
     <div class="datacenter"> 
 
 <div class="formContainer">
-    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/asset/equipment/{{#if equipSN}}{{equipSN}}{{else}}new{{/if}}" method="POST">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/equipment/{{#if equipSN}}{{equipSN}}{{else}}new{{/if}}" method="POST">
 		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <p class="form-control-static">{{#if equipSN}}</p>
         <div class="form-group">
@@ -187,7 +187,7 @@
         <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/asset/equipment/{{equipSN}}' {{else}}formaction='/asset/equipment/{{abbreviation}}'{{/if}} >
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
         </div>
         <hr>
         <ul id="eachUl"class="list-unstyled">    
@@ -423,7 +423,7 @@
             <div class="col-sm-offset-2 col-sm-4">
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if equipSN}} formaction='/asset/equipment/{{equipSN}}' {{else}}formaction='/asset/equipment/{{abbreviation}}'{{/if}} >
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
             </div>
         </div>
      </form><form id="formCancel"></form> 

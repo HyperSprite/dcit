@@ -342,7 +342,7 @@ exports.datacenterPost = function(req,res){
 	        return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
 	    }
         );
-        
+     // Datacenter update   
 	} else {
     Datacenter.findById(req.body.id, function(err, datacenter){
     var thisDoc = datacenter;
@@ -625,18 +625,7 @@ exports.datacenterCagePost = function(req,res){
             // this is for empty +1    
                 if (!checkVar){
                     console.log('no content cage');
-            // this section for only one new cage, no old cage
-        /*    } else if (req.body.cageId ==="new"){
-                    console.log ('picked no array cage');
-                    datacenter.cages.push({
-                        cageNickname : req.body.cageNickname.trim(),               
-                        cageName : req.body.cageName.trim(),
-                        cageInMeters : req.body.cageInMeters.trim(),
-                        cageWattPSM : req.body.cageWattPSM.trim(),
-                        cageMap: req.body.cageMap.trim(),
-                        cageNotes : req.body.cageNotes.trim(),
-                    });
-        */    // this is for more than one new cage
+            // this is for more than one new cage
             } else if (req.body.cageId[i] ==="new"){
                     console.log ('picked new cage');
             // this section for empty cage page    
