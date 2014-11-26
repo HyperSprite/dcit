@@ -172,9 +172,9 @@ exports.dcEquipPages = function(req,res,next){
 */
 
 
-    } else if (req.params.datacenter.indexOf ("newequip") !=-1){
+    } else if (req.params.datacenter.indexOf ("new") !=-1){
         console.log('else if (req.params.datacenter.indexOf ("newequip")');
-        console.log("datacenter "+req.params.datacenter);
+      /*  console.log("datacenter "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("~")+1;
             console.log("|start   >"+start);
         dcInfo = req.params.datacenter.substring (start);
@@ -184,32 +184,42 @@ exports.dcEquipPages = function(req,res,next){
         dcSubId = dcInfo.substring (dcSplit+1);
             console.log("|dcSubId >"+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);
+            console.log("|dcId    >"+dcId);*/
 
-        Datacenter.findById(dcId,function(err,datacenter){
-        var dc = datacenter;
-        var context;
-        if(!datacenter){
-            console.log("Rack !datacenter");
-        } else {
-        console.log("Rack is datacenter");
-        var thisSubDoc = datacenter.cages.id(dcSubId);
+    Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
+        if(err)return next(err);
+        
+
+    Rack.find({},{ 'rUs':1,'rackUnique':1,'_id': 0},{sort:{rackUnique:1}},function(err, rk){
         if(err) return next(err);
-        console.log("datacener= "+datacenter);
+        if(!rk) return next();
+        //console.log("rk"+rk);
+        var rackUni=[];
+        for(i=0;i<rk.length;i++){
+        rackUni[i] = rk[i].rackUnique;
+        //console.log("rackUni >"+rackUni[i]);
+        }
+        
+        //var RuTemp = 52;
+        var getRackrUs = function(RuTemp){
+            console.log("getRackrUs"+RuTemp);
+            var tempRu=[];
+            for(i=0;i<RuTemp;i++){
+            tempRu[i]=strTgs.pad([i]);
+        }
+            //console.log("getRackrUs>> "+tempRu);
+        return tempRu; 
+        };
             context ={
-                id:dc._id,
-                fullName:dc.fullName,
-                abbreviation:dc.abbreviation,
-                createdOn: strTgs.dateMod(dc.createdOn),
-                foundingCompany:dc.foundingCompany,
-                        cageId : thisSubDoc.id,
-                        cageNickname: thisSubDoc.cageNickname,
-                        cageName: thisSubDoc.cageName,
-                        cageAbbreviation: thisSubDoc.cageAbbreviation,
+                optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
+                optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
+                optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
+                rackUnique: rackUni,
+                rackrUs: getRackrUs(52),
                 };
         console.log(context);
-        res.render('location/rackedit', context);  
-        }});
+        res.render('asset/equipmentedit', context);  
+        });});
 
     }  else {
 /*---------------------------------------------------------------------
@@ -442,48 +452,48 @@ exports.dcEquipmentPost = function(req,res){
     console.log("new Equipment in DC");
     
     Equipment.create({
-                                equipLocation: req.body.equipLocationRack+"_"+req.body.equipLocationRu,
-                                equipSN: req.body.equipSN,
-                                equipAssetTag: req.body.equipAssetTag,
-                                equipTicketNumber: req.body.equipTicketNumber,
+                                equipLocation: strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu),
+                                equipSN: strTgs.sTrim(req.body.equipSN),
+                                equipAssetTag: strTgs.sTrim(req.body.equipAssetTag),
+                                equipTicketNumber: strTgs.sTrim(req.body.equipTicketNumber),
                                 equipInventoryStatus: req.body.equipInventoryStatus,
-                                equipStatus: req.body.equipStatus,
+                                equipStatus: strTgs.uTrim(req.body.equipStatus),
                                 equipIsVirtual: req.body.equipIsVirtual,
-                                equipType: req.body.equipType,
-                                equipMake: req.body.equipMake,
-                                equipModel: req.body.equipModel,
-                                equipSubModel: req.body.equipSubModel,
-                                equipRUHieght: req.body.equipRUHieght,
-                                equipImgFront: req.body.equipImgFront,
-                                equipImgRear: req.body.equipImgRear,
-                                equipImgInternal: req.body.equipImgInternal,
-                                equipFirmware: req.body.equipFirmware,
-                                equipMobo: req.body.equipMobo,
-                                equipCPUCount: req.body.equipCPUCount,
-                                equipCPUCores: req.body.equipCPUCores,
-                                equipCPUType: req.body.equipCPUType,
-                                equipMemType: req.body.equipMemType,
-                                equipMemTotal: req.body.equipMemTotal,
-                                equipRaidType: req.body.equipRaidType,
-                                equipRaidLayout: req.body.equipRaidLayout,
-                                equipHDDCount: req.body.equipHDDCount,
-                                equipHDDType: req.body.equipHDDType,
-                                equipPSUCount: req.body.equipPSUCount,
-                                equipPSUDraw: req.body.equipPSUDraw,
-                                equipAddOns: req.body.equipAddOns,
-                                equipRecieved: req.body.equipRecieved,
-                                equipAcquisition: req.body.equipAcquisition,
-                                equipInService: req.body.equipInService,
-                                equipPONum: req.body.equipPONum,
-                                equipInvoice: req.body.equipInvoice,
-                                equipProjectNum: req.body.equipProjectNum,
-                                equipLicense: req.body.equipLicense,
-                                equipMaintAgree: req.body.equipMaintAgree,
-                                equipPurchaseType: req.body.equipPurchaseType,
-                                equipPurchaser: req.body.equipPurchaser,
-                                equipPurchaseTerms: req.body.equipPurchaseTerms,
-                                equipPurchaseEnd: req.body.equipPurchaseEnd,
-                                equipNotes: req.body.equipNotes,
+                                equipType: strTgs.uTrim(req.body.equipType),
+                                equipMake: strTgs.uTrim(req.body.equipMake),
+                                equipModel: strTgs.uTrim(req.body.equipModel),
+                                equipSubModel: strTgs.uTrim(req.body.equipSubModel),
+                                equipRUHieght: strTgs.uTrim(req.body.equipRUHieght),
+                                equipImgFront: strTgs.uTrim(req.body.equipImgFront),
+                                equipImgRear: strTgs.uTrim(req.body.equipImgRear),
+                                equipImgInternal: strTgs.uTrim(req.body.equipImgInternal),
+                                equipFirmware: strTgs.uTrim(req.body.equipFirmware),
+                                equipMobo: strTgs.uTrim(req.body.equipMobo),
+                                equipCPUCount: strTgs.uTrim(req.body.equipCPUCount),
+                                equipCPUCores: strTgs.uTrim(req.body.equipCPUCores),
+                                equipCPUType: strTgs.uTrim(req.body.equipCPUType),
+                                equipMemType: strTgs.uTrim(req.body.equipMemType),
+                                equipMemTotal: strTgs.uTrim(req.body.equipMemTotal),
+                                equipRaidType: strTgs.uTrim(req.body.equipRaidType),
+                                equipRaidLayout: strTgs.uTrim(req.body.equipRaidLayout),
+                                equipHDDCount: strTgs.uTrim(req.body.equipHDDCount),
+                                equipHDDType: strTgs.uTrim(req.body.equipHDDType),
+                                equipPSUCount: strTgs.uTrim(req.body.equipPSUCount),
+                                equipPSUDraw: strTgs.uTrim(req.body.equipPSUDraw),
+                                equipAddOns: strTgs.uTrim(req.body.equipAddOns),
+                                equipRecieved: strTgs.uTrim(req.body.equipRecieved),
+                                equipAcquisition: strTgs.uTrim(req.body.equipAcquisition),
+                                equipInService: strTgs.uTrim(req.body.equipInService),
+                                equipPONum: strTgs.uTrim(req.body.equipPONum),
+                                equipInvoice: strTgs.uTrim(req.body.equipInvoice),
+                                equipProjectNum: strTgs.uTrim(req.body.equipProjectNum),
+                                equipLicense: strTgs.uTrim(req.body.equipLicense),
+                                equipMaintAgree: strTgs.uTrim(req.body.equipMaintAgree),
+                                equipPurchaseType: strTgs.uTrim(req.body.equipPurchaseType),
+                                equipPurchaser: strTgs.uTrim(req.body.equipPurchaser),
+                                equipPurchaseTerms: strTgs.uTrim(req.body.equipPurchaseTerms),
+                                equipPurchaseEnd: strTgs.uTrim(req.body.equipPurchaseEnd),
+                                equipNotes: strTgs.uTrim(req.body.equipNotes),
                                 createdBy:'Admin',
                                 createdOn: Date.now(),
                                 modifiedBy: req.body.modifiedBy,
@@ -534,7 +544,7 @@ exports.dcEquipmentPost = function(req,res){
             console.log(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
-                        thisDoc.equipLocation = req.body.equipLocationRack+"_"+req.body.equipLocationRu;
+                        thisDoc.equipLocation = strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu);
                         thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,req.body.equipAssetTag);
                         thisDoc.equipTicketNumber = strTgs.uCleanUp(thisDoc.equipTicketNumber,req.body.equipTicketNumber);
                         thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus,req.body.equipInventoryStatus);

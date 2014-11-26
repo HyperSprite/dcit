@@ -10,7 +10,7 @@
                 <th class="table-sort" data-sort="equipPortsOpt">Options</th>                
                 <th class="table-sort" data-sort="createdOn">Created On</th> 
                 <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
-                <th class="table-sort" data-sort="portEdit">Edit<th>
+            
             </tr>
         </thead>
         <tbody class="list">
@@ -23,10 +23,7 @@
                 <td class="equipmentStatus">{{equipPortsOpt}}</td>
                 <td class="createdOn">{{createdOn}}</td>
                 <td class="modifiedOn">{{modifiedOn}}</td>
-                <td class="portEdit"><form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
-                <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
-                <input type='submit' class='btn btn-warning btn-xs' formaction='/asset/equipment/edit~{{equipPortsId}}-{{../equipSN}}' form="formEdit" formmethod="get" value='E'>
-                <input type='submit' class='btn btn-info btn-xs' formaction='/asset/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='C'></td>
+           
             </tr>  
         {{/each}}
   

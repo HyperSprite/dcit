@@ -31,7 +31,19 @@
             </div>
         </div>
         {{/if}}
-        
+                <div class="form-group">
+            <label for="field-Status" class="col-sm-2 control-label" >Status</label>
+            <div class="col-sm-4">
+                <select id="equipStatus" name="equipStatus" class="form-control"  >
+               
+                    {{#each optEquipStatus}}
+                    <option {{{selOption this ../equipStatus}}} >{{this}}</option>
+                    {{/each}}
+                    
+				</select>
+                
+            </div>
+        </div> 
         <div class="form-group">
             <label for="field-equipLocationRack" class="col-sm-2 control-label" >Location</label>
             
@@ -72,7 +84,7 @@
             </div>
         </div>
 
-        <table id="portsTable" class="portsTable table table-condensed">
+        <table id="portsTable" class="table table-condensed">
             <thead>
                 <tr>
                     <th><div class="col-md-4">Type</div></th>
@@ -85,10 +97,10 @@
                 <tr>
                 {{#if equipPorts}}
                 {{#each equipPorts}}
-                <input type="hidden" name="index[]" value="{{@index}}">
                 <input type="hidden" name="equipPortsId[]" value="{{id}}">
+                    
                     <td>
-                        <input class="portsTable{{@index}}" type="hidden" name="index{{@index}}" value="{{@index}}">   
+                     
                         <input list="equipPortType{{@index}}" id="form-equipPortType{{@index}}" class="form-control form-group-sm" name="equipPortType[]" value="{{equipPortType}}" > 
                     <datalist id="equipPortType{{@index}}">
                         {{#each ../optSystPortType}}
@@ -109,59 +121,67 @@
                         <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[]"value="{{equipPortsOpt}}" placeholder="Options">
                         
                     </td>
+                </tr>
                 {{/each}}
-                {{else}}
+                {{/if}}
+                <tr>
                     <td>
-                    <input class="portsTable0" type="hidden" name="index0" value="0">
-                        <input list="equipPortType0" id="form-equipPortType0" class="form-control form-group-sm" name="equipPortType[]" value="{{equipPortType}}" > 
-                    <datalist id="equipPortType0">
-                        {{#each ../optSystPortType}}
+                     <input list="equipPortTypeA" id="form-equipPortTypeA" class="form-control form-group-sm" name="equipPortType[]"  > 
+                    <datalist id="equipPortTypeA">
+                        {{#each optSystPortType}}
                         <option {{{this}}}>{{this}}</option>
                         {{/each}}
                     </datalist>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortName{{@index}}" name="equipPortName[]"value="{{equipPortName}}" placeholder="e0, con, netmgmt">
+                        <input type="text" class="form-control form-group-sm"  id="equipPortNameA" name="equipPortName[]" placeholder="e0, con, netmgmt">
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[]"value="{{equipPortsAddr}}" placeholder="01:23:45:67:89:AB:CD"> 
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrA" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"> 
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[]"value="{{equipPortsOpt}}" placeholder="Options">
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsOptA" name="equipPortsOpt[]" placeholder="Options">
                     </td>
-                {{/if}}
-                
-             <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('portsTable','portsTable',10);">+ 1</button>   
-                
-                <script language="Javascript" type="text/javascript">
-<!--
-//Add more fields dynamically.
-function addField(area,field,limit) {
-	if(!document.getElementById) return; //Prevent older browsers from getting any further.
-	var field_area = document.getElementById(area);    
-    var all_inputs = field_area.getElementsByClassName("portsTable");
-    //Get all the input fields in the given area.
-    //Find the count of the last element of the list. It will be in the format '<field><number>'. If the 
-	//		field given in the argument is 'friend_' the last id will be 'friend_4'.
-	var last_item = all_inputs.length - 1;
-    var last = all_inputs[last_item].id;
-    var count = Number(last.split("-")[1]) + 1;
-    if (isNaN=count)count=0;
-	//If the maximum number of elements have been reached, exit the function.
-	//		If the given limit is lower than 0, infinite number of fields can be created.
-	if(count > limit && limit > 0) return;
- 	
-	if(document.createElement) { 
-		 //Older Method
-		field_area.insertAdjacentHTML('beforeend', '{{> location/datacentercagePlus1}}');
-	}
-    
-}
-//-->
-</script> 
+                </tr>
+                <tr>
+                    <td>
+                     <input list="equipPortTypeB" id="form-equipPortTypeB" class="form-control form-group-sm" name="equipPortType[]"  > 
+                    <datalist id="equipPortTypeB">
+                        {{#each optSystPortType}}
+                        <option {{{this}}}>{{this}}</option>
+                        {{/each}}
+                    </datalist>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortNameB" name="equipPortName[]" placeholder="e0, con, netmgmt">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrB" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"> 
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsOptB" name="equipPortsOpt[]" placeholder="Options">
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                     <input list="equipPortTypeC" id="form-equipPortTypeC" class="form-control form-group-sm" name="equipPortType[]"  > 
+                    <datalist id="equipPortTypeC">
+                        {{#each optSystPortType}}
+                        <option {{{this}}}>{{this}}</option>
+                        {{/each}}
+                    </datalist>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortNameC" name="equipPortName[]" placeholder="e0, con, netmgmt">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrC" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"> 
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsOptC" name="equipPortsOpt[]" placeholder="Options">
+                    </td>
+                </tr>
  
                 
                 
-                </tr>
+                
             </tbody>
         </table>
         <div class="form-group">
@@ -175,19 +195,7 @@ function addField(area,field,limit) {
        
 
  
-        <div class="form-group">
-            <label for="field-Status" class="col-sm-2 control-label" >Status</label>
-            <div class="col-sm-4">
-                <select id="equipStatus" name="equipStatus" class="form-control"  >
-               
-                    {{#each optEquipStatus}}
-                    <option {{{selOption this ../equipStatus}}} >{{this}}</option>
-                    {{/each}}
-                    
-				</select>
-                
-            </div>
-        </div>  
+ 
         
                 <div class="form-group">
             <label for="field-equipType" class="col-sm-2 control-label" >Type</label>
