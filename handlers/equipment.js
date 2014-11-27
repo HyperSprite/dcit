@@ -346,7 +346,7 @@ exports.dcEquipPages = function(req,res,next){
                                 modifiedOn: strTgs.dateMod(eq.modifiedOn),
                             equipPorts: eq.equipPorts.map(function(ep){
                             return {
-                                equipPortsId: ep.id,
+                                equipPortId: ep._id,
                                 equipPortType: ep.equipPortType,
                                 equipPortsAddr: ep.equipPortsAddr,
                                 equipPortName: ep.equipPortName,
@@ -359,7 +359,7 @@ exports.dcEquipPages = function(req,res,next){
                             }),
                             equipRMAs: eq.equipRMAs.map(function(er){
                             return {
-                                equipRMA: er.id,
+                                equipRMA: er._id,
                                 equipRMAOpened: strTgs.dateMod(er.equipRMAOpened),
                                 equipRMAClosed: strTgs.dateMod(er.equipRMAClosed),
                                 equipRMATicket: er.equipRMATicket,
@@ -451,7 +451,7 @@ exports.dcEquipmentPost = function(req,res){
     res.abbreviation = req.body.wasCopy;
     }
     console.log("new Equipment in DC");
-    varPorts = function(body){
+    varPortsNew = function(body){
     var Ports = [];
     for(i=0;i<body.equipPortType.length;i++){
         console.log("equipPortType.length "+body.equipPortType.length);
@@ -466,7 +466,7 @@ exports.dcEquipmentPost = function(req,res){
     };
     
     Equipment.create({
-                                equipPorts: varPorts(req.body),
+                                equipPorts: varPortsNew(req.body),
                                 equipLocation: strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu),
                                 equipSN: strTgs.sTrim(req.body.equipSN),
                                 equipAssetTag: strTgs.sTrim(req.body.equipAssetTag),
@@ -554,11 +554,35 @@ exports.dcEquipmentPost = function(req,res){
     Equipment.findOne({equipSN: req.body.equipSN},function(err,eq){
     res.abbreviation = req.body.equipSN;
     var thisDoc = eq;
-    console.log("existing id>"+thisDoc);
+        console.log("existing id>"+thisDoc);
         if (err) {
             console.log(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
+    
+    for(i=0;i<req.body.equipPortType.length;i++){
+        console.log("equip \n PortType >"+req.body.equipPortType[i] +" - addr >"+ req.body.equipPortsAddr[i] +" - name >"+ req.body.equipPortName[i] +" - Opt >"+ req.body.equipPortsOpt[i]);
+        if(!req.body.equipPortType[i]){
+            console.log("No new port");
+            }else if(req.body.equipPortId[i] === "new"){
+            console.log("new port >"+req.body.equipPortId[i]);
+            eq.equipPorts.push({
+            equipPortType: strTgs.sTrim(req.body.equipPortType[i]),
+            equipPortsAddr: strTgs.mTrim(req.body.equipPortsAddr[i]),
+            equipPortName: strTgs.sTrim(req.body.equipPortName[i]),
+            equipPortsOpt: strTgs.sTrim(req.body.equipPortsOpt[i]),
+            });
+            }else{
+            console.log("existing port");
+        var thisSubDoc = eq.equipPorts.id(req.body.equipPortId[i]);
+            thisSubDoc.equipPortType = strTgs.uCleanUp(thisSubDoc.equipPortType,req.body.equipPortType[i]);
+            thisSubDoc.equipPortsAddr = strTgs.mCleanUp(thisSubDoc.equipPortsAddr,req.body.equipPortsAddr[i]);
+            thisSubDoc.equipPortName = strTgs.uCleanUp(thisSubDoc.equipPortName,req.body.equipPortName[i]);
+            thisSubDoc.equipPortsOpt = strTgs.uCleanUp(thisSubDoc.equipPortsOpt,req.body.equipPortsOpt[i]);
+        }
+    }
+    
+
                         thisDoc.equipLocation = strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu);
                         thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,req.body.equipAssetTag);
                         thisDoc.equipTicketNumber = strTgs.uCleanUp(thisDoc.equipTicketNumber,req.body.equipTicketNumber);
@@ -628,31 +652,31 @@ exports.dcEquipmentPost = function(req,res){
 ---------------------------- Rack Delete ------------------------------
 ------------------------------------------------------------------------
 */
-exports.rackDelete = function(req,res){
-    res.abbreviation = req.body.rackUnique;
-if (req.body.rackUnique){
+exports.dcEquipDelete = function(req,res){
+    res.abbreviation = req.body.equipSN;
+if (req.body.equipSN){
         console.log("delete got this far");
-        Rack.findOne({rackUnique: req.body.rackUnique},function(err,racktodelete){
+        Equipment.findOne({equipSN: req.body.equipSN},function(err,equipSNtodelete){
         if(err){
         console.log(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
-            racktodelete.remove(function(err){
+            equipSNtodelete.remove(function(err){
                 if(err){
                 console.log(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
-                        message: 'Something went wrong, '+ req.body.subName +' was not deleted.',
+                        message: 'Something went wrong, '+ req.body.equipSNtodelete +' was not deleted.',
                     };
-                    return res.redirect(303, '/location/rack/'+ res.abbreviation);
+                    return res.redirect(303, '/location/equipment/'+ res.abbreviation);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
-                    message: 'Contact '+ req.body.rackUnique +' has been deleted. Good luck with that one',
+                    message: 'Contact '+ req.body.equipSNtodelete +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/location/rack');
+                return res.redirect(303, '/equipment');
                 }
             });
         }

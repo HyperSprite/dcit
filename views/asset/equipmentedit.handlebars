@@ -97,7 +97,7 @@
                 <tr>
                 {{#if equipPorts}}
                 {{#each equipPorts}}
-                <input type="hidden" name="equipPortsId[]" value="{{id}}">
+                <input type="hidden" name="equipPortId[]" value="{{equipPortId}}">
                     
                     <td>
                      
@@ -114,7 +114,7 @@
                         
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[]"value="{{equipPortsAddr}}" placeholder="Options">
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[]"value="{{equipPortsAddr}}" placeholder="Options"  onKeyUp = "format(this.form.equipPortsAddr{{@index}});" onKeyDown = "format(this.form.equipPortsAddr{{@index}});">
                         
                     </td>
                     <td>
@@ -126,6 +126,7 @@
                 {{/if}}
                 <tr>
                     <td>
+                    <input type="hidden" name="equipPortId[]" value="new">
                      <input list="equipPortTypeA" id="form-equipPortTypeA" class="form-control form-group-sm" name="equipPortType[]"  > 
                     <datalist id="equipPortTypeA">
                         {{#each optSystPortType}}
@@ -136,7 +137,7 @@
                         <input type="text" class="form-control form-group-sm"  id="equipPortNameA" name="equipPortName[]" placeholder="e0, con, netmgmt">
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrA" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"> 
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrA" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"  onKeyUp = "format(this.form.equipPortsAddrA);" onKeyDown = "format(this.form.equipPortsAddrA);"> 
                     </td>
                     <td>
                         <input type="text" class="form-control form-group-sm"  id="equipPortsOptA" name="equipPortsOpt[]" placeholder="Options">
@@ -144,6 +145,7 @@
                 </tr>
                 <tr>
                     <td>
+                    <input type="hidden" name="equipPortId[]" value="new">
                      <input list="equipPortTypeB" id="form-equipPortTypeB" class="form-control form-group-sm" name="equipPortType[]"  > 
                     <datalist id="equipPortTypeB">
                         {{#each optSystPortType}}
@@ -154,14 +156,14 @@
                         <input type="text" class="form-control form-group-sm"  id="equipPortNameB" name="equipPortName[]" placeholder="e0, con, netmgmt">
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrB" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"> 
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrB" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"  onKeyUp = "format(this.form.equipPortsAddrB);" onKeyDown = "format(this.form.equipPortsAddrB);"> 
                     </td>
                     <td>
                         <input type="text" class="form-control form-group-sm"  id="equipPortsOptB" name="equipPortsOpt[]" placeholder="Options">
                     </td>
                 </tr>
                  <tr>
-                    <td>
+                    <td><input type="hidden" name="equipPortId[]" value="new">
                      <input list="equipPortTypeC" id="form-equipPortTypeC" class="form-control form-group-sm" name="equipPortType[]"  > 
                     <datalist id="equipPortTypeC">
                         {{#each optSystPortType}}
@@ -172,14 +174,20 @@
                         <input type="text" class="form-control form-group-sm"  id="equipPortNameC" name="equipPortName[]" placeholder="e0, con, netmgmt">
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrC" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"> 
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrC" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"  onKeyUp = "format(this.form.equipPortsAddrC);" onKeyDown = "format(this.form.equipPortsAddrC);"> 
                     </td>
                     <td>
                         <input type="text" class="form-control form-group-sm"  id="equipPortsOptC" name="equipPortsOpt[]" placeholder="Options">
                     </td>
                 </tr>
  
-                
+        <script>
+            function format(field) { 
+            var last = field.value.substring( field.value.lastIndexOf(":") + 1, field.value.length); 
+            if (last.length >= 2) field.value = field.value + ":"; 
+            if (field.value.length > 17) field.value = field.value.substring(0, 17); 
+            } 
+        </script>
                 
                 
             </tbody>
