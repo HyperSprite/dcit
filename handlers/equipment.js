@@ -174,17 +174,11 @@ exports.dcEquipPages = function(req,res,next){
 
     } else if (req.params.datacenter.indexOf ("new") !=-1){
         console.log('else if (req.params.datacenter.indexOf ("newequip")');
-      /*  console.log("datacenter "+req.params.datacenter);
-        start = req.params.datacenter.indexOf ("~")+1;
+        console.log("datacenter "+req.params.datacenter);
+        start = req.params.datacenter.indexOf ("-")+1;
             console.log("|start   >"+start);
-        dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
-        dcSplit = dcInfo.indexOf ("-");
-            console.log("|dcSplit >"+dcSplit);
-        dcSubId = dcInfo.substring (dcSplit+1);
-            console.log("|dcSubId >"+dcSubId);
-        dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);*/
+        dcId = req.params.datacenter.substring (start);
+            console.log("|dcId    >"+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
@@ -211,6 +205,7 @@ exports.dcEquipPages = function(req,res,next){
         return tempRu; 
         };
             context ={
+                dcId: dcId,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
@@ -439,7 +434,7 @@ exports.dcEquipPages = function(req,res,next){
     
 
 /* ---------------------------------------------------------------------
------------------------   New equipment working   ---------------------------
+-----------------------   New and copy equipment POST working   --------
 ------------------------------------------------------------------------
 */
 exports.dcEquipmentPost = function(req,res){
@@ -649,41 +644,7 @@ exports.dcEquipmentPost = function(req,res){
 }
 };
   
-/*---------------------------------------------------------------------
----------------------------- Equipment Delete ------------------------------
-------------------------------------------------------------------------
-*/
-exports.dcEquipDelete = function(req,res){
-    res.abbreviation = req.body.equipSN;
-if (req.body.equipSN){
-        console.log("delete got this far");
-        Equipment.findOne({equipSN: req.body.equipSN},function(err,equipSNtodelete){
-        if(err){
-        console.log(err);
-        //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
-        }else{
-            equipSNtodelete.remove(function(err){
-                if(err){
-                console.log(err);
-                req.session.flash = {
-                        type: 'danger',
-                        intro: 'Ooops!',
-                        message: 'Something went wrong, '+ req.body.equipSNtodelete +' was not deleted.',
-                    };
-                    return res.redirect(303, '/location/equipment/'+ res.abbreviation);
-                } else {
-                    req.session.flash = {
-                    type: 'success',
-                    intro: 'Done!',
-                    message: 'Contact '+ req.body.equipSNtodelete +' has been deleted. Good luck with that one',
-                };
-                return res.redirect(303, '/equipment');
-                }
-            });
-        }
-    });
-}
-};
+
 
 
 exports.dcEquipPortPostAJAX = function(req,res){
@@ -826,87 +787,42 @@ exports.dcEquipSysPages = function(req,res,next){
     }
 };
 
-/* ---------------------------------------------------------------------
-------------------------   Rack Power Post   ---------------------------
+/*---------------------------------------------------------------------
+---------------------------- Equipment Delete ------------------------------
 ------------------------------------------------------------------------
 */
-
-exports.dcRackPowPost = function(req,res){
-    // this makes the abbreviation available for the URL
-    //res.abbreviation = req.body.rackUnique;
-
-    //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
-    //if (!req.body.rackPowUnique){
-    //if (req.body.wasCopy){
-    //res.abbreviation = req.body.wasCopy;
-    //}
-    console.log("Rack Power abbreviation "+req.body.abbreviation);
-    console.log("Rack Power rackUnique "+req.body.rackUnique);
-    console.log("Rack Power rackPowUnique "+req.body.rackPowUnique);
-    console.log("Rack Power rackPowMain "+req.body.rackPowMain);
-    console.log("Rack Power rackPowVolts "+req.body.rackPowVolts);
-    console.log("Rack Power rackPowPhase "+req.body.rackPowPhase);
-    
-    
-    
-    Rack.findOne({rackUnique: req.body.rackUnique},function(err,rk){
-    res.abbreviation = req.body.rackUnique;
-    console.log("Rack Power findOne "+rk);
-        //console.log("dcRackPowPost abbreviation>"+res.abbreviation);
-    var thisSubDoc;
-    if(req.body.rackPowUnique === "new"){
-    thisSubDoc = "new";
-    }else{
-    thisSubDoc = rk.powers.id(req.body.rackPowId);
-    }
-    console.log("existing id>"+thisSubDoc);
-        if (err) {
-            console.log(err);
-            res.redirect('location/rack/'+res.abbreviation);
-        } else if(thisSubDoc === "new"){
-                rk.powers.push({
-                    rackPowMain: req.body.rackPowMain,
-                    rackPowCircuit: req.body.rackPowCircuit.trim().toUpperCase(),
-                    rackPowUnique: req.body.abbreviation+"_"+req.body.rackPowMain+"_"+req.body.rackPowCircuit.trim().toUpperCase(),
-                    rackPowStatus: req.body.rackPowStatus,
-                    rackPowVolts: req.body.rackPowVolts.trim(),
-                    rackPowPhase: req.body.rackPowPhase.trim(),
-                    rackPowAmps: req.body.rackPowAmps.trim(),
-                    rackPowReceptacle: req.body.rackPowReceptacle.trim().toUpperCase(),
-                    rackPowCreatedBy: 'Admin',
-                    rackPowCreatedOn: modifiedOn = Date.now(),
-                    rackPowModifiedby: 'Admin',
-                    rackPowModifiedOn: modifiedOn = Date.now(),
-                });
-        } else {
-                thisSubDoc.rackPowStatus = strTgs.uCleanUp(thisSubDoc.rackPowStatus,req.body.rackPowStatus);
-                thisSubDoc.rackPowVolts = strTgs.uCleanUp(thisSubDoc.rackPowVolts,req.body.rackPowVolts);
-                thisSubDoc.rackPowPhase = strTgs.uCleanUp(thisSubDoc.rackPowPhase,req.body.rackPowPhase);
-                thisSubDoc.rackPowAmps = strTgs.uCleanUp(thisSubDoc.rackPowAmps,req.body.rackPowAmps);
-                thisSubDoc.rackPowReceptacle = strTgs.uCleanUp(thisSubDoc.rackPowReceptacle,req.body.rackPowReceptacle);
-                thisSubDoc.modifiedOn = Date.now();
-                thisSubDoc.modifiedBy ='Admin';
-                    }
-	    rk.save(function(err){
-	        if(err) {
-	        	console.error(err.stack);
-	            req.session.flash = {
-	                type: 'danger',
-	                intro: 'Ooops!',
-	                message: 'There was an error processing your request.',
-	            };
-	            return res.redirect(303, 'location/rack/'+ res.abbreviation);
-	        }
-	        req.session.flash = {
-	            type: 'success',
-	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
-	        };
-	        return res.redirect(303, '/location/rack/'+ res.abbreviation);
-	    });
-	});
-
+exports.dcEquipDelete = function(req,res){
+    res.abbreviation = req.body.equipSN;
+if (req.body.equipSN){
+        console.log("delete got this far");
+        Equipment.findOne({equipSN: req.body.equipSN},function(err,equipSNtodelete){
+        if(err){
+        console.log(err);
+        //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+        }else{
+            equipSNtodelete.remove(function(err){
+                if(err){
+                console.log(err);
+                req.session.flash = {
+                        type: 'danger',
+                        intro: 'Ooops!',
+                        message: 'Something went wrong, '+ req.body.equipSNtodelete +' was not deleted.',
+                    };
+                    return res.redirect(303, '/location/equipment/'+ res.abbreviation);
+                } else {
+                    req.session.flash = {
+                    type: 'success',
+                    intro: 'Done!',
+                    message: 'Contact '+ req.body.equipSNtodelete +' has been deleted. Good luck with that one',
+                };
+                return res.redirect(303, '/equipment');
+                }
+            });
+        }
+    });
+}
 };
+
 /* ---------------------------------------------------------------------
 -------------------    equipPorts Delete   --------------------------------
 ------------------------------------------------------------------------
