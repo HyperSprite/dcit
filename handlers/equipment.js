@@ -292,6 +292,7 @@ exports.dcEquipPages = function(req,res,next){
                                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
                                 rackUnique: rackUni,
                                 rackrUs: getRackrUs(52),
+                                equipId: eq._id,
                                 equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                                 equipLocationRu: strTgs.ruElevation(eq.equipLocation),
                                 equipLocation: eq.equipLocation,
@@ -649,7 +650,7 @@ exports.dcEquipmentPost = function(req,res){
 };
   
 /*---------------------------------------------------------------------
----------------------------- Rack Delete ------------------------------
+---------------------------- Equipment Delete ------------------------------
 ------------------------------------------------------------------------
 */
 exports.dcEquipDelete = function(req,res){
@@ -907,35 +908,35 @@ exports.dcRackPowPost = function(req,res){
 
 };
 /* ---------------------------------------------------------------------
--------------------    rackPow Delete   --------------------------------
+-------------------    equipPorts Delete   --------------------------------
 ------------------------------------------------------------------------
 */
 
-exports.rackSubDelete = function(req,res){
+exports.equipSubDelete = function(req,res){
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){
-    Rack.findById(req.body.id,req.body.subDoc,function (err, rk){
+    Equipment.findById(req.body.id,req.body.subDoc,function (err, eq){
         if(err){
         console.log(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
-            rk.powers.id(req.body.subId).remove();
-            rk.save(function(err){
+            eq.equipPorts.id(req.body.subId).remove();
+            eq.save(function(err){
                 if(err){
                 console.log(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
-                        message: 'Something went wrong, '+ req.body.subName +' was not deleted.',
+                        message: 'Something went wrong',
                     };
-                    return res.redirect(303, '/location/rack/'+ res.abbreviation);
+                    return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
-                    message: 'Contact '+ req.body.subName +' has been deleted.',
+                    message: 'The port has been deleted.',
                 };
-                return res.redirect(303, '/location/rack/'+ res.abbreviation);
+                return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
                 }
             });
         }

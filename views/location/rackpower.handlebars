@@ -113,11 +113,11 @@
      <form id="formCancel"></form>
 
         <form id="deleteform" action="/location/racksubdelete/{{abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{conName}}')">
-                    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
-                    <input type="hidden" name="id" value="{{rackId}}">
-                    <input type="hidden" name="abbreviation" value="{{rackUnique}}">
-                    <input type="hidden" name="subId" value="{{rackPowId}}">
-                    <input type="hidden" name="subName" value="{{rackPowUnique}}">
-                    </form>
+            <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+            <input type="hidden" name="id" value="{{rackId}}">
+            <input type="hidden" name="abbreviation" value="{{rackUnique}}">
+            <input type="hidden" name="subId" value="{{rackPowId}}">
+            <input type="hidden" name="subName" value="{{rackPowUnique}}">
+        </form>
 </div>
 </div>

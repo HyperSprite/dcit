@@ -64,15 +64,12 @@
                 {{#if modifiedBy}}Modified By: {{modifiedBy}}{{#if modifiedOn}} {{modifiedOn}}{{/if}}<br>{{/if}}
                 
                 
-                <form id="deleteform" action="/equipmentdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
-                    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
-                    <input type="hidden" name="equipSN" value="{{equipSN}}">
-                </form>
+                
                 <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
                 <form id=formCopy></form>
                 <input type='submit' class='btn btn-warning btn-xs' formaction='/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='Edit Equipment'>
                 <input type='submit' class='btn btn-info btn-xs' formaction='/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='Copy Equipment'>
-                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete Equipment</button>
+                
                 </div>
             </div>
             </li><br>

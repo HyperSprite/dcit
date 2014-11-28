@@ -87,21 +87,27 @@
         <table id="portsTable" class="table table-condensed">
             <thead>
                 <tr>
-                    <th><div class="col-md-4">Type</div></th>
-                    <th><div class="col-md-3">Name</div></th>
-                    <th><div class="col-md-2">Address</div></th>
-                    <th><div class="col-md-3">Options</div></th>
+                    <th><div>Delete</div></th>
+                    <th><div >Type</div></th>
+                    <th><div >Name</div></th>
+                    <th><div >Address</div></th>
+                    <th><div >Options</div></th>
                 </tr>
             </thead>
-            <tbody class="list">
-                <tr>
+            <tbody id="tbody1" class="list">
+                
                 {{#if equipPorts}}
                 {{#each equipPorts}}
+                <tr class="tr-ports">
                 <input type="hidden" name="equipPortId[]" value="{{equipPortId}}">
+                    <td>
+                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button>
+                    </td>
+                    
                     
                     <td>
                      
-                        <input list="equipPortType{{@index}}" id="form-equipPortType{{@index}}" class="form-control form-group-sm" name="equipPortType[]" value="{{equipPortType}}" > 
+                        <input list="equipPortType{{@index}}" id="form-equipPortType{{@index}}" class="form-control form-group-sm" name="equipPortType[{{@index}}]" value="{{equipPortType}}" > 
                     <datalist id="equipPortType{{@index}}">
                         {{#each ../optSystPortType}}
                             <option {{{this}}}>{{this}}</option>
@@ -110,89 +116,80 @@
                         
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortName{{@index}}" name="equipPortName[]"value="{{equipPortName}}" placeholder="e0, con, netmgmt">
+                        <input type="text" class="form-control form-group-sm"  id="equipPortName{{@index}}" name="equipPortName[{{@index}}]"value="{{equipPortName}}" placeholder="e0, con, netmgmt">
                         
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[]"value="{{equipPortsAddr}}" placeholder="Options"  onKeyUp = "format(this.form.equipPortsAddr{{@index}});" onKeyDown = "format(this.form.equipPortsAddr{{@index}});">
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[{{@index}}]"value="{{equipPortsAddr}}" placeholder="01:23:45:67:89:AB:CD">
                         
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[]"value="{{equipPortsOpt}}" placeholder="Options">
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[{{@index}}]"value="{{equipPortsOpt}}" placeholder="Options {{@index}}">
                         
                     </td>
                 </tr>
                 {{/each}}
+                {{else}}
+                <tr>
+                    <td>
+                    <input type="hidden" name="equipPortId[0]" value="new">
+                     <input list="equipPortType0" id="form-equipPortType0" class="form-control form-group-sm" name="equipPortType[0]" value="Ethernet"  > 
+                    <datalist id="equipPortType0">
+                        {{#each optSystPortType}}
+                        <option {{{this}}}>{{this}}</option>
+                        {{/each}}
+                    </datalist>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortName0" name="equipPortName[0]" value="e0" placeholder="e0, con, netmgmt">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr0" name="equipPortsAddr[0]" placeholder="01:23:45:67:89:AB:CD" > 
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt0" name="equipPortsOpt[0]" placeholder="Options">
+                    </td>
+                </tr>
+                <tr>
                 {{/if}}
-                <tr>
-                    <td>
-                    <input type="hidden" name="equipPortId[]" value="new">
-                     <input list="equipPortTypeA" id="form-equipPortTypeA" class="form-control form-group-sm" name="equipPortType[]"  > 
-                    <datalist id="equipPortTypeA">
-                        {{#each optSystPortType}}
-                        <option {{{this}}}>{{this}}</option>
-                        {{/each}}
-                    </datalist>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortNameA" name="equipPortName[]" placeholder="e0, con, netmgmt">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrA" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"  onKeyUp = "format(this.form.equipPortsAddrA);" onKeyDown = "format(this.form.equipPortsAddrA);"> 
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsOptA" name="equipPortsOpt[]" placeholder="Options">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                    <input type="hidden" name="equipPortId[]" value="new">
-                     <input list="equipPortTypeB" id="form-equipPortTypeB" class="form-control form-group-sm" name="equipPortType[]"  > 
-                    <datalist id="equipPortTypeB">
-                        {{#each optSystPortType}}
-                        <option {{{this}}}>{{this}}</option>
-                        {{/each}}
-                    </datalist>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortNameB" name="equipPortName[]" placeholder="e0, con, netmgmt">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrB" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"  onKeyUp = "format(this.form.equipPortsAddrB);" onKeyDown = "format(this.form.equipPortsAddrB);"> 
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsOptB" name="equipPortsOpt[]" placeholder="Options">
-                    </td>
-                </tr>
-                 <tr>
-                    <td><input type="hidden" name="equipPortId[]" value="new">
-                     <input list="equipPortTypeC" id="form-equipPortTypeC" class="form-control form-group-sm" name="equipPortType[]"  > 
-                    <datalist id="equipPortTypeC">
-                        {{#each optSystPortType}}
-                        <option {{{this}}}>{{this}}</option>
-                        {{/each}}
-                    </datalist>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortNameC" name="equipPortName[]" placeholder="e0, con, netmgmt">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddrC" name="equipPortsAddr[]" placeholder="01:23:45:67:89:AB:CD"  onKeyUp = "format(this.form.equipPortsAddrC);" onKeyDown = "format(this.form.equipPortsAddrC);"> 
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsOptC" name="equipPortsOpt[]" placeholder="Options">
-                    </td>
-                </tr>
- 
-        <script>
-            function format(field) { 
-            var last = field.value.substring( field.value.lastIndexOf(":") + 1, field.value.length); 
-            if (last.length >= 2) field.value = field.value + ":"; 
-            if (field.value.length > 17) field.value = field.value.substring(0, 17); 
-            } 
-        </script>
+
+                
+
+ <script language="Javascript" type="text/javascript">
+<!--
+//Add more fields dynamically.
+/* area is the region you want to add to, in this case id="tbody1"
+   field is element you want to count, in this case <tr>
+   limit is how many to be allowed to make, 10 is the default here
+*/
+function addField(area,field,limit) {
+	if(!document.getElementById) return;
+    var field_area = document.getElementById(area);  
+    var liList = document.getElementById(area).getElementsByTagName("tr");
+    var count = liList.length
+
+    var count = count + 1;
+    if (isNaN===count)count=0;
+	//If the maximum number of elements have been reached, exit the function.
+	//		If the given limit is lower than 0, infinite number of fields can be created.
+	if(count > limit && limit > 0) return;
+ 	
+	if(document.createElement) { 
+		 //Older Method
+		field_area.insertAdjacentHTML('beforeend', '{{> assets/equipmenteditPlus1}}');
+	}
+    
+}
+//-->
+</script> 
+                
+                
+
                 
                 
             </tbody>
         </table>
         <div class="form-group">
+        <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('tbody1','tr',10);">+ 1</button>
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
                 <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
@@ -403,7 +400,7 @@
                 <div class="form-group">
             <label for="field-equipPurchaser" class="col-sm-2 control-label" >Purchaser</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipPurchaser" name="equipPurchaser"  value="{{equipPurchaser}}" placeholder="Oracle, Company before M&A">
+                <input type="text" class="form-control" id="equipPurchaser" name="equipPurchaser"  value="{{equipPurchaser}}" placeholder="Company Name">
             </div>
         </div>   
                 <div class="form-group">
@@ -432,11 +429,27 @@
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
                 <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>
             </div>
         </div>
      </form><form id="formCancel"></form> 
+      
+     <form id="deleteform" action="/equipmentdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
+        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="equipSN" value="{{equipSN}}">
+    </form>
      
-
-
+        {{#if equipPorts}}
+        {{#each equipPorts}}
+            <form id="deleteform{{@index}}" action="/equipmentportdelete/{{../equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this port?')">
+            <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
+            <input type="hidden" name="id" value="{{../equipId}}">
+            <input type="hidden" name="abbreviation" value="{{../equipSN}}">
+            <input type="hidden" name="subId" value="{{equipPortId}}">
+            <input type="hidden" name="collectionName" value="equipment">
+            <input type="hidden" name="collectionSub" value="equipPorts">
+            </form>
+        {{/each}}
+        {{/if}}
 
         

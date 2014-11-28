@@ -60,19 +60,19 @@ $('form#datacenterForm').serializeJSON();
         <div class="form-group">
             <label for="cageInMeters" class="col-sm-2 control-label">Cage size in Meters</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldcageInMeters{{@index}}" name="cageInMeters[{{@index}}]"  value="{{cageInMeters}}">
+                <input type="text" class="form-control" id="fieldcageInMeters{{@index}}" name="cageInMeters[{{@index}}]"  value="{{cageInMeters}}" placeholder="Cage Size in Meters">
             </div>
         </div>
         <div class="form-group">
             <label for="cageWattPSM" class="col-sm-2 control-label">Watts Per Square Meter</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldcageWattPSM{{@index}}" name="cageWattPSM[{{@index}}]"  value="{{cageWattPSM}}">
+                <input type="text" class="form-control" id="fieldcageWattPSM{{@index}}" name="cageWattPSM[{{@index}}]"  value="{{cageWattPSM}}" placeholder="Watts sq. Meter">
             </div>
         </div>
         <div class="form-group">
             <label for="cageMap" class="col-sm-2 control-label">Cage Map URL</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldcageMap{{@index}}" name="cageMap[{{@index}}]"  value="{{cageMap}}">
+                <input type="text" class="form-control" id="fieldcageMap{{@index}}" name="cageMap[{{@index}}]"  value="{{cageMap}}" placeholder="http://">
             </div>
         </div>         
         <div class="form-group">
@@ -115,7 +115,7 @@ $('form#datacenterForm').serializeJSON();
         </div>         
         <div class="form-group"><label for="cageMap" class="col-sm-2 control-label">Cage Map URL</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldcageMap0"name="cageMap[0]" value="" placeholder="Cage Map URL">
+                <input type="text" class="form-control" id="fieldcageMap0"name="cageMap[0]" value="" placeholder="http://">
             </div>
         </div>
         <div class="form-group"><label for="cageNotes" class="col-sm-2 control-label">Cage Notes</label>
@@ -131,9 +131,10 @@ $('form#datacenterForm').serializeJSON();
          
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
+                        <button type="submit" class="btn btn-primary  btn-xs">Submit</button>
                         <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('eachUl','eachLi-',10);">+ 1</button>
                         <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>                        
-                        <button type="submit" class="btn btn-default  btn-xs">Submit</button>
+                        
                         <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/location/datacenter/{{abbreviation}}'>
             </div>
         </div>
@@ -159,16 +160,13 @@ $('form#datacenterForm').serializeJSON();
 <!--
 //Add more fields dynamically.
 function addField(area,field,limit) {
-	if(!document.getElementById) return; //Prevent older browsers from getting any further.
-	var field_area = document.getElementById(area);    
-    var all_inputs = field_area.getElementsByClassName("eachLi");
-    //Get all the input fields in the given area.
-    //Find the count of the last element of the list. It will be in the format '<field><number>'. If the 
-	//		field given in the argument is 'friend_' the last id will be 'friend_4'.
-	var last_item = all_inputs.length - 1;
-    var last = all_inputs[last_item].id;
-    var count = Number(last.split("-")[1]) + 1;
-    if (isNaN=count)count=0;
+	if(!document.getElementById) return;
+    var field_area = document.getElementById(area);  
+    var liList = document.getElementById(area).getElementsByTagName("li");
+    var count = liList.length
+
+    var count = count + 1;
+    if (isNaN===count)count=0;
 	//If the maximum number of elements have been reached, exit the function.
 	//		If the given limit is lower than 0, infinite number of fields can be created.
 	if(count > limit && limit > 0) return;
@@ -181,3 +179,5 @@ function addField(area,field,limit) {
 }
 //-->
 </script> 
+
+count

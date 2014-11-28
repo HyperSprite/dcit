@@ -61,7 +61,15 @@
         
         
     <hr>        
-    <h4><a href="/location/datacentercage/edit-{{id}}">Cages</a></h4>
+    <h4><input type='submit' class='btn btn-warning btn-xs' formaction='/location/datacentercage/edit-{{id}}' form="formEdit" formmethod="get" value='E'> Cages</h4>
+    
+    
+    <form id=formEdit></form>
+
+
+    
+    
+    
     <ul id="eachUl"class="list-unstyled"> 
 
         {{#each cages}}
@@ -71,7 +79,7 @@
             <strong>Facility name: {{cageName}}</strong><br>
             {{#if cageInMeters}}Cage in Meters: {{cageInMeters}} - Feet: {{cageInFeet}}<br>{{/if}}
             {{#if cageWattPSM}}Watts Per Sq. Meter: {{cageWattPSM}} - Foot:{{cageWattPSF}}<br>{{/if}}
-            {{#if cageMap}}Cage Map: {{cageMap}}<br>{{/if}}
+            {{#if cageMap}}Cage Map: <a href="{{cageMap}}" target="_blank"> Link</a><br>{{/if}}
             {{#if cageNotes}}Notes:{{cageNotes}}<br>{{/if}}
             <br>
             <ul id="racksUl" class="list-unstyled">

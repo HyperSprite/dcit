@@ -635,25 +635,25 @@ exports.datacenterCagePost = function(req,res){
                     console.log ('picked new cage');
             // this section for empty cage page    
                     datacenter.cages.push({
-                        cageNickname : req.body.cageNickname[i],
-                        cageAbbreviation : req.body.cageAbbreviation[i],
-                        cageName : req.body.cageName[i],
-                        cageInMeters : req.body.cageInMeters[i],
-                        cageWattPSM : req.body.cageWattPSM[i],
-                        cageMap: req.body.cageMap[i],
-                        cageNotes : req.body.cageNotes[i],
+                        cageNickname : strTgs.uTrim(req.body.cageNickname[i]),
+                        cageAbbreviation : strTgs.cTrim(req.body.cageAbbreviation[i]),
+                        cageName : strTgs.uTrim(req.body.cageName[i]),
+                        cageInMeters : strTgs.uTrim(req.body.cageInMeters[i]),
+                        cageWattPSM : strTgs.uTrim(req.body.cageWattPSM[i]),
+                        cageMap: strTgs.sTrim(req.body.cageMap[i]),
+                        cageNotes : strTgs.uTrim(req.body.cageNotes[i]),
                     });
             // this is for existing cages    strTgs.uCleanUp(thisSubDoc.conType,req.body.conType);
             }else{
                     console.log('existing cage');
                     var thisSubDoc = datacenter.cages.id(req.body.cageId[i]);
-                        thisSubDoc.cageNickname = req.body.cageNickname[i];
-                        thisSubDoc.cageAbbreviation = req.body.cageAbbreviation[i];
-                        thisSubDoc.cageName = req.body.cageName[i];
-                        thisSubDoc.cageInMeters = req.body.cageInMeters[i];
-                        thisSubDoc.cageWattPSM = req.body.cageWattPSM[i];
-                        thisSubDoc.cageMap = req.body.cageMap[i];
-                        thisSubDoc.cageNotes = req.body.cageNotes[i];
+                        thisSubDoc.cageNickname = strTgs.uTrim(req.body.cageNickname[i]);
+                        thisSubDoc.cageAbbreviation = strTgs.cTrim(req.body.cageAbbreviation[i]);
+                        thisSubDoc.cageName = strTgs.uTrim(req.body.cageName[i]);
+                        thisSubDoc.cageInMeters = strTgs.uTrim(req.body.cageInMeters[i]);
+                        thisSubDoc.cageWattPSM = strTgs.uTrim(req.body.cageWattPSM[i]);
+                        thisSubDoc.cageMap = strTgs.uTrim(req.body.cageMap[i]);
+                        thisSubDoc.cageNotes = strTgs.uTrim(req.body.cageNotes[i]);
                 }}
             }
 	    datacenter.save(function(err){

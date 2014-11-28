@@ -566,7 +566,7 @@ exports.dcRackPowPost = function(req,res){
         } else if(thisSubDoc === "new"){
                 rk.powers.push({
                     rackPowMain: req.body.rackPowMain,
-                    rackPowCircuit: strTgs.cTrim(req.body.rackPowCircuit.trim),
+                    rackPowCircuit: strTgs.cTrim(req.body.rackPowCircuit),
                     rackPowUnique: req.body.abbreviation+"_"+req.body.rackPowMain+"_"+strTgs.cTrim(req.body.rackPowCircuit),
                     rackPowStatus: req.body.rackPowStatus,
                     rackPowVolts: strTgs.sTrim(req.body.rackPowVolts),
