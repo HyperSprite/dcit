@@ -23,7 +23,7 @@
             </div>
         </div>
         {{else}}
-        <input type="hidden" name="wasCopy" value="{{wasCopy}}">
+        {{#if wasCopy}} <input type="hidden" name="wasCopy" value="{{wasCopy}}"> {{/if}}
         <div class="form-group">
             <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
             <div class="col-sm-4">
@@ -87,7 +87,7 @@
         <table id="portsTable" class="table table-condensed">
             <thead>
                 <tr>
-                    <th><div>Delete</div></th>
+                    <th><div></div></th>
                     <th><div >Type</div></th>
                     <th><div >Name</div></th>
                     <th><div >Address</div></th>
@@ -99,7 +99,7 @@
                 {{#if equipPorts}}
                 {{#each equipPorts}}
                 <tr class="tr-ports">
-                <input type="hidden" name="equipPortId[]" value="{{equipPortId}}">
+                <input type="hidden" name="equipPortId[{{@index}}]" value="{{equipPortId}}">
                     <td>
                         <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button>
                     </td>
@@ -130,17 +130,19 @@
                 </tr>
                 {{/each}}
                 {{else}}
-                <tr>
+                <tr class="tr-ports">
+                    <td></td>
                     <td>
                     <input type="hidden" name="equipPortId[0]" value="new">
-                     <input list="equipPortType0" id="form-equipPortType0" class="form-control form-group-sm" name="equipPortType[0]" value="Ethernet"  > 
+                     <input list="equipPortType0" id="form-equipPortType0" class="form-control form-group-sm" name="equipPortType[0]" > 
                     <datalist id="equipPortType0">
                         {{#each optSystPortType}}
                         <option {{{this}}}>{{this}}</option>
                         {{/each}}
                     </datalist>
+                    </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortName0" name="equipPortName[0]" value="e0" placeholder="e0, con, netmgmt">
+                        <input type="text" class="form-control form-group-sm"  id="equipPortName0" name="equipPortName[0]" placeholder="e0, con, netmgmt">
                     </td>
                     <td>
                         <input type="text" class="form-control form-group-sm"  id="equipPortsAddr0" name="equipPortsAddr[0]" placeholder="01:23:45:67:89:AB:CD" > 
@@ -149,43 +151,9 @@
                         <input type="text" class="form-control form-group-sm"  id="equipPortsOpt0" name="equipPortsOpt[0]" placeholder="Options">
                     </td>
                 </tr>
-                <tr>
+                
                 {{/if}}
 
-                
-
- <script language="Javascript" type="text/javascript">
-<!--
-//Add more fields dynamically.
-/* area is the region you want to add to, in this case id="tbody1"
-   field is element you want to count, in this case <tr>
-   limit is how many to be allowed to make, 10 is the default here
-*/
-function addField(area,field,limit) {
-	if(!document.getElementById) return;
-    var field_area = document.getElementById(area);  
-    var liList = document.getElementById(area).getElementsByTagName("tr");
-    var count = liList.length
-
-    var count = count + 1;
-    if (isNaN===count)count=0;
-	//If the maximum number of elements have been reached, exit the function.
-	//		If the given limit is lower than 0, infinite number of fields can be created.
-	if(count > limit && limit > 0) return;
- 	
-	if(document.createElement) { 
-		 //Older Method
-		field_area.insertAdjacentHTML('beforeend', '{{> assets/equipmenteditPlus1}}');
-	}
-    
-}
-//-->
-</script> 
-                
-                
-
-                
-                
             </tbody>
         </table>
         <div class="form-group">
@@ -452,4 +420,31 @@ function addField(area,field,limit) {
         {{/each}}
         {{/if}}
 
-        
+ <script language="Javascript" type="text/javascript">
+<!--
+//Add more fields dynamically.
+/* area is the region you want to add to, in this case id="tbody1"
+   field is element you want to count, in this case <tr>
+   limit is how many to be allowed to make, 10 is the default here
+*/
+function addField(area,field,limit) {
+	if(!document.getElementById) return;
+    var count;
+    var field_area = document.getElementById(area);  
+    var liList = document.getElementById(area).getElementsByTagName("tr");
+    var count = liList.length
+
+    /*var count = count + 1;*/
+    if (isNaN===count)count=0;
+	//If the maximum number of elements have been reached, exit the function.
+	//		If the given limit is lower than 0, infinite number of fields can be created.
+	if(count > limit && limit > 0) return;
+ 	
+	if(document.createElement) { 
+		 //Older Method
+		field_area.insertAdjacentHTML('beforeend', '{{> assets/equipmenteditPlus1}}');
+	}
+    
+}
+//-->
+</script>         

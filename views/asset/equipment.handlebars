@@ -12,7 +12,8 @@
     <ul id="eachUl"class="list-unstyled"> 
             <li>
             <div class="row">
-              <div class="col-md-8">{{#if systemName}}System: <a href="/asets/system/{{systemName}}">{{systemName}} {{{systemStatus}}}</a>{{/if}} 
+              <div class="col-md-8">
+                {{#if systemName}}System: <a href="/system/{{systemName}}">{{systemName}} </a>- {{{systemStatus}}}<br>{{/if}}
                 Location: <a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a><br>
                 Ticket: {{{equipTicketNumberlit}}}<br>
                 Status: {{{equipStatuslit}}}<br>
@@ -28,8 +29,8 @@
                 <div class="col-sm-9">
                 
                 {{#if equipIsVirtual}} Is Virtual {{/if}}
-                {{#if equipMake}}<srong>{{equipMake}}</srong><br>{{/if}}
-                {{#if equipModel}}<srong>{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}</srong><br>{{/if}}
+                {{#if equipMake}}{{equipMake}}<br>{{/if}}
+                {{#if equipModel}}{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}<br>{{/if}}
                 {{#if equipType}}Type: {{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
                 <br>
                 <strong>Hardware Details</strong><br>

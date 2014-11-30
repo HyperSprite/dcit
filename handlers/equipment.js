@@ -178,6 +178,7 @@ exports.dcEquipPages = function(req,res,next){
         start = req.params.datacenter.indexOf ("-")+1;
             console.log("|start   >"+start);
         dcId = req.params.datacenter.substring (start);
+        
             console.log("|dcId    >"+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
@@ -205,7 +206,6 @@ exports.dcEquipPages = function(req,res,next){
         return tempRu; 
         };
             context ={
-                dcId: dcId,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
@@ -439,32 +439,36 @@ exports.dcEquipPages = function(req,res,next){
 */
 exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
-    res.abbreviation = req.body.isEdit;
+    res.abbreviation = strTgs.cTrim(req.body.equipSN);
+    if(req.body.isEdit){
+    res.abbreviation = strTgs.cTrim(req.body.isEdit);
+    }
     console.log("dcRackPost abbreviation>"+res.abbreviation);
-    //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
+    // isEdit and wasCopy = equipment name using #if from handlebars
     if (!req.body.isEdit){
     if (req.body.wasCopy){
-    res.abbreviation = req.body.wasCopy;
+    res.abbreviation = strTgs.cTrim(req.body.equipSN);
     }
     console.log("new Equipment in DC");
     varPortsNew = function(body){
+    if(typeof req.body.equipPortsAddr[i] !== 'undefined'){
     var Ports = [];
     for(i=0;i<body.equipPortType.length;i++){
         console.log("equipPortType.length "+body.equipPortType.length);
         Ports[i]=({
             equipPortType: strTgs.sTrim(body.equipPortType[i]),
-            equipPortsAddr: strTgs.sTrim(body.equipPortsAddr[i]),
+            equipPortsAddr: strTgs.mTrim(body.equipPortsAddr[i]),
             equipPortName: strTgs.sTrim(body.equipPortName[i]),
             equipPortsOpt: strTgs.sTrim(body.equipPortsOpt[i]),
             });
         }
         return Ports;
-    };
+    }};
     
     Equipment.create({
                                 equipPorts: varPortsNew(req.body),
                                 equipLocation: strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu),
-                                equipSN: strTgs.sTrim(req.body.equipSN),
+                                equipSN: strTgs.cTrim(req.body.equipSN),
                                 equipAssetTag: strTgs.sTrim(req.body.equipAssetTag),
                                 equipTicketNumber: strTgs.sTrim(req.body.equipTicketNumber),
                                 equipInventoryStatus: req.body.equipInventoryStatus,
@@ -533,7 +537,7 @@ exports.dcEquipmentPost = function(req,res){
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/equipment'+ res.abbreviation);
+	        return res.redirect(303, '/equipment/'+ res.abbreviation);
             } else { 
             req.session.flash = {
 	            type: 'success',
@@ -547,8 +551,8 @@ exports.dcEquipmentPost = function(req,res){
         );
         
 	} else {
-    Equipment.findOne({equipSN: req.body.equipSN},function(err,eq){
-    res.abbreviation = req.body.equipSN;
+    Equipment.findOne({equipSN: req.body.equipSN.toUpperCase()},function(err,eq){
+    res.abbreviation = strTgs.cTrim(req.body.equipSN);
     var thisDoc = eq;
         console.log("existing id>"+thisDoc);
         if (err) {
@@ -558,9 +562,10 @@ exports.dcEquipmentPost = function(req,res){
     
     for(i=0;i<req.body.equipPortType.length;i++){
         console.log("equip \n PortType >"+req.body.equipPortType[i] +" - addr >"+ req.body.equipPortsAddr[i] +" - name >"+ req.body.equipPortName[i] +" - Opt >"+ req.body.equipPortsOpt[i]);
-        if(!req.body.equipPortType[i]){
-            console.log("No new port");
-            }else if(req.body.equipPortId[i] === "new"){
+        
+        if(req.body.equipPortType[i] === ''){
+        console.log("equipPortType nonw");
+            } else if(req.body.equipPortId[i] === "new"){
             console.log("new port >"+req.body.equipPortId[i]);
             eq.equipPorts.push({
             equipPortType: strTgs.sTrim(req.body.equipPortType[i]),

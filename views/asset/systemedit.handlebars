@@ -1,0 +1,411 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/systems">Systems</a></li>
+  {{#if abbreviation}} <li><a href="/system/datacenter/{{abbreviation}}">{{abbreviation}}</a></li>{{/if}}
+  <li>{{systemName}}</li>
+</ol>
+
+<hr>
+<div class="racks">
+    <h4>{{#if systemName}}System{{else}}New System{{/if}}</h4>
+    <div class="datacenter"> 
+
+<div class="formContainer">
+    
+    {{#if systemName}}
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/system/{{systemName}}" method="POST">
+    <input type="hidden" name="isEdit" value="{{systemName}}">
+    <input type="hidden" name="systemId" value="{{systemId}}">
+    {{else}}
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/system/new" method="POST">
+    <input type="hidden" name="wasCopy" value="{{wasCopy}}">
+    <input type="hidden" name="systemId" value="new">
+    {{/if}} 
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <p class="form-control-static"></p>
+        
+        <div class="form-group">
+            
+            <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
+
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required">
+            </div>
+            
+        </div>
+        <div class="form-group">
+            <label for="field-systemStatus" class="col-sm-2 control-label" >Status</label>
+            <div class="col-sm-4">
+                <select id="systemStatus" name="systemStatus" class="form-control" >
+               
+                    {{#each optSystStatus}}
+                    <option {{{selOption this ../systemStatus}}} >{{this}}</option>
+                    {{/each}}
+                    
+				</select>
+                
+            </div>
+        </div> 
+        
+        <div class="form-group">
+            <label for="field-systemTicket" class="col-sm-2 control-label" >Ticket</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemTicket" name="systemTicket"  value="{{systemTicket}}" placeholder="Case requesting this System?">
+            </div>
+        </div>  
+        
+        <div class="form-group">
+            <label for="field-systemEquipSN" class="col-sm-2 control-label" >Equipment</label>
+            <div class="col-sm-4">
+                <input list="systemEquipSN" id="field-systemEquipSN" class="form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" >
+                <datalist id="systemEquipSN">
+                    {{#each equipSNList}}
+                    <option {{{this}}}>{{this}}</option>
+                    {{/each}}
+                </datalist>
+            </div>
+        </div> 
+        {{#if equipLocation}}<div class="form-group">
+            <label for="field-equipLocation" class="col-sm-2 control-label"  >Location</label>
+            <div class="col-sm-4">
+                {{equipLocation}}
+            </div>
+        </div> 
+        {{/if}}
+            
+
+        <div class="form-group">
+            <label for="field-systemInventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
+            <div class="col-sm-4">
+                <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}}>
+            </div>
+        </div>  
+        <div class="form-group">
+            <label for="field-equipIsVirtual" class="col-sm-2 control-label"  >Is Virtual</label>
+            <div class="col-sm-4">
+                <input type="checkbox" name="equipIsVirtual" value="true" {{equipIsVirtualChecked}}>
+            </div>
+        </div>
+
+        <table id="portsTable" class="table table-condensed">
+            <thead>
+                <tr>
+                <th></th>
+                <th ><strong>System Ports</strong></th>
+                
+                
+                </tr>
+            </thead>
+            <tbody id="tbody1" class="list">
+                
+                {{#if systemPorts}}
+                {{#each systemPorts}}
+                <tr class="tr-ports">
+                <input type="hidden" name="sysPortId[{{@index}}]" value="{{sysPortId}}">
+                    <td>
+                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button>
+                    </td>
+                    
+                    
+                    <td>
+                        <div class="form-group row marginRow">
+                            <div class="col-sm-2">
+                            <input list="sysPortType{{@index}}" id="form-sysPortType{{@index}}" class="form-control form-fixer" name="sysPortType[{{@index}}]" value="{{sysPortType}}" > 
+                            <datalist id="sysPortType{{@index}}">
+                                {{#each ../optSystPortType}}
+                                    <option {{{this}}}>{{this}}</option>
+                                {{/each}}
+                            </datalist>
+                            </div>    
+                            <div class="col-sm-2 ">
+                                <input type="text"  id="sysPortName{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortName[{{@index}}]"value="{{sysPortName}}" placeholder="e0, con, netmgmt">
+                            </div>    
+                            <div class="col-sm-2">
+                                <input list="systemEquipSN{{@index}}" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console">
+                                <datalist id="systemEquipSN{{@index}}">
+                                    {{#each ../sysNameList}}
+                                    <option {{{this}}}>{{this}}</option>
+                                    {{/each}}
+                                </datalist>
+                            </div>    
+                            <div class="col-sm-1">
+                                <input type="text"   id="sysPortEndPointPre{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[{{@index}}]"value="{{sysPortEndPointPre}}" placeholder="Blade">
+                            </div>    
+                            <div class="col-sm-1">
+                                <input type="text"   id="sysPortEndPointPort{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[{{@index}}]"value="{{sysPortEndPointPort}}" placeholder="1-48ish">
+                             </div>    
+                            <div class="col-sm-1">   
+                                <input type="text"  id="sysPortVlan{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortVlan[{{@index}}]"value="{{sysPortVlan}}" placeholder="1,232,999">
+                            </div>
+                            <div class="col-sm-3">
+                            <input type="text" class="form-control col-sm-3"  id="sysPortOptions{{@index}}" name="sysPortOptions[{{@index}}]"value="{{sysPortOptions}}" placeholder="Options {{@index}}">
+                        </div>
+                        </div>
+                        <div class="form-group row marginRow">
+                        <div class="col-sm-4">
+                            <textarea rows="1" class="form-control col-sm-4" id="sysPortCablePath{{@index}}" name="sysPortCablePath[{{@index}}]" placeholder="cable_number cablenumber~patch~cablenumber">{{sysPortCablePath}}</textarea>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress{{@index}}" name="sysPortAddress[{{@index}}]"value="{{sysPortAddress}}" placeholder="10.10.10.10">
+                        </div>
+                        
+                        
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL{{@index}}" name="sysPortURL[{{@index}}]"value="{{sysPortURL}}" placeholder="http://">
+                        </div>
+                        
+                        <div class="checkbox col-sm-2">
+                        <label for="sysPortCrossover{{@index}}" class="control-label form-fixer">
+                            <input type="checkbox"  name="sysPortCrossover[{{@index}}]" value="true" {{sysPortCrossoverChecked}}>Crossover
+                        </label>
+                        </div>
+                        
+                        
+                        </div>
+                        
+                    </td>
+
+                </tr>
+                {{/each}}
+                {{else}}
+                <tr class="tr-ports">
+                <input type="hidden" name="sysPortId[0]" value="new">
+                    <td>
+                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform0">D</button>
+                    </td>
+                    
+                    
+                    <td>
+                        <div class="form-group row marginRow">
+                            <div class="col-sm-2">
+                            <input list="sysPortType0" id="form-sysPortType0" class="form-control form-fixer" name="sysPortType[0]" > 
+                            <datalist id="sysPortType0">
+                                {{#each ../optSystPortType}}
+                                    <option {{{this}}}>{{this}}</option>
+                                {{/each}}
+                            </datalist>
+                            </div>    
+                            <div class="col-sm-2 ">
+                                <input type="text"  id="sysPortName0" class="form-control col-sm-2 form-fixer" name="sysPortName[0]" placeholder="e0, con, netmgmt">
+                            </div>    
+                            <div class="col-sm-2">
+                                <input list="systemEquipSN0" id="sysPortEndPoint0" class="form-control col-sm-2 form-fixer" name="sysPortEndPoint[0]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console">
+                                <datalist id="systemEquipSN0">
+                                    {{#each ../sysNameList}}
+                                    <option {{{this}}}>{{this}}</option>
+                                    {{/each}}
+                                </datalist>
+                            </div>  
+                            <div class="col-sm-1">
+                                <input type="text"   id="sysPortEndPointPre0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[0]" placeholder="Blade">
+                            </div>    
+                            <div class="col-sm-1">
+                                <input type="text"   id="sysPortEndPointPort0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[0]"value="{{sysPortEndPointPort}}" placeholder="1-48ish">
+                             </div>    
+                            <div class="col-sm-1">   
+                                <input type="text"  id="sysPortVlan0" class="form-control col-sm-1 form-fixer" name="sysPortVlan[0]"value="{{sysPortVlan}}" placeholder="1,232,999">
+                            </div>
+                            <div class="col-sm-3">
+                            <input type="text" class="form-control col-sm-3"  id="sysPortOptions0" name="sysPortOptions[0]" placeholder="Options 0">
+                        </div>
+                        </div>
+                        <div class="form-group row marginRow">
+                        <div class="col-sm-4">
+                            <textarea rows="1" class="form-control col-sm-4" id="sysPortCablePath0" name="sysPortCablePath[0]" placeholder="cable_number cablenumber~patch~cablenumber">{{sysPortCablePath}}</textarea>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress0" name="sysPortAddress[0]"value="{{sysPortAddress}}" placeholder="10.10.10.10">
+                        </div>
+                        
+                        
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL0" name="sysPortURL[0]"value="{{sysPortURL}}" placeholder="http://">
+                        </div>
+                        
+                        <div class="checkbox col-sm-2">
+                        <label for="sysPortCrossover0" class="control-label form-fixer">
+                            <input type="checkbox"  name="sysPortCrossover[0]" value="true">Crossover</label>
+                        </div>
+                        
+                        
+                        </div>
+                        
+                    </td>
+
+                </tr>
+                {{/if}}
+
+            </tbody>
+        </table>                
+
+
+                        
+
+        
+
+        
+        
+        
+                <div class="form-group">
+                <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('tbody1','tr',16);">+ 1</button>
+        
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if systemName}} formaction='/system/{{systemName}}' {{else}}formaction='/systems'{{/if}} >
+        </div>
+        <hr>
+        <ul id="eachUl"class="list-unstyled">    
+            <li id="eachLi" class="eachLi">
+         <div class="form-group">
+            <label for="field-systemEnviron" class="col-sm-2 control-label" >Environment</label>
+            <div class="col-sm-4">
+                <input list="systemEnviron" id="field-systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" value="{{systemEnviron}}" >
+                <datalist id="systemEnviron">
+                    {{#each optEnvironment}}
+                    <option {{{this}}}>{{this}}</option>
+                    {{/each}}
+                </datalist>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-systemRole" class="col-sm-2 control-label" >Role</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" placeholder="Apache,Launch,Reporting">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-systemOwner" class="col-sm-2 control-label" >Owner</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemOwner" name="systemOwner"  value="{{systemOwner}}" placeholder="If availible">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-systemImpact" class="col-sm-2 control-label" >Impact</label>
+            <div class="col-sm-4">
+                <select id="systemImpact" name="systemImpact" class="form-control" value="{{systemImpact}}">
+               
+                    {{#each optImpactLevel}}
+                    <option {{{selOption this ../systemImpact}}} >{{this}}</option>
+                    {{/each}}
+                    
+				</select>
+                
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="field-systemParentId" class="col-sm-2 control-label" >System Parent</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemParentId" name="systemParentId"  value="{{systemParentId}}" placeholder="ED Rack,ZFS Rack">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-systemOSType" class="col-sm-2 control-label" >OS</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemOSType" name="systemOSType"  value="{{systemOSType}}" placeholder="CentOS, OEK, Windows">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-systemOSVersion" class="col-sm-2 control-label" >Model</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemOSVersion" name="systemOSVersion"  value="{{systemOSVersion}}" placeholder="5u8,6u5,2008 R2">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-systemApplications" class="col-sm-2 control-label" >Software</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemApplications" name="systemApplications"  value="{{systemApplications}}" placeholder="Paid software">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-systemSupLic" class="col-sm-2 control-label" >Support License</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="systemSupLic" name="systemSupLic"  value="{{systemSupLic}}" placeholder="Contract Numbers">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-systemSupEndDate" class="col-sm-2 control-label" >Software Support End Date</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="systemSupEndDate" name="systemSupEndDate"  value="{{systemSupEndDate}}" >
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-systemInstall" class="col-sm-2 control-label" >System Install Date</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="systemInstall" name="systemInstall"  value="{{systemInstall}}">
+            </div>
+        </div>        
+        <div class="form-group">
+            <label for="field-systemStart" class="col-sm-2 control-label" >System Start Date</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="systemStart" name="systemStart"  value="{{systemStart}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-systemEnd" class="col-sm-2 control-label" >End Date</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="systemEnd" name="systemEnd"  value="{{systemEnd}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-systemNotes" class="col-sm-2 control-label">Notes</label>
+            <div class="col-sm-4">
+                <textarea rows="3" class="form-control" id="fieldequipNotes" name="systemNotes">{{systemNotes}}</textarea>
+            </div>
+        </div>
+    </ul>    
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if equipSN}} formaction='/system/{{systemName}}' {{else}}formaction='/system/{{abbreviation}}'{{/if}} >
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>
+        </div>
+    </div>
+    </form><form id="formCancel"></form> 
+      
+     <form id="deleteform" action="/systemdelete/{{systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{systemName}}. This can not be undone!')">
+        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="systemName" value="{{systemName}}">
+    </form>
+     
+        {{#if systemPorts}}
+        {{#each systemPorts}}
+            <form id="deleteform{{@index}}" action="/systemportdelete/{{../systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this port?')">
+            <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
+            <input type="hidden" name="id" value="{{../systemId}}">
+            <input type="hidden" name="abbreviation" value="{{../systemName}}">
+            <input type="hidden" name="subId" value="{{sysPortId}}">
+            <input type="hidden" name="collectionName" value="Systemdb">
+            <input type="hidden" name="collectionSub" value="systemPorts">
+            </form>
+        {{/each}}
+        {{/if}}
+
+ <script language="Javascript" type="text/javascript">
+<!--
+//Add more fields dynamically.
+/* area is the region you want to add to, in this case id="tbody1"
+   field is element you want to count, in this case <tr>
+   limit is how many to be allowed to make, 10 is the default here
+*/
+function addField(area,field,limit) {
+	var count;
+    if(!document.getElementById) return;
+    var field_area = document.getElementById(area);  
+    var liList = document.getElementById(area).getElementsByTagName("tr");
+    var count = liList.length
+
+    /*var count = count + 1;*/
+    if (isNaN===count)count=0;
+	//If the maximum number of elements have been reached, exit the function.
+	//		If the given limit is lower than 0, infinite number of fields can be created.
+	if(count > limit && limit > 0) return;
+ 	
+	if(document.createElement) { 
+		 //Older Method
+		field_area.insertAdjacentHTML('beforeend', '{{> assets/systemeditPlus1}}');
+	}
+    
+}
+//-->
+</script>        

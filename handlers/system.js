@@ -16,218 +16,99 @@ var start  = "",
 
 
 //---------------------------------------------------------------------     
-//----------------------   Equipment List  ----------------------------
+//----------------------   System List  ----------------------------
 //--------------------------------------------------------------------- 
 /*
 this is the Equip List block. Looks for "List" in the URL and returns list of Equipment.
 */
-exports.dcEquipPages = function(req,res,next){
-    console.log('***********exports.dcEquipPages First >' +req.params.datacenter);
+exports.dcSystemPages = function(req,res,next){
+    console.log('***********exports.dcSystemPages First >' +req.params.datacenter);
     if (!req.params.datacenter ){
     console.log("in List");
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
-        Equipment.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, eqs){
+        Systemdb.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, sys){
         if(err){
         console.log(err);
         }else{
+        console.log("system-list"+sys);
             var context = {
-                eqs: eqs.map(function(eq){
+                sys: sys.map(function(sy){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                    //console.log(eq);
+                    console.log("sy Map>"+sy);
                     return {
-                            equipLocation: eq.equipLocation,
-                            equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-                            equipSN: eq.equipSN,
-                            equipTicketNumber: eq.equipticketNumber,
-                            equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipticketNumber),
-                            equipStatus: eq.equipStatus,
-                            equipStatusLight: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
-                            equipType: eq.equipType,
-                            equipMake: eq.equipMake,
-                            equipModel: eq.equipModel,
-                            equipSubModel: eq.equipSubModel,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
-                            equipPONum: eq.equipPONum,
-                            equipProjectNum: eq.equipProjectNum,
-                            createdOn: strTgs.dateMod(eq.createdOn),
-                            modifiedOn: strTgs.dateMod(eq.modifiedOn),
+                            systemName: sy.systemName,
+                            systemEquipSN: sy.systemEquipSN,
+                            systemEnviron: sy.systemEnviron,
+                            systemRole: sy.systemRole,
+                            systemTicket: sy.systemTicket,
+                            systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus,sy.systemTicket),
+                            systemStatus: strTgs.trueFalseIcon(sy.systemStatus,sy.systemStatus),
+                            createdOn: strTgs.dateMod(sy.createdOn),
+                            modifiedOn: strTgs.dateMod(sy.modifiedOn),
                     };
                 })
             };
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
-            res.render('asset/equipment-list', context);
+            res.render('asset/system-list', context);
         }});
         
-/*------------------------------------------------------------------
------------------------ Create New Rack Power   --------------------   
-------------------------------------------------------------------------
-*/
-    } else if (req.params.datacenter.indexOf ("circuit") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("circuit")');
-        console.log("rack "+req.params.datacenter);
-        start = req.params.datacenter.indexOf ("~")+1;
-            console.log("|start   >"+start);
-        dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
-        dcSplit = dcInfo.indexOf (">");
-            console.log("|dcSplit >"+dcSplit);
-        dcSubId = dcInfo.substring (dcSplit+1);
-            console.log("|dcSubId >"+dcSubId);
-        dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);
-        
-        
-        
-        Rack.findOne({rackUnique: dcId},function(err,rk){
-        if(err)return next(err);
-        Datacenter.find({},'_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err,datacenter){
-        if(err) return next(err);
-        
-        
-        var uber = strTgs.findCGParent(rk.rackParentCage,datacenter);
-        var context;
-        if (dcSubId === 'new'){
-            context ={
-                rackParentDC: rk.rackParentDC,
-                fullName: uber.fullName,
-                abbreviation: uber.abbreviation,
-                foundingCompany: uber.foundingCompany,
-                powerNames: uber.powerNames,
-                cageAbbreviation: uber.cageAbbreviation,
-                cageNickname: uber.cageNickname,
-                cageName: uber.cageName,
-                rackId: rk._id,
-                rackNickname: rk.rackNickname,
-                rackName: rk.rackName,
-                rackUnique: rk.rackUnique,
-                rackParentCage: rk.rackParentCage,
-                };
-            res.render('location/rackpower', context);
-        
-        } else {
-       
-        var thisSubDoc = rk.powers.id(dcSubId);
 
-        if(err) return next(err);
-        if(!rk) return next();
-        
-        if (req.params.datacenter.indexOf ("copy") !=-1){
-            console.log(rk);
-                context ={
-                    rackParentDC: rk.rackParentDC,
-                    fullName: uber.fullName,
-                    abbreviation: uber.abbreviation,
-                    foundingCompany: uber.foundingCompany,
-                    powerNames: uber.powerNames,
-                    cageAbbreviation: uber.cageAbbreviation,
-                    cageNickname: uber.cageNickname,
-                    cageName: uber.cageName,
-                    rackId: rk._id,
-                    rackNickname: rk.rackNickname,
-                    rackName: rk.rackName,
-                    rackUnique: rk.rackUnique,
-                    rackParentCage: rk.rackParentCage,
-                    rackPowStatus: thisSubDoc.rackPowStatus,
-                    rackPowVolts: thisSubDoc.rackPowVolts,
-                    rackPowPhase: thisSubDoc.rackPowPhase,
-                    rackPowAmps: thisSubDoc.rackPowAmps,
-                    rackPowReceptacle: thisSubDoc.rackPowReceptacle,
-                    };        
-        
-        } else {
-        
-        console.log(rk);
-            context ={
-                rackParentDC: rk.rackParentDC,
-                fullName: uber.fullName,
-                abbreviation: uber.abbreviation,
-                foundingCompany: uber.foundingCompany,
-                powerNames: uber.powerNames,
-                cageAbbreviation: uber.cageAbbreviation,
-                cageNickname: uber.cageNickname,
-                cageName: uber.cageName,
-                rackId: rk._id,
-                rackNickname: rk.rackNickname,
-                rackName: rk.rackName,
-                rackUnique: rk.rackUnique,
-                rackParentCage: rk.rackParentCage,
-                rackPowId: thisSubDoc.id,
-                rackPowMain: thisSubDoc.rackPowMain,
-                rackPowCircuit: thisSubDoc.rackPowCircuit,
-                rackPowUnique: thisSubDoc.rackPowUnique,
-                rackPowStatus: thisSubDoc.rackPowStatus,
-                rackPowVolts: thisSubDoc.rackPowVolts,
-                rackPowPhase: thisSubDoc.rackPowPhase,
-                rackPowAmps: thisSubDoc.rackPowAmps,
-                rackPowReceptacle: thisSubDoc.rackPowReceptacle,
-                };
-            }    
-        //console.log(context);
-        res.render('location/rackpower', context); 
-        }});});
-/*------------------------------------------------------------------
----------------------  Create New Equipment   ---------------------------
-------------------------------------------------------------------------
+/*-------------------------------------------------------------------
+---------------------  Create New System  ---------------------------
+---------------------------------------------------------------------
 */
 
 
     } else if (req.params.datacenter.indexOf ("new") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("newequip")');
-      /*  console.log("datacenter "+req.params.datacenter);
-        start = req.params.datacenter.indexOf ("~")+1;
+        console.log('else if (req.params.datacenter.indexOf ("newSys")');
+        console.log("datacenter "+req.params.datacenter);
+        start = req.params.datacenter.indexOf ("-")+1;
             console.log("|start   >"+start);
-        dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
-        dcSplit = dcInfo.indexOf ("-");
-            console.log("|dcSplit >"+dcSplit);
-        dcSubId = dcInfo.substring (dcSplit+1);
-            console.log("|dcSubId >"+dcSubId);
-        dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);*/
+        dcId = req.params.datacenter.substring (start);
+            console.log("|dcId    >"+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
         
-
-    Rack.find({},{ 'rUs':1,'rackUnique':1,'_id': 0},{sort:{rackUnique:1}},function(err, rk){
+    Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
         if(err) return next(err);
-        if(!rk) return next();
+        if(!sysName) return next();
+        var sysUni=[];
+        for(i=0;i<sysName.length;i++){
+        sysUni[i] = sysName[i].systemName;
+        }
+
+    
+    Equipment.find({},{ 'equipSN':1,'_id': 0},{sort:{equipSN:1}},function(err, eq){
+        if(err) return next(err);
+        if(!eq) return next();
         //console.log("rk"+rk);
-        var rackUni=[];
-        for(i=0;i<rk.length;i++){
-        rackUni[i] = rk[i].rackUnique;
+        var eqUni=[];
+        for(i=0;i<eq.length;i++){
+        eqUni[i] = eq[i].equipSN;
         //console.log("rackUni >"+rackUni[i]);
         }
-        
-        //var RuTemp = 52;
-        var getRackrUs = function(RuTemp){
-            console.log("getRackrUs"+RuTemp);
-            var tempRu=[];
-            for(i=0;i<RuTemp;i++){
-            tempRu[i]=strTgs.pad([i]);
-        }
-            //console.log("getRackrUs>> "+tempRu);
-        return tempRu; 
-        };
+      
             context ={
+                sysNameList: sysUni,
+                equipSNList: eqUni,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
-                optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
-                optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
-                rackUnique: rackUni,
-                rackrUs: getRackrUs(52),
+                optSystStatus: strTgs.findThisInThatOpt('optSystStatus',opt),
+                optEnvironment: strTgs.findThisInThatOpt('optEnvironment',opt),
+                optImpactLevel: strTgs.findThisInThatOpt('optImpactLevel',opt),
                 };
         console.log(context);
-        res.render('asset/equipmentedit', context);  
-        });});
+        res.render('asset/systemedit', context);  
+        });});});
 
     }  else {
-/*---------------------------------------------------------------------
--------------------------Equipment Edit, Copy or View------------------
-                   /asset/equipment/edit~copy-
+/*
+-----------------------------------------------------------------------
+-------------------------System Edit, Copy or View---------------------
+                   /asset/system/edit~copy-
 ------------------------------------------------------------------------
 */
-
     if (req.params.datacenter.indexOf ("edit") !=-1){
         console.log('else if (req.params.datacenter.indexOf ("edit")');
     // this section decides if it is a Copy, Edit or View
@@ -235,21 +116,30 @@ exports.dcEquipPages = function(req,res,next){
         dcabbr = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ("copy") !=-1){
             editLoad = 5;
-            console.log("copy equip "+dcabbr);
+            console.log("copy system "+dcabbr);
         } else {
             editLoad = 3;
-            console.log("edit equip "+dcabbr);
+            console.log("edit system "+dcabbr);
         }
         } else {
             editLoad = 1;
             dcabbr = req.params.datacenter;
-            console.log("view equip "+dcabbr);
+            console.log("view system "+dcabbr);
         }
-        
-  
-    Equipment.findOne({equipSN: dcabbr},function(err,eq){
+        console.log("editLoad >"+editLoad);
+    
+    
+    Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
         if(err) return next(err);
-        if(!eq) return next();
+        if(!sysName) return next();
+        var sysUni=[];
+        for(i=0;i<sysName.length;i++){
+        sysUni[i] = sysName[i].systemName;
+        }
+
+    Systemdb.findOne({systemName: dcabbr.toLowerCase()},function(err,sy){
+        if(err) return next(err);
+        if(!sy) return next();
         //console.log(datacenter);
     //Optionsdb.findOne({optListKey: "optEquipStatus"},function(err,opt){
     //    if(err)return next(err);
@@ -257,261 +147,182 @@ exports.dcEquipPages = function(req,res,next){
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
         
-
-    Rack.find({},{ 'rUs':1,'rackUnique':1,'_id': 0},{sort:{rackUnique:1}},function(err, rk){
+    Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
         if(err) return next(err);
-        if(!rk) return next();
+        if(!eq) return next();
         //console.log("rk"+rk);
-        var rackUni=[];
-        for(i=0;i<rk.length;i++){
-        rackUni[i] = rk[i].rackUnique;
-        //console.log("rackUni >"+rackUni[i]);
+        var eqUni=[];
+        for(i=0;i<eq.length;i++){
+        eqUni[i] = eq[i].equipSN;
         }
-        
-        //var RuTemp = 52;
-        var getRackrUs = function(RuTemp){
-            console.log("getRackrUs"+RuTemp);
-            var tempRu=[];
-            for(i=0;i<RuTemp;i++){
-            tempRu[i]=strTgs.pad([i]);
-        }
-            //console.log("getRackrUs>> "+tempRu);
-        return tempRu; 
-        };
-        //console.log("rackUni >"+rackUni);
 
-        console.log ('Equipment.findOne '+dcabbr);
-        
+        console.log ('System.findOne '+dcabbr);
         if(editLoad < 4){
-
-
-             context = {    
-                                
-                                optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
-                                optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
-                                optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
-                                rackUnique: rackUni,
-                                rackrUs: getRackrUs(52),
-                                equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-                                equipLocationRu: strTgs.ruElevation(eq.equipLocation),
-                                equipLocation: eq.equipLocation,
-                                equipSN: eq.equipSN,
-                                equipAssetTag: eq.equipAssetTag,
-                                equipTicketNumber: eq.equipTicketNumber,
-                                equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
-                                equipInventoryStatus: eq.equipInventoryStatus,
-                                equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
-                                equipInventoryStatusChecked: strTgs.setCheckBox(eq.equipInventoryStatus),
-                                equipStatus: eq.equipStatus,
-                                equipIsVirtual: eq.equipIsVirtual,
-                                equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
-                                equipType: eq.equipType,
-                                equipMake: eq.equipMake,
-                                equipModel: eq.equipModel,
-                                equipSubModel: eq.equipSubModel,
-                                equipRUHieght: eq.equipRUHieght,
-                                equipImgFront: eq.equipImgFront,
-                                equipImgRear: eq.equipImgRear,
-                                equipImgInternal: eq.equipImgInternal,
-                                equipFirmware: eq.equipFirmware,
-                                equipMobo: eq.equipMobo,
-                                equipCPUCount: eq.equipCPUCount,
-                                equipCPUCores: eq.equipCPUCores,
-                                equipCPUType: eq.equipCPUType,
-                                equipMemType: eq.equipMemType,
-                                equipMemTotal: eq.equipMemTotal,
-                                equipRaidType: eq.equipRaidType,
-                                equipRaidLayout: eq.equipRaidLayout,
-                                equipHDDCount: eq.equipHDDCount,
-                                equipHDDType: eq.equipHDDType,
-                                equipPSUCount: eq.equipPSUCount,
-                                equipPSUDraw: eq.equipPSUDraw,
-                                equipAddOns: eq.equipAddOns,
-                                equipRecieved: strTgs.dateMod(eq.equipRecieved),
-                                equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
-                                equipInService: strTgs.dateMod(eq.equipInService),
-                                equipPONum: eq.equipPONum,
-                                equipInvoice: eq.equipInvoice,
-                                equipProjectNum: eq.equipProjectNum,
-                                equipLicense: eq.equipLicense,
-                                equipMaintAgree: eq.equipMaintAgree,
-                                equipPurchaseType: eq.equipPurchaseType,
-                                equipPurchaser: eq.equipPurchaser,
-                                equipPurchaseTerms: eq.equipPurchaseTerms,
-                                equipPurchaseEnd: strTgs.dateMod(eq.equipPurchaseEnd),
-                                equipNotes: eq.equipNotes,
-                                createdBy: eq.createdBy,
-                                createdOn: strTgs.dateMod(eq.createdOn),
-                                modifiedBy: eq.modifiedBy,
-                                modifiedOn: strTgs.dateMod(eq.modifiedOn),
-                            equipPorts: eq.equipPorts.map(function(ep){
-                            return {
-                                equipPortsId: ep.id,
-                                equipPortType: ep.equipPortType,
-                                equipPortsAddr: ep.equipPortsAddr,
-                                equipPortName: ep.equipPortName,
-                                equipPortsOpt: ep.equipPortsOpt,
-                                createdBy: ep.createdBy,
-                                createdOn: strTgs.dateMod(ep.createdOn),
-                                modifiedby: ep.modifiedbBy,
-                                modifiedOn: strTgs.dateMod(ep.modifiedOn),
-                            };
-                            }),
-                            equipRMAs: eq.equipRMAs.map(function(er){
-                            return {
-                                equipRMA: er.id,
-                                equipRMAOpened: strTgs.dateMod(er.equipRMAOpened),
-                                equipRMAClosed: strTgs.dateMod(er.equipRMAClosed),
-                                equipRMATicket: er.equipRMATicket,
-                                equipRMANumber: er.equipRMANumber,
-                                equipRMANotes: er.equipRMANotes,
-                                createdBy: er.createdBy,
-                                createdOn: strTgs.dateMod(er.createdOn),
-                                modifiedby: er.modifiedbBy,
-                                modifiedOn: strTgs.dateMod(er.modifiedOn), 
-                            };
-                            }),
-                        }; 
-        
+            tempEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
+        context = {
+            sysNameList: sysUni,
+            equipSNList: eqUni,
+            optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
+            optSystStatus: strTgs.findThisInThatOpt('optSystStatus',opt),
+            optEnvironment: strTgs.findThisInThatOpt('optEnvironment',opt),
+            optImpactLevel: strTgs.findThisInThatOpt('optImpactLevel',opt),
+            systemId: sy._id,
+            systemName: sy.systemName,
+            systemEquipSN: sy.systemEquipSN,
+            systemEnviron: sy.systemEnviron,
+            systemRole: sy.systemRole,
+            systemInventoryStatus: sy.systemInventoryStatus,
+            systemInventoryStatusChecked: strTgs.setCheckBox(sy.systemInventoryStatus),
+            systemTicket: sy.systemTicket,
+            systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus,sy.systemTicket),
+            systemStatus: sy.systemStatus,
+            systemStatusLit: strTgs.trueFalseIcon(sy.systemStatus,sy.systemStatus),
+            systemOwner: sy.systemOwner,
+            systemImpact: sy.systemImpact,
+            systemIsVirtual: sy.systemIsVirtual,
+            systemIsVirtualChecked: strTgs.setCheckBox(sy.systmeIsVirtual),
+            systemParentId: sy.systemParentId,
+            systemOSType: sy.systemOSType,
+            systemOSVersion: sy.systemOSVersion,
+            systemApplications: sy.systemApplications,
+            systemSupLic: sy.systemSupLic,
+            systemSupEndDate: strTgs.dateMod(sy.systemSupEndDate),
+            systemInstall: strTgs.dateMod(sy.systemInstall),
+            systemStart: strTgs.dateMod(sy.systemStart),
+            systemEnd: strTgs.dateMod(sy.systemEnd),
+            systemNotes: sy.systemNotes,
+            createdBy: sy.createdBy,
+            createdOn: strTgs.dateMod(sy.createdOn),
+            modifiedBy: sy.modifiedBy,
+            modifiedOn: strTgs.dateMod(sy.modifiedOn), 
+                systemPorts: sy.systemPorts.map(function(sp){
+                    return {
+                    sysPortId: sp._id,
+                    sysPortType: sp.sysPortType,
+                    sysPortName: sp.sysPortName,
+                    sysPortAddress: sp.sysPortAddress,
+                    sysPortCablePath: sp.sysPortCablePath,
+                    sysPortEndPoint: sp.sysPortEndPoint,
+                    sysPortEndPointPre: sp.sysPortEndPointPre,
+                    sysPortEndPointPort: sp.sysPortEndPointPort,
+                    sysPortVlan: sp.sysPortVlan,
+                    sysPortOptions: sp.sysPortOptions,
+                    sysPortURL: sp.sysPortURL,
+                    sysPortCrossover: sp.sysPortCrossover,
+                    sysPortCrossoverChecked: strTgs.setCheckBox(sp.sysPortCrossover),
+                    };
+                }),
+            equipLocation: tempEquip.equipLocation,
+            equipLocationRack: strTgs.ruToLocation(tempEquip.equipLocation),
+            equipStatus: tempEquip.equipStatus,
+            equipStatusLight: strTgs.trueFalseIcon(tempEquip.equipStatus,tempEquip.equipStatus),
+            equipType: tempEquip.equipType,
+            equipMake: tempEquip.equipMake,
+            equipModel: tempEquip.equipModel,
+            equipSubModel: tempEquip.equipSubModel,
+            equipRUHieght: tempEquip.equipRUHieght,
+            }; 
         } else {
-           context = {    
-                                optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
-                                optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
-                                optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
-                                rackrUs: getRackrUs(52),
-                                rackUnique: rackUni,
-                                rUs: rk.rUs,
-                                wasCopy: eq.equipSN,
-                                equipTicketNumber: eq.equipTicketNumber,
-                                equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
-                                equipInventoryStatus: eq.equipInventoryStatus,
-                                equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
-                                equipStatus: eq.equipStatus,
-                                equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
-                                equipType: eq.equipType,
-                                equipMake: eq.equipMake,
-                                equipModel: eq.equipModel,
-                                equipSubModel: eq.equipSubModel,
-                                equipRUHieght: eq.equipRUHieght,
-                                equipImgFront: eq.equipImgFront,
-                                equipImgRear: eq.equipImgRear,
-                                equipImgInternal: eq.equipImgInternal,
-                                equipFirmware: eq.equipFirmware,
-                                equipMobo: eq.equipMobo,
-                                equipCPUCount: eq.equipCPUCount,
-                                equipCPUCores: eq.equipCPUCores,
-                                equipCPUType: eq.equipCPUType,
-                                equipMemType: eq.equipMemType,
-                                equipMemTotal: eq.equipMemTotal,
-                                equipRaidType: eq.equipRaidType,
-                                equipRaidLayout: eq.equipRaidLayout,
-                                equipHDDCount: eq.equipHDDCount,
-                                equipHDDType: eq.equipHDDType,
-                                equipPSUCount: eq.equipPSUCount,
-                                equipPSUDraw: eq.equipPSUDraw,
-                                equipAddOns: eq.equipAddOns,
-                                equipRecieved: strTgs.dateMod(eq.equipRecieved),
-                                equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
-                                equipInService: strTgs.dateMod(eq.equipInService),
-                                equipPONum: eq.equipPONum,
-                                equipInvoice: eq.equipInvoice,
-                                equipProjectNum: eq.equipProjectNum,
-                                equipLicense: eq.equipLicense,
-                                equipMaintAgree: eq.equipMaintAgree,
-                                equipPurchaseType: eq.equipPurchaseType,
-                                equipPurchaser: eq.equipPurchaser,
-                                equipPurchaseTerms: eq.equipPurchaseTerms,
-                                equipPurchaseEnd: strTgs.dateMod(eq.equipPurchaseEnd),
-                        };     
+            context = {    
+                    equipSNList: eqUni,
+                    optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
+                    optSystStatus: strTgs.findThisInThatOpt('optSystStatus',opt),
+                    optEnvironment: strTgs.findThisInThatOpt('optEnvironment',opt),
+                    wasCopy: sy.systemName,
+                    systemEnviron: sy.systemEnviron,
+                    systemRole: sy.systemRole,
+                    systemInventoryStatus: sy.systemInventoryStatus,
+                    systemInventoryStatusChecked: strTgs.setCheckBox(sy.systemInventoryStatus),
+                    systemTicket: sy.systemTicket,
+                    systemStatus: sy.systemStatus,
+                    systemOwner: sy.systemOwner,
+                    systemImpact: sy.systemImpact,
+                    systemIsVirtual: sy.systemIsVirual,
+                    systemIsVirtualChecked: strTgs.setCheckBox(sy.systmeIsVirtual),
+                    systemParentId: sy.systemParentId,
+                    systemOSType: sy.systemOSType,
+                    systemOSVersion: sy.systemOSVersion,
+                    systemApplications: sy.systemApplications,
+                    systemSupLic: sy.systemSupLic,
+                    systemSupEndDate: sy.systemSupEndDate,
+                    systemInstall: sy.systemInstall,
+                    systemStart: sy.systemStart,
+            };     
         }                    
  
         //console.log(context);
         if (editLoad > 2){
-            console.log("equipment Edit");
-            res.render('asset/equipmentedit', context); 
+            console.log("System Edit(end)");
+            res.render('asset/systemedit', context); 
         }else{
-        res.render('asset/equipment', context);  
+        res.render('asset/system', context);  
         }
-        });});});
+        });});});});
     }
 };
     
 
 /* ---------------------------------------------------------------------
------------------------   New equipment working   ---------------------------
+-----------------------   New and copy system POST working   --------
 ------------------------------------------------------------------------
 */
-exports.dcEquipmentPost = function(req,res){
+exports.dcSystemPost = function(req,res){
+    var bd = req.body;
     // this makes the abbreviation available for the URL
-    res.abbreviation = req.body.isEdit;
-    console.log("dcRackPost abbreviation>"+res.abbreviation);
+    res.abbreviation = strTgs.clTrim(bd.systemName);
+    console.log("dcRackPost abbreviation>"+strTgs.clTrim(bd.systemName));
+
     //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
-    if (!req.body.isEdit){
-    if (req.body.wasCopy){
-    res.abbreviation = req.body.wasCopy;
-    }
-    console.log("new Equipment in DC");
-    varPorts = function(body){
+    if (!bd.isEdit){
+
+    console.log("new System in DC");
+    varPortsNew = function(bd){
+    if(typeof bd.sysPortName[i] !== 'undefined'){
     var Ports = [];
-    for(i=0;i<body.equipPortType.length;i++){
-        console.log("equipPortType.length "+body.equipPortType.length);
+    for(i=0;i<bd.sysPortName.length;i++){
+        console.log("sysPortName.length "+bd.sysPortName.length);
         Ports[i]=({
-            equipPortType: strTgs.sTrim(body.equipPortType[i]),
-            equipPortsAddr: strTgs.sTrim(body.equipPortsAddr[i]),
-            equipPortName: strTgs.sTrim(body.equipPortName[i]),
-            equipPortsOpt: strTgs.sTrim(body.equipPortsOpt[i]),
+            sysPortType: strTgs.sTrim(bd.sysPortType[i]),
+            sysPortName: strTgs.sTrim(bd.sysPortName[i]),
+            sysPortAddress: strTgs.sTrim(bd.sysPortAddress[i]),
+            sysPortCablePath: strTgs.stTrim(bd.sysPortCablePath[i]),
+            sysPortEndPoint: strTgs.clTrim(bd.sysPortEndPoint[i]),
+            sysPortEndPointPre: strTgs.clTrim(bd.sysPortEndPointPre[i]),
+            sysPortEndPointPort: strTgs.clTrim(bd.sysPortEndPointPort[i]),
+            sysPortVlan: strTgs.sTrim(bd.sysPortVlan[i]),
+            sysPortOptions: strTgs.clTrim(bd.sysPortOptions[i]),
+            sysPortURL: strTgs.clTrim(bd.sysPortURL[i]),
+            sysPortCrossover: bd.sysPortCrossover[i],
             });
         }
         return Ports;
-    };
+    }};
     
-    Equipment.create({
-                                equipPorts: varPorts(req.body),
-                                equipLocation: strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu),
-                                equipSN: strTgs.sTrim(req.body.equipSN),
-                                equipAssetTag: strTgs.sTrim(req.body.equipAssetTag),
-                                equipTicketNumber: strTgs.sTrim(req.body.equipTicketNumber),
-                                equipInventoryStatus: req.body.equipInventoryStatus,
-                                equipStatus: strTgs.uTrim(req.body.equipStatus),
-                                equipIsVirtual: req.body.equipIsVirtual,
-                                equipType: strTgs.uTrim(req.body.equipType),
-                                equipMake: strTgs.uTrim(req.body.equipMake),
-                                equipModel: strTgs.uTrim(req.body.equipModel),
-                                equipSubModel: strTgs.uTrim(req.body.equipSubModel),
-                                equipRUHieght: strTgs.uTrim(req.body.equipRUHieght),
-                                equipImgFront: strTgs.uTrim(req.body.equipImgFront),
-                                equipImgRear: strTgs.uTrim(req.body.equipImgRear),
-                                equipImgInternal: strTgs.uTrim(req.body.equipImgInternal),
-                                equipFirmware: strTgs.uTrim(req.body.equipFirmware),
-                                equipMobo: strTgs.uTrim(req.body.equipMobo),
-                                equipCPUCount: strTgs.uTrim(req.body.equipCPUCount),
-                                equipCPUCores: strTgs.uTrim(req.body.equipCPUCores),
-                                equipCPUType: strTgs.uTrim(req.body.equipCPUType),
-                                equipMemType: strTgs.uTrim(req.body.equipMemType),
-                                equipMemTotal: strTgs.uTrim(req.body.equipMemTotal),
-                                equipRaidType: strTgs.uTrim(req.body.equipRaidType),
-                                equipRaidLayout: strTgs.uTrim(req.body.equipRaidLayout),
-                                equipHDDCount: strTgs.uTrim(req.body.equipHDDCount),
-                                equipHDDType: strTgs.uTrim(req.body.equipHDDType),
-                                equipPSUCount: strTgs.uTrim(req.body.equipPSUCount),
-                                equipPSUDraw: strTgs.uTrim(req.body.equipPSUDraw),
-                                equipAddOns: strTgs.uTrim(req.body.equipAddOns),
-                                equipRecieved: strTgs.uTrim(req.body.equipRecieved),
-                                equipAcquisition: strTgs.uTrim(req.body.equipAcquisition),
-                                equipInService: strTgs.uTrim(req.body.equipInService),
-                                equipPONum: strTgs.uTrim(req.body.equipPONum),
-                                equipInvoice: strTgs.uTrim(req.body.equipInvoice),
-                                equipProjectNum: strTgs.uTrim(req.body.equipProjectNum),
-                                equipLicense: strTgs.uTrim(req.body.equipLicense),
-                                equipMaintAgree: strTgs.uTrim(req.body.equipMaintAgree),
-                                equipPurchaseType: strTgs.uTrim(req.body.equipPurchaseType),
-                                equipPurchaser: strTgs.uTrim(req.body.equipPurchaser),
-                                equipPurchaseTerms: strTgs.uTrim(req.body.equipPurchaseTerms),
-                                equipPurchaseEnd: strTgs.uTrim(req.body.equipPurchaseEnd),
-                                equipNotes: strTgs.uTrim(req.body.equipNotes),
+    Systemdb.create({
+                                systemPorts: varPortsNew(bd),
+                                systemName: strTgs.clTrim(bd.systemName),
+                                systemEquipSN: strTgs.sTrim(bd.systemEquipSN),
+                                systemEnviron: strTgs.sTrim(bd.systemEnviron),
+                                systemRole: strTgs.uTrim(bd.systemRole),
+                                systemInventoryStatus: bd.systemInventoryStatus,
+                                systemTicket: strTgs.sTrim(bd.systemTicket),
+                                systemStatus: bd.systemStatus,
+                                systemOwner: strTgs.uTrim(bd.systemOwner),
+                                systemImpact: bd.systemImpact,
+                                systemIsVirtual: bd.systemIsVirtual,
+                                systemParentId: strTgs.sTrim(bd.systemParentId),
+                                systemOSType: strTgs.uTrim(bd.systemOSType),
+                                systemOSVersion: strTgs.uTrim(bd.systemOSVersion),
+                                systemApplications: strTgs.uTrim(bd.systemApplications),
+                                systemSupLic: strTgs.uTrim(bd.systemSupLic),
+                                systemSupEndDate: bd.systemSupEndDate,
+                                systemInstall: bd.systemInstall,
+                                systemStart: bd.systemStart,
+                                systemEnd: bd.systemEnd,
+                                systemNotes: strTgs.uTrim(bd.systemNotes),
                                 createdBy:'Admin',
                                 createdOn: Date.now(),
-                                modifiedBy: req.body.modifiedBy,
+                                modifiedBy: bd.modifiedBy,
                                 modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
@@ -529,7 +340,7 @@ exports.dcEquipmentPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };}
-                return res.redirect(303, '/equipment');
+                return res.redirect(303, '/systems');
 	        }
             if (!req.body.wasCopy){
 	        req.session.flash = {
@@ -537,73 +348,89 @@ exports.dcEquipmentPost = function(req,res){
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/equipment'+ res.abbreviation);
+	        return res.redirect(303, '/system/'+ res.abbreviation);
             } else { 
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/equipment/copy~edit-'+ res.abbreviation);
+	        return res.redirect(303, '/system/copy~edit-'+ res.abbreviation);
 
             }
 	    }
         );
         
 	} else {
-    Equipment.findOne({equipSN: req.body.equipSN},function(err,eq){
-    res.abbreviation = req.body.equipSN;
-    var thisDoc = eq;
-    console.log("existing id>"+thisDoc);
+    Systemdb.findOne({systemName: req.body.isEdit},function(err,sys){
+    res.abbreviation = req.body.systemName;
+
+    var thisDoc = sys;
+        console.log("existing id>"+thisDoc);
         if (err) {
             console.log(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
-                        thisDoc.equipLocation = strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu);
-                        thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,req.body.equipAssetTag);
-                        thisDoc.equipTicketNumber = strTgs.uCleanUp(thisDoc.equipTicketNumber,req.body.equipTicketNumber);
-                        thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus,req.body.equipInventoryStatus);
-                        thisDoc.equipStatus = strTgs.uCleanUp(thisDoc.equipStatus,req.body.equipStatus);
-                        thisDoc.equipIsVirtual = strTgs.uCleanUp(thisDoc.equipIsVirtual,req.body.equipIsVirtual);
-                        thisDoc.equipType = strTgs.uCleanUp(thisDoc.equipType,req.body.equipType);
-                        thisDoc.equipMake = strTgs.uCleanUp(thisDoc.equipMake,req.body.equipMake);
-                        thisDoc.equipModel = strTgs.uCleanUp(thisDoc.equipModel,req.body.equipModel);
-                        thisDoc.equipSubModel = strTgs.uCleanUp(thisDoc.equipSubModel,req.body.equipSubModel);
-                        thisDoc.equipRUHieght = strTgs.uCleanUp(thisDoc.equipRUHieght,req.body.equipRUHieght);
-                        thisDoc.equipImgFront = strTgs.uCleanUp(thisDoc.equipImgFront,req.body.equipImgFront);
-                        thisDoc.equipImgRear = strTgs.uCleanUp(thisDoc.equipImgRear,req.body.equipImgRear);
-                        thisDoc.equipImgInternal = strTgs.uCleanUp(thisDoc.equipImgInternal,req.body.equipImgInternal);
-                        thisDoc.equipFirmware = strTgs.uCleanUp(thisDoc.equipFirmware,req.body.equipFirmware);
-                        thisDoc.equipMobo = strTgs.uCleanUp(thisDoc.equipMobo,req.body.equipMobo);
-                        thisDoc.equipCPUCount = strTgs.uCleanUp(thisDoc.equipCPUCount,req.body.equipCPUCount);
-                        thisDoc.equipCPUCores = strTgs.uCleanUp(thisDoc.equipCPUCores,req.body.equipCPUCores);
-                        thisDoc.equipCPUType = strTgs.uCleanUp(thisDoc.equipCPUType,req.body.equipCPUType);
-                        thisDoc.equipMemType = strTgs.uCleanUp(thisDoc.equipMemType,req.body.equipMemType);
-                        thisDoc.equipMemTotal = strTgs.uCleanUp(thisDoc.equipMemTotal,req.body.equipMemTotal);
-                        thisDoc.equipRaidType = strTgs.uCleanUp(thisDoc.equipRaidType,req.body.equipRaidType);
-                        thisDoc.equipRaidLayout = strTgs.uCleanUp(thisDoc.equipRaidLayout,req.body.equipRaidLayout);
-                        thisDoc.equipHDDCount = strTgs.uCleanUp(thisDoc.equipHDDCount,req.body.equipHDDCount);
-                        thisDoc.equipHDDType = strTgs.uCleanUp(thisDoc.equipHDDType,req.body.equipHDDType);
-                        thisDoc.equipPSUCount = strTgs.uCleanUp(thisDoc.equipPSUCount,req.body.equipPSUCount);
-                        thisDoc.equipPSUDraw = strTgs.uCleanUp(thisDoc.equipPSUDraw,req.body.equipPSUDraw);
-                        thisDoc.equipAddOns = strTgs.uCleanUp(thisDoc.equipAddOns,req.body.equipAddOns);
-                        thisDoc.equipRecieved = strTgs.uCleanUp(thisDoc.equipRecieved,req.body.equipRecieved);
-                        thisDoc.equipAcquisition = strTgs.uCleanUp(thisDoc.equipAcquisition,req.body.equipAcquisition);
-                        thisDoc.equipInService = strTgs.uCleanUp(thisDoc.equipInService,req.body.equipInService);
-                        thisDoc.equipPONum = strTgs.uCleanUp(thisDoc.equipPONum,req.body.equipPONum);
-                        thisDoc.equipInvoice = strTgs.uCleanUp(thisDoc.equipInvoice,req.body.equipInvoice);
-                        thisDoc.equipProjectNum = strTgs.uCleanUp(thisDoc.equipProjectNum,req.body.equipProjectNum);
-                        thisDoc.equipLicense = strTgs.uCleanUp(thisDoc.equipLicense,req.body.equipLicense);
-                        thisDoc.equipMaintAgree = strTgs.uCleanUp(thisDoc.equipMaintAgree,req.body.equipMaintAgree);
-                        thisDoc.equipPurchaseType = strTgs.uCleanUp(thisDoc.equipPurchaseType,req.body.equipPurchaseType);
-                        thisDoc.equipPurchaser = strTgs.uCleanUp(thisDoc.equipPurchaser,req.body.equipPurchaser);
-                        thisDoc.equipPurchaseTerms = strTgs.uCleanUp(thisDoc.equipPurchaseTerms,req.body.equipPurchaseTerms);
-                        thisDoc.equipPurchaseEnd = strTgs.uCleanUp(thisDoc.equipPurchaseEnd,req.body.equipPurchaseEnd);
-                        thisDoc.equipNotes = strTgs.uCleanUp(thisDoc.equipNotes,req.body.equipNotes);
-                        thisDoc.modifiedOn = Date.now();
-                        thisDoc.modifiedBy ='Admin';
+    
+    for(i=0;i<bd.sysPortType.length;i++){
+        console.log("equip \n Portname >"+bd.sysPortName[i] +" - path >"+ bd.sysPortCablePath[i] +" - endpoint >"+ bd.sysPortEndPoint[i] +" - Opt >"+ bd.sysPortOptions[i]/*+"crossover"+strTgs.doCheckbox(bd.sysPortCrossover[i]  future*/);
+        if(!bd.sysPortType[i]){
+            console.log("No new port");
+            }else if(bd.sysPortId[i] === "new"){
+            console.log("new port >"+bd.sysPortId[i]);
+            sys.systemPorts.push({
+                sysPortType: strTgs.sTrim(bd.sysPortType[i]),
+                sysPortName: strTgs.sTrim(bd.sysPortName[i]),
+                sysPortAddress: strTgs.sTrim(bd.sysPortAddress[i]),
+                sysPortCablePath: strTgs.stTrim(bd.sysPortCablePath[i]),
+                sysPortEndPoint: strTgs.clTrim(bd.sysPortEndPoint[i]),
+                sysPortEndPointPre: strTgs.clTrim(bd.sysPortEndPointPre[i]),
+                sysPortEndPointPort: strTgs.clTrim(bd.sysPortEndPointPort[i]),
+                sysPortVlan: strTgs.sTrim(bd.sysPortVlan[i]),
+                sysPortOptions: strTgs.stcTrim(bd.sysPortOptions[i]),
+                sysPortURL: strTgs.clTrim(bd.sysPortURL[i]),
+    /*            sysPortCrossover: strTgs.doCheckbox(bd.sysPortCrossover[i]),  future*/
+            });
+            }else{
+            console.log("existing port");
+        var thisSubDoc = sys.systemPorts.id(bd.sysPortId[i]);
+                thisSubDoc.sysPortType= strTgs.clCleanUp(thisSubDoc.sysPortType,bd.sysPortType[i]);
+                thisSubDoc.sysPortName= strTgs.clCleanUp(thisSubDoc.sysPortName,bd.sysPortName[i]);
+                thisSubDoc.sysPortAddress= strTgs.clCleanUp(thisSubDoc.sysPortAddress,bd.sysPortAddress[i]);
+                thisSubDoc.sysPortCablePath= strTgs.clCleanUp(thisSubDoc.sysPortCablePath,bd.sysPortCablePath[i]);
+                thisSubDoc.sysPortEndPoint= strTgs.clCleanUp(thisSubDoc.sysPortEndPoint,bd.sysPortEndPoint[i]);
+                thisSubDoc.sysPortEndPointPre= strTgs.clCleanUp(thisSubDoc.sysPortEndPointPre,bd.sysPortEndPointPre[i]);
+                thisSubDoc.sysPortEndPointPort= strTgs.clCleanUp(thisSubDoc.sysPortEndPointPort,bd.sysPortEndPointPort[i]);
+                thisSubDoc.sysPortVlan= strTgs.clCleanUp(thisSubDoc.sysPortVlan,bd.sysPortVlan[i]);
+                thisSubDoc.sysPortOptions= strTgs.stcCleanup(thisSubDoc.sysPortOptions,bd.sysPortOptions[i]);
+                thisSubDoc.sysPortURL= strTgs.clCleanUp(thisSubDoc.sysPortURL,bd.sysPortURL[i]);
+    /*            thisSubDoc.sysPortCrossover= strTgs.doCheckbox(bd.sysPortCrossover[i]);  future*/
+        }
+    }
+            thisDoc.systemName= strTgs.clTrim(bd.systemName);
+            thisDoc.systemEquipSN= strTgs.sTrim(bd.systemEquipSN);
+            thisDoc.systemEnviron= strTgs.sTrim(bd.systemEnviron);
+            thisDoc.systemRole= strTgs.uTrim(bd.systemRole);
+            thisDoc.systemInventoryStatus= bd.systemInventoryStatus;
+            thisDoc.systemTicket= strTgs.sTrim(bd.systemTicket);
+            thisDoc.systemStatus= bd.systemStatus;
+            thisDoc.systemOwner= strTgs.uTrim(bd.systemOwner);
+            thisDoc.systemImpact= bd.systemImpact;
+            thisDoc.systemIsVirtual= bd.systemIsVirtual;
+            thisDoc.systemParentId= strTgs.sTrim(bd.systemParentId);
+            thisDoc.systemOSType= strTgs.uTrim(bd.systemOSType);
+            thisDoc.systemOSVersion= strTgs.uTrim(bd.systemOSVersion);
+            thisDoc.systemApplications= strTgs.uTrim(bd.systemApplications);
+            thisDoc.systemSupLic= strTgs.uTrim(bd.systemSupLic);
+            thisDoc.systemSupEndDate= bd.systemSupEndDate;
+            thisDoc.systemInstall= bd.systemInstall;
+            thisDoc.systemStart= bd.systemStart;
+            thisDoc.systemEnd= bd.systemEnd;
+            thisDoc.systemNotes= strTgs.uTrim(bd.systemNotes);
+            thisDoc.modifiedOn = Date.now();
+            thisDoc.modifiedBy ='Admin';
                     }
-	    eq.save(function(err){
+	    sys.save(function(err){
 	        if(err) {
 	        	console.error(err.stack);
 	            req.session.flash = {
@@ -611,54 +438,20 @@ exports.dcEquipmentPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, '/equipment/'+ res.abbreviation);
+	            return res.redirect(303, '/system/'+ res.abbreviation);
 	        }
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
 	        };
-	        return res.redirect(303, '/equipment/'+ res.abbreviation);
+	        return res.redirect(303, '/system/'+ res.abbreviation);
 	    });
 	});
 }
 };
   
-/*---------------------------------------------------------------------
----------------------------- Rack Delete ------------------------------
-------------------------------------------------------------------------
-*/
-exports.rackDelete = function(req,res){
-    res.abbreviation = req.body.rackUnique;
-if (req.body.rackUnique){
-        console.log("delete got this far");
-        Rack.findOne({rackUnique: req.body.rackUnique},function(err,racktodelete){
-        if(err){
-        console.log(err);
-        //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
-        }else{
-            racktodelete.remove(function(err){
-                if(err){
-                console.log(err);
-                req.session.flash = {
-                        type: 'danger',
-                        intro: 'Ooops!',
-                        message: 'Something went wrong, '+ req.body.subName +' was not deleted.',
-                    };
-                    return res.redirect(303, '/location/rack/'+ res.abbreviation);
-                } else {
-                    req.session.flash = {
-                    type: 'success',
-                    intro: 'Done!',
-                    message: 'Contact '+ req.body.rackUnique +' has been deleted. Good luck with that one',
-                };
-                return res.redirect(303, '/location/rack');
-                }
-            });
-        }
-    });
-}
-};
+
 
 
 exports.dcEquipPortPostAJAX = function(req,res){
@@ -801,117 +594,72 @@ exports.dcEquipSysPages = function(req,res,next){
     }
 };
 
-/* ---------------------------------------------------------------------
-------------------------   Rack Power Post   ---------------------------
+/*---------------------------------------------------------------------
+---------------------------- System Delete ------------------------------
 ------------------------------------------------------------------------
 */
-
-exports.dcRackPowPost = function(req,res){
-    // this makes the abbreviation available for the URL
-    //res.abbreviation = req.body.rackUnique;
-
-    //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
-    //if (!req.body.rackPowUnique){
-    //if (req.body.wasCopy){
-    //res.abbreviation = req.body.wasCopy;
-    //}
-    console.log("Rack Power abbreviation "+req.body.abbreviation);
-    console.log("Rack Power rackUnique "+req.body.rackUnique);
-    console.log("Rack Power rackPowUnique "+req.body.rackPowUnique);
-    console.log("Rack Power rackPowMain "+req.body.rackPowMain);
-    console.log("Rack Power rackPowVolts "+req.body.rackPowVolts);
-    console.log("Rack Power rackPowPhase "+req.body.rackPowPhase);
-    
-    
-    
-    Rack.findOne({rackUnique: req.body.rackUnique},function(err,rk){
-    res.abbreviation = req.body.rackUnique;
-    console.log("Rack Power findOne "+rk);
-        //console.log("dcRackPowPost abbreviation>"+res.abbreviation);
-    var thisSubDoc;
-    if(req.body.rackPowUnique === "new"){
-    thisSubDoc = "new";
-    }else{
-    thisSubDoc = rk.powers.id(req.body.rackPowId);
-    }
-    console.log("existing id>"+thisSubDoc);
-        if (err) {
-            console.log(err);
-            res.redirect('location/rack/'+res.abbreviation);
-        } else if(thisSubDoc === "new"){
-                rk.powers.push({
-                    rackPowMain: req.body.rackPowMain,
-                    rackPowCircuit: req.body.rackPowCircuit.trim().toUpperCase(),
-                    rackPowUnique: req.body.abbreviation+"_"+req.body.rackPowMain+"_"+req.body.rackPowCircuit.trim().toUpperCase(),
-                    rackPowStatus: req.body.rackPowStatus,
-                    rackPowVolts: req.body.rackPowVolts.trim(),
-                    rackPowPhase: req.body.rackPowPhase.trim(),
-                    rackPowAmps: req.body.rackPowAmps.trim(),
-                    rackPowReceptacle: req.body.rackPowReceptacle.trim().toUpperCase(),
-                    rackPowCreatedBy: 'Admin',
-                    rackPowCreatedOn: modifiedOn = Date.now(),
-                    rackPowModifiedby: 'Admin',
-                    rackPowModifiedOn: modifiedOn = Date.now(),
-                });
-        } else {
-                thisSubDoc.rackPowStatus = strTgs.uCleanUp(thisSubDoc.rackPowStatus,req.body.rackPowStatus);
-                thisSubDoc.rackPowVolts = strTgs.uCleanUp(thisSubDoc.rackPowVolts,req.body.rackPowVolts);
-                thisSubDoc.rackPowPhase = strTgs.uCleanUp(thisSubDoc.rackPowPhase,req.body.rackPowPhase);
-                thisSubDoc.rackPowAmps = strTgs.uCleanUp(thisSubDoc.rackPowAmps,req.body.rackPowAmps);
-                thisSubDoc.rackPowReceptacle = strTgs.uCleanUp(thisSubDoc.rackPowReceptacle,req.body.rackPowReceptacle);
-                thisSubDoc.modifiedOn = Date.now();
-                thisSubDoc.modifiedBy ='Admin';
-                    }
-	    rk.save(function(err){
-	        if(err) {
-	        	console.error(err.stack);
-	            req.session.flash = {
-	                type: 'danger',
-	                intro: 'Ooops!',
-	                message: 'There was an error processing your request.',
-	            };
-	            return res.redirect(303, 'location/rack/'+ res.abbreviation);
-	        }
-	        req.session.flash = {
-	            type: 'success',
-	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
-	        };
-	        return res.redirect(303, '/location/rack/'+ res.abbreviation);
-	    });
-	});
-
-};
-/* ---------------------------------------------------------------------
--------------------    rackPow Delete   --------------------------------
-------------------------------------------------------------------------
-*/
-
-exports.rackSubDelete = function(req,res){
-    res.abbreviation = req.body.abbreviation;
-if (req.body.id && req.body.subId){
-    Rack.findById(req.body.id,req.body.subDoc,function (err, rk){
+exports.dcsystemDelete = function(req,res){
+    res.abbreviation = req.body.systemName;
+if (req.body.systemName){
+        console.log("delete got this far");
+        Systemdb.findOne({systemName: req.body.systemName},function(err,systemNametodelete){
         if(err){
         console.log(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
-            rk.powers.id(req.body.subId).remove();
-            rk.save(function(err){
+            systemNametodelete.remove(function(err){
                 if(err){
                 console.log(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
-                        message: 'Something went wrong, '+ req.body.subName +' was not deleted.',
+                        message: 'Something went wrong, '+ req.body.systemNametodelete +' was not deleted.',
                     };
-                    return res.redirect(303, '/location/rack/'+ res.abbreviation);
+                    return res.redirect(303, '/location/equipment/'+ res.abbreviation);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
-                    message: 'Contact '+ req.body.subName +' has been deleted.',
+                    message: 'Contact '+ req.body.systemNametodelete +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/location/rack/'+ res.abbreviation);
+                return res.redirect(303, '/systems');
+                }
+            });
+        }
+    });
+}
+};
+
+/* ---------------------------------------------------------------------
+-------------------    systemPorts Delete   --------------------------------
+------------------------------------------------------------------------
+*/
+
+exports.dcsystemSubDelete = function(req,res){
+    res.abbreviation = req.body.abbreviation;
+if (req.body.id && req.body.subId){
+    Systemdb.findById(req.body.id,req.body.subDoc,function (err, sys){
+        if(err){
+        console.log(err);
+        //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+        }else{
+            sys.systemPorts.id(req.body.subId).remove();
+            sys.save(function(err){
+                if(err){
+                console.log(err);
+                req.session.flash = {
+                        type: 'danger',
+                        intro: 'Ooops!',
+                        message: 'Something went wrong',
+                    };
+                    return res.redirect(303, '/system/edit-'+ res.abbreviation);
+                } else {
+                    req.session.flash = {
+                    type: 'success',
+                    intro: 'Done!',
+                    message: 'The port has been deleted.',
+                };
+                return res.redirect(303, '/system/edit-'+ res.abbreviation);
                 }
             });
         }

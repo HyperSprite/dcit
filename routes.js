@@ -49,10 +49,12 @@ module.exports = function(app){
         app.post('/equipment/:datacenter', equipment.dcEquipmentPost);
         app.post('/equipmentdelete/:datacenter', equipment.dcEquipDelete);
         app.post('/equipmentportdelete/:datacenter', equipment.equipSubDelete);
-      /*  
+        
         app.get('/systems', system.dcSystemPages);
-        app.get('/systems/:datacenter', system.dcSystemPages);
-      */
+        app.get('/system/:datacenter', system.dcSystemPages);
+        app.post('/system/:datacenter', system.dcSystemPost);
+        app.post('/systemdelete/:datacenter', system.dcsystemDelete);
+        app.post('/systemportdelete/:datacenter', system.dcsystemSubDelete);
         
         // Admin 
         

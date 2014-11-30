@@ -1,0 +1,89 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/systems">Systems</a></li>
+  <li>{{systemName}}</li>
+</ol>
+
+<hr>
+<div class="racks">
+    <h4>{{systemName}}</h4>
+    <ul id="eachUl"class="list-unstyled"> 
+        <li>
+        <div class="row">
+            <div class="col-md-4">
+            <strong>System Details</strong><br>
+            
+            Status: {{{systemStatusLit}}}<br>
+            
+            {{#if systemEnviron}}Environment: {{systemEnviron}}<br>{{/if}}
+            {{#if systemRole}}Role: {{systemRole}}<br>{{/if}}
+            {{#if systemOwner}}Owner: {{systemOwner}}<br>{{/if}}
+            {{#if systemImpact}}Impact: {{systemImpact}}<br>{{/if}}
+            {{#if systemIsVirual}}Is Virtual: {{systemIsVirual}}<br>{{/if}}
+            {{#if systemParentId}}Parent: {{systemParentId}}<br>{{/if}}
+            Ticket: {{{systemTicketLit}}}<br>
+            <br>
+            </div>
+            <div class="col-md-2">
+            {{> assets/system-e-c}}
+            </div>
+            <div class="col-md-4">
+            {{#if systemEquipSN}}
+            <strong>Hardware Details</strong><br>
+            Equipment SN: <strong><a href="/equipment/{{systemEquipSN}}">{{systemEquipSN}}</a></strong><br>
+            Location: <strong><a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
+            {{#if equipMake}}{{equipMake}}<br>{{/if}}
+            {{#if equipModel}}{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}<br>{{/if}}
+            {{#if equipType}}{{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
+            {{/if}}
+          
+            </div>
+        </div>
+        <div class="row">
+            <hr>
+
+            {{> assets/sysport-list}}
+            
+            <hr>
+            <div class="col-sm-9">
+            {{#if systemIsVirual}} Is Virtual {{/if}}
+            {{#if systemIsVirual}} Is Virtual {{/if}}
+            
+            <br>
+
+            <strong>OS and Software</strong><br>
+            {{#if systemEnviron}}Environment: {{systemEnviron}}<br>{{/if}}
+            {{#if systemOSType}}OS: {{systemOSType}}<br>{{/if}}
+            {{#if systemOSVersion}}OS Version: {{systemOSVersion}}<br>{{/if}}
+            {{#if systemApplications}}Aplications: {{systemApplications}}<br>{{/if}}
+            {{#if systemSupLic}}Support License: {{systemSupLic}}<br>{{/if}}
+            {{#if systemSupEndDate}}Parent: {{systemSupEndDate}}<br>{{/if}}
+            <br>
+            <strong>Timing</strong><br>
+            {{#if systemInstall}}Install Date: {{systemInstall}}<br>{{/if}}
+            {{#if systemStart}}Start Date: {{systemStart}}<br>{{/if}}
+            {{#if systemEnd}}End Date: {{systemEnd}}<br>{{/if}}
+            <br>
+            {{#if equipNotes}}Notes: {{equipNotes}}<br>{{/if}}
+            {{#if createdBy}}Created By: {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
+            {{#if modifiedBy}}Modified By: {{modifiedBy}}{{#if modifiedOn}} {{modifiedOn}}{{/if}}<br>{{/if}}
+            
+            
+            
+            <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+            <form id=formCopy></form>
+            <input type='submit' class='btn btn-warning btn-xs' formaction='/system/edit-{{systemName}}' form="formEdit" formmethod="get" value='Edit'>
+            <input type='submit' class='btn btn-info btn-xs' formaction='/system/edit~copy-{{systemName}}' form="formCopy" formmethod="get" value='Copy'>
+            
+            </div>
+        </div>
+        </li><br>
+    </ul>
+     
+
+
+    
+    
+</div>
+
+
