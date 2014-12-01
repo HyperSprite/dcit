@@ -57,7 +57,8 @@ module.exports = function(app){
         app.post('/systemportdelete/:datacenter', system.dcsystemSubDelete);
         
         // Admin 
-        
+        app.get('/admin', admin.home);
+        app.get('/admin/:datacenter', admin.home);
         app.get('/admin/options/:datacenter', admin.optionsEdit);
         app.post('/admin/optionspost', admin.optionsEditPost);
         app.get('/admin/options', admin.options);

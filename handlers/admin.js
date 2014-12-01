@@ -6,8 +6,76 @@ var Datacenter = require('../models/datacenter.js'),
     strTgs = require('../lib/stringThings.js'),
     locationPlus1 = require('../lib/locationPlus1.js'),
     seedDataLoad = require('../seedDataLoad.js'),
-    dcit = require('../dcit.js');
-  
+    dcit = require('../dcit.js'),
+    fs = require('fs'),
+    path = require('path');
+
+var fileList = function(path){
+    fs.readdir(path, function(err, files){
+    var dir = files;
+    if (err) throw err;
+    for(i=0;i<dir.length;i++){
+    dir[i].file = fileRead('./models/'+dir[i]);
+    }
+    //console.log("files > "+dir);
+    //console.log("files 0> "+dir[0]);
+    return dir;
+});
+};
+
+var fileRead = function(dirFile){
+    fs.readFile(dirFile, function(err, file){
+    if (err) throw err;    
+    var array = file.toString().split('\n');
+    for(i=0;i<array.length;i++){
+    var br = '<br>';
+    array[i] = array[i]+br;
+    }
+    //console.log("array"+array)
+    return array;
+    });
+    };
+
+exports.home = function(req, res){
+    if(!req.params.datacenter){
+    res.render ('admin/home');
+      
+    }else if(req.params.datacenter === "models"){
+    var dirFile = fileList('./models/');
+/*    for(i=0;i<dir.length;i++){
+    file[i] = fileRead('./models/'+dir[i]);
+    }
+    */
+    console.log("dir > "+dirFile);
+    context = dirFile;
+    res.render ('admin/models', context);
+    
+
+/*  var filePath = path.join(__dirname, 'start.html');
+    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+    if (!err){
+    console.log('received data: ' + data);
+    response.writeHead(200, {'Content-Type': 'text/html'});
+    response.write(data);
+    response.end();   
+    }else{
+        console.log(err);
+    }
+
+});
+    */
+    
+    
+    }else{
+    console.log("datacenter >"+req.params.datacenter);
+    res.render ('admin/'+req.params.datacenter);
+    }
+};
+
+
+
+
+    
 exports.options = function(req, res){
     console.log('called admin.options');     
         Optionsdb.find(function(err,opts){
