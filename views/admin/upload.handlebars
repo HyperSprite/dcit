@@ -1,0 +1,25 @@
+<h4>File Upload</h4>
+
+<div>
+<form class="form-horizontal" role="form" 
+		enctype="multipart/form-data" method="POST"
+		action="/admin/uploadpost">
+	<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+	<div class="form-group">
+		<label for="fieldPhoto" class="col-sm-2 control-label">Vacation photo</label>
+		<div class="col-sm-4">
+			<input type="file" class="form-control" required accept="image/*"
+				id="fieldPhoto" data-url="/upload" name="photo">
+		</div>
+	</div>
+         
+     <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                        
+                        <button type="submit" class="btn btn-default btn-xs">Submit</button>
+                        <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                        <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/admin'>
+            </div>
+        </div>
+     </form><form id="formCancel"></form> 
+</div>

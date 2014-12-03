@@ -6,7 +6,7 @@
 <h2>Models Explained</h2>
 <p>
 How I really want to do this is read the files in and output them to the page
-Then add comments inlike to the models, this way I don't have to update them in two palces 
+Then add comments inline to the models, this way I don't have to update them in two places 
 
 Could do the same with Routes as well
 </p>
@@ -16,77 +16,76 @@ Could do the same with Routes as well
 
 
 <p>
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator'); 
-var Rack = require('../models/rack.js');
-
-var dcCagesSchema = mongoose.Schema({
-        cageNickname:{type: String, required: true},
-        cageAbbreviation: String,
-        cageName:{type: String, required: true},
-        cageInMeters:Number,
-        cageWattPSM:Number,
-        cageNotes:String,
-        cageMap:String,
-        cageracks:[{ type: mongoose.Schema.ObjectId, ref: 'Rack' }]
-});
-
-
-var dcContactsSchema = mongoose.Schema({
-        conGuid:{type: String},
-        conType:{type: String, required: true},
-        conName:{type: String, required: true},
-        conEmail:String,
-        conURL:String,    
-        address1: String,
-        address2: String,
-        address3: String,
-        address4: String,
-        city: String,
-        state: String,
-        country: String,
-        zip: String,
-        lat: Number,
-        lon: Number,
-        conPho1Num: Number,
-        conPho1Typ: String,
-        conPho2Num: Number,
-        conPho2Typ: String,
-        conPho3Num: Number,
-        conPho3Typ: String,        
-        conPho4Num: Number,
-        conPho4Typ: String,        
-        conNotes: String,   
-});
-
-var datacenterSchema = mongoose.Schema({
-        fullName: {type: String, unique: true, required: true,index:1,sparse: true},
-        abbreviation: {type: String, unique: true, required: true, index:1,sparse: true},
-        foundingCompany: String,
-        createdOn: {type: Date, default: Date.now},
-        createdBy: String,
-        modifiedOn: {type: Date, default: Date.now},
-        modifiedBy: String,
-        contacts:[dcContactsSchema],
-        cages:[dcCagesSchema],
-        powerNames: Array,
-        racks:[{ type: mongoose.Schema.ObjectId, ref: 'Rack' }]
-});
-
-// gets Cages based on Datacenter ID
-datacenterSchema.methods.getChangeOrders = function(){
-    return changeorders.find({datacenterId: this._id});
-};
-
-datacenterSchema.methods.getRacks = function(){
-    return Racks.find({datacenterId: this._id});
-};
-
-// Apply the uniqueValidator plugin to datacenterSchema
-//datacenterSchema.plugin(uniqueValidator);
-
-var Datacenter = mongoose.model('Datacenter', datacenterSchema);
-module.exports = Datacenter;
-
-
+var mongoose = require('mongoose');<br>
+var uniqueValidator = require('mongoose-unique-validator'); <br>
+var Rack = require('../models/rack.js');<br>
+<br>
+var dcCagesSchema = mongoose.Schema({<br>
+        cageNickname:{type: String, required: true},<br>
+        cageAbbreviation: String,<br>
+        cageName:{type: String, required: true},<br>
+        cageInMeters:Number,<br>
+        cageWattPSM:Number,<br>
+        cageNotes:String,<br>
+        cageMap:String,<br>
+        cageracks:[{ type: mongoose.Schema.ObjectId, ref: 'Rack' }]<br>
+});<br>
+<br>
+<br>
+var dcContactsSchema = mongoose.Schema({<br>
+        conGuid:{type: String},<br>
+        conType:{type: String, required: true},<br>
+        conName:{type: String, required: true},<br>
+        conEmail:String,<br>
+        conURL:String,    <br>
+        address1: String,<br>
+        address2: String,<br>
+        address3: String,<br>
+        address4: String,<br>
+        city: String,<br>
+        state: String,<br>
+        country: String,<br>
+        zip: String,<br>
+        lat: Number,<br>
+        lon: Number,<br>
+        conPho1Num: Number,<br>
+        conPho1Typ: String,<br>
+        conPho2Num: Number,<br>
+        conPho2Typ: String,<br>
+        conPho3Num: Number,<br>
+        conPho3Typ: String,        <br>
+        conPho4Num: Number,<br>
+        conPho4Typ: String,        <br>
+        conNotes: String,   <br>
+});<br>
+<br>
+var datacenterSchema = mongoose.Schema({<br>
+        fullName: {type: String, unique: true, required: true,index:1,sparse: true},<br>
+        abbreviation: {type: String, unique: true, required: true, index:1,sparse: true},<br>
+        foundingCompany: String,<br>
+        createdOn: {type: Date, default: Date.now},<br>
+        createdBy: String,<br>
+        modifiedOn: {type: Date, default: Date.now},<br>
+        modifiedBy: String,<br>
+        contacts:[dcContactsSchema],<br>
+        cages:[dcCagesSchema],<br>
+        powerNames: Array,<br>
+        racks:[{ type: mongoose.Schema.ObjectId, ref: 'Rack' }]<br>
+});<br>
+<br>
+// gets Cages based on Datacenter ID<br>
+datacenterSchema.methods.getChangeOrders = function(){<br>
+    return changeorders.find({datacenterId: this._id});<br>
+};<br>
+<br>
+datacenterSchema.methods.getRacks = function(){<br>
+    return Racks.find({datacenterId: this._id});<br>
+};<br>
+<br>
+// Apply the uniqueValidator plugin to datacenterSchema<br>
+//datacenterSchema.plugin(uniqueValidator);<br>
+<br>
+var Datacenter = mongoose.model('Datacenter', datacenterSchema);<br>
+module.exports = Datacenter;<br>
 </p>
+

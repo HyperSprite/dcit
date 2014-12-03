@@ -8,76 +8,17 @@ var Datacenter = require('../models/datacenter.js'),
     seedDataLoad = require('../seedDataLoad.js'),
     dcit = require('../dcit.js'),
     fs = require('fs'),
-    path = require('path');
-
-var fileList = function(path){
-    fs.readdir(path, function(err, files){
-    var dir = files;
-    if (err) throw err;
-    for(i=0;i<dir.length;i++){
-    dir[i].file = fileRead('./models/'+dir[i]);
-    }
-    //console.log("files > "+dir);
-    //console.log("files 0> "+dir[0]);
-    return dir;
-});
-};
-
-var fileRead = function(dirFile){
-    fs.readFile(dirFile, function(err, file){
-    if (err) throw err;    
-    var array = file.toString().split('\n');
-    for(i=0;i<array.length;i++){
-    var br = '<br>';
-    array[i] = array[i]+br;
-    }
-    //console.log("array"+array)
-    return array;
-    });
-    };
-
+    path = require('path'),
+    formidable = require('formidable');
+    
 exports.home = function(req, res){
     if(!req.params.datacenter){
     res.render ('admin/home');
-      
-    }else if(req.params.datacenter === "models"){
-    var dirFile = fileList('./models/');
-/*    for(i=0;i<dir.length;i++){
-    file[i] = fileRead('./models/'+dir[i]);
-    }
-    */
-    console.log("dir > "+dirFile);
-    context = dirFile;
-    res.render ('admin/models', context);
-    
-
-/*  var filePath = path.join(__dirname, 'start.html');
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
-    if (!err){
-    console.log('received data: ' + data);
-    response.writeHead(200, {'Content-Type': 'text/html'});
-    response.write(data);
-    response.end();   
-    }else{
-        console.log(err);
-    }
-
-});
-    */
-    
-    
-    }else{
-    console.log("datacenter >"+req.params.datacenter);
-    res.render ('admin/'+req.params.datacenter);
-    }
-};
-
-
-
-
-    
-exports.options = function(req, res){
-    console.log('called admin.options');     
+//
+//          Options page
+//
+    }else if (req.params.datacenter  === "options"){
+     console.log('called admin.options');     
         Optionsdb.find(function(err,opts){
         console.log(opts);
         if (!opts){
@@ -100,13 +41,48 @@ exports.options = function(req, res){
 
 	res.render('admin/options', context );
     }});
+//
+//              OptionsEdit page
+//   
+    
+//
+//      Models page
+//
+    }else if(req.params.datacenter === "upload"){
+        res.render ('admin/upload');
+    
+    }else if(req.params.datacenter === "models"){
+ /*   var dirPath = './models/';
+    console.log("dirList typefo"+dirList);
+
+    var dirList = fs.readdir(dirPath, function(err, files){
+    var filesOut = [];
+    var filesTemp = [];
+    if (err) return;
+    for(i=0;i<files;i++){
+    fs.readFile(dirPath+files[i], function(err, data){
+    if(err) throw err;
+    filesTemp =  data;
+    
+    return filesTemp;
+    });}
+    console.log("fileList > "+f);  
+    return f;
+    });
+
+
+    console.log("dirList typefo"+dirList + typeof dirList);
+    res.render ('admin/models');
+*/
+    }else{
+    console.log("datacenter >"+req.params.datacenter);
+    res.render ('admin/'+req.params.datacenter);
+    
+}
 };
 
-exports.optionsEdit = function(req, res, next){
-    console.log("starting optionsedit");
-    if (req.params.datacenter.indexOf("edit")!=-1){
-        start = req.params.datacenter.indexOf ("-")+1;
-        dcInfo = req.params.datacenter.substring (start);
+exports.optionsEdit = function(req, res){
+        dcInfo = req.params.datacenter;
             console.log("|dcInfo  >"+dcInfo);
         
         if (dcInfo ==="new"){
@@ -126,10 +102,7 @@ exports.optionsEdit = function(req, res, next){
                 };
             res.render('admin/optionsedit', context);
             });
-
     }
-}
-
 };
 
 exports.optionsEditPost = function(req,res,err){
@@ -191,6 +164,41 @@ exports.optionsEditPost = function(req,res,err){
 }
 };
 
+exports.uploadPost = function(req,res){
+    var form = new formidable.IncomingForm();
+    
+    form.parse(req, function(err,fields,files){
+    form.uploadDir = "./uploads";
+     if(err) return res.redirect(303, '/error');
+        if(err) {
+            res.session.flash = {
+                type: 'danger',
+                intro: 'Oops!',
+                message: 'There was an error processing your submission. ' +
+                    'Pelase try again.',
+            };
+            return res.redirect(303, '/admin');
+        }
+    
+    var file = files.file;
+        var dir = './upload';
+        var path = dir + '/' + file;
+        fs.mkdirSync(dir);
+        fs.renameSync(file.path, dir + '/' + file);
+        savefile('vacation-photo', fields.email, path);
+        req.session.flash = {
+            type: 'success',
+            intro: 'Good luck!',
+            message: 'You have been entered into the contest.',
+        };
+        return res.redirect(303, '/admin');
+    
+    
+    
+    });
+
+
+};
 
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){

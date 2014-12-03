@@ -59,9 +59,9 @@ module.exports = function(app){
         // Admin 
         app.get('/admin', admin.home);
         app.get('/admin/:datacenter', admin.home);
-        app.get('/admin/options/:datacenter', admin.optionsEdit);
+        app.get('/admin/optionsedit/:datacenter', admin.optionsEdit);
         app.post('/admin/optionspost', admin.optionsEditPost);
-        app.get('/admin/options', admin.options);
+        app.post('/admin/uploadpost', admin.uploadPost);
         app.get('/admin/optionsadmin/dropDatacenter', admin.dropDatacenterGet);
         app.get('/admin/optionsadmin/dropRack', admin.dropRackGet);
         app.get('/admin/optionsadmin/dropOptionsdb', admin.dropOptionsdbGet);

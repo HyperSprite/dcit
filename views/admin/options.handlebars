@@ -9,7 +9,7 @@
 <h3>Options</h3>
 {{#each optList}}
 <div>
-<h4><a href="/admin/options/edit-{{optListKey}}">{{optListName}}</a></h4>
+<h4><a href="/admin/optionsedit/{{optListKey}}">{{optListName}}</a></h4>
     <ul id="{{optListKey}}" class="list-unstyled">    
         {{#each optListArray}}
         <li>
@@ -21,7 +21,7 @@
    </div>
 {{/each}}
 <form id="newList">
-<input type='submit' class='btn btn-success btn-xs' formaction='/admin/options/edit-new' formmethod="get" novalidate value='New List'>
+<input type='submit' class='btn btn-success btn-xs' formaction='/admin/optionsedit/new' formmethod="get" novalidate value='New List'>
 </form>
 <h4>Demos<h4>
 <div>
@@ -59,6 +59,7 @@
                     </datalist>
             </div>
         </div> 
+</div>
 <div>
 
 <hr>
