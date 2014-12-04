@@ -1,3 +1,9 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li>Admin</li>
+  <li>CSV File Upload</li>
+</ol>
+
 <h4>File Upload</h4>
 
 <div>
@@ -6,10 +12,10 @@
 		action="/admin/uploadpost">
 	<input type="hidden" name="_csrf" value="{{_csrfToken}}">
 	<div class="form-group">
-		<label for="fieldPhoto" class="col-sm-2 control-label">Vacation photo</label>
+		<label for="fieldPhoto" class="col-sm-2 control-label">Data</label>
 		<div class="col-sm-4">
-			<input type="file" class="form-control" required accept="image/*"
-				id="fieldPhoto" data-url="/upload" name="photo">
+			<input type="file" class="form-control" required accept=".csv"
+				id="newCSVfile" data-url="/upload" name="newCSVfile">
 		</div>
 	</div>
          
