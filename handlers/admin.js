@@ -42,15 +42,33 @@ exports.home = function(req, res){
 	res.render('admin/options', context );
     }});
 //
-//              OptionsEdit page
+//  OptionsEdit page
 //   
     
 //
-//      Models page
+//  Models page
 //
     }else if(req.params.datacenter === "upload"){
         res.render ('admin/upload');
+//
+//  Database admin
+//
+    }else if(req.params.datacenter === "dbinsert"){
     
+    
+    
+    
+        res.render ('admin/dbinsert');
+//    
+//  User Admin
+//
+    }else if(req.params.datacenter === "useradmin"){
+    
+    
+    
+    
+        res.render ('admin/useradmin');    
+
     }else if(req.params.datacenter === "models"){
  /*   var dirPath = './models/';
     console.log("dirList typefo"+dirList);
@@ -165,19 +183,23 @@ exports.optionsEditPost = function(req,res,err){
 };
 
 exports.uploadPost = function(req,res){
-    fs.unlinkSync('/*.csv');
+    console.log("date"+Date.now());
     var form = new formidable.IncomingForm();
-    form.uploadDir = './userdata';
+    //form.uploadDir = './userdata/';
     form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
     var file = files.newCSVfile;
+    var base = './userdata/';
     var dir = './userdata/uploads/';
-    var newPath = dir + file.name;
+    var dateStr = Date.now();
+    var datefile = dateStr+"-"+file.name;
+    var newPath = dir + datefile;
+    
     console.log("conlog> "+file.name);
     console.log("conlog> "+dir);
     console.log("conlog> "+newPath);
     console.log("conlog> "+file.upload);
-    fs.writeFile(file.name, file, function (err) {
+    fs.writeFile(base+datefile, file, function (err) {
      if(err) return res.redirect(303, '/error');
         if(err) {
             res.session.flash = {
@@ -188,7 +210,7 @@ exports.uploadPost = function(req,res){
             };
             return res.redirect(303, '/admin');
         }else{
-        fs.renameSync(file.path, newPath);
+        //fs.renameSync(file.path, newPath);
         
         req.session.flash = {
             type: 'success',

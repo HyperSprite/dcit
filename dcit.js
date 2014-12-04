@@ -133,6 +133,7 @@ app.use(require('body-parser')());
 app.use(require('csurf')());
 app.use(function(req, res, next){
 	res.locals._csrfToken = req.csrfToken();
+    
 	next();
 });
 */

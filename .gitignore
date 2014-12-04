@@ -1,6 +1,7 @@
 # ignore packages installed by npm
 node_modules*
 dump*
+userdata*
 
 # put any other files you don't want to check in here,
 # such as .DS_Store (OSX), *.bak, etc.
@@ -10,6 +11,7 @@ dump*
 credentials.js
 seedDataLoad.js
 scraps2.html
+*.csv
 
 # don't commit log files
 log

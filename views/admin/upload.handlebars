@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
-  <li>Admin</li>
+  <li><a href="admin">Admin</a></li>
   <li>CSV File Upload</li>
 </ol>
 
@@ -9,7 +9,7 @@
 <div>
 <form class="form-horizontal" role="form" 
 		enctype="multipart/form-data" method="POST"
-		action="/admin/uploadpost">
+		action="/admin/uploadpost?{{_csrfToken}}">
 	<input type="hidden" name="_csrf" value="{{_csrfToken}}">
 	<div class="form-group">
 		<label for="fieldPhoto" class="col-sm-2 control-label">Data</label>
