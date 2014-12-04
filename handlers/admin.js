@@ -165,39 +165,43 @@ exports.optionsEditPost = function(req,res,err){
 };
 
 exports.uploadPost = function(req,res){
+    fs.unlinkSync('/*.csv');
     var form = new formidable.IncomingForm();
-    
+    form.uploadDir = './userdata';
+    form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
-    form.uploadDir = "./uploads";
+    var file = files.newCSVfile;
+    var dir = './userdata/uploads/';
+    var newPath = dir + file.name;
+    console.log("conlog> "+file.name);
+    console.log("conlog> "+dir);
+    console.log("conlog> "+newPath);
+    console.log("conlog> "+file.upload);
+    fs.writeFile(file.name, file, function (err) {
      if(err) return res.redirect(303, '/error');
         if(err) {
             res.session.flash = {
                 type: 'danger',
                 intro: 'Oops!',
-                message: 'There was an error processing your submission. ' +
+                message: 'There was an error processing '+file.name+'. ' +
                     'Pelase try again.',
             };
             return res.redirect(303, '/admin');
-        }
-    
-    var file = files.file;
-        var dir = './upload';
-        var path = dir + '/' + file;
-        fs.mkdirSync(dir);
-        fs.renameSync(file.path, dir + '/' + file);
-        savefile('vacation-photo', fields.email, path);
+        }else{
+        fs.renameSync(file.path, newPath);
+        
         req.session.flash = {
             type: 'success',
-            intro: 'Good luck!',
-            message: 'You have been entered into the contest.',
+            intro: 'Awesome!',
+            message: 'File '+file.name+' uploaded.',
         };
         return res.redirect(303, '/admin');
     
     
     
-    });
+    }});
 
-
+});
 };
 
 // These drop the whole DB, not just one
