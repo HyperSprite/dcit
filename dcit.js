@@ -1,6 +1,7 @@
 var http = require('http'),
 	https = require('https'),
 	express = require('express'),
+    bodyParser = require('body-parser'),
 	fortune = require('./lib/fortune.js'),
 	formidable = require('formidable'),
 	fs = require('fs'),
@@ -126,7 +127,8 @@ app.use(require('express-session')({ store: sessionStore,
                  saveUninitialized: true,
                  resave: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(require('body-parser')());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // cross-site request forgery protection
 /*

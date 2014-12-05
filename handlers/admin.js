@@ -3,6 +3,7 @@ var Datacenter = require('../models/datacenter.js'),
     Optionsdb = require('../models/options.js'),
     Equipment = require('../models/equipment.js'),
     Systemdb = require('../models/system.js'),
+    Fileinfo = require('../models/fileinfo.js'),
     strTgs = require('../lib/stringThings.js'),
     locationPlus1 = require('../lib/locationPlus1.js'),
     seedDataLoad = require('../seedDataLoad.js'),
@@ -67,8 +68,49 @@ exports.home = function(req, res){
     
     
     
-        res.render ('admin/useradmin');    
-
+        res.render ('admin/useradmin');
+//    
+//  File Manager
+//
+    }else if(req.params.datacenter === "filemanager"){
+    
+    Fileinfo.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, fil){
+        if(err){
+        console.log(err);
+        }else{
+        console.log("file-list"+fil);
+            var context = {
+                fil: fil.map(function(fi){
+                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
+                    console.log("sy Map>"+fi);
+                    return {
+                            fileId: fi._id,
+                            fileName: fi.fileName,
+                            filePath: fi.filePath,
+                            fileHRName: fi.fileHRName,
+                            fileType: fi.fileType,
+                            fileDescription: fi.fileDescription,
+                            createdBy: fi.createdBy,
+                            createdOn: strTgs.dateTimeMod(fi.createdOn),
+                            modifiedOn: strTgs.dateTimeMod(fi.modifiedOn),
+                    };
+                })
+            };
+            res.render('admin/filemanager', context);
+        }});
+ 
+//    
+//  Joins
+//
+    }else if(req.params.datacenter === "joins"){
+    
+    
+    
+    
+        res.render ('admin/joins');   
+//
+//  Models (not working)
+// 
     }else if(req.params.datacenter === "models"){
  /*   var dirPath = './models/';
     console.log("dirList typefo"+dirList);
@@ -90,8 +132,9 @@ exports.home = function(req, res){
 
 
     console.log("dirList typefo"+dirList + typeof dirList);
+    */
     res.render ('admin/models');
-*/
+
     }else{
     console.log("datacenter >"+req.params.datacenter);
     res.render ('admin/'+req.params.datacenter);
@@ -189,42 +232,101 @@ exports.uploadPost = function(req,res){
     form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
     var file = files.newCSVfile;
+    var fileHRName = strTgs.clTrim(file.name);
     var base = './userdata/';
     var dir = './userdata/uploads/';
     var dateStr = Date.now();
-    var datefile = dateStr+"-"+file.name;
-    var newPath = dir + datefile;
-    
-    console.log("conlog> "+file.name);
-    console.log("conlog> "+dir);
-    console.log("conlog> "+newPath);
-    console.log("conlog> "+file.upload);
-    fs.writeFile(base+datefile, file, function (err) {
+    var fileName = dateStr+"-"+fileHRName;
+    var newPath = dir + fileName;
+
+    fs.writeFile(base+fileName, file, function (err) {
      if(err) return res.redirect(303, '/error');
         if(err) {
             res.session.flash = {
                 type: 'danger',
                 intro: 'Oops!',
-                message: 'There was an error processing '+file.name+'. ' +
+                message: 'There was an error processing '+fileHRName+'. ' +
                     'Pelase try again.',
             };
             return res.redirect(303, '/admin');
         }else{
         //fs.renameSync(file.path, newPath);
-        
+        Fileinfo.create({
+                    fileName: fileName,
+                    filePath: base,
+                    fileHRName: fileHRName,
+                    fileDescription: strTgs.csvCleanup(fields.fileDescription),
+                    fileType: fields.fileType,
+                    createdOn: Date.now(),
+                    createdBy:'Admin',
+                    },function(err){
+              if(err) return res.redirect(303, '/error');
+        if(err) {
+            res.session.flash = {
+                type: 'danger',
+                intro: 'Oops!',
+                message: 'There was an error processing '+fileHRName+'. ' +
+                    'Pelase try again.',
+            };
+            return res.redirect(303, '/admin');
+        }else{
+    
         req.session.flash = {
             type: 'success',
             intro: 'Awesome!',
-            message: 'File '+file.name+' uploaded.',
+            message: 'File '+fileHRName+' uploaded.',
         };
-        return res.redirect(303, '/admin');
-    
-    
-    
+        return res.redirect(303, '/admin/filemanager');
+        }});
     }});
-
 });
 };
+exports.uploadDeletePost = function(req,res){
+if (req.body.id){
+        var bdy = req.body
+        console.log("delete got this far");
+        Fileinfo.findOne({_id: bdy.id},function(err,fileToDelete){
+        if(err){
+        console.log(err);
+        //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+        }else{
+            fileToDelete.remove(function(err){
+                if(err){
+                console.log(err);
+                req.session.flash = {
+                        type: 'danger',
+                        intro: 'Ooops!',
+                        message: 'Something went wrong, '+bdy.fileName+' was not deleted.',
+                    };
+                    return res.redirect(303, '/admin/filemanager');
+                } else {
+                console.log("path/file "+bdy.filePath+bdy.fileName);
+                fs.unlink(bdy.filePath+bdy.fileName, function(err){
+                    if(err){
+                console.log(err);
+                req.session.flash = {
+                        type: 'danger',
+                        intro: 'Ooops!',
+                        message: 'Something went wrong, '+bdy.fileName+' was not deleted.',
+                    };
+                    return res.redirect(303, '/admin/filemanager');
+                    } else {
+                
+                    req.session.flash = {
+                    type: 'success',
+                    intro: 'Done!',
+                    message: 'File '+ bdy.fileName+' has been deleted. Good luck with that one',
+                };
+                return res.redirect(303, '/admin/filemanager');
+                }});
+                }
+            });
+        }
+    });
+}
+};
+
+
 
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){

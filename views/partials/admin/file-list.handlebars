@@ -1,0 +1,39 @@
+    
+<h4>Files</h4>
+    <table class="table-sort table-sort-search">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="edit">D</th>
+                <th class="table-sort" data-sort="fileHRName">File Name</th>
+                <th class="table-sort" data-sort="fileType">Type</th>
+                <th class="table-sort" data-sort="fileDescription">Description</th>
+                <th class="table-sort" data-sort="createdBy">Owner</th>
+                <th class="table-sort" data-sort="createdOn">Upload Date</th>
+                <th class="table-sort" data-sort="filePath">Path</th>                 
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each fil}}
+            <tr>
+                <td class="edit"><button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button></td>
+                <td class="fileHRName">{{fileHRName}}</td>
+                <td class="fileType">{{fileType}}</td>
+                <td class="fileDescription">{{fileDescription}}</td>
+                <td class="createdBy">{{Owner}}</td>
+                <td class="createdOn">{{createdOn}}</td>
+                <td class="filePath">{{filePath}}</td>
+              </tr>  
+        {{/each}}
+        </tbody>
+    </table>
+    
+           
+        {{#each fil}}
+            <form id="deleteform{{@index}}" action="/admin/uploaddelete" method="POST" onsubmit="return confirm('Are you sure you want to delete this file?')">
+            <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
+            <input type="hidden" name="id" value="{{fileId}}">
+            <input type="hidden" name="fileName" value="{{fileName}}">
+            <input type="hidden" name="filePath" value="{{filePath}}">
+            </form>
+        {{/each}}
+     

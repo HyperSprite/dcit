@@ -1,37 +1,26 @@
+var fs = require('fs");
 
+var dirPath = './models/';
+var args;
 
-var dirPath = '/models/';
 var dirList = fileList(dirPath);
-    /*context ={
-        dirList: dirList.map(function(dL){
-            return {
-                filename: dL.files,
-                filedata: dL.filesOut,
-            };
-    })};*/
-    
-    console.log("dirList typefo"+dirList + typeof dirList);
-    res.render ('admin/models');
-    }else{
-    console.log("datacenter >"+req.params.datacenter);
-    res.render ('admin/'+req.params.datacenter);
-    }
-};
+
+    console.log("dirList typefo"+dirList);
 
 
     function fileList(p){
     var filesOut = [];
     var filesTemp = [];
     fs.readdir(p, function(err, files){
-    if (err){
-    console.log("fileList error"+err);
-    }
-    for(i=0;i<files.length;i++){
-    console.log ("files i >"files[i]);
+    if (err) return
+    files.forEach(function(f){
+    f.data = fileRead(p,f);
+    });
+
     filesOut[i] = fileRead(p,files[i]);
     }
-    console.log("fileList > "+filesOut);  
-    return filesOut;
+    console.log("fileList > "+f);  
+    return f;
     });
 }
 

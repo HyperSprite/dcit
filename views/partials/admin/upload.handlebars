@@ -1,31 +1,30 @@
-<ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="admin">Admin</a></li>
-  <li>CSV File Upload</li>
-</ol>
-
-<h4>File Upload</h4>
-
 <div>
-<form class="form-horizontal" role="form" 
+<form id="fileupload" class="form-horizontal" role="form" 
 		enctype="multipart/form-data" method="POST"
 		action="/admin/uploadpost?{{_csrfToken}}">
 	<input type="hidden" name="_csrf" value="{{_csrfToken}}">
-	<div class="form-group">
+	<input type="hidden" name="fileType" value="csv">
+
+
+    <div class="form-group">
 		<label for="fieldPhoto" class="col-sm-2 control-label">Data</label>
 		<div class="col-sm-4">
 			<input type="file" class="form-control" required accept=".csv"
 				id="newCSVfile" data-url="/upload" name="newCSVfile">
 		</div>
 	</div>
-         
+    <div class="form-group">
+            <label for="fieldfileDescription" class="col-sm-2 control-label"  >Description</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fileDescription" name="fileDescription" placeholder="What is this for?">
+            </div>
+        </div> 
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                         
                         <button type="submit" class="btn btn-default btn-xs">Submit</button>
                         <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                        <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/admin'>
-            </div>
+             </div>
         </div>
      </form><form id="formCancel"></form> 
 </div>
