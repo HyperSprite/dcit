@@ -1,17 +1,17 @@
     
-<h4>Equipment and Systems {{#if rackView}} for Rack {{rackView}}{{/if}}</h4>
+<h4>{{#if rackView}}Rack {{rackView}} - {{/if}}Equipment and Systems </h4>
     <table class="table-sort table-sort-search">
         <thead>
             <tr>
                 <th class="table-sort" data-sort="equipLocation">DC_Cage_Rack_RU</th>
                 <th class="table-sort" data-sort="systemName">System Name</th>
-                <th class="table-sort" data-sort="systemStatus">System Status</th>
-                <th class="table-sort" data-sort="systemEnviron">Environment</th>
+                <th class="table-sort" data-sort="systemStatus">Status</th>
+                <th class="table-sort" data-sort="systemEnviron">Env</th>
                 <th class="table-sort" data-sort="systemRole">Role</th>                
                 <th class="table-sort" data-sort="equipSN ">Equipment SN</th>
-                <th class="table-sort" data-sort="equipStatus">Equipment Status</th>
+                <th class="table-sort" data-sort="equipStatus">Status</th>
+                <th class="table-sort" data-sort="makeModel">Make - Model</th>
                 <th class="table-sort" data-sort="sysmodifiedOn">System Mod</th> 
-                <th class="table-sort" data-sort="modifiedOn">Equipment Mod</th>
             </tr>
         </thead>
         <tbody class="list">
@@ -25,8 +25,9 @@
                 <td class="systemRole">{{systemRole}}</td>
                 <td class="equipSN"><a href="/equipment/{{equipSN}}">{{equipSN}}</a></td>
                 <td class="equipStatus">{{{equipStatusLight}}}</td>
+                <td class="modifiedOn">{{equipMake}} {{equipModel}}</td>
                 <td class="sysmodifiedOn">{{sysmodifiedOn}}</td>
-                <td class="modifiedOn">{{modifiedOn}}</td>
+                
             </tr>  
         {{/each}}
   

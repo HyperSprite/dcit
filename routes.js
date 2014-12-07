@@ -62,7 +62,8 @@ module.exports = function(app){
         app.get('/admin/optionsedit/:datacenter', admin.optionsEdit);
         app.post('/admin/optionspost', admin.optionsEditPost);
         app.post('/admin/uploadpost', admin.uploadPost);
-        app.post('/admin/uploaddelete',admin.uploadDeletePost);
+        app.post('/admin/uploaddelete', admin.uploadDeletePost);
+        app.post('/admin/csvtodb', admin.csvToDBPost);
         app.get('/admin/optionsadmin/dropDatacenter', admin.dropDatacenterGet);
         app.get('/admin/optionsadmin/dropRack', admin.dropRackGet);
         app.get('/admin/optionsadmin/dropOptionsdb', admin.dropOptionsdbGet);

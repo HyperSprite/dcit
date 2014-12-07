@@ -738,13 +738,14 @@ exports.dcEquipSysPages = function(req,res,next){
         //console.log("SYS >>>>>>>>>>>"+sys);
 
             var context = { 
+                        rackView: req.params.datacenter,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
                   
                  
                  
                   return {
-                            rackView: req.params.datacenter,
+                            
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,

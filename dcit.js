@@ -127,8 +127,9 @@ app.use(require('express-session')({ store: sessionStore,
                  saveUninitialized: true,
                  resave: true }));
 app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded());
 
 // cross-site request forgery protection
 /*
