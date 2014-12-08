@@ -1,10 +1,15 @@
+
+var     logger = require("morgan"),
+        strTgs = require('../lib/stringThings.js'),
+      ObjectId = require('mongoose').Types.ObjectId;
+
+// Models
 var Datacenter = require('../models/datacenter.js'),
-    Rack = require('../models/rack.js'),
-    Optionsdb = require('../models/options.js'),
-    Equipment = require('../models/equipment.js'),
-    Systemdb = require('../models/system.js'),
-    strTgs = require('../lib/stringThings.js'),
-    ObjectId = require('mongoose').Types.ObjectId;
+          Rack = require('../models/rack.js'),
+     Optionsdb = require('../models/options.js'),
+     Equipment = require('../models/equipment.js'),
+      Systemdb = require('../models/system.js');
+
 
 var start  = "",
     editLoad =0,
@@ -113,7 +118,7 @@ exports.dcEquipPages = function(req,res,next){
         if(!rk) return next();
         
         if (req.params.datacenter.indexOf ("copy") !=-1){
-            console.log(rk);
+           //console.log(rk);
                 context ={
                     rackParentDC: rk.rackParentDC,
                     fullName: uber.fullName,
@@ -137,7 +142,7 @@ exports.dcEquipPages = function(req,res,next){
         
         } else {
         
-        console.log(rk);
+       //console.log(rk);
             context ={
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
@@ -197,7 +202,7 @@ exports.dcEquipPages = function(req,res,next){
         
         //var RuTemp = 52;
         var getRackrUs = function(RuTemp){
-            console.log("getRackrUs"+RuTemp);
+           //console.log("getRackrUs"+RuTemp);
             var tempRu=[];
             for(i=0;i<RuTemp;i++){
             tempRu[i]=strTgs.pad([i]);
@@ -212,7 +217,7 @@ exports.dcEquipPages = function(req,res,next){
                 rackUnique: rackUni,
                 rackrUs: getRackrUs(52),
                 };
-        console.log(context);
+       //console.log(context);
         res.render('asset/equipmentedit', context);  
         });});
 
@@ -265,7 +270,7 @@ exports.dcEquipPages = function(req,res,next){
         
         //var RuTemp = 52;
         var getRackrUs = function(RuTemp){
-            console.log("getRackrUs"+RuTemp);
+           //console.log("getRackrUs"+RuTemp);
             var tempRu=[];
             for(i=0;i<RuTemp;i++){
             tempRu[i]=strTgs.pad([i]);
@@ -275,7 +280,7 @@ exports.dcEquipPages = function(req,res,next){
         };
         //console.log("rackUni >"+rackUni);
 
-        console.log ('Equipment.findOne '+dcabbr);
+       //console.log ('Equipment.findOne '+dcabbr);
         
         if(editLoad < 4){
 
@@ -554,7 +559,7 @@ exports.dcEquipmentPost = function(req,res){
     Equipment.findOne({equipSN: req.body.equipSN.toUpperCase()},function(err,eq){
     res.abbreviation = strTgs.cTrim(req.body.equipSN);
     var thisDoc = eq;
-        console.log("existing id>"+thisDoc);
+       //console.log("existing id>"+thisDoc);
         if (err) {
             console.log(err);
             res.redirect('location/datacenter/'+res.abbreviation);
@@ -719,7 +724,7 @@ exports.dcEquipSysPages = function(req,res,next){
                     };
                 })
             };
-            console.log('context List >>>>>> '+context.toString());
+           //console.log('context List >>>>>> '+context.toString());
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
             res.render('asset/equipsys-list', context);
@@ -730,7 +735,7 @@ exports.dcEquipSysPages = function(req,res,next){
     Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:-1}).exec(function(err, eqs){
         if(err) return next(err);
         if(!eqs) return next();
-        console.log("eqs"+eqs);
+       //console.log("eqs"+eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
         
         if(err) return next(err);
@@ -785,7 +790,7 @@ exports.dcEquipSysPages = function(req,res,next){
                     };
                 })
             };
-            console.log('context Rack >>>>>> '+context.toString());
+           //console.log('context Rack >>>>>> '+context.toString());
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
             res.render('asset/equipsys-list', context);

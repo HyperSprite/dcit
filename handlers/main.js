@@ -1,8 +1,14 @@
+
+var     logger = require("morgan"),
+        strTgs = require('../lib/stringThings.js'),
+      ObjectId = require('mongoose').Types.ObjectId;
+
+// Models
 var Datacenter = require('../models/datacenter.js'),
-    Rack = require('../models/rack.js');
-
-
-var fortune = require('../lib/fortune.js');
+          Rack = require('../models/rack.js'),
+     Optionsdb = require('../models/options.js'),
+     Equipment = require('../models/equipment.js'),
+      Systemdb = require('../models/system.js');
     
 exports.home = function(req, res){
 	res.render('home');

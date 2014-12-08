@@ -11,7 +11,7 @@ var systemPortSchema = mongoose.Schema({
     sysPortEndPoint: String,
     sysPortEndPointPre: String,
     sysPortEndPointPort: String,
-    sysPortVlan: Number,
+    sysPortVlan: String,
     sysPortOptions: String,
     sysPortURL: String,
     sysPortCrossover: {type: Boolean, default: false},

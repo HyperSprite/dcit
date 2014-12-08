@@ -1,16 +1,23 @@
+
+var     logger = require("morgan"),
+        strTgs = require('../lib/stringThings.js'),
+          dcit = require('../dcit.js'),
+            fs = require('fs'),
+          path = require('path'),
+    formidable = require('formidable'),
+           csv = require('fast-csv'), 
+  seedDataLoad = require('../seedDataLoad.js'),
+ equipmentCrud = require('../crud/equipment.js'),
+  systemdbCrud = require('../crud/system.js'),
+      ObjectId = require('mongoose').Types.ObjectId;
+
+// Models
 var Datacenter = require('../models/datacenter.js'),
-    Rack = require('../models/rack.js'),
-    Optionsdb = require('../models/options.js'),
-    Equipment = require('../models/equipment.js'),
-    Systemdb = require('../models/system.js'),
-    strTgs = require('../lib/stringThings.js'),
-    locationPlus1 = require('../lib/locationPlus1.js'),
-    seedDataLoad = require('../seedDataLoad.js'),
-    dcit = require('../dcit.js');
-
-
-
-
+          Rack = require('../models/rack.js'),
+     Optionsdb = require('../models/options.js'),
+     Equipment = require('../models/equipment.js'),
+      Systemdb = require('../models/system.js'),
+      Fileinfo = require('../models/fileinfo.js');
 
 exports.get = function(req, res, next){
     console.log("ajax.get +++++++++++++");

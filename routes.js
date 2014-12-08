@@ -1,11 +1,12 @@
-var main = require('./handlers/main.js'),
-	samples = require('./handlers/sample.js'),
-    location = require('./handlers/location.js'),
-    rack = require('./handlers/rack.js'),
-    equipment = require('./handlers/equipment.js'),
-    system = require('./handlers/system.js'),
-    admin = require('./handlers/admin.js'),
-    ajax = require('./handlers/ajax.js');
+var     logger = require("morgan"),
+          main = require('./handlers/main.js'),
+	   samples = require('./handlers/sample.js'),
+      location = require('./handlers/location.js'),
+          rack = require('./handlers/rack.js'),
+     equipment = require('./handlers/equipment.js'),
+        system = require('./handlers/system.js'),
+         admin = require('./handlers/admin.js'),
+          ajax = require('./handlers/ajax.js');
 
 module.exports = function(app){
 

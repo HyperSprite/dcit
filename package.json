@@ -36,7 +36,8 @@
     "q": "^1.0.1",
     "session-mongoose": "^0.4.1",
     "underscore": "^1.6.0",
-    "vhost": "^2.0.0"
+    "vhost": "^2.0.0",
+    "winston": "^0.8.3"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

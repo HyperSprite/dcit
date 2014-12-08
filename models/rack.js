@@ -37,6 +37,7 @@ var rackSchema = mongoose.Schema({
     rackDepth: Number,
     rackLat: String,
     rackLon: String,
+    rackRow: String, // for showing elevations 
     rackStatus: String,
     rackMake: String,
     rackModel: String,

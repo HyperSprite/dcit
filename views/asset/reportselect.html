@@ -1,0 +1,54 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/systems">Systems</a></li>
+  <li>Report Select</li>
+</ol>
+
+<h4>Report Select</h4>
+
+<h5>Environment</h5>
+<form id="systemEnvironForm"class="form-horizontal systemEnvironForm" role="form" action="/environment/{{systemEnviron}}" method="POST">
+
+         <div class="form-group">
+            <label for="field-systemEnviron" class="col-sm-2 control-label" >Environment</label>
+            <div class="col-sm-4">
+                <input list="systemEnviron" id="field-systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" value="{{systemEnviron}}" >
+                <datalist id="systemEnviron">
+                    {{#each optEnvironment}}
+                    <option {{{this}}}>{{this}}</option>
+                    {{/each}}
+                </datalist>
+            </div>
+        </div>
+        
+            <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                
+        </div>
+    </div>
+</form>
+
+<h5>Rack</h5>
+<form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/equipment-systems/{{equipLocationRack}}" method="POST">
+
+        <div class="form-group">
+            <label for="field-equipLocationRack" class="col-sm-2 control-label" >Location</label>
+            
+            <div class="col-xs-3">
+                
+                <input list="equipLocationRack" id="field-equipLocationRack" class="form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" > 
+                    <datalist id="equipLocationRack">
+                        {{#each rackUnique}}
+                        <option {{{this}}}>{{this}}</option>
+                        {{/each}}
+                    </datalist>
+            
+            </div>
+            <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                
+        </div>
+    </div>
+</form>

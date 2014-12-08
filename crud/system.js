@@ -65,7 +65,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 sysPortOptions: strTgs.stcTrim(data.sysPortOptions),
                 sysPortURL: strTgs.clTrim(data.sysPortURL),
             });
-            eq.save(function(err){
+            sys.save(function(err){
 	        if(err) {
                 console.log(err);
                 console.log("systemdbPortsCreate Failed write :"+data.index+" : "+data.systemName);

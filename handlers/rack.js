@@ -1,8 +1,14 @@
+
+var     logger = require("morgan"),
+        strTgs = require('../lib/stringThings.js'),
+      ObjectId = require('mongoose').Types.ObjectId;
+
+// Models
 var Datacenter = require('../models/datacenter.js'),
-    Rack = require('../models/rack.js'),
-    Optionsdb = require('../models/options.js'),
-    strTgs = require('../lib/stringThings.js'),
-    ObjectId = require('mongoose').Types.ObjectId;
+          Rack = require('../models/rack.js'),
+     Optionsdb = require('../models/options.js'),
+     Equipment = require('../models/equipment.js'),
+      Systemdb = require('../models/system.js');
 
 var start  = "",
     editLoad =0,
@@ -11,8 +17,6 @@ var start  = "",
     dcInfoSplit = "",
     dcSubId = "",
     dcId ="";
-
-
 
 //---------------------------------------------------------------------   
 //----------------------   Rack List  ---------------------------------
@@ -57,6 +61,7 @@ exports.dcRackPages = function(req,res,next){
                             rackDepth: rack.rackDepth,
                             rackLat: rack.rackLat,
                             rackLon: rack.rackLon,
+                            rackRow: rack.rackRow,
                             rackStatus: strTgs.trueFalseIcon(rack.rackStatus,rack.rackStatus),
                             rackMake: rack.rackMake,
                             rackModel: rack.rackModel,
@@ -307,6 +312,7 @@ link to this looks
                             rackSN: rack.rackSN,
                             rackLat: rack.rackLat,
                             rackLon: rack.rackLon,
+                            rackRow: rack.rackRow,
                             rackStatus: rack.rackStatus,
                             rackNotes: rack.rackNotes,
                             createdBy: rack.createdBy,
@@ -392,7 +398,7 @@ exports.dcRackPost = function(req,res){
                         rackParentCage:req.body.cageId,
                         rackNickname: strTgs.cTrim(req.body.rackNickname),
                         rackName:strTgs.cTrim(req.body.rackName),
-                        rackUnique:(req.body.abbreviation+"_"+req.body.cageAbbreviation+"_"+strTgs.cTrim(req.body.rackNickname)),
+                        rackUnique:(req.body.abbreviation+"_"+req.body.cageAbbreviation+"_"+strTgs.clTrim(req.body.rackNickname)),
                         rackDescription:strTgs.uTrim(req.body.rackDescription),
                         rackSN: strTgs.cTrim(req.body.rackSN),
                         rackHeight:strTgs.sTrim(req.body.rackHeight),
@@ -400,6 +406,7 @@ exports.dcRackPost = function(req,res){
                         rackDepth:strTgs.uTrim(req.body.rackDepth),
                         rackLat:strTgs.cTrim(req.body.rackLat),
                         rackLon:strTgs.cTrim(req.body.rackLon),
+                        rackRow: strTgs.cTrim(req.body.rackRow),
                         rackStatus:req.body.rackStatus,
                         rackMake:strTgs.uTrim(req.body.rackMake),
                         rackModel:strTgs.uTrim(req.body.rackModel),
@@ -463,6 +470,7 @@ exports.dcRackPost = function(req,res){
                         thisDoc.rackDepth = strTgs.uCleanUp(thisDoc.rackDepth,req.body.rackDepth);
                         thisDoc.rackLat = strTgs.uCleanUp(thisDoc.rackLat,req.body.rackLat);
                         thisDoc.rackLon = strTgs.uCleanUp(thisDoc.rackLon,req.body.rackLon);
+                        thisDoc.rackRow = strTgs.uCleanUp(thisDoc.rackRow,req.body.rackRow);
                         thisDoc.rackStatus = strTgs.uCleanUp(thisDoc.rackStatus,req.body.rackStatus);
                         thisDoc.rackMake = strTgs.uCleanUp(thisDoc.rackMake,req.body.rackMake);
                         thisDoc.rackModel = strTgs.uCleanUp(thisDoc.rackModel,req.body.rackModel);

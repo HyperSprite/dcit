@@ -1,3 +1,5 @@
+
+
 var http = require('http'),
 	https = require('https'),
 	express = require('express'),
@@ -5,6 +7,7 @@ var http = require('http'),
 	fortune = require('./lib/fortune.js'),
 	formidable = require('formidable'),
 	fs = require('fs'),
+    logger = require("morgan"),
 	vhost = require('vhost'),
     Datacenter = require('./models/datacenter.js'),
     Rack = require('./models/rack.js'),
@@ -12,7 +15,6 @@ var http = require('http'),
     Systemdb = require('./models/system.js'),
     Optionsdb = require('./models/options.js'),
     seedDataLoad = require('./seedDataLoad.js');
-
 
 var app = express();
 
@@ -109,13 +111,18 @@ app.use(function(req, res, next){
 switch(app.get('env')){
     case 'development':
     	// compact, colorful dev logging
-    	app.use(require('morgan')('dev'));
+    	//app.use(require('morgan')('dev'));
+       // var accessLogStream = fs.createWriteStream(__dirname + '/logs/dev/access.log', {flags: 'a'})
+        //app.use(logger('tiny', {stream: accessLogStream}))
         break;
     case 'production':
         // module 'express-logger' supports daily log rotation
-        app.use(require('express-logger')({ path: __dirname + '/log/requests.log'}));
+        //var accessLogStream = fs.createWriteStream(__dirname + '/logs/access.log', {flags: 'a'})
+        //app.use(logger('tiny', {stream: accessLogStream}))
         break;
 }
+
+//app.use(logger());
 
 var MongoSessionStore = require('session-mongoose')(require('connect'));
 var sessionStore = new MongoSessionStore({ url: credentials.mongo.development.connectionString });
@@ -129,7 +136,7 @@ app.use(require('express-session')({ store: sessionStore,
 app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // cross-site request forgery protection
 /*

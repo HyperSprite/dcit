@@ -1,13 +1,18 @@
-var Datacenter = require('../models/datacenter.js'),
-    Rack = require('../models/rack.js'),
-    Optionsdb = require('../models/options.js'),
-    Equipment = require('../models/equipment.js'),
-    Systemdb = require('../models/system.js'),
-    strTgs = require('../lib/stringThings.js'),
-    locationPlus1 = require('../lib/locationPlus1.js'),
-    seedDataLoad = require('../seedDataLoad.js'),
-    dcit = require('../dcit.js');
+    
+var     logger = require("morgan"),
+        strTgs = require('../lib/stringThings.js'),
+  seedDataLoad = require('../seedDataLoad.js'),
+          dcit = require('../dcit.js'),
+      ObjectId = require('mongoose').Types.ObjectId;
 
+// Models
+var Datacenter = require('../models/datacenter.js'),
+          Rack = require('../models/rack.js'),
+     Optionsdb = require('../models/options.js'),
+     Equipment = require('../models/equipment.js'),
+      Systemdb = require('../models/system.js');    
+    
+    
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var LIUser = {'account':'admin',
