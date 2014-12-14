@@ -1,5 +1,5 @@
     
-var     logger = require("morgan"),
+var     winston = require('winston'),
         strTgs = require('../lib/stringThings.js'),
   seedDataLoad = require('../seedDataLoad.js'),
           dcit = require('../dcit.js'),
@@ -68,7 +68,7 @@ this is the DC List block. Looks for "List" in the URL and returns list of datac
 */
 exports.datacenterPages = function(req,res,next){
     console.log('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
-    if (req.params.datacenter === 'list'){
+    if (req.params.datacenter === 'list' || !req.params.datacenter){
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
             var context = {

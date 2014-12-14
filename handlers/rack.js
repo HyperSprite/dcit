@@ -1,5 +1,5 @@
 
-var     logger = require("morgan"),
+var     winston = require('winston'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 

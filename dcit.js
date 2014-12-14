@@ -4,10 +4,9 @@ var http = require('http'),
 	https = require('https'),
 	express = require('express'),
     bodyParser = require('body-parser'),
-	fortune = require('./lib/fortune.js'),
 	formidable = require('formidable'),
 	fs = require('fs'),
-    logger = require("morgan"),
+    winston = require('winston'),
 	vhost = require('vhost'),
     Datacenter = require('./models/datacenter.js'),
     Rack = require('./models/rack.js'),
@@ -16,6 +15,7 @@ var http = require('http'),
     Optionsdb = require('./models/options.js'),
     seedDataLoad = require('./seedDataLoad.js');
 
+    
 var app = express();
 
 var LIUser = {'account':'admin',
@@ -110,8 +110,8 @@ app.use(function(req, res, next){
 // logging
 switch(app.get('env')){
     case 'development':
-    	// compact, colorful dev logging
-    	//app.use(require('morgan')('dev'));
+  
+       
        // var accessLogStream = fs.createWriteStream(__dirname + '/logs/dev/access.log', {flags: 'a'})
         //app.use(logger('tiny', {stream: accessLogStream}))
         break;
@@ -123,6 +123,22 @@ switch(app.get('env')){
 }
 
 //app.use(logger());
+
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({ json: false, timestamp: true }),
+    new winston.transports.File({ filename: __dirname + '/debug.log', json: false })
+  ],
+  exceptionHandlers: [
+    new (winston.transports.Console)({ json: false, timestamp: true }),
+    new winston.transports.File({ filename: __dirname + '/exceptions.log', json: false })
+  ],
+  exitOnError: false
+});
+
+module.exports = logger;
+
+logger.info('DCIT Log started');
 
 var MongoSessionStore = require('session-mongoose')(require('connect'));
 var sessionStore = new MongoSessionStore({ url: credentials.mongo.development.connectionString });

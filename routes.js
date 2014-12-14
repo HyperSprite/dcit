@@ -1,4 +1,4 @@
-var     logger = require("morgan"),
+var     winston = require('winston'),
           main = require('./handlers/main.js'),
 	   samples = require('./handlers/sample.js'),
       location = require('./handlers/location.js'),
@@ -23,6 +23,7 @@ module.exports = function(app){
     // locations
         // URL is incoming / :datacenter is the req storage (this could have had a better name) 
         // Next part is the export file.name in handlers dir.
+        app.get('/location/datacenters', location.datacenterPages);
         app.get('/location/datacenter/:datacenter', location.datacenterPages);
         app.post('/location/datacentercontact/:datacenter', location.datacenterContactPost);
         app.post('/location/datacenterdelete/:datacenter', location.datacenterDelete);
@@ -36,6 +37,7 @@ module.exports = function(app){
         app.post('/location/datacentercage/:datacenter', location.datacenterCagePost);
         app.get('/location/datacenterpower/:datacenter', location.datacenterPowerPages);
         app.post('/location/datacenterpower/:datacenter', location.datacenterPowerPost);
+        app.get('/location/racks', rack.dcRackPages);
         app.get('/location/rack', rack.dcRackPages);
         app.get('/location/rack/:datacenter', rack.dcRackPages);
         app.post('/location/rack/:datacenter', rack.dcRackPost);
@@ -47,6 +49,7 @@ module.exports = function(app){
         app.get('/equipment/:datacenter', equipment.dcEquipPages);
         app.get('/equipment-systems', equipment.dcEquipSysPages);
         app.get('/equipment-systems/:datacenter', equipment.dcEquipSysPages);
+        app.get('/elevation/:datacenter', equipment.dcRackElevationPage);
         app.post('/equipment/:datacenter', equipment.dcEquipmentPost);
         app.post('/equipmentdelete/:datacenter', equipment.dcEquipDelete);
         app.post('/equipmentportdelete/:datacenter', equipment.equipSubDelete);

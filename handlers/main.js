@@ -1,5 +1,5 @@
 
-var     logger = require("morgan"),
+var     winston = require('winston'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -35,7 +35,6 @@ exports.seedDatacetnerGet = function(req,res){
 
 exports.about = function(req, res){
 	res.render('about', { 
-		fortune: fortune.getFortune(),
 		pageTestScript: '/qa/tests-about.js' 
 	} );
 };

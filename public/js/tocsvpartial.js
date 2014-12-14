@@ -1,54 +1,3 @@
-
-        <div class='container'> 
-          <div id="dvData">
-                <table>
-                    <tr>
-                        <th>Column One</th>
-                        <th>Column Two</th>
-                        <th>Column Three</th>
-                    </tr>
-                    <tr>
-                        <td>Row 1 Col 1</td>
-                        <td>Row 1 Col 2</td>
-                        <td>Row 1 Col 3 </td>
-                    </tr>
-                    <tr>
-                        <td>Row 2 Col 1</td>
-                        <td>Row 2 Col 2</td>
-                        <td>Row 2 Col 3</td>
-                    </tr>
-                    <tr>
-                        <td>Row 3 Col 1</td>
-                        <td>Row 3 Col 2</td>
-                        <td>Row 3 Col 3</td>
-                    </tr>
-                </table>
-            </div>
-            <br/>
-            <div class='button'>
-                <a href="#" id ="export" role='button'>Click On This Here Link To Export The Table Data into a CSV File
-                </a>
-            </div>
- 
-            <hr/>
-            <div class='refs'>
-            <div class='label'>References</div>
-            <ul>
- 
-            <li><a href="http://stackoverflow.com/questions/16078544/export-to-csv-using-jquery-and-html" target="_blank">Export to CSV using jQuery and HTML (Stack Overflow)</a>
-            </li>
-            <li> 
-            <a href="http://adilapapaya.wordpress.com/2013/11/15/exporting-data-from-a-web-browser-to-a-csv-file-using-javascript/" target="_blank">adilapapaya.wordpress.com</a>
-            </li>
-            </ul>
-            </div>
-            <hr/>
-        </div>
- 
-        <!-- Scripts ----------------------------------------------------------- -->
-        <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
-        <!-- If you want to use jquery 2+: https://code.jquery.com/jquery-2.1.0.min.js -->
-        <script type='text/javascript'>
         $(document).ready(function () {
 
             console.log("HELLO")
@@ -119,10 +68,9 @@
                 outputFile = outputFile.replace('.csv','') + '.csv'
                  
                 // CSV
-                exportTableToCSV.apply(this, [$('#dvData>table'), outputFile]);
+                exportTableToCSV.apply(this, [$('#toCSV'), outputFile]);
                 
                 // IF CSV, don't do event.preventDefault() or return false
                 // We actually need this to be a typical hyperlink
             });
         });
-    </script>

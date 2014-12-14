@@ -1,5 +1,8 @@
 <h4>Files</h4>
-    <table class="table-sort table-sort-search">
+        <div class='container'> 
+          <div id="dvData">
+    
+    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
         <thead>
             <tr>
                 <th class="table-sort" data-sort="edit">D</th>
@@ -24,6 +27,9 @@
         {{/each}}
         </tbody>
     </table>
+    </div>
+         {{> tocsvpartial }}
+    </div>
         {{#each fil}}
             <form id="csvToDBPostform{{@index}}" action="/admin/csvtodb" method="POST" onsubmit="return confirm('Are you sure you want to upload this file to the database?')">
             <input type="hidden" name="_csrf" value="{{../_csrfToken}}">

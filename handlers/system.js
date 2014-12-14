@@ -1,5 +1,5 @@
 
-var     logger = require("morgan"),
+var     winston = require('winston'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -466,7 +466,7 @@ exports.dcEquipPortPostAJAX = function(req,res){
 //                   working to display list of Equipment w/ systems
 //          will not show systems without equipment
 // ---------------------------------------------------------------------
-
+/*
 exports.dcEquipSysPages = function(req,res,next){
     console.log('***********exports.dcEquipSysPages First >' +req.params.datacenter);
     if (!req.params.datacenter){
@@ -597,7 +597,7 @@ exports.dcEquipSysPages = function(req,res,next){
         });});
     }
 };
-
+*/
 /*---------------------------------------------------------------------
 ---------------------------- System Delete ------------------------------
 ------------------------------------------------------------------------

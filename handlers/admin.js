@@ -1,5 +1,5 @@
 
-var     logger = require("morgan"),
+var     winston = require('winston'),
         strTgs = require('../lib/stringThings.js'),
           dcit = require('../dcit.js'),
             fs = require('fs'),

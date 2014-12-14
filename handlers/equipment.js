@@ -1,5 +1,5 @@
 
-var     logger = require("morgan"),
+var     logger = require("winston"),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -797,6 +797,159 @@ exports.dcEquipSysPages = function(req,res,next){
         });});
     }
 };
+
+
+// --------------------------------------------------------------------
+//                   working to display list of Equipment w/ systems
+//          will not show systems without equipment
+//            first half does table version, second half does SVG version
+// ---------------------------------------------------------------------
+
+exports.dcRackElevationPage = function(req,res,next){
+    logger.info('***********exports.dcRackElevationPage First >' +req.params.datacenter);
+    if (!req.params.datacenter){
+    logger.info("in EquipSysPages - List");
+    // this looks for "list" as the / url. if it exists, it prints the datacenter list
+        Equipment.find({}).exec(function(err, eqs){
+        if(err) return next(err);
+        if(!eqs) return next();
+        //console.log(eqs);
+        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
+        
+        if(err) return next(err);
+        if(!sys) return next();
+        //console.log("SYS >>>>>>>>>>>"+sys);
+
+            var context = { 
+               eqs: eqs.map(function(eq){
+                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                  return {
+                            equipLocation: eq.equipLocation,
+                            equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
+                            equipSN: eq.equipSN,
+                            equipTicketNumber: eq.equipticketNumber,
+                            equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipticketNumber),
+                            equipStatus: eq.equipStatus,
+                            equipStatusLight: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
+                            equipType: eq.equipType,
+                            equipMake: eq.equipMake,
+                            equipModel: eq.equipModel,
+                            equipSubModel: eq.equipSubModel,
+                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                            equipPONum: eq.equipPONum,
+                            equipProjectNum: eq.equipProjectNum,
+                            createdOn: strTgs.dateMod(eq.createdOn),
+                            modifiedOn: strTgs.dateMod(eq.modifiedOn),
+                            equipPorts: eq.equipPorts.map(function(ep){
+                           return {
+                                equipPortsId: ep.id,
+                                equipPortType: ep.equipPortType,
+                                equipPortsAddr: ep.equipPortsAddr,
+                                equipPortName: ep.equipPortName,
+                                equipPortsOpt: ep.equipPortsOpt,
+                                createdBy: ep.createdBy,
+                                createdOn: strTgs.dateMod(ep.createdOn),
+                                modifiedby: ep.modifiedbBy,
+                                modifiedOn: strTgs.dateMod(ep.modifiedOn),
+                            };
+                            }),
+                            
+                            systemName: tempSys.systemName,
+                            systemEnviron: tempSys.systemEnviron,
+                            systemRole: tempSys.systemRole,
+                            systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
+                            sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
+                            
+                    };
+                })
+            };
+           //console.log('context List >>>>>> '+context.toString());
+            // the 'location/datacenter-list' is the view that will be called
+            // context is the data from above
+            res.render('asset/elevation', context);
+        });});
+    } else { 
+    // little regex to get the contains rack location
+    var re = new RegExp(req.params.datacenter, "i");
+    Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:-1}).exec(function(err, eqs){
+        if(err) return next(err);
+        if(!eqs) return next();
+       //console.log("eqs"+eqs);
+        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
+        
+        if(err) return next(err);
+        if(!sys) return next();
+        //console.log("SYS >>>>>>>>>>>"+sys);
+        Rack.findOne({rackUnique: { $regex: re }},'rackUnique rackDescription rackHeight rackWidth rackDepth rackLat rackLon rackRow rackStatus rUs',function(err,rk){
+        //console.log("rk >>>>>>>>>>>"+rk);
+        //console.log("rk.rackUnique>"+rk.rackUnique);
+            var context = {
+                rackView: req.params.datacenter,
+                rackUnique: rk.rackUnique,
+                rackDescription: rk.rackDescription,
+                rackHeight: rk.rackHeight,
+                rackWidth: rk.rackWidth,
+                rackDepth: rk.rackDepth,
+                rackLat: rk.rackLat,
+                rackLon: rk.rackLon,
+                rackRow: rk.rackRow,
+                rackStatus: rk.rackStatus,
+                rUs: rk.rUs,
+
+                eqs: eqs.map(function(eq){
+                tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                  
+                  return {
+                            
+                            equipLocation: eq.equipLocation,
+                            equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
+                            equipLocationRu: strTgs.ruElevation(eq.equipLocation),
+                            equipSN: eq.equipSN,
+                            equipRUHieght: strTgs.checkNull(eq.equipRUHieght),
+                            equipTicketNumber: eq.equipticketNumber,
+                            equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipticketNumber),
+                            equipStatus: eq.equipStatus,
+                            equipStatusLight: strTgs.trueFalseD3(eq.equipStatus,eq.equipStatus),
+                            equipIsVirtual: eq.equipIsVirtual,
+                            equipType: eq.equipType,
+                            equipTypeColor: strTgs.equipTypeColor(eq.equipType),
+                            equipMake: eq.equipMake,
+                            equipModel: eq.equipModel,
+                            equipSubModel: eq.equipSubModel,
+                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                            equipPONum: eq.equipPONum,
+                            equipProjectNum: eq.equipProjectNum,
+                            createdOn: strTgs.dateMod(eq.createdOn),
+                            modifiedOn: strTgs.dateMod(eq.modifiedOn),
+                            equipPorts: eq.equipPorts.map(function(ep){
+                           return {
+                                equipPortsId: ep.id,
+                                equipPortType: ep.equipPortType,
+                                equipPortsAddr: ep.equipPortsAddr,
+                                equipPortName: ep.equipPortName,
+                                equipPortsOpt: ep.equipPortsOpt,
+                                createdBy: ep.createdBy,
+                                createdOn: strTgs.dateMod(ep.createdOn),
+                                modifiedby: ep.modifiedbBy,
+                                modifiedOn: strTgs.dateMod(ep.modifiedOn),
+                            };
+                            }),
+                            systemName: tempSys.systemName,
+                            systemEnviron: tempSys.systemEnviron,
+                            systemRole: tempSys.systemRole,
+                            systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
+                            sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
+                    };
+                })
+            };
+           //console.log('context Rack >>>>>> '+context.rackUnique);
+            // the 'location/datacenter-list' is the view that will be called
+            // context is the data from above
+            res.render('asset/elevation', context);
+        });});});
+    }
+};
+
 
 /*---------------------------------------------------------------------
 ---------------------------- Equipment Delete ------------------------------

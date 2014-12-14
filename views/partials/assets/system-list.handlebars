@@ -1,6 +1,8 @@
     
 <h4>Systems</h4>
-    <table class="table-sort table-sort-search">
+    <div class='container'> 
+    <div id="dvData">
+    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
         <thead>
             <tr>
                 <th class="table-sort" data-sort="edit">Edit</th>
@@ -28,5 +30,7 @@
         {{/each}}
         </tbody>
     </table>
-    
+    </div>
+        {{> tocsvpartial }}
+    </div> 
     

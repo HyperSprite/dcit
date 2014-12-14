@@ -67,7 +67,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
             });
             sys.save(function(err){
 	        if(err) {
-                console.log(err);
+                console.log(err+data.index);
                 console.log("systemdbPortsCreate Failed write :"+data.index+" : "+data.systemName);
                 return (err.stack);
             }else{
