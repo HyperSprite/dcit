@@ -55,16 +55,16 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
 	        if(err) {
-                console.log("Failed write : "+data.equipSN);
+                logger.warn("Failed write : "+data.equipSN);
                 return (err.stack);
             }else{
-                console.log("Sucessful write :"+data.index+" : "+data.equipSN);
+                logger.warn("Sucessful write :"+data.index+" : "+data.equipSN);
                 return ("done");
             }
     });
 
     }else{
-    console.log("equipmentCreate Failed - Duplicate :"+data.index+" equipSN "+strTgs.cTrim(data.equipSN)+" found");    
+    logger.warn("equipmentCreate Failed - Duplicate :"+data.index+" equipSN "+strTgs.cTrim(data.equipSN)+" found");    
     }
     });
 };
@@ -72,9 +72,9 @@ exports.equipmentPortCreate = function (data,req) {
 Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
 
     if (err) {
-        console.log(err);
+        logger.warn("equipmentPortCreate"+data.equipSN+err);
     }else if(!eq){
-        console.log("equipmentPortCreate Failed lookup :"+data.equipSN.toUpperCase()+" not found");
+        logger.warn("equipmentPortCreate Failed lookup :"+data.equipSN.toUpperCase()+" not found");
     } else {
         eq.equipPorts.push({
         equipPortType: strTgs.sTrim(data.equipPortType),
@@ -85,10 +85,10 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 
         eq.save(function(err){
         if(err) {
-            console.log("Failed write :"+data.equipSN);
+            logger.warn("Failed write :"+data.equipSN);
             return (err.stack);
         }else{
-            console.log("Sucessful write :"+data.index+" : "+data.equipSN);
+            logger.info("Sucessful write :"+data.index+" : "+data.equipSN);
             return ("done");
         }
     });

@@ -13,7 +13,9 @@ var http = require('http'),
     Equipment = require('./models/equipment.js'),
     Systemdb = require('./models/system.js'),
     Optionsdb = require('./models/options.js'),
-    seedDataLoad = require('./seedDataLoad.js');
+    MrSystemEnviron = require('./models/mrsystemenviron.js'),
+    seedDataLoad = require('./seedDataLoad.js'),
+    logger = require('./lib/logger.js');
 
     
 var app = express();
@@ -43,9 +45,9 @@ var handlebars = require('express-handlebars').create({
         selOption: function (current, field) {
           var results = ""; 
           results = 'value="' + current + '" ' + (field === current ? 'selected="selected"' : "");
-          /*console.log("selOption r >"+results);
-          console.log("selOption f >"+field);
-          console.log("selOption c >"+current);
+          /*logger.info("selOption r >"+results);
+          logger.info("selOption f >"+field);
+          logger.info("selOption c >"+current);
           */
           return (results);
           }
@@ -124,21 +126,12 @@ switch(app.get('env')){
 
 //app.use(logger());
 
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({ json: false, timestamp: true }),
-    new winston.transports.File({ filename: __dirname + '/debug.log', json: false })
-  ],
-  exceptionHandlers: [
-    new (winston.transports.Console)({ json: false, timestamp: true }),
-    new winston.transports.File({ filename: __dirname + '/exceptions.log', json: false })
-  ],
-  exitOnError: false
-});
 
-module.exports = logger;
+
 
 logger.info('DCIT Log started');
+
+
 
 var MongoSessionStore = require('session-mongoose')(require('connect'));
 var sessionStore = new MongoSessionStore({ url: credentials.mongo.development.connectionString });
@@ -187,14 +180,14 @@ exports.dropDatacenter = (function(Datacenter){
     // this will need to be removed once we start using real data
     // or it will delete the real data
         if(datacenters.length) mongoose.connection.collections.datacenters.drop( function(err) {
-        console.log('Datacenters collection dropped');
+        logger.info('Datacenters collection dropped');
         });
     });
 });
 exports.dropRack = (function(Rack){
     Rack.find(function(err, racks){
         if(racks.length) mongoose.connection.collections.racks.drop(function(err) {
-        console.log('Racks collection dropped');
+        logger.info('Racks collection dropped');
         });
     });
 });
@@ -202,7 +195,7 @@ exports.dropRack = (function(Rack){
 exports.dropOptionsdb = (function(Optionsdb){
     Optionsdb.find(function(err, optionsdbs){
         if(optionsdbs.length) mongoose.connection.collections.optionsdbs.drop(function(err) {
-        console.log('Optionsdbs collection dropped');
+        logger.info('Optionsdbs collection dropped');
         });
     });    
 });
@@ -210,7 +203,7 @@ exports.dropOptionsdb = (function(Optionsdb){
 exports.dropEquipment = (function(Equipment){
     Equipment.find(function(err, equipment){
         if(equipment.length) mongoose.connection.collections.equipment.drop(function(err) {
-        console.log('Equipment collection dropped');
+        logger.info('Equipment collection dropped');
         });
     });    
 });
@@ -218,7 +211,7 @@ exports.dropEquipment = (function(Equipment){
 exports.dropSystem = (function(Systemdb){
     Systemdb.find(function(err, systemdb){
         if(systemdb.length) mongoose.connection.collections.systemdb.drop(function(err) {
-        console.log('Systemdb collection dropped');
+        logger.info('Systemdb collection dropped');
         });
     });    
 });
@@ -265,7 +258,7 @@ function startServer() {
 		cert: fs.readFileSync(__dirname + '/ssl/cdsuperg.crt'),
 	};
 	server = https.createServer(options, app).listen(app.get('port'), function(){
-		console.log('Express started in ' + app.get('env') +
+		logger.info('Express started in ' + app.get('env') +
 			' https://localhost:' + app.get('port') + '.');
 	});
 }

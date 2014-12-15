@@ -16,19 +16,19 @@ exports.home = function(req, res){
 
 exports.dropDatacenterGet = function(req,res){
     dcit.dropDatacenter(Datacenter);
-	console.log("dropDatacenterGet");
+	logger.info("dropDatacenterGet");
     res.render('home');    
 };
 
 exports.dropRackGet = function(req,res){
     dcit.dropRack(Rack);
-    console.log('dropRackGet');
+    logger.info('dropRackGet');
 	res.render('home');    
 };
 
 exports.seedDatacetnerGet = function(req,res){
     seedDataLoad.seedDatacenter(Datacenter);
-    console.log('seedDatacetnerGet');
+    logger.info('seedDatacetnerGet');
 	res.render('home');    
 };
 

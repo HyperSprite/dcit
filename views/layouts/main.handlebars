@@ -42,16 +42,66 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
-		<header>
-<!--			<div class="row">
-				<div class="col-sm-4">
-					<img src="{{logoImage}}" alt="Data Center Chronicle Logo">
-				</div>
-			</div>
--->            
+        <header>
+         
 		</header>
-
+         <div class="navbar" >
+          <div class="container">
+            <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+              <ul class="nav navbar-nav">
+                                        <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">DCIT<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/location/datacenter/list">Datacenters</a></li>
+                        <li><a href="/env-role-reports">Environment & Role Reports</a></li>
+                        <li><a href="/equipment-systems">Equipment & Systems</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/admin">Admin</a></li>
+                        <li><a href="/systems">Systems</a></li>
+                        <li><a href="/jquery-test">jquery Test</a></li>
+                        <li><a href="/equipment">Equipment</a></li>
+                    </ul>
+                  </li>
+     {{#if menu1}} <li><a href="{{menuLink1}}">{{menu1}}</a>
+                 </li> {{/if}}
+     {{#if menu2}} <li><a href="{{menuLink2}}">{{menu2}}</a>
+                 </li> {{/if}}
+     {{#if menu3}} <li><a href="{{menuLink3}}">{{menu3}}</a>
+                 </li> {{/if}}
+     {{#if menu4}} <li><a href="{{menuLink4}}">{{menu4}}</a>
+                 </li> {{/if}}
+   {{#if drop1}} <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop1}}<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    {{#each drop1each}}
+                    <li><a href="{{{../drop1url}}}{{this}}">{{this}}</a></li>
+                    {{/each}}
+                    </ul>
+                 </li>{{/if}}
+   {{#if drop2}} <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop2}}<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    {{#each drop2each}}
+                    <li><a href="{{{../drop2url}}}{{this}}">{{this}}</a></li>
+                    {{/each}}
+                    </ul>
+                 </li>{{/if}}
+   {{#if drop3}} <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop3}}<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    {{#each drop3each}}
+                    <li><a href="{{{../drop3url}}}{{this}}">{{this}}</a></li>
+                    {{/each}}
+                    </ul>
+                 </li>{{/if}}
+   {{#if lastPage}} <li><a href="{{lastPage}}">Back</a>
+                 </li> {{/if}}                 
+              </ul>
+            </nav>
+          </div>
+        </div>
+        
 	    <div class="container">
 			{{#if flash}}
 				<div class="alert alert-dismissible alert-{{flash.type}}">
@@ -64,23 +114,9 @@
 		    {{{body}}}
 
 			<hr>
-
 			<footer>
-            <ul>
-                <li><a href="/location/datacenter/list">Datacenters</a></li>
-                <li><a href="/equipment-systems">Equipment & Systems</a></li>
-                <li><a href="/equipment">Equipment</a></li>
-                <li><a href="/systems">Systems</a></li>
-                <li><a href="/admin">Admin</a></li>
-                <li><a href="/">Home</a></li>
-                <br>
-                <li><a href="/jquery-test">jquery Test</a></li>
-                <li><a href="/epic-fail">Epic Fail</a></li>
-                <br>
-                
-                <li><a href="/about">About</a></li>
-            </ul>
-				<p>&copy; Data Center Chronicle 2014</p>
+
+				<p>&copy; DCIT 2014</p>
 			</footer>
 	    </div> <!-- /container -->        
         

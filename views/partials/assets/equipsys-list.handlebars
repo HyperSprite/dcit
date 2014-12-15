@@ -6,6 +6,7 @@
     <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
         <thead>
             <tr>
+                <th class="table-sort" data-sort="index"></th>
                 <th class="table-sort" data-sort="equipLocation">DC_Cage_Rack_RU</th>
                 <th class="table-sort" data-sort="systemName">System Name</th>
                 <th class="table-sort" data-sort="systemStatus">Status</th>
@@ -21,12 +22,13 @@
         {{#each eqs}}
             <tr>
                 
+                <td class="index">{{@index}}</tc>
                 <td class="equipLocation"><a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a></td>
-                <td class="systemName"><a href="/system/{{systemName}}">{{systemName}}</a></td>
+                <td class="systemName"><a href="/system/{{systemName}}" target="_blank">{{systemName}}</a></td>
                 <td class="systemStatus" >{{{systemStatus}}}</td>
                 <td class="systemEnviron">{{systemEnviron}}</td>
                 <td class="systemRole">{{systemRole}}</td>
-                <td class="equipSN"><a href="/equipment/{{equipSN}}">{{equipSN}}</a></td>
+                <td class="equipSN"><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
                 <td class="equipStatus">{{{equipStatusLight}}}</td>
                 <td class="modifiedOn">{{equipMake}} {{equipModel}}</td>
                 <td class="sysmodifiedOn">{{sysmodifiedOn}}</td>

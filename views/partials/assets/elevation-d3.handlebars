@@ -17,11 +17,13 @@
 
 
             //Create SVG element
+            var u =22;
             var svg = d3.select("#rack")
                     .append("svg")
-                    .attr("width", {{rackWidth}}*10)
-                    .attr("height", ({{rackHeight}}*10)+10);
-            var scale = d3.scale.linear(.5)
+                    .attr("width", {{rackWidth}}*5)
+                    .attr("height", u*{{rUs}});
+                    //.attr("height", ({{rackHeight}}*4.69));
+            
                    
             
             var j=1;           
@@ -29,37 +31,38 @@
                 
             svg.append("text")
 				.attr("x", 6)
-				.attr("y", (i*45)-20)
+				.attr("y", (i*u)-8)
 				.attr("fill", "black")
-				.attr("font-size", 18)
+				.attr("font-size", 12)
 				.text(j);
                 j++;
             };        
                         
-
+            
             {{#each eqs}}
+             
                 var rl = {{../rUs}}-{{equipLocationRu}};  //find the location by on ru
-                var rc = rl*45;  //stretch that to fit
-                var ht = 45*{{equipRUHieght}};
+                var rc = rl*u;  //stretch that to fit
+                var ht = u*{{equipRUHieght}};
                 var rf = rc-ht;  //subtract the total hight so it fits
-                var ru = rf+45;
-                var rw = {{../rackWidth}}*10;
-                var ct = (rw-445)/2;
-                var wt = 445;
+                var ru = rf+u;
+                var rw = {{../rackWidth}}*5;
+                var ct = (rw-222.5)/2;
+                var wt = 222.5;
                 var bc = "black";
                 var fc = "{{equipTypeColor}}";
-                var fnt = 20;
-                var sx = ct+10;
-                var sy = ru+30;
+                var fnt = 12;
+                var sx = ct+15;
+                var sy = ru+15;
                 var sc = "black";
-                var ex = ct+220;
-                var ey = ru+30;
+                var ex = ct+218;
+                var ey = ru+15;
                 var ec = "black";
-                var cx = ct+205;
-                var cy = ru+24;
+                var cx = ct+8;
+                var cy = ru+12;
                 var cc = "{{equipStatusLight}}";
-                 
-             
+                var cr = 4; 
+                
                 svg.append("rect")
                     .attr("x", ct)
                     .attr("y", ru)
@@ -82,12 +85,13 @@
                     .attr("fill", ec)
                     .attr("font-size", fnt)
                     .text("{{equipSN}}")
+                    .attr("text-anchor","end")
                     .on("click", function() { window.open("/equipment/{{equipSN}}"); });
                 
                 svg.append("circle")
                     .attr("cx", cx)
                     .attr("cy", cy)
-                    .attr("r","8")
+                    .attr("r", cr)
                     .attr("fill", cc)
                     .append("title")
                     .text("{{equipStatus}}");

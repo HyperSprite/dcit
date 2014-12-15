@@ -19,6 +19,28 @@ list of equipment modified in the last 30 days
 -->
 
 
+<div class='container'> 
+    <div id="dvData">
+    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
+        <thead>
+            <tr>
+            <th class="table-sort" data-sort="systemEnviron">Environment</th>
+            <th class="table-sort" data-sort="systemCount">Count</th>
+        </tr>
+    <tbody class="list">
+        {{#each envCnt}}
+        <tr>
+            <td class="systemEnviron">{{systemEnviron}}</td>
+            <td class="systemCount">{{systemCount}}</td>
+        </tr>
+        {{/each}}
+    </tbody>   
+</table>
+</div>
+    {{> tocsvpartial }}
+</div>
+
+
 
 <h5>System</h5>
 <form id="systemEnvironForm"class="form-horizontal systemEnvironForm" role="form" action="/environment/{{systemEnviron}}" method="POST">

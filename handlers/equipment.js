@@ -27,18 +27,18 @@ var start  = "",
 this is the Equip List block. Looks for "List" in the URL and returns list of Equipment.
 */
 exports.dcEquipPages = function(req,res,next){
-    console.log('***********exports.dcEquipPages First >' +req.params.datacenter);
+    logger.info('***********exports.dcEquipPages First >' +req.params.datacenter);
     if (!req.params.datacenter ){
-    console.log("in List");
+    logger.info("in List");
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
         Equipment.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, eqs){
         if(err){
-        console.log(err);
+        logger.info(err);
         }else{
             var context = {
                 eqs: eqs.map(function(eq){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                    //console.log(eq);
+                    //logger.info(eq);
                     return {
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
@@ -69,18 +69,18 @@ exports.dcEquipPages = function(req,res,next){
 ------------------------------------------------------------------------
 */
     } else if (req.params.datacenter.indexOf ("circuit") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("circuit")');
-        console.log("rack "+req.params.datacenter);
+        logger.info('else if (req.params.datacenter.indexOf ("circuit")');
+        logger.info("rack "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("~")+1;
-            console.log("|start   >"+start);
+            logger.info("|start   >"+start);
         dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
+            logger.info("|dcInfo  >"+dcInfo);
         dcSplit = dcInfo.indexOf (">");
-            console.log("|dcSplit >"+dcSplit);
+            logger.info("|dcSplit >"+dcSplit);
         dcSubId = dcInfo.substring (dcSplit+1);
-            console.log("|dcSubId >"+dcSubId);
+            logger.info("|dcSubId >"+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);
+            logger.info("|dcId    >"+dcId);
         
         
         
@@ -118,7 +118,7 @@ exports.dcEquipPages = function(req,res,next){
         if(!rk) return next();
         
         if (req.params.datacenter.indexOf ("copy") !=-1){
-           //console.log(rk);
+           //logger.info(rk);
                 context ={
                     rackParentDC: rk.rackParentDC,
                     fullName: uber.fullName,
@@ -142,7 +142,7 @@ exports.dcEquipPages = function(req,res,next){
         
         } else {
         
-       //console.log(rk);
+       //logger.info(rk);
             context ={
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
@@ -168,7 +168,7 @@ exports.dcEquipPages = function(req,res,next){
                 rackPowReceptacle: thisSubDoc.rackPowReceptacle,
                 };
             }    
-        //console.log(context);
+        //logger.info(context);
         res.render('location/rackpower', context); 
         }});});
 /*------------------------------------------------------------------
@@ -178,13 +178,13 @@ exports.dcEquipPages = function(req,res,next){
 
 
     } else if (req.params.datacenter.indexOf ("new") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("newequip")');
-        console.log("datacenter "+req.params.datacenter);
+        logger.info('else if (req.params.datacenter.indexOf ("newequip")');
+        logger.info("datacenter "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("-")+1;
-            console.log("|start   >"+start);
+            logger.info("|start   >"+start);
         dcId = req.params.datacenter.substring (start);
         
-            console.log("|dcId    >"+dcId);
+            logger.info("|dcId    >"+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
@@ -193,21 +193,21 @@ exports.dcEquipPages = function(req,res,next){
     Rack.find({},{ 'rUs':1,'rackUnique':1,'_id': 0},{sort:{rackUnique:1}},function(err, rk){
         if(err) return next(err);
         if(!rk) return next();
-        //console.log("rk"+rk);
+        //logger.info("rk"+rk);
         var rackUni=[];
         for(i=0;i<rk.length;i++){
         rackUni[i] = rk[i].rackUnique;
-        //console.log("rackUni >"+rackUni[i]);
+        //logger.info("rackUni >"+rackUni[i]);
         }
         
         //var RuTemp = 52;
         var getRackrUs = function(RuTemp){
-           //console.log("getRackrUs"+RuTemp);
+           //logger.info("getRackrUs"+RuTemp);
             var tempRu=[];
             for(i=0;i<RuTemp;i++){
             tempRu[i]=strTgs.pad([i]);
         }
-            //console.log("getRackrUs>> "+tempRu);
+            //logger.info("getRackrUs>> "+tempRu);
         return tempRu; 
         };
             context ={
@@ -217,7 +217,7 @@ exports.dcEquipPages = function(req,res,next){
                 rackUnique: rackUni,
                 rackrUs: getRackrUs(52),
                 };
-       //console.log(context);
+       //logger.info(context);
         res.render('asset/equipmentedit', context);  
         });});
 
@@ -229,28 +229,28 @@ exports.dcEquipPages = function(req,res,next){
 */
 
     if (req.params.datacenter.indexOf ("edit") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("edit")');
+        logger.info('else if (req.params.datacenter.indexOf ("edit")');
     // this section decides if it is a Copy, Edit or View
         start = req.params.datacenter.indexOf ("-");
         dcabbr = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ("copy") !=-1){
             editLoad = 5;
-            console.log("copy equip "+dcabbr);
+            logger.info("copy equip "+dcabbr);
         } else {
             editLoad = 3;
-            console.log("edit equip "+dcabbr);
+            logger.info("edit equip "+dcabbr);
         }
         } else {
             editLoad = 1;
             dcabbr = req.params.datacenter;
-            console.log("view equip "+dcabbr);
+            logger.info("view equip "+dcabbr);
         }
         
   
     Equipment.findOne({equipSN: dcabbr},function(err,eq){
         if(err) return next(err);
         if(!eq) return next();
-        //console.log(datacenter);
+        //logger.info(datacenter);
     //Optionsdb.findOne({optListKey: "optEquipStatus"},function(err,opt){
     //    if(err)return next(err);
     
@@ -261,32 +261,34 @@ exports.dcEquipPages = function(req,res,next){
     Rack.find({},{ 'rUs':1,'rackUnique':1,'_id': 0},{sort:{rackUnique:1}},function(err, rk){
         if(err) return next(err);
         if(!rk) return next();
-        //console.log("rk"+rk);
+        //logger.info("rk"+rk);
         var rackUni=[];
         for(i=0;i<rk.length;i++){
         rackUni[i] = rk[i].rackUnique;
-        //console.log("rackUni >"+rackUni[i]);
+        //logger.info("rackUni >"+rackUni[i]);
         }
         
         //var RuTemp = 52;
         var getRackrUs = function(RuTemp){
-           //console.log("getRackrUs"+RuTemp);
+           //logger.info("getRackrUs"+RuTemp);
             var tempRu=[];
             for(i=0;i<RuTemp;i++){
             tempRu[i]=strTgs.pad([i]);
         }
-            //console.log("getRackrUs>> "+tempRu);
+            //logger.info("getRackrUs>> "+tempRu);
         return tempRu; 
         };
-        //console.log("rackUni >"+rackUni);
+        //logger.info("rackUni >"+rackUni);
 
-       //console.log ('Equipment.findOne '+dcabbr);
+       //logger.info ('Equipment.findOne '+dcabbr);
         
         if(editLoad < 4){
 
 
              context = {    
-                                
+                                menu1: eq.equipSN,
+                                menuLink1: "#",
+                                titleNow:eq.equipSN,
                                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
@@ -426,9 +428,9 @@ exports.dcEquipPages = function(req,res,next){
                         };     
         }                    
  
-        //console.log(context);
+        //logger.info(context);
         if (editLoad > 2){
-            console.log("equipment Edit");
+            logger.info("equipment Edit");
             res.render('asset/equipmentedit', context); 
         }else{
         res.render('asset/equipment', context);  
@@ -448,18 +450,18 @@ exports.dcEquipmentPost = function(req,res){
     if(req.body.isEdit){
     res.abbreviation = strTgs.cTrim(req.body.isEdit);
     }
-    console.log("dcRackPost abbreviation>"+res.abbreviation);
+    logger.info("dcRackPost abbreviation>"+res.abbreviation);
     // isEdit and wasCopy = equipment name using #if from handlebars
     if (!req.body.isEdit){
     if (req.body.wasCopy){
     res.abbreviation = strTgs.cTrim(req.body.equipSN);
     }
-    console.log("new Equipment in DC");
+    logger.info("new Equipment in DC");
     varPortsNew = function(body){
     if(typeof req.body.equipPortsAddr[i] !== 'undefined'){
     var Ports = [];
     for(i=0;i<body.equipPortType.length;i++){
-        console.log("equipPortType.length "+body.equipPortType.length);
+        logger.info("equipPortType.length "+body.equipPortType.length);
         Ports[i]=({
             equipPortType: strTgs.sTrim(body.equipPortType[i]),
             equipPortsAddr: strTgs.mTrim(body.equipPortsAddr[i]),
@@ -559,19 +561,19 @@ exports.dcEquipmentPost = function(req,res){
     Equipment.findOne({equipSN: req.body.equipSN.toUpperCase()},function(err,eq){
     res.abbreviation = strTgs.cTrim(req.body.equipSN);
     var thisDoc = eq;
-       //console.log("existing id>"+thisDoc);
+       //logger.info("existing id>"+thisDoc);
         if (err) {
-            console.log(err);
+            logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
     
     for(i=0;i<req.body.equipPortType.length;i++){
-        console.log("equip \n PortType >"+req.body.equipPortType[i] +" - addr >"+ req.body.equipPortsAddr[i] +" - name >"+ req.body.equipPortName[i] +" - Opt >"+ req.body.equipPortsOpt[i]);
+        logger.info("equip \n PortType >"+req.body.equipPortType[i] +" - addr >"+ req.body.equipPortsAddr[i] +" - name >"+ req.body.equipPortName[i] +" - Opt >"+ req.body.equipPortsOpt[i]);
         
         if(req.body.equipPortType[i] === ''){
-        console.log("equipPortType nonw");
+        logger.info("equipPortType nonw");
             } else if(req.body.equipPortId[i] === "new"){
-            console.log("new port >"+req.body.equipPortId[i]);
+            logger.info("new port >"+req.body.equipPortId[i]);
             eq.equipPorts.push({
             equipPortType: strTgs.sTrim(req.body.equipPortType[i]),
             equipPortsAddr: strTgs.mTrim(req.body.equipPortsAddr[i]),
@@ -579,7 +581,7 @@ exports.dcEquipmentPost = function(req,res){
             equipPortsOpt: strTgs.sTrim(req.body.equipPortsOpt[i]),
             });
             }else{
-            console.log("existing port");
+            logger.info("existing port");
         var thisSubDoc = eq.equipPorts.id(req.body.equipPortId[i]);
             thisSubDoc.equipPortType = strTgs.uCleanUp(thisSubDoc.equipPortType,req.body.equipPortType[i]);
             thisSubDoc.equipPortsAddr = strTgs.mCleanUp(thisSubDoc.equipPortsAddr,req.body.equipPortsAddr[i]);
@@ -667,24 +669,25 @@ exports.dcEquipPortPostAJAX = function(req,res){
 // ---------------------------------------------------------------------
 
 exports.dcEquipSysPages = function(req,res,next){
-    console.log('***********exports.dcEquipSysPages First >' +req.params.datacenter);
+    logger.info('***********exports.dcEquipSysPages First >' +req.params.datacenter);
     if (!req.params.datacenter){
-    console.log("in EquipSysPages - List");
+    logger.info("in EquipSysPages - List");
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
         Equipment.find({}).exec(function(err, eqs){
         if(err) return next(err);
         if(!eqs) return next();
-        //console.log(eqs);
+        //logger.info(eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
         
         if(err) return next(err);
         if(!sys) return next();
-        //console.log("SYS >>>>>>>>>>>"+sys);
+        //logger.info("SYS >>>>>>>>>>>"+sys);
 
             var context = { 
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
                   return {
+                            titleNow:dc.abbreviation,
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,
@@ -724,7 +727,7 @@ exports.dcEquipSysPages = function(req,res,next){
                     };
                 })
             };
-           //console.log('context List >>>>>> '+context.toString());
+           //logger.info('context List >>>>>> '+context.toString());
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
             res.render('asset/equipsys-list', context);
@@ -735,20 +738,20 @@ exports.dcEquipSysPages = function(req,res,next){
     Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:-1}).exec(function(err, eqs){
         if(err) return next(err);
         if(!eqs) return next();
-       //console.log("eqs"+eqs);
+       //logger.info("eqs"+eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
         
         if(err) return next(err);
         if(!sys) return next();
-        //console.log("SYS >>>>>>>>>>>"+sys);
+        //logger.info("SYS >>>>>>>>>>>"+sys);
 
             var context = { 
                         rackView: req.params.datacenter,
+                        menu1: req.params.datacenter,
+                        menuLink1: "/location/rack/"+req.params.datacenter,
+                        titleNow: req.params.datacenter,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
-                  
-                 
-                 
                   return {
                             
                             equipLocation: eq.equipLocation,
@@ -790,7 +793,7 @@ exports.dcEquipSysPages = function(req,res,next){
                     };
                 })
             };
-           //console.log('context Rack >>>>>> '+context.toString());
+           //logger.info('context Rack >>>>>> '+context.toString());
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
             res.render('asset/equipsys-list', context);
@@ -813,12 +816,12 @@ exports.dcRackElevationPage = function(req,res,next){
         Equipment.find({}).exec(function(err, eqs){
         if(err) return next(err);
         if(!eqs) return next();
-        //console.log(eqs);
+        //logger.info(eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
         
         if(err) return next(err);
         if(!sys) return next();
-        //console.log("SYS >>>>>>>>>>>"+sys);
+        //logger.info("SYS >>>>>>>>>>>"+sys);
 
             var context = { 
                eqs: eqs.map(function(eq){
@@ -863,7 +866,7 @@ exports.dcRackElevationPage = function(req,res,next){
                     };
                 })
             };
-           //console.log('context List >>>>>> '+context.toString());
+           //logger.info('context List >>>>>> '+context.toString());
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
             res.render('asset/elevation', context);
@@ -874,15 +877,15 @@ exports.dcRackElevationPage = function(req,res,next){
     Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:-1}).exec(function(err, eqs){
         if(err) return next(err);
         if(!eqs) return next();
-       //console.log("eqs"+eqs);
+       //logger.info("eqs"+eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
         
         if(err) return next(err);
         if(!sys) return next();
-        //console.log("SYS >>>>>>>>>>>"+sys);
+        //logger.info("SYS >>>>>>>>>>>"+sys);
         Rack.findOne({rackUnique: { $regex: re }},'rackUnique rackDescription rackHeight rackWidth rackDepth rackLat rackLon rackRow rackStatus rUs',function(err,rk){
-        //console.log("rk >>>>>>>>>>>"+rk);
-        //console.log("rk.rackUnique>"+rk.rackUnique);
+        //logger.info("rk >>>>>>>>>>>"+rk);
+        //logger.info("rk.rackUnique>"+rk.rackUnique);
             var context = {
                 rackView: req.params.datacenter,
                 rackUnique: rk.rackUnique,
@@ -895,6 +898,9 @@ exports.dcRackElevationPage = function(req,res,next){
                 rackRow: rk.rackRow,
                 rackStatus: rk.rackStatus,
                 rUs: rk.rUs,
+                menu1: rk.rackUnique,
+                menuLink1: "/location/rack/"+rk.rackUnique,
+                titleNow: rk.rackUnique,
 
                 eqs: eqs.map(function(eq){
                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
@@ -942,7 +948,7 @@ exports.dcRackElevationPage = function(req,res,next){
                     };
                 })
             };
-           //console.log('context Rack >>>>>> '+context.rackUnique);
+           //logger.info('context Rack >>>>>> '+context.rackUnique);
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
             res.render('asset/elevation', context);
@@ -957,16 +963,17 @@ exports.dcRackElevationPage = function(req,res,next){
 */
 exports.dcEquipDelete = function(req,res){
     res.abbreviation = req.body.equipSN;
+    res.newpage = req.body.equipLocationRack;
 if (req.body.equipSN){
-        console.log("delete got this far");
+        logger.info("delete got this far");
         Equipment.findOne({equipSN: req.body.equipSN},function(err,equipSNtodelete){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             equipSNtodelete.remove(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -977,9 +984,9 @@ if (req.body.equipSN){
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
-                    message: 'Contact '+ req.body.equipSNtodelete +' has been deleted. Good luck with that one',
+                    message: 'Equipment '+ res.abbreviation +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/equipment');
+                return res.redirect(303, '/equipment-systems/'+res.newpage);
                 }
             });
         }
@@ -997,13 +1004,13 @@ exports.equipSubDelete = function(req,res){
 if (req.body.id && req.body.subId){
     Equipment.findById(req.body.id,req.body.subDoc,function (err, eq){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             eq.equipPorts.id(req.body.subId).remove();
             eq.save(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',

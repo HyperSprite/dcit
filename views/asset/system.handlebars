@@ -1,8 +1,3 @@
-<ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/systems">Systems</a></li>
-  <li>{{systemName}}</li>
-</ol>
 
 <hr>
 <div class="racks">
@@ -22,10 +17,11 @@
             {{#if systemIsVirual}}Is Virtual: {{systemIsVirual}}<br>{{/if}}
             {{#if systemParentId}}Parent: {{systemParentId}}<br>{{/if}}
             Ticket: {{{systemTicketLit}}}<br>
-            <br>
+            {{> assets/system-e-c}}
+            
             </div>
             <div class="col-md-2">
-            {{> assets/system-e-c}}
+            
             </div>
             <div class="col-md-4">
             {{#if systemEquipSN}}

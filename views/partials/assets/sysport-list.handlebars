@@ -14,7 +14,7 @@
                 <th class="table-sort" data-sort="sysPortOptions">Options</th>
                 <th class="table-sort" data-sort="sysPortAddress">Address</th>
                 <th class="table-sort" data-sort="sysPortURL">URL</th>
-                <th class="table-sort" data-sort="sysPortCrossover">Xover</th>
+               <!-- <th class="table-sort" data-sort="sysPortCrossover">Xover</th>-->
             
             </tr>
         </thead>
@@ -28,8 +28,8 @@
                 <td class="sysPortVlan">{{sysPortVlan}}</td>
                 <td class="sysPortOptions">{{sysPortOptions}}</td>
                 <td class="sysPortAddress">{{sysPortAddress}}</td>
-                <td class="sysPortURL"><a href="{{sysPortURL}}">{{sysPortURL}}</a>
-                <td class="sysPortCrossover"><input type="checkbox" name="sysPortCrossover" value="true" {{sysPortCrossoverChecked}} disabled></td>
+                <td class="sysPortURL"><a href="{{sysPortURL}}" target="_blank">{{sysPortURL}}</a>
+                <!--<td class="sysPortCrossover"><input type="checkbox" name="sysPortCrossover" value="true" {{sysPortCrossoverChecked}} disabled></td>-->
             </tr>  
         {{/each}}
         </tbody>

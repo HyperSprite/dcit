@@ -1,5 +1,6 @@
 var Systemdb = require('../models/system.js'),
-    strTgs = require('../lib/stringThings.js');
+    strTgs = require('../lib/stringThings.js'),
+    logger = require("winston");
 
 exports.systemdbCreate = function (data,req) {
     Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
@@ -33,15 +34,15 @@ Systemdb.create({
                     modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
         if(err) {
-            console.log("systemdbCreate Failed write :"+data.index+" : "+data.systemName);
+            logger.info("systemdbCreate Failed write :"+data.index+" : "+data.systemName);
             return (err.stack);
         }else{
-            console.log("systemdbCreate Sucessful write :"+data.index+" : "+data.systemName);
+            logger.info("systemdbCreate Sucessful write :"+data.index+" : "+data.systemName);
             return ("done");
         }
     });
     }else{
-        console.log("systemdbCreate Failed - Duplicate :"+data.index+" systemName "+strTgs.clTrim(data.systemName)+" found");
+        logger.info("systemdbCreate Failed - Duplicate :"+data.index+" systemName "+strTgs.clTrim(data.systemName)+" found");
     }
     });
 };
@@ -50,7 +51,7 @@ exports.systemdbPortsCreate = function (data,req) {
 // Lookup system
 Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
         if(!sys){
-        console.log("systemdbPortsCreate Failed lookup :"+data.index+" systemName not found");
+        logger.info("systemdbPortsCreate Failed lookup :"+data.index+" systemName not found");
         }else{
         
             sys.systemPorts.push({
@@ -67,11 +68,11 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
             });
             sys.save(function(err){
 	        if(err) {
-                console.log(err+data.index);
-                console.log("systemdbPortsCreate Failed write :"+data.index+" : "+data.systemName);
+                logger.info(err+data.index);
+                logger.info("systemdbPortsCreate Failed write :"+data.index+" : "+data.systemName);
                 return (err.stack);
             }else{
-                console.log("systemdbPortsCreate Sucessful write :"+data.index+" : "+data.systemName);
+                logger.info("systemdbPortsCreate Sucessful write :"+data.index+" : "+data.systemName);
                 return ("done");
             }
     });

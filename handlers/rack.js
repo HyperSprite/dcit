@@ -1,5 +1,5 @@
 
-var     winston = require('winston'),
+var     logger = require('winston'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -25,24 +25,26 @@ var start  = "",
 this is the Rack List block. Looks for "List" in the URL and returns list of datacenters with city and country from Main contact.
 */
 exports.dcRackPages = function(req,res,next){
-    console.log('***********exports.dcRackPages First >' +req.params.datacenter);
+    logger.info('***********exports.dcRackPages First >' +req.params.datacenter);
     if (!req.params.datacenter){
-    console.log("in List");
+    logger.info("in List");
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
         Rack.find({}).sort('rackUnique').exec(function(err, racks){
         if(err){
-        console.log(err);
+        logger.info(err);
         }else{
         Datacenter.find({},'_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err,datacenter){
         if(err){
-        console.log(err);
+        logger.info(err);
         }else{
             var context = {
                 racks: racks.map(function(rack){
                 var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                    //console.log(rack);
+                    //logger.info(rack);
                     return {
+                            menu1: "Datacenters",
+                            menuLink1: "/location/datacenter/list",
                             titleNow: "Rack List",
                             rackParentDC: rack.rackParentDC,
                             abbreviation: uber.abbreviation,
@@ -82,18 +84,18 @@ exports.dcRackPages = function(req,res,next){
 ------------------------------------------------------------------------
 */
     } else if (req.params.datacenter.indexOf ("circuit") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("circuit")');
-        console.log("rack "+req.params.datacenter);
+        logger.info('else if (req.params.datacenter.indexOf ("circuit")');
+        logger.info("rack "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("~")+1;
-            console.log("|start   >"+start);
+            logger.info("|start   >"+start);
         dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
+            logger.info("|dcInfo  >"+dcInfo);
         dcSplit = dcInfo.indexOf (">");
-            console.log("|dcSplit >"+dcSplit);
+            logger.info("|dcSplit >"+dcSplit);
         dcSubId = dcInfo.substring (dcSplit+1);
-            console.log("|dcSubId >"+dcSubId);
+            logger.info("|dcSubId >"+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);
+            logger.info("|dcId    >"+dcId);
         
         
         
@@ -101,7 +103,7 @@ exports.dcRackPages = function(req,res,next){
         if(err)return next(err);
         Optionsdb.findOne({optListKey: "optEquipStatus"},function(err,opt){
         if(err)return next(err);
-        console.log(opt);
+        logger.info(opt);
         Datacenter.find({},'_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err,datacenter){
         if(err) return next(err);
         
@@ -110,6 +112,12 @@ exports.dcRackPages = function(req,res,next){
         var context;
         if (dcSubId === 'new'){
             context ={
+                menu1: uber.abbreviation,
+                menuLink1: "/location/datacenter/"+uber.abbreviation,
+                menu2: "Elevation",
+                menuLink2: "/elevation/"+rk.rackUnique,
+                menu3: "Details",
+                menuLink3: "/equipment-systems/"+rk.rackUnique,
                 titleNow: rk.rackUnique,
                 optEquipStatus: opt.optListArray,
                 rackParentDC: rk.rackParentDC,
@@ -136,7 +144,7 @@ exports.dcRackPages = function(req,res,next){
         if(!rk) return next();
         // New Rack Power from Copy
         if (req.params.datacenter.indexOf ("copy") !=-1){
-            //console.log(rk);
+            //logger.info(rk);
                 context ={
                     titleNow: "Copy "+rk.rackUnique,
                     optEquipStatus: opt.optListArray,
@@ -162,7 +170,7 @@ exports.dcRackPages = function(req,res,next){
         
         } else {
         // Edit Rack Power 
-        console.log(rk);
+        logger.info(rk);
             context ={
                 titleNow: thisSubDoc.rackPowUnique,
                 optEquipStatus: opt.optListArray,
@@ -190,7 +198,7 @@ exports.dcRackPages = function(req,res,next){
                 rackPowReceptacle: thisSubDoc.rackPowReceptacle,
                 };
             }    
-        //console.log(context);
+        //logger.info(context);
         res.render('location/rackpower', context); 
         }});});});
 /*----------------------------------------------------------------------
@@ -204,32 +212,32 @@ link to this looks
 
 
     } else if (req.params.datacenter.indexOf ("newrack") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("newrack")');
-        console.log("datacenter "+req.params.datacenter);
+        logger.info('else if (req.params.datacenter.indexOf ("newrack")');
+        logger.info("datacenter "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("~")+1;
-            console.log("|start   >"+start);
+            logger.info("|start   >"+start);
         dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
+            logger.info("|dcInfo  >"+dcInfo);
         dcSplit = dcInfo.indexOf ("-");
-            console.log("|dcSplit >"+dcSplit);
+            logger.info("|dcSplit >"+dcSplit);
         dcSubId = dcInfo.substring (dcSplit+1);
-            console.log("|dcSubId >"+dcSubId);
+            logger.info("|dcSubId >"+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);
+            logger.info("|dcId    >"+dcId);
 
         Datacenter.findById(dcId,function(err,datacenter){
         var dc = datacenter;
         var context;
         Optionsdb.findOne({optListKey: "optRackStatus"},function(err,opt){
         if(err)return next(err);
-        console.log(opt);
+        logger.info(opt);
         if(!datacenter){
-            console.log("Rack !datacenter");
+            logger.info("Rack !datacenter");
         } else {
-        console.log("Rack is datacenter");
+        logger.info("Rack is datacenter");
         var thisSubDoc = datacenter.cages.id(dcSubId);
         if(err) return next(err);
-        console.log("datacener= "+datacenter);
+        logger.info("datacener= "+datacenter);
             context ={
                 optRackStatus: opt.optListArray,
                 id:dc._id,
@@ -243,7 +251,7 @@ link to this looks
                         cageName: thisSubDoc.cageName,
                         cageAbbreviation: thisSubDoc.cageAbbreviation,
                 };
-        console.log(context);
+        logger.info(context);
         res.render('location/rackedit', context);  
         }});});
 
@@ -255,42 +263,48 @@ link to this looks
 */
 
     if (req.params.datacenter.indexOf ("edit") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("edit")');
+        logger.info('else if (req.params.datacenter.indexOf ("edit")');
 
         start = req.params.datacenter.indexOf ("-");
         dcabbr = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ("copy") !=-1){
             editLoad = 5;
-            console.log("copy rack "+dcabbr);
+            logger.info("copy rack "+dcabbr);
         } else {
             editLoad = 3;
-            console.log("edit rack "+dcabbr);
+            logger.info("edit rack "+dcabbr);
         }
         } else {
             editLoad = 1;
             dcabbr = req.params.datacenter;
-            console.log("view rack "+dcabbr);
+            logger.info("view rack "+dcabbr);
         }
         
   
     Rack.findOne({rackUnique: dcabbr},function(err,rack){
         if(err) return next(err);
         if(!rack) return next();
-        //console.log(datacenter);
+        //logger.info(datacenter);
         
     Optionsdb.findOne({optListKey: "optRackStatus"},function(err,opt){
         if(err)return next(err);
-        console.log(opt);    
+        logger.info(opt);    
     Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err, datacenter){ 
         if(err){
-        console.log(err);
+        logger.info(err);
         }else{
-        console.log ('Rack.findOne takes the id and displays the matching rack');
+        logger.info ('Rack.findOne takes the id and displays the matching rack');
             var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);            
         if(editLoad < 4){
              context = {    
                             optRackStatus: opt.optListArray,
                             titleNow: rack.rackUnique,
+                            menu1: uber.abbreviation,
+                            menuLink1: "/location/datacenter/"+uber.abbreviation,
+                            menu2: "Elevation",
+                            menuLink2: "/elevation/"+rack.rackUnique,
+                            menu3: "Details",
+                            menuLink3: "/equipment-systems/"+rack.rackUnique,
                             rackParentDC: rack.rackParentDC,
                             fullName: uber.fullName,
                             abbreviation: uber.abbreviation,
@@ -364,9 +378,9 @@ link to this looks
                         };    
         }                    
  
-        //console.log(context);
+        //logger.info(context);
         if (editLoad > 2){
-            console.log("rackedit");
+            logger.info("rackedit");
             res.render('location/rackedit', context); 
         }else{
         res.render('location/rack', context);  
@@ -383,16 +397,16 @@ link to this looks
 exports.dcRackPost = function(req,res){
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    console.log("dcRackPost abbreviation>"+res.abbreviation);
-    console.log("rUs >"+req.body.rUs);
-    //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
+    logger.info("dcRackPost abbreviation>"+res.abbreviation);
+    logger.info("rUs >"+req.body.rUs);
+    //logger.info("rUs expanded >"+ strTgs.compUs(req.body.rUs));
     // rackUniqe is created when making a new rack so it does not exist on new 
     // or copied racks
     if (!req.body.rackUnique){
     if (req.body.wasCopy){
     res.abbreviation = req.body.wasCopy;
     }
-    console.log("new rack in DC "+req.body.id);
+    logger.info("new rack in DC "+req.body.id);
     Rack.create({
                     	rackParentDC:req.body.id,
                         rackParentCage:req.body.cageId,
@@ -456,9 +470,9 @@ exports.dcRackPost = function(req,res){
     Rack.findOne({rackUnique: req.body.rackUnique},function(err,rack){
     res.abbreviation = req.body.rackUnique;
     var thisDoc = rack;
-    console.log("existing id>"+thisDoc);
+    logger.info("existing id>"+thisDoc);
         if (err) {
-            console.log(err);
+            logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
 
@@ -506,15 +520,15 @@ exports.dcRackPost = function(req,res){
 exports.rackDelete = function(req,res){
     res.abbreviation = req.body.rackUnique;
 if (req.body.rackUnique){
-        console.log("delete got this far");
+        logger.info("delete got this far");
         Rack.findOne({rackUnique: req.body.rackUnique},function(err,racktodelete){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             racktodelete.remove(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -543,33 +557,33 @@ exports.dcRackPowPost = function(req,res){
     // this makes the abbreviation available for the URL
     //res.abbreviation = req.body.rackUnique;
 
-    //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
+    //logger.info("rUs expanded >"+ strTgs.compUs(req.body.rUs));
     //if (!req.body.rackPowUnique){
     //if (req.body.wasCopy){
     //res.abbreviation = req.body.wasCopy;
     //}
-    console.log("Rack Power abbreviation "+req.body.abbreviation);
-    console.log("Rack Power rackUnique "+req.body.rackUnique);
-    console.log("Rack Power rackPowUnique "+req.body.rackPowUnique);
-    console.log("Rack Power rackPowMain "+req.body.rackPowMain);
-    console.log("Rack Power rackPowVolts "+req.body.rackPowVolts);
-    console.log("Rack Power rackPowPhase "+req.body.rackPowPhase);
+    logger.info("Rack Power abbreviation "+req.body.abbreviation);
+    logger.info("Rack Power rackUnique "+req.body.rackUnique);
+    logger.info("Rack Power rackPowUnique "+req.body.rackPowUnique);
+    logger.info("Rack Power rackPowMain "+req.body.rackPowMain);
+    logger.info("Rack Power rackPowVolts "+req.body.rackPowVolts);
+    logger.info("Rack Power rackPowPhase "+req.body.rackPowPhase);
     
     
     
     Rack.findOne({rackUnique: req.body.rackUnique},function(err,rk){
     res.abbreviation = req.body.rackUnique;
-    console.log("Rack Power findOne "+rk);
-        //console.log("dcRackPowPost abbreviation>"+res.abbreviation);
+    logger.info("Rack Power findOne "+rk);
+        //logger.info("dcRackPowPost abbreviation>"+res.abbreviation);
     var thisSubDoc;
     if(req.body.rackPowUnique === "new"){
     thisSubDoc = "new";
     }else{
     thisSubDoc = rk.powers.id(req.body.rackPowId);
     }
-    console.log("existing id>"+thisSubDoc);
+    logger.info("existing id>"+thisSubDoc);
         if (err) {
-            console.log(err);
+            logger.info(err);
             res.redirect('location/rack/'+res.abbreviation);
         } else if(thisSubDoc === "new"){
                 rk.powers.push({
@@ -625,13 +639,13 @@ exports.rackSubDelete = function(req,res){
 if (req.body.id && req.body.subId){
     Rack.findById(req.body.id,req.body.subDoc,function (err, rk){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             rk.powers.id(req.body.subId).remove();
             rk.save(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',

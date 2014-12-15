@@ -1,5 +1,5 @@
 
-var     winston = require('winston'),
+var     logger = require('winston'),
         strTgs = require('../lib/stringThings.js'),
           dcit = require('../dcit.js'),
             fs = require('fs'),
@@ -27,9 +27,9 @@ exports.home = function(req, res){
 //          Options page
 //
     }else if (req.params.datacenter  === "options"){
-     console.log('called admin.options');     
+     logger.info('called admin.options');     
         Optionsdb.find(function(err,opts){
-        //console.log(opts);
+        //logger.info(opts);
         if (!opts){
         	context = {
                 optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
@@ -87,16 +87,18 @@ exports.home = function(req, res){
     
     Fileinfo.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, fil){
         if(err){
-        console.log(err);
+        logger.info(err);
         }else{
-        //console.log("file-list"+fil);
+        //logger.info("file-list"+fil);
             var context = {
                     optModels: strTgs.findThisInThatOpt('optModels',opt),
                 fil: fil.map(function(fi){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                    //console.log("sy Map>"+fi);
+                    //logger.info("sy Map>"+fi);
                     return {
-                            
+                            menu1: "Admin",
+                            menuLink1: "/admin",
+                            titleNow:"File Manager",
                             fileId: fi._id,
                             fileName: fi.fileName,
                             filePath: fi.filePath,
@@ -127,7 +129,7 @@ exports.home = function(req, res){
 // 
     }else if(req.params.datacenter === "models"){
  /*   var dirPath = './models/';
-    console.log("dirList typefo"+dirList);
+    logger.info("dirList typefo"+dirList);
 
     var dirList = fs.readdir(dirPath, function(err, files){
     var filesOut = [];
@@ -140,17 +142,17 @@ exports.home = function(req, res){
     
     return filesTemp;
     });}
-    console.log("fileList > "+f);  
+    logger.info("fileList > "+f);  
     return f;
     });
 
 
-    console.log("dirList typefo"+dirList + typeof dirList);
+    logger.info("dirList typefo"+dirList + typeof dirList);
     */
     res.render ('admin/models');
 
     }else{
-    console.log("datacenter >"+req.params.datacenter);
+    logger.info("datacenter >"+req.params.datacenter);
     res.render ('admin/'+req.params.datacenter);
     
 }
@@ -158,7 +160,7 @@ exports.home = function(req, res){
 
 exports.optionsEdit = function(req, res){
         dcInfo = req.params.datacenter;
-            console.log("|dcInfo  >"+dcInfo);
+            logger.info("|dcInfo  >"+dcInfo);
         
         if (dcInfo ==="new"){
             context={
@@ -170,6 +172,9 @@ exports.optionsEdit = function(req, res){
             Optionsdb.findOne({optListKey: dcInfo},function(err,opt){
             if(err)return next(err);
                 context={
+                    menu1: "Admin",
+                    menuLink1: "/admin",
+                    titleNow:"Option Edit",
                     id: opt._id,
                     optListName: opt.optListName,
                     optListKey: opt.optListKey,
@@ -181,7 +186,7 @@ exports.optionsEdit = function(req, res){
 };
 
 exports.optionsEditPost = function(req,res,err){
-    console.log("optionsEditPost >"+ req.body.id);
+    logger.info("optionsEditPost >"+ req.body.id);
     var thisDoc;
      if (!req.body.id){
         Optionsdb.create({
@@ -212,9 +217,9 @@ exports.optionsEditPost = function(req,res,err){
     } else {
         Optionsdb.findById(req.body.id,function(err,opt){
         if (err) {
-            console.log(err);
+            logger.info(err);
             }else{
-                    //console.log(opt);
+                    //logger.info(opt);
                     opt.optListArray = strTgs.csvCleanup(req.body.optListArray);
                     }
         
@@ -242,12 +247,12 @@ exports.optionsEditPost = function(req,res,err){
 // Upload POST working
 //
 exports.uploadPost = function(req,res){
-    console.log("date"+Date.now());
+    logger.info("date"+Date.now());
     var form = new formidable.IncomingForm();
     form.uploadDir = './userdata/';
     form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
-    console.log(files);
+    logger.info(files);
     var file = files.newCSVfile;
     var fileHRName = strTgs.clTrim(file.name);
     var base = './public/userdata/';
@@ -317,15 +322,15 @@ exports.uploadPost = function(req,res){
 exports.uploadDeletePost = function(req,res){
 if (req.body.id){
         var bdy = req.body;
-        console.log("delete got this far");
+        logger.info("delete got this far");
         Fileinfo.findOne({_id: bdy.id},function(err,fileToDelete){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             fileToDelete.remove(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -333,10 +338,10 @@ if (req.body.id){
                     };
                     return res.redirect(303, '/admin/filemanager');
                 } else {
-                console.log("path/file ./"+bdy.filePath);
+                logger.info("path/file ./"+bdy.filePath);
                 fs.unlink(bdy.filePath, function(err){
                     if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -362,7 +367,7 @@ if (req.body.id){
 //  CSV to DB
 // 
 exports.csvToDBPost = function(req,res){
-    //console.log("csvToDBPost >"+req.body.file);
+    //logger.info("csvToDBPost >"+req.body.file);
     switch(req.body.fileDescription) {
     case "Equipment":
         var equipmentStream = fs.createReadStream(req.body.file);
@@ -370,12 +375,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(equipmentStream, {headers : true})
             .on("data", function(data){
             if(!data.equipSN){
-            console.log("No Equipment SN");
+            logger.info("No Equipment SN");
         }else{
             equipmentCrud.equipmentCreate(data,req);
          }})
             .on("end", function(){
-             console.log("done");
+             logger.info("done");
         });
         break;
     case "Equipment.equipPorts":
@@ -384,12 +389,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(equipPortsStream, {headers : true})
             .on("data", function(data){
             if(!data.equipSN){
-            console.log("Equipment Port error");
+            logger.info("Equipment Port error");
         }else{
             equipmentCrud.equipmentPortCreate(data,req);
          }})
             .on("end", function(){
-             console.log("done");
+             logger.info("done");
         });
     
         break;
@@ -399,12 +404,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(systemdbStream, {headers : true})
             .on("data", function(data){
             if(!data.systemName){
-            console.log("No System Name");
+            logger.info("No System Name");
         }else{
             systemdbCrud.systemdbCreate(data,req);
          }})
             .on("end", function(){
-             console.log("done");
+             logger.info("done");
         });
     
         break;
@@ -414,12 +419,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(systemPortsStream, {headers : true})
             .on("data", function(data){
             if(!strTgs.clTrim(data.systemName)){
-            console.log("systemPortsStream Error on index "+data.index+" systemName not found");
+            logger.info("systemPortsStream Error on index "+data.index+" systemName not found");
         }else{
             systemdbCrud.systemdbPortsCreate(data,req);
          }})
             .on("end", function(){
-             console.log("done");
+             logger.info("done");
         });
     
         break;        
@@ -444,12 +449,12 @@ exports.csvToDBPost = function(req,res){
         .fromStream(stream, {headers : true})
         .on("data", function(data){
         if(!data.equipSN){
-        console.log("No Equipment SN");
+        logger.info("No Equipment SN");
         }else{
         equipmentCrud.equipmentCreate(data,req);
      }})
     .on("end", function(){
-     console.log("done");
+     logger.info("done");
     });
     */
  return res.redirect(303, '/admin/filemanager');
@@ -476,54 +481,54 @@ exports.csvToDBPost = function(req,res){
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){
     dcit.dropDatacenter(Datacenter);
-	console.log("dropDatacenterGet");
+	logger.info("dropDatacenterGet");
     return res.redirect(303, '/location/datacenter/list');    
 };
 
 exports.dropRackGet = function(req,res){
     dcit.dropRack(Rack);
-    console.log('dropRackGet');
+    logger.info('dropRackGet');
 	return res.redirect(303, '/location/datacenter/list'); 
 };
 
 exports.dropOptionsdbGet = function(req,res){
     dcit.dropOptionsdb(Optionsdb);
-    console.log('dropOptionsdbGet');
+    logger.info('dropOptionsdbGet');
 	return res.redirect(303, '/admin/options'); 
 };
 
 exports.dropEquipmentGet = function(req,res){
     dcit.dropEquipment(Equipment);
-    console.log('dropEquipmentGet');
+    logger.info('dropEquipmentGet');
 	return res.redirect(303, '/admin/options'); 
 };
 
 exports.dropSystemGet = function(req,res){
     dcit.dropSystem(Systemdb);
-    console.log('dropSystemGet');
+    logger.info('dropSystemGet');
 	return res.redirect(303, '/admin/options'); 
 };
 
 
 exports.seedDatacetnerGet = function(req,res){
     seedDataLoad.seedDatacenter(Datacenter);
-    console.log('seedDatacetnerGet');
+    logger.info('seedDatacetnerGet');
 	return res.redirect(303, '/location/datacenter/list');   
 };
 
 exports.seedOptionsdbGet = function(req,res){
     seedDataLoad.seedOptionsDataBase(Optionsdb);
-    console.log('seedOptionsdbGet');
+    logger.info('seedOptionsdbGet');
 	return res.redirect(303, '/admin/options');   
 };
 
 exports.seedEquipmentGet = function(req,res){
     seedDataLoad.seedEquipmentDataBase(Equipment);
-    console.log('seedEquipmentGet');
+    logger.info('seedEquipmentGet');
     return res.redirect(303, '/admin/options');
 };
 exports.seedSystemGet = function(req,res){
     seedDataLoad.seedSystemDataBase(Systemdb);
-    console.log('seedSystemGet');
+    logger.info('seedSystemGet');
     return res.redirect(303, '/admin/options');   	
 };

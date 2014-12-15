@@ -1,5 +1,5 @@
 
-var     winston = require('winston'),
+var     logger = require('winston'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -9,6 +9,7 @@ var Datacenter = require('../models/datacenter.js'),
      Optionsdb = require('../models/options.js'),
      Equipment = require('../models/equipment.js'),
       Systemdb = require('../models/system.js');
+MrSystemEnviron= require('../models/mrsystemenviron.js');
 
 var start  = "",
     editLoad =0,
@@ -18,6 +19,7 @@ var start  = "",
     dcSubId = "",
     dcId ="";
 
+    var query;
 
 //---------------------------------------------------------------------     
 //----------------------   System List  ----------------------------
@@ -26,19 +28,19 @@ var start  = "",
 this is the Equip List block. Looks for "List" in the URL and returns list of Equipment.
 */
 exports.dcSystemPages = function(req,res,next){
-    console.log('***********exports.dcSystemPages First >' +req.params.datacenter);
+    logger.info('***********exports.dcSystemPages First >' +req.params.datacenter);
     if (!req.params.datacenter ){
-    console.log("in List");
+    logger.info("in List");
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
         Systemdb.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, sys){
         if(err){
-        console.log(err);
+        logger.info(err);
         }else{
-        //console.log("system-list"+sys);
+        //logger.info("system-list"+sys);
             var context = {
                 sys: sys.map(function(sy){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                    //console.log("sy Map>"+sy);
+                    //logger.info("sy Map>"+sy);
                     return {
                             systemName: sy.systemName,
                             systemEquipSN: sy.systemEquipSN,
@@ -56,7 +58,6 @@ exports.dcSystemPages = function(req,res,next){
             // context is the data from above
             res.render('asset/system-list', context);
         }});
-        
 
 /*-------------------------------------------------------------------
 ---------------------  Create New System  ---------------------------
@@ -65,12 +66,12 @@ exports.dcSystemPages = function(req,res,next){
 
 
     } else if (req.params.datacenter.indexOf ("new") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("newSys")');
-        console.log("datacenter "+req.params.datacenter);
+        logger.info('else if (req.params.datacenter.indexOf ("newSys")');
+        logger.info("datacenter "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("-")+1;
-            console.log("|start   >"+start);
+            logger.info("|start   >"+start);
         dcId = req.params.datacenter.substring (start);
-            console.log("|dcId    >"+dcId);
+            logger.info("|dcId    >"+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
@@ -87,14 +88,15 @@ exports.dcSystemPages = function(req,res,next){
     Equipment.find({},{ 'equipSN':1,'_id': 0},{sort:{equipSN:1}},function(err, eq){
         if(err) return next(err);
         if(!eq) return next();
-        //console.log("rk"+rk);
+        //logger.info("rk"+rk);
         var eqUni=[];
         for(i=0;i<eq.length;i++){
         eqUni[i] = eq[i].equipSN;
-        //console.log("rackUni >"+rackUni[i]);
+        //logger.info("rackUni >"+rackUni[i]);
         }
       
             context ={
+                titleNow: "New System",
                 sysNameList: sysUni,
                 equipSNList: eqUni,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
@@ -102,7 +104,7 @@ exports.dcSystemPages = function(req,res,next){
                 optEnvironment: strTgs.findThisInThatOpt('optEnvironment',opt),
                 optImpactLevel: strTgs.findThisInThatOpt('optImpactLevel',opt),
                 };
-       //console.log(context);
+       //logger.info(context);
         res.render('asset/systemedit', context);  
         });});});
 
@@ -114,23 +116,23 @@ exports.dcSystemPages = function(req,res,next){
 ------------------------------------------------------------------------
 */
     if (req.params.datacenter.indexOf ("edit") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("edit")');
+        logger.info('else if (req.params.datacenter.indexOf ("edit")');
     // this section decides if it is a Copy, Edit or View
         start = req.params.datacenter.indexOf ("-");
         dcabbr = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ("copy") !=-1){
             editLoad = 5;
-            console.log("copy system "+dcabbr);
+            logger.info("copy system "+dcabbr);
         } else {
             editLoad = 3;
-            console.log("edit system "+dcabbr);
+            logger.info("edit system "+dcabbr);
         }
         } else {
             editLoad = 1;
             dcabbr = req.params.datacenter;
-            console.log("view system "+dcabbr);
+            logger.info("view system "+dcabbr);
         }
-        console.log("editLoad >"+editLoad);
+        logger.info("editLoad >"+editLoad);
     
     
     Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
@@ -144,7 +146,7 @@ exports.dcSystemPages = function(req,res,next){
     Systemdb.findOne({systemName: dcabbr.toLowerCase()},function(err,sy){
         if(err) return next(err);
         if(!sy) return next();
-        //console.log(datacenter);
+        //logger.info(datacenter);
     //Optionsdb.findOne({optListKey: "optEquipStatus"},function(err,opt){
     //    if(err)return next(err);
     
@@ -154,16 +156,17 @@ exports.dcSystemPages = function(req,res,next){
     Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
         if(err) return next(err);
         if(!eq) return next();
-        //console.log("rk"+rk);
+        //logger.info("rk"+rk);
         var eqUni=[];
         for(i=0;i<eq.length;i++){
         eqUni[i] = eq[i].equipSN;
         }
 
-        console.log ('System.findOne '+dcabbr);
+        logger.info ('System.findOne '+dcabbr);
         if(editLoad < 4){
             tempEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
         context = {
+            titleNow: sy.systemName,
             sysNameList: sysUni,
             equipSNList: eqUni,
             optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
@@ -254,9 +257,9 @@ exports.dcSystemPages = function(req,res,next){
             };     
         }                    
  
-        //console.log(context);
+        //logger.info(context);
         if (editLoad > 2){
-            console.log("System Edit(end)");
+            logger.info("System Edit(end)");
             res.render('asset/systemedit', context); 
         }else{
         res.render('asset/system', context);  
@@ -264,7 +267,151 @@ exports.dcSystemPages = function(req,res,next){
         });});});});
     }
 };
+
+    function queryString(findThis,opt){   
+        switch (opt){
+        case 2:
+            query = Systemdb.find({systemEnviron : findThis});
+            logger.info("query2"+query);
+            break;
+        case 3:
+            query = Systemdb.find({systemRole : findThis});
+            logger.info("query3"+query);
+            break;      
+            default:
+            logger.info("no opt for queryString");
+        break;
+        }
+        return query;
+    }
+
+
+// -------------------------------------------------------------
+//           list by Env and Role
+// -------------------------------------------------------------
+        
+exports.dcSystembyEnvRole = function(req,res,next){
+    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
+    var editLoad;
     
+    if(!req.params.datacenter){
+            editLoad = 1;
+            logger.info("none slected");
+        }else{
+        
+        start = req.params.datacenter.indexOf ("-");
+        dcabbr = req.params.datacenter.substring (start+1);
+            if (req.params.datacenter.indexOf ("env") !=-1){
+            editLoad = 2;
+            
+        } else if(req.params.datacenter.indexOf ("role") !=-1){
+            editLoad = 3;
+            
+        } else {
+            editLoad = 1;
+            logger.info("none slected");
+        }}
+        logger.info("page type selected >"+editLoad);
+    
+        Systemdb.distinct('systemEnviron').exec(function(err,env){
+        //logger.info(env);
+        Systemdb.distinct('systemRole').exec(function(err,role){
+        //logger.info(role);
+        
+    if(editLoad>1){
+    
+    // this looks for "list" as the / url. if it exists, it prints the datacenter list
+
+        query = queryString(dcabbr,editLoad);
+        query.sort({'systemName': 'asc'}).exec(function(err, sys){
+        if(err){
+        logger.info(err);
+        }else{
+        logger.info("2"+dcabbr);
+        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn',function(err,eqs){
+         
+        //logger.info("system-list"+sys);
+            var context = {
+                titleNow: dcabbr,
+                equipsys: "true",
+                reportType: req.body.systemEnviron,
+                drop1:"Environment",
+                drop1url:"/env-role-report/env-",
+                drop1each: env.sort(),
+                drop2:"Roles",
+                drop2url:"/env-role-report/role-",
+                drop2each: role.sort(),
+            
+                eqs: sys.map(function(sy){
+                tempSys = strTgs.findThisInThat2(sy.systemEquipSN,eqs);
+                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
+                    //logger.info("sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+sy);
+                    return {
+                            systemName: sy.systemName,
+                            systemEquipSN: sy.systemEquipSN,
+                            systemEnviron: sy.systemEnviron,
+                            systemRole: sy.systemRole,
+                            systemTicket: sy.systemTicket,
+                            systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus,sy.systemTicket),
+                            systemStatus: strTgs.trueFalseIcon(sy.systemStatus,sy.systemStatus),
+                            sysmodifiedOn: strTgs.dateMod(sy.modifiedOn),
+                            equipLocation: tempSys.equipLocation,
+                            equipLocationRack: strTgs.ruToLocation(tempSys.equipLocation),
+                            equipSN: tempSys.equipSN,
+                            equipStatus: tempSys.equipStatus,
+                            equipStatusLight: strTgs.trueFalseIcon(tempSys.equipStatus,tempSys.equipStatus),
+                            equipMake: tempSys.equipMake,
+                            equipModel: tempSys.equipModel,
+                            equipSubModel: tempSys.equipSubModel,
+                    };
+                }),
+            };
+            // the 'location/datacenter-list' is the view that will be called
+            // context is the data from above
+            res.render('asset/env-role-report', context);
+        });}});
+    }else{
+        var context = {
+                titleNow: dcabbr,
+                reportType: req.body.systemEnviron,
+                drop1:"Environment",
+                drop1url:"/env-role-report/env-",
+                drop1each: env.sort(),
+                drop2:"Roles",
+                drop2url:"/env-role-report/role-",
+                drop2each: role.sort(),
+                
+        };
+        res.render('asset/env-role-report', context);
+        }});});
+};
+
+// Map Reduce in use !! for count of systems in env.
+exports.dcSystemCountbyEnv  = function(req,res,next){
+    
+  //  Systemdb.aggregate({ $match: { seller: user, status: 'completed' } }, {
+  //  $group: { _id: '$customer', count: {$sum: 1}}}.exec()
+    
+    /*MrSystemEnviron.find({}).sort({'_id':'desc'}).exec(function(err, sys){
+    if(err){
+    logger.info(err);
+    }else{
+            
+            var context ={
+            envCnt: model.map(function(ec){
+                return{
+                systemEnviron: ec._id,
+                systemCount: ec.value,
+                };
+            })};
+            res.render('asset/reportselect', context);
+            }});*/
+};
+ 
+//    Systemdb.distinct({systemEnviron}).sort({'systemEnviron':'desc').exec(function(err,env){
+//    Systemdb.
+    
+//    });
 
 /* ---------------------------------------------------------------------
 -----------------------   New and copy system POST working   --------
@@ -274,17 +421,17 @@ exports.dcSystemPost = function(req,res){
     var bd = req.body;
     // this makes the abbreviation available for the URL
     res.abbreviation = strTgs.clTrim(bd.systemName);
-    console.log("dcRackPost abbreviation>"+strTgs.clTrim(bd.systemName));
+    logger.info("dcRackPost abbreviation>"+strTgs.clTrim(bd.systemName));
 
-    //console.log("rUs expanded >"+ strTgs.compUs(req.body.rUs));
+    //logger.info("rUs expanded >"+ strTgs.compUs(req.body.rUs));
     if (!bd.isEdit){
 
-    console.log("new System in DC");
+    logger.info("new System in DC");
     varPortsNew = function(bd){
     if(typeof bd.sysPortName[i] !== 'undefined'){
     var Ports = [];
     for(i=0;i<bd.sysPortName.length;i++){
-        console.log("sysPortName.length "+bd.sysPortName.length);
+        logger.info("sysPortName.length "+bd.sysPortName.length);
         Ports[i]=({
             sysPortType: strTgs.sTrim(bd.sysPortType[i]),
             sysPortName: strTgs.sTrim(bd.sysPortName[i]),
@@ -370,18 +517,18 @@ exports.dcSystemPost = function(req,res){
     res.abbreviation = req.body.systemName;
 
     var thisDoc = sys;
-       //console.log("existing id>"+thisDoc);
+       //logger.info("existing id>"+thisDoc);
         if (err) {
-            console.log(err);
+            logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
     
     for(i=0;i<bd.sysPortType.length;i++){
-        console.log("equip \n Portname >"+bd.sysPortName[i] +" - path >"+ bd.sysPortCablePath[i] +" - endpoint >"+ bd.sysPortEndPoint[i] +" - Opt >"+ bd.sysPortOptions[i]/*+"crossover"+strTgs.doCheckbox(bd.sysPortCrossover[i]  future*/);
+        logger.info("equip \n Portname >"+bd.sysPortName[i] +" - path >"+ bd.sysPortCablePath[i] +" - endpoint >"+ bd.sysPortEndPoint[i] +" - Opt >"+ bd.sysPortOptions[i]/*+"crossover"+strTgs.doCheckbox(bd.sysPortCrossover[i]  future*/);
         if(!bd.sysPortType[i]){
-            console.log("No new port");
+            logger.info("No new port");
             }else if(bd.sysPortId[i] === "new"){
-            console.log("new port >"+bd.sysPortId[i]);
+            logger.info("new port >"+bd.sysPortId[i]);
             sys.systemPorts.push({
                 sysPortType: strTgs.sTrim(bd.sysPortType[i]),
                 sysPortName: strTgs.sTrim(bd.sysPortName[i]),
@@ -396,7 +543,7 @@ exports.dcSystemPost = function(req,res){
     /*            sysPortCrossover: strTgs.doCheckbox(bd.sysPortCrossover[i]),  future*/
             });
             }else{
-            console.log("existing port");
+            logger.info("existing port");
         var thisSubDoc = sys.systemPorts.id(bd.sysPortId[i]);
                 thisSubDoc.sysPortType= strTgs.clCleanUp(thisSubDoc.sysPortType,bd.sysPortType[i]);
                 thisSubDoc.sysPortName= strTgs.clCleanUp(thisSubDoc.sysPortName,bd.sysPortName[i]);
@@ -454,166 +601,23 @@ exports.dcSystemPost = function(req,res){
 	});
 }
 };
-  
-
-
-
-exports.dcEquipPortPostAJAX = function(req,res){
-
-};
-
-// --------------------------------------------------------------------
-//                   working to display list of Equipment w/ systems
-//          will not show systems without equipment
-// ---------------------------------------------------------------------
-/*
-exports.dcEquipSysPages = function(req,res,next){
-    console.log('***********exports.dcEquipSysPages First >' +req.params.datacenter);
-    if (!req.params.datacenter){
-    console.log("in EquipSysPages - List");
-    // this looks for "list" as the / url. if it exists, it prints the datacenter list
-        Equipment.find({}).exec(function(err, eqs){
-        if(err) return next(err);
-        if(!eqs) return next();
-        //console.log(eqs);
-        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
-        
-        if(err) return next(err);
-        if(!sys) return next();
-        //console.log("SYS >>>>>>>>>>>"+sys);
-
-            var context = { 
-               eqs: eqs.map(function(eq){
-                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
-                  return {
-                            equipLocation: eq.equipLocation,
-                            equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-                            equipSN: eq.equipSN,
-                            equipTicketNumber: eq.equipticketNumber,
-                            equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipticketNumber),
-                            equipStatus: eq.equipStatus,
-                            equipStatusLight: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
-                            equipType: eq.equipType,
-                            equipMake: eq.equipMake,
-                            equipModel: eq.equipModel,
-                            equipSubModel: eq.equipSubModel,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
-                            equipPONum: eq.equipPONum,
-                            equipProjectNum: eq.equipProjectNum,
-                            createdOn: strTgs.dateMod(eq.createdOn),
-                            modifiedOn: strTgs.dateMod(eq.modifiedOn),
-                            equipPorts: eq.equipPorts.map(function(ep){
-                           return {
-                                equipPortsId: ep.id,
-                                equipPortType: ep.equipPortType,
-                                equipPortsAddr: ep.equipPortsAddr,
-                                equipPortName: ep.equipPortName,
-                                equipPortsOpt: ep.equipPortsOpt,
-                                createdBy: ep.createdBy,
-                                createdOn: strTgs.dateMod(ep.createdOn),
-                                modifiedby: ep.modifiedbBy,
-                                modifiedOn: strTgs.dateMod(ep.modifiedOn),
-                            };
-                            }),
-                            
-                            systemName: tempSys.systemName,
-                            systemEnviron: tempSys.systemEnviron,
-                            systemRole: tempSys.systemRole,
-                            systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
-                            sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-                            
-                    };
-                })
-            };
-            console.log('context List >>>>>> '+context.toString());
-            // the 'location/datacenter-list' is the view that will be called
-            // context is the data from above
-            res.render('asset/equipsys-list', context);
-        });});
-    } else { 
-    // little regex to get the contains rack location
-    var re = new RegExp(req.params.datacenter, "i");
-    Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:-1}).exec(function(err, eqs){
-        if(err) return next(err);
-        if(!eqs) return next();
-       //console.log("eqs"+eqs);
-        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
-        
-        if(err) return next(err);
-        if(!sys) return next();
-        //console.log("SYS >>>>>>>>>>>"+sys);
-
-            var context = { 
-               eqs: eqs.map(function(eq){
-                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
-                  
-                 
-                 
-                  return {
-                            rackView: req.params.datacenter,
-                            equipLocation: eq.equipLocation,
-                            equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-                            equipSN: eq.equipSN,
-                            equipRUHieght: eq.equipRUHieght,
-                            equipTicketNumber: eq.equipticketNumber,
-                            equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipticketNumber),
-                            equipStatus: eq.equipStatus,
-                            equipStatusLight: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
-                            equipIsVirtual: eq.equipIsVirtual,
-                            equipType: eq.equipType,
-                            equipMake: eq.equipMake,
-                            equipModel: eq.equipModel,
-                            equipSubModel: eq.equipSubModel,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
-                            equipPONum: eq.equipPONum,
-                            equipProjectNum: eq.equipProjectNum,
-                            createdOn: strTgs.dateMod(eq.createdOn),
-                            modifiedOn: strTgs.dateMod(eq.modifiedOn),
-                            equipPorts: eq.equipPorts.map(function(ep){
-                           return {
-                                equipPortsId: ep.id,
-                                equipPortType: ep.equipPortType,
-                                equipPortsAddr: ep.equipPortsAddr,
-                                equipPortName: ep.equipPortName,
-                                equipPortsOpt: ep.equipPortsOpt,
-                                createdBy: ep.createdBy,
-                                createdOn: strTgs.dateMod(ep.createdOn),
-                                modifiedby: ep.modifiedbBy,
-                                modifiedOn: strTgs.dateMod(ep.modifiedOn),
-                            };
-                            }),
-                            systemName: tempSys.systemName,
-                            systemEnviron: tempSys.systemEnviron,
-                            systemRole: tempSys.systemRole,
-                            systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
-                            sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-                    };
-                })
-            };
-           //console.log('context Rack >>>>>> '+context.toString());
-            // the 'location/datacenter-list' is the view that will be called
-            // context is the data from above
-            res.render('asset/equipsys-list', context);
-        });});
-    }
-};
-*/
 /*---------------------------------------------------------------------
 ---------------------------- System Delete ------------------------------
 ------------------------------------------------------------------------
 */
 exports.dcsystemDelete = function(req,res){
     res.abbreviation = req.body.systemName;
+    res.newpage = req.body.equipLocationRack;
 if (req.body.systemName){
-        console.log("delete got this far");
+        logger.info("delete got this far");
         Systemdb.findOne({systemName: req.body.systemName},function(err,systemNametodelete){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             systemNametodelete.remove(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -624,9 +628,9 @@ if (req.body.systemName){
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
-                    message: 'Contact '+ req.body.systemNametodelete +' has been deleted. Good luck with that one',
+                    message: 'System '+ res.abbreviation +' has been deleted.',
                 };
-                return res.redirect(303, '/systems');
+                return res.redirect(303, '/equipment-systems/'+res.newpage);
                 }
             });
         }
@@ -644,13 +648,13 @@ exports.dcsystemSubDelete = function(req,res){
 if (req.body.id && req.body.subId){
     Systemdb.findById(req.body.id,req.body.subDoc,function (err, sys){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             sys.systemPorts.id(req.body.subId).remove();
             sys.save(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',

@@ -1,9 +1,9 @@
     
-var     winston = require('winston'),
-        strTgs = require('../lib/stringThings.js'),
+var     strTgs = require('../lib/stringThings.js'),
   seedDataLoad = require('../seedDataLoad.js'),
           dcit = require('../dcit.js'),
-      ObjectId = require('mongoose').Types.ObjectId;
+      ObjectId = require('mongoose').Types.ObjectId,
+        logger = require('../lib/logger.js');
 
 // Models
 var Datacenter = require('../models/datacenter.js'),
@@ -67,14 +67,14 @@ Datacenter List
 this is the DC List block. Looks for "List" in the URL and returns list of datacenters with city and country from Main contact.
 */
 exports.datacenterPages = function(req,res,next){
-    console.log('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
+    logger.info('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
     if (req.params.datacenter === 'list' || !req.params.datacenter){
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
             var context = {
                 datacenters: datacenters.map(function(datacenter){
                     var dc = datacenter;
-                    console.log(dc);
+                    logger.info(dc);
                     return {
                         id: dc._id,
                         fullName: dc.fullName,
@@ -98,18 +98,18 @@ Edit Contact
 //this is the DC edit block. Looks for "contact" in the URL and redirects to a form to edit the Datacenter.
 */
     } else if (req.params.datacenter.indexOf ("contact") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("contact")');
-        console.log("datacenter "+req.params.datacenter);
+        logger.info('else if (req.params.datacenter.indexOf ("contact")');
+        logger.info("datacenter "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("~")+1;
-            console.log("|start   >"+start);
+            logger.info("|start   >"+start);
         dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
+            logger.info("|dcInfo  >"+dcInfo);
         dcSplit = dcInfo.indexOf ("-");
-            console.log("|dcSplit >"+dcSplit);
+            logger.info("|dcSplit >"+dcSplit);
         dcSubId = dcInfo.substring (dcSplit+1);
-            console.log("|dcSubId >"+dcSubId);
+            logger.info("|dcSubId >"+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-            console.log("|dcId    >"+dcId);
+            logger.info("|dcId    >"+dcId);
 
         Datacenter.findById(dcId,function(err,datacenter){
         var dc = datacenter;
@@ -130,7 +130,7 @@ Edit Contact
 
         if(err) return next(err);
         if(!datacenter) return next();
-        console.log(datacenter);
+        logger.info(datacenter);
             context ={
                 id:dc._id,
                 fullName:dc.fullName,
@@ -138,6 +138,8 @@ Edit Contact
                 createdOn: strTgs.dateMod(dc.createdOn),
                 foundingCompany:dc.foundingCompany,
                 titleNow:thisSubDoc.conName+" - "+dc.abbreviation,
+                menu1: dc.abbreviation,
+                menuLink1: "",
                
                         conId : thisSubDoc.id,
                         conGuid: thisSubDoc.conGuid,
@@ -167,7 +169,7 @@ Edit Contact
                     
                 };
                 
-        //console.log(context);
+        //logger.info(context);
         res.render('location/datacentercontact', context);  
         }});
 
@@ -179,7 +181,7 @@ this is the DC edit block. Looks for "edit" in the URL and redirects to a form t
 If "New" is in the URL, it does New, otherwise it goes to existing
 */
     } else if (req.params.datacenter.indexOf ("edit") !=-1){
-        console.log('else if (req.params.datacenter.indexOf ("edit")');
+        logger.info('else if (req.params.datacenter.indexOf ("edit")');
         start = req.params.datacenter.indexOf ("-");
         dcabbr = req.params.datacenter.substring (start+1);
         
@@ -188,11 +190,11 @@ If "New" is in the URL, it does New, otherwise it goes to existing
         res.render('location/datacenteredit');
         } else {
         
-        //console.log('edit called' + dcabbr);
+        //logger.info('edit called' + dcabbr);
             Datacenter.findOne({abbreviation: dcabbr},function(err,datacenter){
         if(err) return next(err);
         if(!datacenter) return next();
-        //console.log(datacenter);
+        //logger.info(datacenter);
             var dc = datacenter;
             var context ={
                 id:dc._id,
@@ -202,7 +204,7 @@ If "New" is in the URL, it does New, otherwise it goes to existing
                 foundingCompany:dc.foundingCompany,
                 };            
 
-        //console.log(context);
+        //logger.info(context);
         res.render('location/datacenteredit', context);  
         });
         }
@@ -217,13 +219,15 @@ this takes the abbreviation and displays the matching datacenter details
     Datacenter.findOne({abbreviation: req.params.datacenter},function(err,datacenter){
         if(err) return next(err);
         if(!datacenter) return next();
-        //console.log(datacenter);
-        console.log ('Datacenter.findOne - abbreviation to matching datacenter');
+        //logger.info(datacenter);
+        logger.info ('Datacenter.findOne - abbreviation to matching datacenter');
         var dc = datacenter;
         // looks up racks in Rack based on datacenter id
         Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err,racks){
-        console.log ('Rack - id to matching rack to datacenter'+ dc._id); 
+        logger.info ('Rack - id to matching rack to datacenter'+ dc._id); 
             var context ={
+                menu1: dc.abbreviation,
+                menuLink1: "/location/datacenter/"+dc.abbreviation,
                 id:dc._id,
                 titleNow:dc.abbreviation,
                 fullName:dc.fullName,
@@ -310,8 +314,8 @@ this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects 
 // if(thisSubDoc.conType==="" && req.body.conType==""){}else{thisSubDoc.conType = req.body.conType.trim();}
 /*uCleanUp
 uCleanUp = function(old,current){
-    console.log ("was>"+old);
-    console.log ("now>"+current)
+    logger.info ("was>"+old);
+    logger.info ("now>"+current)
     if(old==="" && current==""){}else{was = current.trim();}
     return current;
 };
@@ -321,9 +325,10 @@ New Datacenter working
 exports.datacenterPost = function(req,res){
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    console.log("datacenterPost abbreviation>"+res.abbreviation);
+    logger.info("datacenterPost abbreviation>"+res.abbreviation);
     if (!req.body.id){
     Datacenter.create({
+
                     fullName : req.body.fullName,               
                     abbreviation : req.body.abbreviation,
                     foundingCompany : req.body.foundingCompany,
@@ -351,9 +356,9 @@ exports.datacenterPost = function(req,res){
 	} else {
     Datacenter.findById(req.body.id, function(err, datacenter){
     var thisDoc = datacenter;
-    console.log("id>"+thisDoc);
+    logger.info("id>"+thisDoc);
         if (err) {
-            console.log(err);
+            logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         
         } else {
@@ -388,13 +393,13 @@ exports.datacenterPost = function(req,res){
 exports.datacenterContactPost = function(req,res){
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    console.log("id>"+req.body.id);
-    console.log("abbreviation>"+req.body.abbreviation);
-    console.log("conId       >"+req.body.conId);
+    logger.info("id>"+req.body.id);
+    logger.info("abbreviation>"+req.body.abbreviation);
+    logger.info("conId       >"+req.body.conId);
     Datacenter.findById(req.body.id, 'contacts modifiedOn', function(err, datacenter){
     var thisSubDoc = datacenter.contacts.id(req.body.conId);
         if (err) {
-            console.log(err);
+            logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         
         } else if (!thisSubDoc){
@@ -479,21 +484,21 @@ exports.datacenterSubDelete = function(req,res){
 if (req.body.id && req.body.subId){
             
     Datacenter.findById(req.body.id,req.body.subDoc,function (err, datacenter){
-            console.log("first : "+datacenter); 
+            logger.info("first : "+datacenter); 
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{            
             if(req.body.collectionSub === "contact"){
                datacenter.contacts.id(req.body.subId).remove();
-                console.log("delete: "+req.body.subId+" - "+req.body.subName);
+                logger.info("delete: "+req.body.subId+" - "+req.body.subName);
             } else if (req.body.collectionSub === "cages"){//(req.body.collectionSub === "cages")
                 datacenter.cages.id(req.body.subId).remove();
-                console.log("delete: "+req.body.subId+" - "+req.body.subName);
+                logger.info("delete: "+req.body.subId+" - "+req.body.subName);
             }
             datacenter.save(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -519,15 +524,15 @@ if (req.body.id && req.body.subId){
 exports.datacenterDelete = function(req,res){
     res.abbreviation = req.body.id;
 if (req.body.id){
-        console.log("delete got this far");
+        logger.info("delete got this far");
         Datacenter.findOne({_id: req.body.id},function(err,datacentertodelete){
         if(err){
-        console.log(err);
+        logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             datacentertodelete.remove(function(err){
                 if(err){
-                console.log(err);
+                logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -554,23 +559,26 @@ Working - Done
 this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects to a form to edit the Datacenter.
 */  
 exports.datacenterCagePages = function(req,res,next){
-    //console.log('***********datacenterCagePages First ' +req.params.datacenter);
-    console.log('exports.datacenterCagePages');
+    //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
+    logger.info('exports.datacenterCagePages');
     start = req.params.datacenter.indexOf ("-");
     var searchId = req.params.datacenter.substring (start+1);
-        console.log('edit called ' + searchId); 
-    //  console.log(obj_dccage);
+        logger.info('edit called ' + searchId); 
+    //  logger.info(obj_dccage);
     var query = Datacenter.findOne({_id: searchId});
         query.exec(function(err,datacenter){
         if(err) return next(err);
-        //console.log("datacenter :" + datacenter);
-        console.log("1 v19 ");
+        //logger.info("datacenter :" + datacenter);
+        logger.info("1 v19 ");
         if(!datacenter) return next();
-        //console.log("2 ");
+        //logger.info("2 ");
 
             var dc = datacenter;
-            console.log ("dc>"+dc);
+            logger.info ("dc>"+dc);
             var context ={
+                menu1: dc.abbreviation,
+                menuLink1: "/location/datacenter/"+dc.abbreviation,
+                titleNow:dc.abbreviation,
                 id:dc._id,
                 fullName:dc.fullName,
                 abbreviation:dc.abbreviation,
@@ -606,15 +614,15 @@ this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects 
 exports.datacenterCagePost = function(req,res){
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    console.log("@ id "+ req.body.id);
+    logger.info("@ id "+ req.body.id);
     var i = 1;
     // having the [i]index at the end of the form field collects it properly
     Datacenter.findById(req.body.id, 'cages modifiedOn', function(err, datacenter){
             if (err) {
-                console.log(err);
+                logger.info(err);
                 return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
             } else if (!req.body.cageName){
-                console.log("no cageName");
+                logger.info("no cageName");
                 req.session.flash = {
 	                type: 'danger',
 	                intro: 'Ooops!',
@@ -624,20 +632,20 @@ exports.datacenterCagePost = function(req,res){
             } else {
             //using index returned from handlebars and count to get loop count
                 for(i=0;i<req.body.index.length;i++){
-                    console.log('indx > '+req.body.index.length);
-                    console.log('cageId           > '+req.body.cageId);
-                    console.log('cageNickname     > '+req.body.cageNickname);
-                    console.log('cageAbbreviation > '+req.body.cageAbbreviation);
-                    console.log('cageName         > '+req.body.cageName);
-                    console.log('cageWattPSM      > '+req.body.cageWattPSM);
+                    logger.info('indx > '+req.body.index.length);
+                    logger.info('cageId           > '+req.body.cageId);
+                    logger.info('cageNickname     > '+req.body.cageNickname);
+                    logger.info('cageAbbreviation > '+req.body.cageAbbreviation);
+                    logger.info('cageName         > '+req.body.cageName);
+                    logger.info('cageWattPSM      > '+req.body.cageWattPSM);
                 var checkVar = req.body.cageName[i];
-                    console.log ("cageName> "+checkVar);
+                    logger.info ("cageName> "+checkVar);
             // this is for empty +1    
                 if (!checkVar){
-                    console.log('no content cage');
+                    logger.info('no content cage');
             // this is for more than one new cage
             } else if (req.body.cageId[i] ==="new"){
-                    console.log ('picked new cage');
+                    logger.info ('picked new cage');
             // this section for empty cage page    
                     datacenter.cages.push({
                         cageNickname : strTgs.uTrim(req.body.cageNickname[i]),
@@ -650,7 +658,7 @@ exports.datacenterCagePost = function(req,res){
                     });
             // this is for existing cages    strTgs.uCleanUp(thisSubDoc.conType,req.body.conType);
             }else{
-                    console.log('existing cage');
+                    logger.info('existing cage');
                     var thisSubDoc = datacenter.cages.id(req.body.cageId[i]);
                         thisSubDoc.cageNickname = strTgs.uTrim(req.body.cageNickname[i]);
                         thisSubDoc.cageAbbreviation = strTgs.cTrim(req.body.cageAbbreviation[i]);
@@ -688,23 +696,26 @@ Working - Done
 this is the DC Power edit block. Looks for "cage/edit-" in the URL and redirects to a form to edit the Datacenter.
 */  
 exports.datacenterPowerPages = function(req,res,next){
-    //console.log('***********datacenterCagePages First ' +req.params.datacenter);
-    console.log('exports.datacenterPowerPages');
+    //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
+    logger.info('exports.datacenterPowerPages');
     start = req.params.datacenter.indexOf ("-");
     var searchId = req.params.datacenter.substring (start+1);
-        console.log('edit called ' + searchId); 
-    //  console.log(obj_dccage);
+        logger.info('edit called ' + searchId); 
+    //  logger.info(obj_dccage);
     var query = Datacenter.findOne({_id: searchId});
         query.exec(function(err,datacenter){
         if(err) return next(err);
-        //console.log("datacenter :" + datacenter);
-        console.log("Power v19 ");
+        //logger.info("datacenter :" + datacenter);
+        logger.info("Power v19 ");
         if(!datacenter) return next();
-        //console.log("2 ");
+        //logger.info("2 ");
 
             var dc = datacenter;
-            console.log ("dc>"+dc);
+            logger.info ("dc>"+dc);
             var context ={
+                menu1: dc.abbreviation,
+                menuLink1: "/location/datacenter/"+dc.abbreviation,
+                titleNow:dc.abbreviation,
                 id:dc._id,
                 titleNow:dc.abbreviation,
                 fullName:dc.fullName,
@@ -723,14 +734,14 @@ exports.datacenterPowerPages = function(req,res,next){
 exports.datacenterPowerPost = function(req,res){
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    console.log("PowerPost id "+ req.body.id);
+    logger.info("PowerPost id "+ req.body.id);
     var i = 1;
     // having the [i]index at the end of the form field collects it properly
     Datacenter.findById(req.body.id, 'power modifiedOn', function(err, datacenter){
     var thisDoc = datacenter;
-    console.log("id>"+thisDoc);
+    logger.info("id>"+thisDoc);
         if (err) {
-            console.log(err);
+            logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         
         } else {    

@@ -1,11 +1,12 @@
-var fs = require('fs");
+var     fs = require('fs"),
+    logger = require("winston");
 
 var dirPath = './models/';
 var args;
 
 var dirList = fileList(dirPath);
 
-    console.log("dirList typefo"+dirList);
+    logger.info("dirList typefo"+dirList);
 
 
     function fileList(p){
@@ -19,21 +20,21 @@ var dirList = fileList(dirPath);
 
     filesOut[i] = fileRead(p,files[i]);
     }
-    console.log("fileList > "+f);  
+    logger.info("fileList > "+f);  
     return f;
     });
 }
 
     function fileRead(p,dF){
     var filesAndData;
-    console.log("p+dF >"+p+dF);
+    logger.info("p+dF >"+p+dF);
     fs.readFile(p+dF, function(err, file){
     if (err) throw err;
 
   /* var array = [];
     array = file.toString().split('\n');
     array = array.join(" <br> ");
-    console.log("array"+array);
+    logger.info("array"+array);
     */
     return file;
     });

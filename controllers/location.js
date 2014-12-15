@@ -1,5 +1,6 @@
 var Datacenter = require('../models/datacenter.js'),
-       stringThings = require('../lib/stringThings.js');
+       stringThings = require('../lib/stringThings.js'),
+       logger = require("winston");
 
 
 exports.datacenterNew = function(req,res){
@@ -43,14 +44,14 @@ var dbqCountry = {
 
 //working - Returns list of datacenters with city and country from Main contact
 exports.datacenterPages = function(req,res,next){
-    console.log('***********First call/n' +req.params.datacenter);
+    logger.info('***********First call/n' +req.params.datacenter);
     if (req.params.datacenter === 'list'){
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
             var context = {
                 datacenters: datacenters.map(function(datacenter){
                     var dc = datacenter;
-                    //console.log(datacenter);
+                    //logger.info(datacenter);
                     return {
                         name: dc.fullName,
                         abb: dc.abbreviation,
@@ -69,11 +70,11 @@ exports.datacenterPages = function(req,res,next){
 
         var start = req.params.datacenter.indexOf ("-");
         var dcabbr = req.params.datacenter.substring (start+1);
-        console.log('edit called' + dcabbr);
+        logger.info('edit called' + dcabbr);
             Datacenter.findOne({abbreviation: dcabbr},function(err,datacenter){
         if(err) return next(err);
         if(!datacenter) return next();
-        console.log(datacenter);
+        logger.info(datacenter);
             var dc = datacenter;
             var context ={
                 id:dc._id,
@@ -125,7 +126,7 @@ exports.datacenterPages = function(req,res,next){
                         cageNotes:ca.cageNotes,
                     };
                 };
-        console.log(context);
+        logger.info(context);
         res.render('location/datacenter-edit', context);  
         });
     } else {
@@ -133,7 +134,7 @@ exports.datacenterPages = function(req,res,next){
     Datacenter.findOne({abbreviation: req.params.datacenter},function(err,datacenter){
         if(err) return next(err);
         if(!datacenter) return next();
-        console.log(datacenter);
+        logger.info(datacenter);
             var dc = datacenter;
             var context ={
                 id:dc._id,
@@ -173,7 +174,7 @@ exports.datacenterPages = function(req,res,next){
                     };
                 }),
                 };
-        console.log(context);
+        logger.info(context);
         res.render('location/datacenter', context);  
         });
      }
@@ -184,11 +185,11 @@ exports.datacenterPages = function(req,res,next){
 
 exports.datacenterPagesPost = function(req,res,next){
     var dcabbr = req.body.abbreviation;
-    console.log('edit post called -' + dcabbr);
+    logger.info('edit post called -' + dcabbr);
    
     Datacenter.update({_id: req.body.id}, {upsert:true}, function(err, doc){
     if (err) return res.send(500, { error: err });
-    console.log("succesfully saved");
+    logger.info("succesfully saved");
     res.render('location/datacenter/'+ dcabbr);
     });
 
@@ -211,7 +212,7 @@ exports.datacenterPagesPost = function(req,res,next){
 
 //working : do not touch but no longer used
 exports.datacenterTwo = function(req,res,next){
-    console.log(req.params.datacenter);
+    logger.info(req.params.datacenter);
     Datacenter.findOne({abbreviation: req.params.datacenter},function(err,datacenter){
         if(err) return next(err);
         if(!datacenter) return next();

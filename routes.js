@@ -60,6 +60,10 @@ module.exports = function(app){
         app.post('/systemdelete/:datacenter', system.dcsystemDelete);
         app.post('/systemportdelete/:datacenter', system.dcsystemSubDelete);
         
+        app.get('/reports', system.dcSystemCountbyEnv);
+        app.get('/env-role-reports',system.dcSystembyEnvRole);
+        app.get('/env-role-report/:datacenter',system.dcSystembyEnvRole);
+        
         // Admin 
         app.get('/admin', admin.home);
         app.get('/admin/:datacenter', admin.home);
