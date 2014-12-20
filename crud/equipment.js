@@ -1,5 +1,6 @@
 // Equipment crud
-var Equipment = require('../models/equipment.js'),
+var logger = require('../lib/logger.js'), 
+ Equipment = require('../models/equipment.js'),
     strTgs = require('../lib/stringThings.js');
          
 exports.equipmentCreate = function (data,req) {
@@ -55,10 +56,10 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
 	        if(err) {
-                logger.warn("Failed write : "+data.equipSN);
+                logger.warn("equipmentCreate Failed write : "+data.equipSN);
                 return (err.stack);
             }else{
-                logger.warn("Sucessful write :"+data.index+" : "+data.equipSN);
+                logger.warn("equipmentCreate Sucessful write :"+data.index+" : "+data.equipSN);
                 return ("done");
             }
     });
@@ -85,10 +86,10 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 
         eq.save(function(err){
         if(err) {
-            logger.warn("Failed write :"+data.equipSN);
+            logger.warn("equipmentPortCreate Failed write :"+data.equipSN);
             return (err.stack);
         }else{
-            logger.info("Sucessful write :"+data.index+" : "+data.equipSN);
+            logger.info("equipmentPortCreate Sucessful write :"+data.index+" : "+data.equipSN);
             return ("done");
         }
     });

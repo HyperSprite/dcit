@@ -3,6 +3,7 @@
 var http = require('http'),
 	https = require('https'),
 	express = require('express'),
+    mongoose = require('mongoose'),
     bodyParser = require('body-parser'),
 	formidable = require('formidable'),
 	fs = require('fs'),
@@ -131,33 +132,6 @@ switch(app.get('env')){
 
 logger.info('DCIT Log started');
 
-
-
-var MongoSessionStore = require('session-mongoose')(require('connect'));
-var sessionStore = new MongoSessionStore({ url: credentials.mongo.development.connectionString });
-
-app.use(require('cookie-parser')(credentials.cookieSecret));
-app.use(require('express-session')({ store: sessionStore,
-                 secret: credentials.cookieSecret,
-                 name: credentials.cookieName,
-                 saveUninitialized: true,
-                 resave: true }));
-app.use(express.static(__dirname + '/public'));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// cross-site request forgery protection
-/*
-app.use(require('csurf')());
-app.use(function(req, res, next){
-	res.locals._csrfToken = req.csrfToken();
-    
-	next();
-});
-*/
-// database configuration
-var mongoose = require('mongoose');
 var options = {
                 server: {
                     socketOptions: { keepAlive: 1 } 
@@ -173,6 +147,37 @@ switch(app.get('env')){
     default:
         throw new Error('Unknown execution environment: ' + app.get('env'));
 }
+
+
+//var MongoSessionStore = require('mongoose-session')(require('connect'));
+//var sessionStore = new MongoSessionStore({ url: credentials.mongo.development.connectionString });
+
+app.use(require('cookie-parser')(credentials.cookieSecret));
+
+app.use(require('express-session')({ 
+                 key: 'session',
+                 secret: credentials.cookieSecret,
+                 store: require('mongoose-session')(mongoose),
+                 saveUninitialized: true,
+                 resave: true,
+                 }));
+                 
+app.use(express.static(__dirname + '/public'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(bodyParser());
+// cross-site request forgery protection
+/*
+app.use(require('csurf')());
+app.use(function(req, res, next){
+	res.locals._csrfToken = req.csrfToken();
+    
+	next();
+});
+*/
+// database configuration
+// var mongoose = require('mongoose');
 
 
 exports.dropDatacenter = (function(Datacenter){
@@ -210,7 +215,7 @@ exports.dropEquipment = (function(Equipment){
 
 exports.dropSystem = (function(Systemdb){
     Systemdb.find(function(err, systemdb){
-        if(systemdb.length) mongoose.connection.collections.systemdb.drop(function(err) {
+        if(systemdb.length) mongoose.connection.collections.systemdbs.drop(function(err) {
         logger.info('Systemdb collection dropped');
         });
     });    

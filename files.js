@@ -1,5 +1,5 @@
 var     fs = require('fs"),
-    logger = require("winston");
+    logger = require('../lib/logger.js');
 
 var dirPath = './models/';
 var args;

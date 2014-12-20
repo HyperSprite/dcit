@@ -12,7 +12,7 @@
                 <th class="table-sort" data-sort="rackStatus">Status</th>
                 <th class="table-sort" data-sort="rackLat">X</th>
                 <th class="table-sort" data-sort="rackLon">Y</th>
-                <th class="table-sort" data-sort="rUs">RUs</th>
+                <th class="table-sort" data-sort="rackRow">Row</th>
                 <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
                 <th class="table-sort" data-sort="rackDescription">Description</th>
                 
@@ -24,13 +24,13 @@
                     <td class="rackEdit"><form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
                     <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
                     <input type='submit' class='btn btn-warning btn-xs' formaction='/location/rack/edit-{{rackUnique}}' form="formEdit" formmethod="get" value='E'>
-                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='C'></td>                
+                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='C'> {{@index}}</td>                
                     <td class="rackNickname">{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}" target="_blank">{{rackUnique}}</a>{{else}}{{rackUnique}}{{/if}}</td>
                     <td class="rackName"><a href="/location/rack/{{rackUnique}}" target="_blank">{{rackName}}</a></td>
                     <td class="rackStatus">{{{rackStatus}}}</td>
                     <td class="rackLat">{{rackLat}}</td>
                     <td class="rackLon">{{rackLon}}</td>
-                    <td class="rUs">{{rUs}}</td>
+                    <td class="rackRow">{{rackRow}}</td>
                     <td class="modifiedOn">{{modifiedOn}}</td>
                     <td class="rackDescription">{{rackDescription}}</td>
 

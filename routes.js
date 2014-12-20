@@ -56,6 +56,7 @@ module.exports = function(app){
         
         app.get('/systems', system.dcSystemPages);
         app.get('/system/:datacenter', system.dcSystemPages);
+        app.get('/endpoint/:datacenter', system.findEndpoints);
         app.post('/system/:datacenter', system.dcSystemPost);
         app.post('/systemdelete/:datacenter', system.dcsystemDelete);
         app.post('/systemportdelete/:datacenter', system.dcsystemSubDelete);

@@ -1,5 +1,5 @@
 
-var     logger = require('winston'),
+var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
           dcit = require('../dcit.js'),
             fs = require('fs'),
@@ -26,7 +26,7 @@ exports.home = function(req, res){
 //
 //          Options page
 //
-    }else if (req.params.datacenter  === "options"){
+    }else if (req.params.datacenter  === 'options'){
      logger.info('called admin.options');     
         Optionsdb.find(function(err,opts){
         //logger.info(opts);
@@ -39,6 +39,12 @@ exports.home = function(req, res){
         }else{   
         if (err) return next (err);
         context ={
+                menu1: 'Admin',
+                menuLink1: '/admin',
+                menu2: 'File Manager',
+                menuLink2: '/admin/filemanager',
+                titleNow:'Options',
+
             optList: opts.map(function(opt){
             return{
                 optListName: opt.optListName,
@@ -57,12 +63,12 @@ exports.home = function(req, res){
 //
 //  Models page
 //
-    }else if(req.params.datacenter === "upload"){
+    }else if(req.params.datacenter === 'upload'){
         res.render ('admin/upload');
 //
 //  Database admin
 //
-    }else if(req.params.datacenter === "dbinsert"){
+    }else if(req.params.datacenter === 'dbinsert'){
     
     
     
@@ -71,7 +77,7 @@ exports.home = function(req, res){
 //    
 //  User Admin
 //
-    }else if(req.params.datacenter === "useradmin"){
+    }else if(req.params.datacenter === 'useradmin'){
     
     
     
@@ -80,7 +86,7 @@ exports.home = function(req, res){
 //    
 //  File Manager
 //
-    }else if(req.params.datacenter === "filemanager"){
+    }else if(req.params.datacenter === 'filemanager'){
     
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
@@ -89,16 +95,18 @@ exports.home = function(req, res){
         if(err){
         logger.info(err);
         }else{
-        //logger.info("file-list"+fil);
+        //logger.info('file-list'+fil);
             var context = {
                     optModels: strTgs.findThisInThatOpt('optModels',opt),
                 fil: fil.map(function(fi){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                    //logger.info("sy Map>"+fi);
+                    //logger.info('sy Map>'+fi);
                     return {
-                            menu1: "Admin",
-                            menuLink1: "/admin",
-                            titleNow:"File Manager",
+                            menu1: 'Admin',
+                            menuLink1: '/admin',
+                            menu2: 'Options',
+                            menuLink2: '/admin/options',
+                            titleNow:'File Manager',
                             fileId: fi._id,
                             fileName: fi.fileName,
                             filePath: fi.filePath,
@@ -118,7 +126,7 @@ exports.home = function(req, res){
 //    
 //  Joins
 //
-    }else if(req.params.datacenter === "joins"){
+    }else if(req.params.datacenter === 'joins'){
     
     
     
@@ -127,44 +135,24 @@ exports.home = function(req, res){
 //
 //  Models (not working)
 // 
-    }else if(req.params.datacenter === "models"){
- /*   var dirPath = './models/';
-    logger.info("dirList typefo"+dirList);
+    }else if(req.params.datacenter === 'models'){
 
-    var dirList = fs.readdir(dirPath, function(err, files){
-    var filesOut = [];
-    var filesTemp = [];
-    if (err) return;
-    for(i=0;i<files;i++){
-    fs.readFile(dirPath+files[i], function(err, data){
-    if(err) throw err;
-    filesTemp =  data;
-    
-    return filesTemp;
-    });}
-    logger.info("fileList > "+f);  
-    return f;
-    });
-
-
-    logger.info("dirList typefo"+dirList + typeof dirList);
-    */
     res.render ('admin/models');
 
     }else{
-    logger.info("datacenter >"+req.params.datacenter);
+    logger.info('datacenter >'+req.params.datacenter);
     res.render ('admin/'+req.params.datacenter);
     
 }
 };
 
 exports.optionsEdit = function(req, res){
-        dcInfo = req.params.datacenter;
-            logger.info("|dcInfo  >"+dcInfo);
+    var dcInfo = req.params.datacenter;
+            logger.info('|dcInfo  >'+dcInfo);
         
-        if (dcInfo ==="new"){
+        if (dcInfo ==='new'){
             context={
-                stat: "isNew",
+                stat: 'isNew',
             };
         
             res.render('admin/optionsedit', context);
@@ -172,9 +160,9 @@ exports.optionsEdit = function(req, res){
             Optionsdb.findOne({optListKey: dcInfo},function(err,opt){
             if(err)return next(err);
                 context={
-                    menu1: "Admin",
-                    menuLink1: "/admin",
-                    titleNow:"Option Edit",
+                    menu1: 'Admin',
+                    menuLink1: '/admin',
+                    titleNow:'Option Edit',
                     id: opt._id,
                     optListName: opt.optListName,
                     optListKey: opt.optListKey,
@@ -186,7 +174,7 @@ exports.optionsEdit = function(req, res){
 };
 
 exports.optionsEditPost = function(req,res,err){
-    logger.info("optionsEditPost >"+ req.body.id);
+    logger.info('optionsEditPost >'+ req.body.id);
     var thisDoc;
      if (!req.body.id){
         Optionsdb.create({
@@ -245,34 +233,23 @@ exports.optionsEditPost = function(req,res,err){
 };
 //
 // Upload POST working
-//
+//        
 exports.uploadPost = function(req,res){
-    logger.info("date"+Date.now());
+    logger.info('date >'+Date.now());
     var form = new formidable.IncomingForm();
     form.uploadDir = './userdata/';
     form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
-    logger.info(files);
+    logger.info('files >'+files);
     var file = files.newCSVfile;
     var fileHRName = strTgs.clTrim(file.name);
     var base = './public/userdata/';
     var dir = './userdata/uploads/';
     var dateStr = Date.now();
-    var fileName = dateStr+"-"+fileHRName;
+    var fileName = dateStr+'-'+fileHRName;
     var newPath = dir + fileName;
+    logger.info('dir+filename >'+dir + fileName);
 
-  //  fs.writeFile(base+fileName, file, function (err) {
-  //   if(err) return res.redirect(303, '/error');
-  //      if(err) {
-  //          res.session.flash = {
-  //              type: 'danger',
-  //              intro: 'Oops!',
-  //              message: 'There was an error processing '+fileHRName+'. ' +
-  //                  'Pelase try again.',
-  //          };
-  //          return res.redirect(303, '/admin');
-  //      }else{
-        //fs.renameSync(file.path, newPath);
      if(err) return res.redirect(303, '/error');
         if(err) {
             res.session.flash = {
@@ -288,7 +265,7 @@ exports.uploadPost = function(req,res){
     
         Fileinfo.create({
                     fileName: file.name,
-                    filePath: "./"+file.path,
+                    filePath: './'+file.path,
                     fileHRName: fileHRName,
                     fileDescription: strTgs.csvCleanup(fields.fileDescription),
                     fileType: fields.fileType,
@@ -322,7 +299,7 @@ exports.uploadPost = function(req,res){
 exports.uploadDeletePost = function(req,res){
 if (req.body.id){
         var bdy = req.body;
-        logger.info("delete got this far");
+        logger.info('delete got this far');
         Fileinfo.findOne({_id: bdy.id},function(err,fileToDelete){
         if(err){
         logger.info(err);
@@ -338,7 +315,7 @@ if (req.body.id){
                     };
                     return res.redirect(303, '/admin/filemanager');
                 } else {
-                logger.info("path/file ./"+bdy.filePath);
+                logger.info('path/file ./'+bdy.filePath);
                 fs.unlink(bdy.filePath, function(err){
                     if(err){
                 logger.info(err);
@@ -367,64 +344,64 @@ if (req.body.id){
 //  CSV to DB
 // 
 exports.csvToDBPost = function(req,res){
-    //logger.info("csvToDBPost >"+req.body.file);
+    //logger.info('csvToDBPost >'+req.body.file);
     switch(req.body.fileDescription) {
-    case "Equipment":
+    case 'Equipment':
         var equipmentStream = fs.createReadStream(req.body.file);
         csv
             .fromStream(equipmentStream, {headers : true})
-            .on("data", function(data){
+            .on('data', function(data){
             if(!data.equipSN){
-            logger.info("No Equipment SN");
+            logger.info('No Equipment SN');
         }else{
             equipmentCrud.equipmentCreate(data,req);
          }})
-            .on("end", function(){
-             logger.info("done");
+            .on('end', function(){
+             logger.info('done');
         });
         break;
-    case "Equipment.equipPorts":
+    case 'Equipment.equipPorts':
         var equipPortsStream = fs.createReadStream(req.body.file);
         csv
             .fromStream(equipPortsStream, {headers : true})
-            .on("data", function(data){
+            .on('data', function(data){
             if(!data.equipSN){
-            logger.info("Equipment Port error");
+            logger.info('Equipment Port error');
         }else{
             equipmentCrud.equipmentPortCreate(data,req);
          }})
-            .on("end", function(){
-             logger.info("done");
+            .on('end', function(){
+             logger.info('done');
         });
     
         break;
-    case "Systemdb":
+    case 'Systemdb':
         var systemdbStream = fs.createReadStream(req.body.file);
         csv
             .fromStream(systemdbStream, {headers : true})
-            .on("data", function(data){
+            .on('data', function(data){
             if(!data.systemName){
-            logger.info("No System Name");
+            logger.info('No System Name');
         }else{
             systemdbCrud.systemdbCreate(data,req);
          }})
-            .on("end", function(){
-             logger.info("done");
+            .on('end', function(){
+             logger.info('done');
         });
     
         break;
-    case "Systemdb.systemPorts":
+    case 'Systemdb.systemPorts':
         var systemPortsStream = fs.createReadStream(req.body.file);
         csv
             .fromStream(systemPortsStream, {headers : true})
-            .on("data", function(data){
+            .on('data', function(data){
             if(!strTgs.clTrim(data.systemName)){
-            logger.info("systemPortsStream Error on index "+data.index+" systemName not found");
+            logger.info('systemPortsStream Error on index '+data.index+' systemName not found');
         }else{
             systemdbCrud.systemdbPortsCreate(data,req);
          }})
-            .on("end", function(){
-             logger.info("done");
+            .on('end', function(){
+             logger.info('done');
         });
     
         break;        
@@ -437,51 +414,15 @@ exports.csvToDBPost = function(req,res){
             };
 }
     
-    
-    
-    
-    
-    
-    
-    /*
-   var stream = fs.createReadStream(req.body.file);
-    csv
-        .fromStream(stream, {headers : true})
-        .on("data", function(data){
-        if(!data.equipSN){
-        logger.info("No Equipment SN");
-        }else{
-        equipmentCrud.equipmentCreate(data,req);
-     }})
-    .on("end", function(){
-     logger.info("done");
-    });
-    */
+
  return res.redirect(303, '/admin/filemanager');
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){
     dcit.dropDatacenter(Datacenter);
-	logger.info("dropDatacenterGet");
+	logger.info('dropDatacenterGet');
     return res.redirect(303, '/location/datacenter/list');    
 };
 

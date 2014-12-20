@@ -1,6 +1,7 @@
-var Systemdb = require('../models/system.js'),
-    strTgs = require('../lib/stringThings.js'),
-    logger = require("winston");
+var   logger = require('../lib/logger.js'),
+    Systemdb = require('../models/system.js'),
+      strTgs = require('../lib/stringThings.js');
+    
 
 exports.systemdbCreate = function (data,req) {
     Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){

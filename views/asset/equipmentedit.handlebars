@@ -52,10 +52,14 @@
             
             </div>
             <div class="col-xs-2">
-                <select id="field-equipLocationRu"  name="equipLocationRu" class="form-control form-group-sm col-xs-2"  >
-                 
+                <input list="field-equipLocationRu" id="field-equipLocationRu" class="form-control  form-group-sm col-xs-3" name="equipLocationRu" value="{{equipLocationRu}}"> 
+                    <datalist id="equipLocationRu">
+                    <option "0a" >0a</option>
+                    <option "0b" >0b</option>
+                    <option "0c" >0c</option>
+                    <option "0d" >0d</option>
                     {{#each rackrUs}}
-                    <option {{{selOption this ../equipLocationRu}}} >{{this}}</option>
+                    <option {{{this}}} >{{this}}</option>
                     {{/each}}
                     
 				</select>

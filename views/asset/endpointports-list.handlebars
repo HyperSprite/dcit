@@ -1,36 +1,39 @@
     
-<h4>System Ports</h4>
+<h4>Endpoint Ports</h4>
     <div class='container'> 
     <div id="dvData">
     <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
         <thead>
             <tr>
                 
-                <th class="table-sort" data-sort="sysPortType">Type</th>
+                
+                <th class="table-sort" data-sort="systemName">System Name</th>
                 <th class="table-sort" data-sort="sysPortName">Name</th>
                 <th class="table-sort" data-sort="sysPortCablePath">Cable Path</th>
-                <th class="table-sort" data-sort="sysPortEndPoint">End Point/Pre/Port</th>                
+                <th class="table-sort" data-sort="sysPortEndPointPre">Pre</th>
+                <th class="table-sort" data-sort="sysPortEndPointPort">Port</th>
                 <th class="table-sort" data-sort="sysPortVlan">VLAN</th>
                 <th class="table-sort" data-sort="sysPortOptions">Options</th>
                 <th class="table-sort" data-sort="sysPortAddress">Address</th>
-                <th class="table-sort" data-sort="sysPortURL">URL</th>
-               <!-- <th class="table-sort" data-sort="sysPortCrossover">Xover</th>-->
-            
+                <th class="table-sort" data-sort="sysPortType">Type</th>
+           
             </tr>
         </thead>
         <tbody class="list">
+        {{#each sys}}
         {{#each systemPorts}}
             <tr>
-                <td class="sysPortType">{{sysPortType}}</td>
+                <td class="systemName"><a href="/system/{{systemName}}">{{systemName}}</td>
                 <td class="sysPortName">{{sysPortName}}</td>
                 <td class="sysPortCablePath">{{sysPortCablePath}}</td>
-                <td class="sysPortEndPoint"><a href="/system/{{sysPortEndPoint}}">{{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</a></td>
+                <td class="sysPortEndPointPre">{{sysPortEndPointPre}}</td>
+                <td class="sysPortEndPointPort">{{sysPortEndPointPort}}</td>
                 <td class="sysPortVlan">{{sysPortVlan}}</td>
                 <td class="sysPortOptions">{{sysPortOptions}}</td>
                 <td class="sysPortAddress">{{sysPortAddress}}</td>
-                <td class="sysPortURL"><a href="{{sysPortURL}}" target="_blank">{{sysPortURL}}</a>
-                <!--<td class="sysPortCrossover"><input type="checkbox" name="sysPortCrossover" value="true" {{sysPortCrossoverChecked}} disabled></td>-->
-            </tr>  
+                <td class="sysPortType">{{sysPortType}}</td>
+            </tr>
+        {{/each}}
         {{/each}}
         </tbody>
     </table>

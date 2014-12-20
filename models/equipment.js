@@ -41,6 +41,7 @@ var equipmentSchema = mongoose.Schema({
     equipModel: String,
     equipSubModel: String,
     equipRUHieght: Number,
+    equipParent: String,
     equipImgFront: String,
     equipImgRear: String,
     equipImgInternal: String,
@@ -80,6 +81,8 @@ var equipmentSchema = mongoose.Schema({
 
 // Apply the uniqueValidator plugin to datacenterSchema
 equipmentSchema.plugin(uniqueValidator);
+
+equipmentSchema.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.' });
 
 var Equipment = mongoose.model('Equipment', equipmentSchema);
 module.exports = Equipment;

@@ -1,6 +1,6 @@
 // Map Reduce Collections
 
-var     logger = require('winston'),
+var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 

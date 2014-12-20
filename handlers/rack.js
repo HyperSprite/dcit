@@ -1,5 +1,5 @@
 
-var     logger = require('winston'),
+var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -288,7 +288,7 @@ link to this looks
         
     Optionsdb.findOne({optListKey: "optRackStatus"},function(err,opt){
         if(err)return next(err);
-        logger.info(opt);    
+        //logger.info(opt);    
     Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err, datacenter){ 
         if(err){
         logger.info(err);
@@ -402,6 +402,7 @@ exports.dcRackPost = function(req,res){
     //logger.info("rUs expanded >"+ strTgs.compUs(req.body.rUs));
     // rackUniqe is created when making a new rack so it does not exist on new 
     // or copied racks
+    res.lastRack = req.body.rackNickname;
     if (!req.body.rackUnique){
     if (req.body.wasCopy){
     res.abbreviation = req.body.wasCopy;
@@ -458,7 +459,7 @@ exports.dcRackPost = function(req,res){
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
+                message: "Rack "+res.lastRack+' has been created!',
                 };
 	        return res.redirect(303, '/location/rack/copy~edit-'+ res.abbreviation);
 
@@ -489,6 +490,7 @@ exports.dcRackPost = function(req,res){
                         thisDoc.rackMake = strTgs.uCleanUp(thisDoc.rackMake,req.body.rackMake);
                         thisDoc.rackModel = strTgs.uCleanUp(thisDoc.rackModel,req.body.rackModel);
                         thisDoc.rackNotes = strTgs.uCleanUp(thisDoc.rackNotes,req.body.rackNotes);
+                        thisDoc.rUs = strTgs.uCleanUp(thisDoc.rUs,req.body.rUs);
                         thisDoc.modifiedOn = Date.now();
                         thisDoc.modifiedBy ='Admin';
                     }

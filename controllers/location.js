@@ -1,6 +1,6 @@
 var Datacenter = require('../models/datacenter.js'),
        stringThings = require('../lib/stringThings.js'),
-       logger = require("winston");
+       logger = require('../lib/logger.js');
 
 
 exports.datacenterNew = function(req,res){

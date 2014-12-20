@@ -1,5 +1,5 @@
 var cluster = require('cluster'),
-    logger = require("winston");
+    logger = require('./lib/logger.js');
 
 
 function startWorker() {

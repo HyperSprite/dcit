@@ -1,5 +1,5 @@
 
-var     logger = require('winston'),
+var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -167,6 +167,8 @@ exports.dcSystemPages = function(req,res,next){
             tempEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
         context = {
             titleNow: sy.systemName,
+            menu1: sy.systemName+" as Endpoint",
+            menuLink1: "/endpoint/"+sy.systemName,
             sysNameList: sysUni,
             equipSNList: eqUni,
             optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
@@ -407,6 +409,50 @@ exports.dcSystemCountbyEnv  = function(req,res,next){
             res.render('asset/reportselect', context);
             }});*/
 };
+
+exports.findEndpoints = function(req,res,next){
+    var fEndPoint = req.params.datacenter.toLowerCase();
+    if(!fEndPoint){
+    logger.warn("findEndpoints: No endpoint found");
+    return;
+    }else{
+    logger.info("findEndpoints >"+fEndPoint);
+
+        Systemdb.find({'systemPorts.sysPortEndPoint': fEndPoint},'systemName systemPorts.sysPortName systemPorts.sysPortCablePath systemPorts.sysPortEndPoint systemPorts.sysPortEndPointPre systemPorts.sysPortEndPointPort systemPorts.sysPortVlan systemPorts.sysPortOptions systemPorts.sysPortAddress systemPorts.sysPortType',function(err,sys){
+        if(err) return next(err);
+        //logger.info("sys > "+sys);
+        context = {
+                titleNow:fEndPoint,
+                menu1:fEndPoint,
+                menuLink1: "/system/"+fEndPoint,
+                sys: sys.map(function(sy){
+                    return {
+
+                        systemPorts: sy.systemPorts.map(function(sysPort){
+                        if(sysPort.sysPortEndPoint===fEndPoint){
+                        return{
+                        systemName: sy.systemName,
+                        sysPortName: sysPort.sysPortName,
+                        sysPortCablePath: sysPort.sysPortCablePath,
+                        sysPortEndPoint: sysPort.sysPortEndPoint,
+                        sysPortEndPointPre: sysPort.sysPortEndPointPre,
+                        sysPortEndPointPort: strTgs.pad(sysPort.sysPortEndPointPort),
+                        sysPortVlan: sysPort.sysPortVlan,
+                        sysPortOptions: sysPort.sysPortOptions,
+                        sysPortAddress: sysPort.sysPortAddress,
+                        sysPortType: sysPort.sysPortType,
+                        };}
+                    }),
+                    };
+                }),
+        
+        };
+        res.render('asset/endpointports-list', context);  
+    
+    });}
+};
+
+
  
 //    Systemdb.distinct({systemEnviron}).sort({'systemEnviron':'desc').exec(function(err,env){
 //    Systemdb.

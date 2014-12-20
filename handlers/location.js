@@ -21,23 +21,7 @@ var LIUser = {'account':'admin',
                 };
 
 
-/* moved to dcit.js
-var start  = "",
-    dcabbr = "",
-    dcInfo = "",
-    dcInfoSplit = "",
-    dcSubId = "",
-    dcId ="";
-    */
-/*
-exports.datacenterNew = function(req,res){
-    res.render('datacenter-new');
-};
 
-exports.datacenterNewPost = function(req,res,next){
-    next(new Error("Not yet implemented"));
-};
-*/
 // convenience function for joining fields
 function smartJoin(arr, separator){
 	if(!separator) separator = ' ';
@@ -98,18 +82,18 @@ Edit Contact
 //this is the DC edit block. Looks for "contact" in the URL and redirects to a form to edit the Datacenter.
 */
     } else if (req.params.datacenter.indexOf ("contact") !=-1){
-        logger.info('else if (req.params.datacenter.indexOf ("contact")');
-        logger.info("datacenter "+req.params.datacenter);
+        //logger.info('else if (req.params.datacenter.indexOf ("contact")');
+        //logger.info("datacenter "+req.params.datacenter);
         start = req.params.datacenter.indexOf ("~")+1;
-            logger.info("|start   >"+start);
+        //    logger.info("|start   >"+start);
         dcInfo = req.params.datacenter.substring (start);
-            logger.info("|dcInfo  >"+dcInfo);
+        //    logger.info("|dcInfo  >"+dcInfo);
         dcSplit = dcInfo.indexOf ("-");
-            logger.info("|dcSplit >"+dcSplit);
+        //    logger.info("|dcSplit >"+dcSplit);
         dcSubId = dcInfo.substring (dcSplit+1);
-            logger.info("|dcSubId >"+dcSubId);
+         //   logger.info("|dcSubId >"+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-            logger.info("|dcId    >"+dcId);
+        //    logger.info("|dcId    >"+dcId);
 
         Datacenter.findById(dcId,function(err,datacenter){
         var dc = datacenter;
