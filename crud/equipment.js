@@ -1,7 +1,8 @@
 // Equipment crud
 var logger = require('../lib/logger.js'), 
  Equipment = require('../models/equipment.js'),
-    strTgs = require('../lib/stringThings.js');
+    strTgs = require('../lib/stringThings.js'),
+     dates = require('../lib/dates.js');
          
 exports.equipmentCreate = function (data,req) {
 Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
@@ -34,6 +35,8 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipRaidLayout: strTgs.uTrim(data.equipRaidLayout),
         equipHDDCount: strTgs.uTrim(data.equipHDDCount),
         equipHDDType: strTgs.uTrim(data.equipHDDType),
+        equipNICCount:strTgs.uTrim(data.equipNICCount),
+        etuipNICType:strTgs.uTrim(data.etuipNICType),
         equipPSUCount: strTgs.uTrim(data.equipPSUCount),
         equipPSUDraw: strTgs.uTrim(data.equipPSUDraw),
         equipAddOns: strTgs.uTrim(data.equipAddOns),
@@ -56,16 +59,80 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
 	        if(err) {
-                logger.warn("equipmentCreate Failed write : "+data.equipSN);
+
+                logger.warn('equipmentCreate Failed write : '+data.equipSN);
                 return (err.stack);
             }else{
-                logger.warn("equipmentCreate Sucessful write :"+data.index+" : "+data.equipSN);
-                return ("done");
+                logger.warn('equipmentCreate Sucessful write :'+data.index+' : '+data.equipSN);
+                return ('done');
             }
     });
 
     }else{
-    logger.warn("equipmentCreate Failed - Duplicate :"+data.index+" equipSN "+strTgs.cTrim(data.equipSN)+" found");    
+        var thisDoc = eq;
+        if(!data.modifiedOn){
+            logger.warn('CSV missing modifiedOn date or ignore command for existing equipment.');
+        } else if (data.modifiedOn==='ignore' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
+
+                thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);
+                thisDoc.equipAssetTag = strTgs.uTrim(data.equipAssetTag);
+                thisDoc.equipTicketNumber = strTgs.uTrim(data.equipTicketNumber);
+                thisDoc.equipInventoryStatus = strTgs.uTrim(data.equipInventoryStatus);
+                thisDoc.equipStatus = strTgs.uTrim(data.equipStatus);
+                thisDoc.equipIsVirtual = strTgs.uTrim(data.equipIsVirtual);
+                thisDoc.equipType = strTgs.uTrim(data.equipType);
+                thisDoc.equipMake = strTgs.uTrim(data.equipMake);
+                thisDoc.equipModel = strTgs.uTrim(data.equipModel);
+                thisDoc.equipSubModel = strTgs.uTrim(data.equipSubModel);
+                thisDoc.equipRUHieght = strTgs.uTrim(data.equipRUHieght);
+                thisDoc.equipImgFront = strTgs.uTrim(data.equipImgFront);
+                thisDoc.equipImgRear = strTgs.uTrim(data.equipImgRear);
+                thisDoc.equipImgInternal = strTgs.uTrim(data.equipImgInternal);
+                thisDoc.equipFirmware = strTgs.uTrim(data.equipFirmware);
+                thisDoc.equipMobo = strTgs.uTrim(data.equipMobo);
+                thisDoc.equipCPUCount = strTgs.uTrim(data.equipCPUCount);
+                thisDoc.equipCPUCores = strTgs.uTrim(data.equipCPUCores);
+                thisDoc.equipCPUType = strTgs.uTrim(data.equipCPUType);
+                thisDoc.equipMemType = strTgs.uTrim(data.equipMemType);
+                thisDoc.equipMemTotal = strTgs.uTrim(data.equipMemTotal);
+                thisDoc.equipRaidType = strTgs.uTrim(data.equipRaidType);
+                thisDoc.equipRaidLayout = strTgs.uTrim(data.equipRaidLayout);
+                thisDoc.equipHDDCount = strTgs.uTrim(data.equipHDDCount);
+                thisDoc.equipHDDType = strTgs.uTrim(data.equipHDDType);
+                thisDoc.equipNICCount = strTgs.uTrim(data.equipNICCount);
+                thisDoc.equipNICType= strTgs.uTrim(data.equipNicType);
+                thisDoc.equipPSUCount = strTgs.uTrim(data.equipPSUCount);
+                thisDoc.equipPSUDraw = strTgs.uTrim(data.equipPSUDraw);
+                thisDoc.equipAddOns = strTgs.uTrim(data.equipAddOns);
+                thisDoc.equipRecieved = strTgs.uTrim(data.equipRecieved);
+                thisDoc.equipAcquisition = strTgs.uTrim(data.equipAcquisition);
+                thisDoc.equipInService = strTgs.uTrim(data.equipInService);
+                thisDoc.equipPONum = strTgs.uTrim(data.equipPONum);
+                thisDoc.equipInvoice = strTgs.uTrim(data.equipInvoice);
+                thisDoc.equipProjectNum = strTgs.uTrim(data.equipProjectNum);
+                thisDoc.equipLicense = strTgs.uTrim(data.equipLicense);
+                thisDoc.equipMaintAgree = strTgs.uTrim(data.equipMaintAgree);
+                thisDoc.equipPurchaseType = strTgs.uTrim(data.equipPurchaseType);
+                thisDoc.equipPurchaser = strTgs.uTrim(data.equipPurchaser);
+                thisDoc.equipPurchaseTerms = strTgs.uTrim(data.equipPurchaseTerms);
+                thisDoc.equipPurchaseEnd = strTgs.uTrim(data.equipPurchaseEnd);
+                thisDoc.equipNotes = strTgs.uTrim(data.equipNotes);
+                thisDoc.modifiedOn = dates.convert(data.modifiedOn);
+                thisDoc.modifiedBy ='Admin';
+
+        eq.save(function(err){
+            if(err){
+                logger.warn(err);
+                logger.warn('equipmentCreate Failed - No idea what when wrong :'+data.index+' equipSN '+strTgs.cTrim(data.equipSN)+' found');
+            }else{
+            logger.info('equipmentCreate Sucessful write :'+data.index+' : '+data.equipSN);
+            return ('done');
+            }
+        });
+
+        }else{
+            logger.warn('equipmentCreate Failed - Modified date is older than the existing date for :'+data.index+' equipSN '+strTgs.clTrim(data.equipSN));
+        }
     }
     });
 };
@@ -73,9 +140,9 @@ exports.equipmentPortCreate = function (data,req) {
 Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
 
     if (err) {
-        logger.warn("equipmentPortCreate"+data.equipSN+err);
+        logger.warn('equipmentPortCreate'+data.equipSN+err);
     }else if(!eq){
-        logger.warn("equipmentPortCreate Failed lookup :"+data.equipSN.toUpperCase()+" not found");
+        logger.warn('equipmentPortCreate Failed lookup :'+data.equipSN.toUpperCase()+' not found');
     } else {
         eq.equipPorts.push({
         equipPortType: strTgs.sTrim(data.equipPortType),
@@ -86,11 +153,12 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 
         eq.save(function(err){
         if(err) {
-            logger.warn("equipmentPortCreate Failed write :"+data.equipSN);
+            logger.warn(err);
+            logger.warn('equipmentPortCreate Failed write :'+data.equipSN);
             return (err.stack);
         }else{
-            logger.info("equipmentPortCreate Sucessful write :"+data.index+" : "+data.equipSN);
-            return ("done");
+            logger.info('equipmentPortCreate Sucessful write :'+data.index+' : '+data.equipSN);
+            return ('done');
         }
     });
     }

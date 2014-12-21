@@ -1,6 +1,7 @@
 var   logger = require('../lib/logger.js'),
     Systemdb = require('../models/system.js'),
-      strTgs = require('../lib/stringThings.js');
+      strTgs = require('../lib/stringThings.js'),
+       dates = require('../lib/dates.js');
     
 
 exports.systemdbCreate = function (data,req) {
@@ -24,10 +25,10 @@ Systemdb.create({
                     systemOSVersion: strTgs.uTrim(data.systemOSVersion),
                     systemApplications: strTgs.uTrim(data.systemApplications),
                     systemSupLic: strTgs.uTrim(data.systemSupLic),
-                    systemSupEndDate: data.systemSupEndDate,
-                    systemInstall: data.systemInstall,
-                    systemStart: data.systemStart,
-                    systemEnd: data.systemEnd,
+                    systemSupEndDate: dates.convert(data.systemSupEndDate),
+                    systemInstall: dates.convert(data.systemInstall),
+                    systemStart: dates.convert(data.systemStart),
+                    systemEnd: dates.convert(data.systemEnd),
                     systemNotes: strTgs.uTrim(data.systemNotes),
                     createdBy:'Admin',
                     createdOn: Date.now(),
@@ -35,25 +36,64 @@ Systemdb.create({
                     modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
         if(err) {
-            logger.info("systemdbCreate Failed write :"+data.index+" : "+data.systemName);
+            logger.info('systemdbCreate Failed write :'+data.index+' : '+data.systemName);
             return (err.stack);
         }else{
-            logger.info("systemdbCreate Sucessful write :"+data.index+" : "+data.systemName);
-            return ("done");
+            logger.info('systemdbCreate Sucessful write :'+data.index+' : '+data.systemName);
+            return ('done');
         }
     });
     }else{
-        logger.info("systemdbCreate Failed - Duplicate :"+data.index+" systemName "+strTgs.clTrim(data.systemName)+" found");
+        var thisDoc = sys;
+        if(!data.modifiedOn){
+            logger.warn('CSV missing modifiedOn date or ignore command for existing system.');
+        } else if (data.modifiedOn==='ignore' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
+               
+            thisDoc.systemEquipSN= strTgs.sTrim(data.systemEquipSN);
+            thisDoc.systemEnviron= strTgs.sTrim(data.systemEnviron);
+            thisDoc.systemRole= strTgs.uTrim(data.systemRole);
+            thisDoc.systemInventoryStatus= data.systemInventoryStatus;
+            thisDoc.systemTicket= strTgs.sTrim(data.systemTicket);
+            thisDoc.systemStatus= data.systemStatus;
+            thisDoc.systemOwner= strTgs.uTrim(data.systemOwner);
+            thisDoc.systemImpact= data.systemImpact;
+            thisDoc.systemIsVirtual= data.systemIsVirtual;
+            thisDoc.systemParentId= strTgs.sTrim(data.systemParentId);
+            thisDoc.systemOSType= strTgs.uTrim(data.systemOSType);
+            thisDoc.systemOSVersion= strTgs.uTrim(data.systemOSVersion);
+            thisDoc.systemApplications= strTgs.uTrim(data.systemApplications);
+            thisDoc.systemSupLic= strTgs.uTrim(data.systemSupLic);
+            thisDoc.systemSupEndDate= dates.convert(data.systemSupEndDate);
+            thisDoc.systemInstall= dates.convert(data.systemInstall);
+            thisDoc.systemStart= dates.convert(data.systemStart);
+            thisDoc.systemEnd= dates.convert(data.systemEnd);
+            thisDoc.systemNotes= strTgs.uTrim(data.systemNotes);
+            thisDoc.modifiedOn = dates.convert(data.modifiedOn);
+            thisDoc.modifiedBy ='Admin';
+        
+        sys.save(function(err){
+            if(err){
+                logger.info('systemdbCreate Failed - No idea what when wrong :'+data.index+' systemName '+strTgs.clTrim(data.systemName)+' found');
+            }else{
+            logger.info('systemdbCreate Sucessful write :'+data.index+' : '+data.systemName);
+            return ('done');
+            }
+        });
+
+        }else{
+            logger.warn('systemdbCreate Failed - Modified date is older than the existing date for :'+data.index+' systemName '+strTgs.clTrim(data.systemName));
+        }
     }
     });
 };
-
 exports.systemdbPortsCreate = function (data,req) {
 // Lookup system
 Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
         if(!sys){
-        logger.info("systemdbPortsCreate Failed lookup :"+data.index+" systemName not found");
-        }else{
+        logger.warn('systemdbPortsCreate Failed lookup :'+data.index+' systemName not found');
+        }else if(!data.modifiedOn){
+            logger.warn('CSV missing modifiedOn date or ignore command for existing system port.');
+        } else if (data.modifiedOn==='ignore' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
         
             sys.systemPorts.push({
                 sysPortType: strTgs.sTrim(data.sysPortType),
@@ -69,12 +109,12 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
             });
             sys.save(function(err){
 	        if(err) {
-                logger.info(err+data.index);
-                logger.info("systemdbPortsCreate Failed write :"+data.index+" : "+data.systemName);
+                logger.warn(err+data.index);
+                logger.warn('systemdbPortsCreate Failed write :'+data.index+' : '+data.systemName);
                 return (err.stack);
             }else{
-                logger.info("systemdbPortsCreate Sucessful write :"+data.index+" : "+data.systemName);
-                return ("done");
+                logger.info('systemdbPortsCreate Sucessful write :'+data.index+' : '+data.systemName);
+                return ('done');
             }
     });
     }
