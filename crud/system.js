@@ -47,7 +47,7 @@ Systemdb.create({
         var thisDoc = sys;
         if(!data.modifiedOn){
             logger.warn('CSV missing modifiedOn date or ignore command for existing system.');
-        } else if (data.modifiedOn==='ignore' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
+        } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
                
             thisDoc.systemEquipSN= strTgs.sTrim(data.systemEquipSN);
             thisDoc.systemEnviron= strTgs.sTrim(data.systemEnviron);
@@ -89,11 +89,12 @@ Systemdb.create({
 exports.systemdbPortsCreate = function (data,req) {
 // Lookup system
 Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
+        var thisDoc = sys;
         if(!sys){
         logger.warn('systemdbPortsCreate Failed lookup :'+data.index+' systemName not found');
         }else if(!data.modifiedOn){
             logger.warn('CSV missing modifiedOn date or ignore command for existing system port.');
-        } else if (data.modifiedOn==='ignore' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
+        } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
         
             sys.systemPorts.push({
                 sysPortType: strTgs.sTrim(data.sysPortType),

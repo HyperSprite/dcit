@@ -40,9 +40,9 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipPSUCount: strTgs.uTrim(data.equipPSUCount),
         equipPSUDraw: strTgs.uTrim(data.equipPSUDraw),
         equipAddOns: strTgs.uTrim(data.equipAddOns),
-        equipRecieved: strTgs.uTrim(data.equipRecieved),
-        equipAcquisition: strTgs.uTrim(data.equipAcquisition),
-        equipInService: strTgs.uTrim(data.equipInService),
+        equipRecieved: dates.convert(data.equipRecieved),
+        equipAcquisition: dates.convert(data.equipAcquisition),
+        equipInService: dates.convert(data.equipInService),
         equipPONum: strTgs.uTrim(data.equipPONum),
         equipInvoice: strTgs.uTrim(data.equipInvoice),
         equipProjectNum: strTgs.uTrim(data.equipProjectNum),
@@ -51,7 +51,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipPurchaseType: strTgs.uTrim(data.equipPurchaseType),
         equipPurchaser: strTgs.uTrim(data.equipPurchaser),
         equipPurchaseTerms: strTgs.uTrim(data.equipPurchaseTerms),
-        equipPurchaseEnd: strTgs.uTrim(data.equipPurchaseEnd),
+        equipPurchaseEnd: dates.convert(data.equipPurchaseEnd),
         equipNotes: strTgs.uTrim(data.equipNotes),
         createdBy:'Admin',
         createdOn: strTgs.compareDates(data.modifiedOn),
@@ -63,7 +63,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 logger.warn('equipmentCreate Failed write : '+data.equipSN);
                 return (err.stack);
             }else{
-                logger.warn('equipmentCreate Sucessful write :'+data.index+' : '+data.equipSN);
+                logger.info('equipmentCreate Sucessful write :'+data.index+' : '+data.equipSN);
                 return ('done');
             }
     });
@@ -72,7 +72,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         var thisDoc = eq;
         if(!data.modifiedOn){
             logger.warn('CSV missing modifiedOn date or ignore command for existing equipment.');
-        } else if (data.modifiedOn==='ignore' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
+        } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
 
                 thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);
                 thisDoc.equipAssetTag = strTgs.uTrim(data.equipAssetTag);
@@ -104,9 +104,9 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 thisDoc.equipPSUCount = strTgs.uTrim(data.equipPSUCount);
                 thisDoc.equipPSUDraw = strTgs.uTrim(data.equipPSUDraw);
                 thisDoc.equipAddOns = strTgs.uTrim(data.equipAddOns);
-                thisDoc.equipRecieved = strTgs.uTrim(data.equipRecieved);
-                thisDoc.equipAcquisition = strTgs.uTrim(data.equipAcquisition);
-                thisDoc.equipInService = strTgs.uTrim(data.equipInService);
+                thisDoc.equipRecieved = dates.convert(data.equipRecieved);
+                thisDoc.equipAcquisition = dates.convert(data.equipAcquisition);
+                thisDoc.equipInService = dates.convert(data.equipInService);
                 thisDoc.equipPONum = strTgs.uTrim(data.equipPONum);
                 thisDoc.equipInvoice = strTgs.uTrim(data.equipInvoice);
                 thisDoc.equipProjectNum = strTgs.uTrim(data.equipProjectNum);
@@ -115,7 +115,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 thisDoc.equipPurchaseType = strTgs.uTrim(data.equipPurchaseType);
                 thisDoc.equipPurchaser = strTgs.uTrim(data.equipPurchaser);
                 thisDoc.equipPurchaseTerms = strTgs.uTrim(data.equipPurchaseTerms);
-                thisDoc.equipPurchaseEnd = strTgs.uTrim(data.equipPurchaseEnd);
+                thisDoc.equipPurchaseEnd = dates.convert(data.equipPurchaseEnd);
                 thisDoc.equipNotes = strTgs.uTrim(data.equipNotes);
                 thisDoc.modifiedOn = dates.convert(data.modifiedOn);
                 thisDoc.modifiedBy ='Admin';
