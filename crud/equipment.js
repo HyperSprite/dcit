@@ -70,53 +70,93 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
 
     }else{
         var thisDoc = eq;
-        if(!data.modifiedOn){
-            logger.warn('CSV missing modifiedOn date or ignore command for existing equipment.');
+        if(data.overwite === 'no'){
+            logger.warn('EqCreate CSV date overwite=no: '+data.index+' '+data.equipSN);
+        }else if(!data.modifiedOn && !data.overwrite){
+            logger.warn('EqCreate CSV no modifiedOn or overwite: '+data.index+' '+data.equipSN);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
-
-                thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);
-                thisDoc.equipAssetTag = strTgs.uTrim(data.equipAssetTag);
-                thisDoc.equipTicketNumber = strTgs.uTrim(data.equipTicketNumber);
-                thisDoc.equipInventoryStatus = strTgs.uTrim(data.equipInventoryStatus);
-                thisDoc.equipStatus = strTgs.uTrim(data.equipStatus);
-                thisDoc.equipIsVirtual = strTgs.uTrim(data.equipIsVirtual);
-                thisDoc.equipType = strTgs.uTrim(data.equipType);
-                thisDoc.equipMake = strTgs.uTrim(data.equipMake);
-                thisDoc.equipModel = strTgs.uTrim(data.equipModel);
-                thisDoc.equipSubModel = strTgs.uTrim(data.equipSubModel);
-                thisDoc.equipRUHieght = strTgs.uTrim(data.equipRUHieght);
-                thisDoc.equipImgFront = strTgs.uTrim(data.equipImgFront);
-                thisDoc.equipImgRear = strTgs.uTrim(data.equipImgRear);
-                thisDoc.equipImgInternal = strTgs.uTrim(data.equipImgInternal);
-                thisDoc.equipFirmware = strTgs.uTrim(data.equipFirmware);
-                thisDoc.equipMobo = strTgs.uTrim(data.equipMobo);
-                thisDoc.equipCPUCount = strTgs.uTrim(data.equipCPUCount);
-                thisDoc.equipCPUCores = strTgs.uTrim(data.equipCPUCores);
-                thisDoc.equipCPUType = strTgs.uTrim(data.equipCPUType);
-                thisDoc.equipMemType = strTgs.uTrim(data.equipMemType);
-                thisDoc.equipMemTotal = strTgs.uTrim(data.equipMemTotal);
-                thisDoc.equipRaidType = strTgs.uTrim(data.equipRaidType);
-                thisDoc.equipRaidLayout = strTgs.uTrim(data.equipRaidLayout);
-                thisDoc.equipHDDCount = strTgs.uTrim(data.equipHDDCount);
-                thisDoc.equipHDDType = strTgs.uTrim(data.equipHDDType);
-                thisDoc.equipNICCount = strTgs.uTrim(data.equipNICCount);
-                thisDoc.equipNICType= strTgs.uTrim(data.equipNicType);
-                thisDoc.equipPSUCount = strTgs.uTrim(data.equipPSUCount);
-                thisDoc.equipPSUDraw = strTgs.uTrim(data.equipPSUDraw);
-                thisDoc.equipAddOns = strTgs.uTrim(data.equipAddOns);
-                thisDoc.equipRecieved = dates.convert(data.equipRecieved);
-                thisDoc.equipAcquisition = dates.convert(data.equipAcquisition);
-                thisDoc.equipInService = dates.convert(data.equipInService);
-                thisDoc.equipPONum = strTgs.uTrim(data.equipPONum);
-                thisDoc.equipInvoice = strTgs.uTrim(data.equipInvoice);
-                thisDoc.equipProjectNum = strTgs.uTrim(data.equipProjectNum);
-                thisDoc.equipLicense = strTgs.uTrim(data.equipLicense);
-                thisDoc.equipMaintAgree = strTgs.uTrim(data.equipMaintAgree);
-                thisDoc.equipPurchaseType = strTgs.uTrim(data.equipPurchaseType);
-                thisDoc.equipPurchaser = strTgs.uTrim(data.equipPurchaser);
-                thisDoc.equipPurchaseTerms = strTgs.uTrim(data.equipPurchaseTerms);
-                thisDoc.equipPurchaseEnd = dates.convert(data.equipPurchaseEnd);
-                thisDoc.equipNotes = strTgs.uTrim(data.equipNotes);
+                if(data.equipLocationRack && data.equipLocationRu){
+                thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);}
+                if(data.equipAssetTag){
+                thisDoc.equipAssetTag = strTgs.uTrim(data.equipAssetTag);}
+                if(data.equipTicketNumber){
+                thisDoc.equipTicketNumber = strTgs.uTrim(data.equipTicketNumber);}
+                if(data.equipInventoryStatus){
+                thisDoc.equipInventoryStatus = strTgs.uTrim(data.equipInventoryStatus);}
+                if(data.equipStatus){
+                thisDoc.equipStatus = strTgs.uTrim(data.equipStatus);}
+                if(data.equipIsVirtual){
+                thisDoc.equipIsVirtual = strTgs.uTrim(data.equipIsVirtual);}
+                if(data.equipType){
+                thisDoc.equipType = strTgs.uTrim(data.equipType);}
+                if(data.equipMake){
+                thisDoc.equipMake = strTgs.uTrim(data.equipMake);}
+                if(data.equipModel){
+                thisDoc.equipModel = strTgs.uTrim(data.equipModel);}
+                if(data.equipSubModel){
+                thisDoc.equipSubModel = strTgs.uTrim(data.equipSubModel);}
+                if(data.equipRUHieght){
+                thisDoc.equipRUHieght = strTgs.uTrim(data.equipRUHieght);}
+                if(data.equipImgFront){
+                thisDoc.equipImgFront = strTgs.uTrim(data.equipImgFront);}
+                if(data.equipImgRear){
+                thisDoc.equipImgRear = strTgs.uTrim(data.equipImgRear);}
+                if(data.equipImgInternal){
+                thisDoc.equipImgInternal = strTgs.uTrim(data.equipImgInternal);}
+                if(data.equipFirmware){
+                thisDoc.equipFirmware = strTgs.uTrim(data.equipFirmware);}
+                if(data.equipMobo){
+                thisDoc.equipMobo = strTgs.uTrim(data.equipMobo);}
+                if(data.equipCPUCount){
+                thisDoc.equipCPUCount = strTgs.uTrim(data.equipCPUCount);}
+                if(data.equipCPUCores){
+                thisDoc.equipCPUCores = strTgs.uTrim(data.equipCPUCores);}
+                if(data.equipCPUType){
+                thisDoc.equipCPUType = strTgs.uTrim(data.equipCPUType);}
+                if(data.equipMemType){
+                thisDoc.equipMemType = strTgs.uTrim(data.equipMemType);}
+                if(data.equipMemTotal){
+                thisDoc.equipMemTotal = strTgs.uTrim(data.equipMemTotal);}
+                if(data.equipRaidType){
+                thisDoc.equipRaidType = strTgs.uTrim(data.equipRaidType);}
+                if(data.equipRaidLayout){
+                thisDoc.equipRaidLayout = strTgs.uTrim(data.equipRaidLayout);}
+                if(data.equipHDDCount){
+                thisDoc.equipHDDCount = strTgs.uTrim(data.equipHDDCount);}
+                if(data.equipHDDType){
+                thisDoc.equipHDDType = strTgs.uTrim(data.equipHDDType);}
+                if(data.equipPSUCount){
+                thisDoc.equipPSUCount = strTgs.uTrim(data.equipPSUCount);}
+                if(data.equipPSUDraw){
+                thisDoc.equipPSUDraw = strTgs.uTrim(data.equipPSUDraw);}
+                if(data.equipAddOns){
+                thisDoc.equipAddOns = strTgs.uTrim(data.equipAddOns);}
+                if(data.equipRecieved){
+                thisDoc.equipRecieved = dates.convert(data.equipRecieved);}
+                if(data.equipAcquisition){
+                thisDoc.equipAcquisition = dates.convert(data.equipAcquisition);}
+                if(data.equipInService){
+                thisDoc.equipInService = dates.convert(data.equipInService);}
+                if(data.equipPONum){
+                thisDoc.equipPONum = strTgs.uTrim(data.equipPONum);}
+                if(data.equipInvoice){
+                thisDoc.equipInvoice = strTgs.uTrim(data.equipInvoice);}
+                if(data.equipProjectNum){
+                thisDoc.equipProjectNum = strTgs.uTrim(data.equipProjectNum);}
+                if(data.equipLicense){
+                thisDoc.equipLicense = strTgs.uTrim(data.equipLicense);}
+                if(data.equipMaintAgree){
+                thisDoc.equipMaintAgree = strTgs.uTrim(data.equipMaintAgree);}
+                if(data.equipPurchaseType){
+                thisDoc.equipPurchaseType = strTgs.uTrim(data.equipPurchaseType);}
+                if(data.equipPurchaser){
+                thisDoc.equipPurchaser = strTgs.uTrim(data.equipPurchaser);}
+                if(data.equipPurchaseTerms){
+                thisDoc.equipPurchaseTerms = strTgs.uTrim(data.equipPurchaseTerms);}
+                if(data.equipPurchaseEnd){
+                thisDoc.equipPurchaseEnd = dates.convert(data.equipPurchaseEnd);}
+                if(data.equipNotes){
+                thisDoc.equipNotes = strTgs.uTrim(data.equipNotes);}
                 thisDoc.modifiedOn = dates.convert(data.modifiedOn);
                 thisDoc.modifiedBy ='Admin';
 
@@ -131,41 +171,71 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         });
 
         }else{
-            logger.warn('equipmentCreate Failed - Modified date is older than the existing date for :'+data.index+' equipSN '+strTgs.clTrim(data.equipSN));
+            logger.warn('equipmentCreate Failed - Modified date is older than the existing date for :'+data.index+' equipSN '+strTgs.cTrim(data.equipSN));
         }
     }
     });
 };
 exports.equipmentPortCreate = function (data,req) {
 Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
-
     if (err) {
-        logger.warn('equipmentPortCreate'+data.equipSN+err);
+        logger.warn('PortCreate'+data.equipSN+err);
     }else if(!eq){
-        logger.warn('equipmentPortCreate Failed lookup :'+data.equipSN.toUpperCase()+' not found');
+        logger.warn('PortCreate Failed lookup :'+data.equipSN.toUpperCase()+' not found');
     } else {
-        eq.equipPorts.push({
-        equipPortType: strTgs.sTrim(data.equipPortType),
-        equipPortsAddr: strTgs.mTrim(data.equipPortsAddr),
-        equipPortName: strTgs.sTrim(data.equipPortName),
-        equipPortsOpt: strTgs.sTrim(data.equipPortsOpt),
+        var portArray = [];
+            for(var i = eq.equipPorts.length - 1; i >= 0; i--) {
+                portArray[i] = eq.equipPorts[i].equipPortName;
+            }
+        var portPosition = portArray.indexOf(data.equipPortName);
+            //logger.info('portPosition >'+portPosition);
+        if(portPosition === -1){
+            eq.equipPorts.push({
+                equipPortType: strTgs.sTrim(data.equipPortType),
+                equipPortsAddr: strTgs.mTrim(data.equipPortsAddr),
+                equipPortName: strTgs.sTrim(data.equipPortName),
+                equipPortsOpt: strTgs.sTrim(data.equipPortsOpt),
+                modifiedBy: req.body.modifiedBy,
+                modifiedOn: strTgs.compareDates(data.modifiedOn),   
         });
-                
         eq.save(function(err){
         if(err) {
             logger.warn(err);
-            logger.warn('equipmentPortCreate Failed write :'+data.equipSN);
+            logger.warn('PortCreate Failed write :'+data.equipSN);
             return (err.stack);
         }else{
-            logger.info('equipmentPortCreate Sucessful write :'+data.index+' : '+data.equipSN);
+            logger.info('PortCreate Sucessful write :'+data.index+' : '+data.equipSN);
             return ('done');
         }
     });
+    } else {
+        var thisDoc = eq.equipPorts[portPosition];
+        if(data.overwite === 'no'){
+            logger.warn('EqPortCreate CSV date overwite=no: '+data.index+' '+data.equipSN);
+        }else if(!data.modifiedOn && !data.overwrite){
+            logger.warn('EqPortCreate CSV no modifiedOn or overwite: '+data.index+' '+data.equipSN);
+        } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
+                if(data.equipPortType){
+                thisDoc.equipPortType= strTgs.sTrim(data.equipPortType);}
+                if(data.equipPortsAddr){
+                thisDoc.equipPortsAddr= strTgs.mTrim(data.equipPortsAddr);}
+                if(data.equipPortsOpt){
+                thisDoc.equipPortsOpt= strTgs.sTrim(data.equipPortsOpt);}
+                thisDoc.modifiedBy= req.body.modifiedBy;
+                thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn);
+            eq.save(function(err){
+            if(err){
+                logger.info('EqPortCreate Failed - '+err+' : '+data.index+' equipSN '+strTgs.cTrim(data.equipSN)+' found');
+            }else{
+            logger.info('EqPortCreate Sucessful write :'+data.index+' : '+data.equipSN);
+            return ('done');
+            }
+        });
+    } else {
+        logger.warn('EqPortCreate CSV modifiedOn date older: '+data.index+' '+data.equipSN);
     }
-    });
+
+    }}
+});
+
 };
-
-
-
-
-

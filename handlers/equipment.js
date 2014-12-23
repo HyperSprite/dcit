@@ -446,19 +446,20 @@ exports.dcEquipPages = function(req,res,next){
 */
 exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
-    res.abbreviation = strTgs.cTrim(req.body.equipSN);
-    if(req.body.isEdit){
-    res.abbreviation = strTgs.cTrim(req.body.isEdit);
+    var data = req.body;
+    res.abbreviation = strTgs.cTrim(data.equipSN);
+    if(data.isEdit){
+    res.abbreviation = strTgs.cTrim(data.isEdit);
     }
     logger.info('dcRackPost abbreviation>'+res.abbreviation);
     // isEdit and wasCopy = equipment name using #if from handlebars
-    if (!req.body.isEdit){
-    if (req.body.wasCopy){
-    res.abbreviation = strTgs.cTrim(req.body.equipSN);
+    if (!data.isEdit){
+    if (data.wasCopy){
+    res.abbreviation = strTgs.cTrim(data.equipSN);
     }
     logger.info('new Equipment in DC');
     varPortsNew = function(body){
-    if(typeof req.body.equipPortsAddr[i] !== 'undefined'){
+    if(typeof data.equipPortsAddr[i] !== 'undefined'){
     var Ports = [];
     for(i=0;i<body.equipPortType.length;i++){
         logger.info('equipPortType.length '+body.equipPortType.length);
@@ -473,52 +474,52 @@ exports.dcEquipmentPost = function(req,res){
     }};
     
     Equipment.create({
-                                equipPorts: varPortsNew(req.body),
-                                equipLocation: strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu),
-                                equipSN: strTgs.cTrim(req.body.equipSN),
-                                equipAssetTag: strTgs.sTrim(req.body.equipAssetTag),
-                                equipTicketNumber: strTgs.sTrim(req.body.equipTicketNumber),
-                                equipInventoryStatus: req.body.equipInventoryStatus,
-                                equipStatus: strTgs.uTrim(req.body.equipStatus),
-                                equipIsVirtual: req.body.equipIsVirtual,
-                                equipType: strTgs.uTrim(req.body.equipType),
-                                equipMake: strTgs.uTrim(req.body.equipMake),
-                                equipModel: strTgs.uTrim(req.body.equipModel),
-                                equipSubModel: strTgs.uTrim(req.body.equipSubModel),
-                                equipRUHieght: strTgs.uTrim(req.body.equipRUHieght),
-                                equipImgFront: strTgs.uTrim(req.body.equipImgFront),
-                                equipImgRear: strTgs.uTrim(req.body.equipImgRear),
-                                equipImgInternal: strTgs.uTrim(req.body.equipImgInternal),
-                                equipFirmware: strTgs.uTrim(req.body.equipFirmware),
-                                equipMobo: strTgs.uTrim(req.body.equipMobo),
-                                equipCPUCount: strTgs.uTrim(req.body.equipCPUCount),
-                                equipCPUCores: strTgs.uTrim(req.body.equipCPUCores),
-                                equipCPUType: strTgs.uTrim(req.body.equipCPUType),
-                                equipMemType: strTgs.uTrim(req.body.equipMemType),
-                                equipMemTotal: strTgs.uTrim(req.body.equipMemTotal),
-                                equipRaidType: strTgs.uTrim(req.body.equipRaidType),
-                                equipRaidLayout: strTgs.uTrim(req.body.equipRaidLayout),
-                                equipHDDCount: strTgs.uTrim(req.body.equipHDDCount),
-                                equipHDDType: strTgs.uTrim(req.body.equipHDDType),
-                                equipPSUCount: strTgs.uTrim(req.body.equipPSUCount),
-                                equipPSUDraw: strTgs.uTrim(req.body.equipPSUDraw),
-                                equipAddOns: strTgs.uTrim(req.body.equipAddOns),
-                                equipRecieved: strTgs.uTrim(req.body.equipRecieved),
-                                equipAcquisition: strTgs.uTrim(req.body.equipAcquisition),
-                                equipInService: strTgs.uTrim(req.body.equipInService),
-                                equipPONum: strTgs.uTrim(req.body.equipPONum),
-                                equipInvoice: strTgs.uTrim(req.body.equipInvoice),
-                                equipProjectNum: strTgs.uTrim(req.body.equipProjectNum),
-                                equipLicense: strTgs.uTrim(req.body.equipLicense),
-                                equipMaintAgree: strTgs.uTrim(req.body.equipMaintAgree),
-                                equipPurchaseType: strTgs.uTrim(req.body.equipPurchaseType),
-                                equipPurchaser: strTgs.uTrim(req.body.equipPurchaser),
-                                equipPurchaseTerms: strTgs.uTrim(req.body.equipPurchaseTerms),
-                                equipPurchaseEnd: strTgs.uTrim(req.body.equipPurchaseEnd),
-                                equipNotes: strTgs.uTrim(req.body.equipNotes),
+                                equipPorts: varPortsNew(data),
+                                equipLocation: strTgs.locComb(data.equipLocationRack,data.equipLocationRu),
+                                equipSN: strTgs.cTrim(data.equipSN),
+                                equipAssetTag: strTgs.sTrim(data.equipAssetTag),
+                                equipTicketNumber: strTgs.sTrim(data.equipTicketNumber),
+                                equipInventoryStatus: data.equipInventoryStatus,
+                                equipStatus: strTgs.uTrim(data.equipStatus),
+                                equipIsVirtual: data.equipIsVirtual,
+                                equipType: strTgs.uTrim(data.equipType),
+                                equipMake: strTgs.uTrim(data.equipMake),
+                                equipModel: strTgs.uTrim(data.equipModel),
+                                equipSubModel: strTgs.uTrim(data.equipSubModel),
+                                equipRUHieght: strTgs.uTrim(data.equipRUHieght),
+                                equipImgFront: strTgs.uTrim(data.equipImgFront),
+                                equipImgRear: strTgs.uTrim(data.equipImgRear),
+                                equipImgInternal: strTgs.uTrim(data.equipImgInternal),
+                                equipFirmware: strTgs.uTrim(data.equipFirmware),
+                                equipMobo: strTgs.uTrim(data.equipMobo),
+                                equipCPUCount: strTgs.uTrim(data.equipCPUCount),
+                                equipCPUCores: strTgs.uTrim(data.equipCPUCores),
+                                equipCPUType: strTgs.uTrim(data.equipCPUType),
+                                equipMemType: strTgs.uTrim(data.equipMemType),
+                                equipMemTotal: strTgs.uTrim(data.equipMemTotal),
+                                equipRaidType: strTgs.uTrim(data.equipRaidType),
+                                equipRaidLayout: strTgs.uTrim(data.equipRaidLayout),
+                                equipHDDCount: strTgs.uTrim(data.equipHDDCount),
+                                equipHDDType: strTgs.uTrim(data.equipHDDType),
+                                equipPSUCount: strTgs.uTrim(data.equipPSUCount),
+                                equipPSUDraw: strTgs.uTrim(data.equipPSUDraw),
+                                equipAddOns: strTgs.uTrim(data.equipAddOns),
+                                equipRecieved: strTgs.uTrim(data.equipRecieved),
+                                equipAcquisition: strTgs.uTrim(data.equipAcquisition),
+                                equipInService: strTgs.uTrim(data.equipInService),
+                                equipPONum: strTgs.uTrim(data.equipPONum),
+                                equipInvoice: strTgs.uTrim(data.equipInvoice),
+                                equipProjectNum: strTgs.uTrim(data.equipProjectNum),
+                                equipLicense: strTgs.uTrim(data.equipLicense),
+                                equipMaintAgree: strTgs.uTrim(data.equipMaintAgree),
+                                equipPurchaseType: strTgs.uTrim(data.equipPurchaseType),
+                                equipPurchaser: strTgs.uTrim(data.equipPurchaser),
+                                equipPurchaseTerms: strTgs.uTrim(data.equipPurchaseTerms),
+                                equipPurchaseEnd: strTgs.uTrim(data.equipPurchaseEnd),
+                                equipNotes: strTgs.uTrim(data.equipNotes),
                                 createdBy:'Admin',
                                 createdOn: Date.now(),
-                                modifiedBy: req.body.modifiedBy,
+                                modifiedBy: data.modifiedBy,
                                 modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
@@ -538,7 +539,7 @@ exports.dcEquipmentPost = function(req,res){
 	            };}
                 return res.redirect(303, '/equipment');
 	        }
-            if (!req.body.wasCopy){
+            if (!data.wasCopy){
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
@@ -560,6 +561,7 @@ exports.dcEquipmentPost = function(req,res){
 	} else {
     Equipment.findOne({equipSN: req.body.equipSN.toUpperCase()},function(err,eq){
     res.abbreviation = strTgs.cTrim(req.body.equipSN);
+    var data = req.body;
     var thisDoc = eq;
        //logger.info('existing id>'+thisDoc);
         if (err) {
@@ -567,71 +569,72 @@ exports.dcEquipmentPost = function(req,res){
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
     
-    for(i=0;i<req.body.equipPortType.length;i++){
-        logger.info('equip \n PortType >'+req.body.equipPortType[i] +' - addr >'+ req.body.equipPortsAddr[i] +' - name >'+ req.body.equipPortName[i] +' - Opt >'+ req.body.equipPortsOpt[i]);
+    for(i=0;i<data.equipPortType.length;i++){
         
-        if(req.body.equipPortType[i] === ''){
+        logger.info('equip \n PortType >'+data.equipPortType[i] +' - addr >'+ data.equipPortsAddr[i] +' - name >'+ data.equipPortName[i] +' - Opt >'+ data.equipPortsOpt[i]);
+        
+        if(data.equipPortType[i] === ''){
         logger.info('equipPortType nonw');
-            } else if(req.body.equipPortId[i] === 'new'){
-            logger.info('new port >'+req.body.equipPortId[i]);
+            } else if(data.equipPortId[i] === 'new'){
+            logger.info('new port >'+data.equipPortId[i]);
             eq.equipPorts.push({
-            equipPortType: strTgs.sTrim(req.body.equipPortType[i]),
-            equipPortsAddr: strTgs.mTrim(req.body.equipPortsAddr[i]),
-            equipPortName: strTgs.sTrim(req.body.equipPortName[i]),
-            equipPortsOpt: strTgs.sTrim(req.body.equipPortsOpt[i]),
+            equipPortType: strTgs.sTrim(data.equipPortType[i]),
+            equipPortsAddr: strTgs.mTrim(data.equipPortsAddr[i]),
+            equipPortName: strTgs.sTrim(data.equipPortName[i]),
+            equipPortsOpt: strTgs.sTrim(data.equipPortsOpt[i]),
             });
             }else{
             logger.info('existing port');
-        var thisSubDoc = eq.equipPorts.id(req.body.equipPortId[i]);
-            thisSubDoc.equipPortType = strTgs.uCleanUp(thisSubDoc.equipPortType,req.body.equipPortType[i]);
-            thisSubDoc.equipPortsAddr = strTgs.mCleanUp(thisSubDoc.equipPortsAddr,req.body.equipPortsAddr[i]);
-            thisSubDoc.equipPortName = strTgs.uCleanUp(thisSubDoc.equipPortName,req.body.equipPortName[i]);
-            thisSubDoc.equipPortsOpt = strTgs.uCleanUp(thisSubDoc.equipPortsOpt,req.body.equipPortsOpt[i]);
+        var thisSubDoc = eq.equipPorts.id(data.equipPortId[i]);
+            thisSubDoc.equipPortType = strTgs.uCleanUp(thisSubDoc.equipPortType,data.equipPortType[i]);
+            thisSubDoc.equipPortsAddr = strTgs.mCleanUp(thisSubDoc.equipPortsAddr,data.equipPortsAddr[i]);
+            thisSubDoc.equipPortName = strTgs.uCleanUp(thisSubDoc.equipPortName,data.equipPortName[i]);
+            thisSubDoc.equipPortsOpt = strTgs.uCleanUp(thisSubDoc.equipPortsOpt,data.equipPortsOpt[i]);
         }
     }
     
 
-                        thisDoc.equipLocation = strTgs.locComb(req.body.equipLocationRack,req.body.equipLocationRu);
-                        thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,req.body.equipAssetTag);
-                        thisDoc.equipTicketNumber = strTgs.uCleanUp(thisDoc.equipTicketNumber,req.body.equipTicketNumber);
-                        thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus,req.body.equipInventoryStatus);
-                        thisDoc.equipStatus = strTgs.uCleanUp(thisDoc.equipStatus,req.body.equipStatus);
-                        thisDoc.equipIsVirtual = strTgs.uCleanUp(thisDoc.equipIsVirtual,req.body.equipIsVirtual);
-                        thisDoc.equipType = strTgs.uCleanUp(thisDoc.equipType,req.body.equipType);
-                        thisDoc.equipMake = strTgs.uCleanUp(thisDoc.equipMake,req.body.equipMake);
-                        thisDoc.equipModel = strTgs.uCleanUp(thisDoc.equipModel,req.body.equipModel);
-                        thisDoc.equipSubModel = strTgs.uCleanUp(thisDoc.equipSubModel,req.body.equipSubModel);
-                        thisDoc.equipRUHieght = strTgs.uCleanUp(thisDoc.equipRUHieght,req.body.equipRUHieght);
-                        thisDoc.equipImgFront = strTgs.uCleanUp(thisDoc.equipImgFront,req.body.equipImgFront);
-                        thisDoc.equipImgRear = strTgs.uCleanUp(thisDoc.equipImgRear,req.body.equipImgRear);
-                        thisDoc.equipImgInternal = strTgs.uCleanUp(thisDoc.equipImgInternal,req.body.equipImgInternal);
-                        thisDoc.equipFirmware = strTgs.uCleanUp(thisDoc.equipFirmware,req.body.equipFirmware);
-                        thisDoc.equipMobo = strTgs.uCleanUp(thisDoc.equipMobo,req.body.equipMobo);
-                        thisDoc.equipCPUCount = strTgs.uCleanUp(thisDoc.equipCPUCount,req.body.equipCPUCount);
-                        thisDoc.equipCPUCores = strTgs.uCleanUp(thisDoc.equipCPUCores,req.body.equipCPUCores);
-                        thisDoc.equipCPUType = strTgs.uCleanUp(thisDoc.equipCPUType,req.body.equipCPUType);
-                        thisDoc.equipMemType = strTgs.uCleanUp(thisDoc.equipMemType,req.body.equipMemType);
-                        thisDoc.equipMemTotal = strTgs.uCleanUp(thisDoc.equipMemTotal,req.body.equipMemTotal);
-                        thisDoc.equipRaidType = strTgs.uCleanUp(thisDoc.equipRaidType,req.body.equipRaidType);
-                        thisDoc.equipRaidLayout = strTgs.uCleanUp(thisDoc.equipRaidLayout,req.body.equipRaidLayout);
-                        thisDoc.equipHDDCount = strTgs.uCleanUp(thisDoc.equipHDDCount,req.body.equipHDDCount);
-                        thisDoc.equipHDDType = strTgs.uCleanUp(thisDoc.equipHDDType,req.body.equipHDDType);
-                        thisDoc.equipPSUCount = strTgs.uCleanUp(thisDoc.equipPSUCount,req.body.equipPSUCount);
-                        thisDoc.equipPSUDraw = strTgs.uCleanUp(thisDoc.equipPSUDraw,req.body.equipPSUDraw);
-                        thisDoc.equipAddOns = strTgs.uCleanUp(thisDoc.equipAddOns,req.body.equipAddOns);
-                        thisDoc.equipRecieved = strTgs.uCleanUp(thisDoc.equipRecieved,req.body.equipRecieved);
-                        thisDoc.equipAcquisition = strTgs.uCleanUp(thisDoc.equipAcquisition,req.body.equipAcquisition);
-                        thisDoc.equipInService = strTgs.uCleanUp(thisDoc.equipInService,req.body.equipInService);
-                        thisDoc.equipPONum = strTgs.uCleanUp(thisDoc.equipPONum,req.body.equipPONum);
-                        thisDoc.equipInvoice = strTgs.uCleanUp(thisDoc.equipInvoice,req.body.equipInvoice);
-                        thisDoc.equipProjectNum = strTgs.uCleanUp(thisDoc.equipProjectNum,req.body.equipProjectNum);
-                        thisDoc.equipLicense = strTgs.uCleanUp(thisDoc.equipLicense,req.body.equipLicense);
-                        thisDoc.equipMaintAgree = strTgs.uCleanUp(thisDoc.equipMaintAgree,req.body.equipMaintAgree);
-                        thisDoc.equipPurchaseType = strTgs.uCleanUp(thisDoc.equipPurchaseType,req.body.equipPurchaseType);
-                        thisDoc.equipPurchaser = strTgs.uCleanUp(thisDoc.equipPurchaser,req.body.equipPurchaser);
-                        thisDoc.equipPurchaseTerms = strTgs.uCleanUp(thisDoc.equipPurchaseTerms,req.body.equipPurchaseTerms);
-                        thisDoc.equipPurchaseEnd = strTgs.uCleanUp(thisDoc.equipPurchaseEnd,req.body.equipPurchaseEnd);
-                        thisDoc.equipNotes = strTgs.uCleanUp(thisDoc.equipNotes,req.body.equipNotes);
+                        thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);
+                        thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,data.equipAssetTag);
+                        thisDoc.equipTicketNumber = strTgs.uCleanUp(thisDoc.equipTicketNumber,data.equipTicketNumber);
+                        thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus,data.equipInventoryStatus);
+                        thisDoc.equipStatus = strTgs.uCleanUp(thisDoc.equipStatus,data.equipStatus);
+                        thisDoc.equipIsVirtual = strTgs.uCleanUp(thisDoc.equipIsVirtual,data.equipIsVirtual);
+                        thisDoc.equipType = strTgs.uCleanUp(thisDoc.equipType,data.equipType);
+                        thisDoc.equipMake = strTgs.uCleanUp(thisDoc.equipMake,data.equipMake);
+                        thisDoc.equipModel = strTgs.uCleanUp(thisDoc.equipModel,data.equipModel);
+                        thisDoc.equipSubModel = strTgs.uCleanUp(thisDoc.equipSubModel,data.equipSubModel);
+                        thisDoc.equipRUHieght = strTgs.uCleanUp(thisDoc.equipRUHieght,data.equipRUHieght);
+                        thisDoc.equipImgFront = strTgs.uCleanUp(thisDoc.equipImgFront,data.equipImgFront);
+                        thisDoc.equipImgRear = strTgs.uCleanUp(thisDoc.equipImgRear,data.equipImgRear);
+                        thisDoc.equipImgInternal = strTgs.uCleanUp(thisDoc.equipImgInternal,data.equipImgInternal);
+                        thisDoc.equipFirmware = strTgs.uCleanUp(thisDoc.equipFirmware,data.equipFirmware);
+                        thisDoc.equipMobo = strTgs.uCleanUp(thisDoc.equipMobo,data.equipMobo);
+                        thisDoc.equipCPUCount = strTgs.uCleanUp(thisDoc.equipCPUCount,data.equipCPUCount);
+                        thisDoc.equipCPUCores = strTgs.uCleanUp(thisDoc.equipCPUCores,data.equipCPUCores);
+                        thisDoc.equipCPUType = strTgs.uCleanUp(thisDoc.equipCPUType,data.equipCPUType);
+                        thisDoc.equipMemType = strTgs.uCleanUp(thisDoc.equipMemType,data.equipMemType);
+                        thisDoc.equipMemTotal = strTgs.uCleanUp(thisDoc.equipMemTotal,data.equipMemTotal);
+                        thisDoc.equipRaidType = strTgs.uCleanUp(thisDoc.equipRaidType,data.equipRaidType);
+                        thisDoc.equipRaidLayout = strTgs.uCleanUp(thisDoc.equipRaidLayout,data.equipRaidLayout);
+                        thisDoc.equipHDDCount = strTgs.uCleanUp(thisDoc.equipHDDCount,data.equipHDDCount);
+                        thisDoc.equipHDDType = strTgs.uCleanUp(thisDoc.equipHDDType,data.equipHDDType);
+                        thisDoc.equipPSUCount = strTgs.uCleanUp(thisDoc.equipPSUCount,data.equipPSUCount);
+                        thisDoc.equipPSUDraw = strTgs.uCleanUp(thisDoc.equipPSUDraw,data.equipPSUDraw);
+                        thisDoc.equipAddOns = strTgs.uCleanUp(thisDoc.equipAddOns,data.equipAddOns);
+                        thisDoc.equipRecieved = strTgs.uCleanUp(thisDoc.equipRecieved,data.equipRecieved);
+                        thisDoc.equipAcquisition = strTgs.uCleanUp(thisDoc.equipAcquisition,data.equipAcquisition);
+                        thisDoc.equipInService = strTgs.uCleanUp(thisDoc.equipInService,data.equipInService);
+                        thisDoc.equipPONum = strTgs.uCleanUp(thisDoc.equipPONum,data.equipPONum);
+                        thisDoc.equipInvoice = strTgs.uCleanUp(thisDoc.equipInvoice,data.equipInvoice);
+                        thisDoc.equipProjectNum = strTgs.uCleanUp(thisDoc.equipProjectNum,data.equipProjectNum);
+                        thisDoc.equipLicense = strTgs.uCleanUp(thisDoc.equipLicense,data.equipLicense);
+                        thisDoc.equipMaintAgree = strTgs.uCleanUp(thisDoc.equipMaintAgree,data.equipMaintAgree);
+                        thisDoc.equipPurchaseType = strTgs.uCleanUp(thisDoc.equipPurchaseType,data.equipPurchaseType);
+                        thisDoc.equipPurchaser = strTgs.uCleanUp(thisDoc.equipPurchaser,data.equipPurchaser);
+                        thisDoc.equipPurchaseTerms = strTgs.uCleanUp(thisDoc.equipPurchaseTerms,data.equipPurchaseTerms);
+                        thisDoc.equipPurchaseEnd = strTgs.uCleanUp(thisDoc.equipPurchaseEnd,data.equipPurchaseEnd);
+                        thisDoc.equipNotes = strTgs.uCleanUp(thisDoc.equipNotes,data.equipNotes);
                         thisDoc.modifiedOn = Date.now();
                         thisDoc.modifiedBy ='Admin';
                     }
