@@ -1,0 +1,55 @@
+    <div class='container'> 
+          <div id="dvData">
+    
+    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="dcNetEdit">Edit</th>
+                <th class="table-sort" data-sort="dcNetType">ipV</th>
+                <th class="table-sort" data-sort="dcNetNickname">Network</th>
+                <th class="table-sort" data-sort="dcNetVlan">vLan</th>
+                <th class="table-sort" data-sort="dcNetDesc">Description</th>
+                <th class="table-sort" data-sort="dcNetGateway">Gateway</th>
+                <th class="table-sort" data-sort="dcNetDomain">Domain</th>
+                <th class="table-sort" data-sort="dcNetSettings">Settings</th>
+
+                
+            </tr>
+        </thead>
+        <tbody class="list">
+            {{#each networks}}
+                <tr>
+                    <td class="dcNetEdit">
+                    <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+                    <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
+
+                    <input type='submit' class='btn btn-warning btn-xs' formaction='/location/network/{{../id}}-{{dcNetId}}' form="formEdit" formmethod="get" value='E'>
+
+                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/network/{{../id}}-{{dcNetId}}~copy' form="formCopy" formmethod="get" value='C'>
+                     {{@index}}</td>
+                    <td class="dcNetType">{{dcNetType}}</td>     
+                    <td class="dcNetNickname">{{dcNetUnique}}</td>
+                    <td class="dcNetVlan">{{dcNetVlan}}</td>
+                    <td class="dcNetDesc">{{{dcNetDesc}}}</td>
+                    <td class="dcNetGateway">{{dcNetGateway}}</td>
+                    <td class="dcNetDomain">{{dcNetDomain}}</td>
+                    <td class="dcNetSettings">
+                        {{#if iPRangeipLowStr}}Low Range: {{iPRangeipLowStr}}<br>
+                                    High Range: {{iPRangeipHighStr}}<br>
+                                    Mask String: {{iPRangeprefixMaskStr}}<br>{{/if}}
+                        {{#if dcNetDns1}}Primary DNS: {{dcNetDns1}}<br>{{/if}}
+                        {{#if dcNetDns2}}Secondary DNS: {{dcNetDns2}}<br>{{/if}}
+                        {{#if dcNetNTP1}}Primary NTP: {{dcNetNTP1}}<br>{{/if}}
+                        {{#if dcNetNTP2}}Secondary NTP: {{dcNetNTP2}}<br>{{/if}}
+                        {{#if dcNetLdap1}}Primary LDAP: {{dcNetLdap1}}<br>{{/if}}
+                        {{#if dcNetLdap2}}Secondary LDAP:{{dcNetLdap2}}<br>{{/if}}
+                        {{#if dcNetTftpHost}}TFTP Host: {{dcNetTftpHost}}<br>{{/if}}
+                    </td>
+                </tr>  
+            {{/each}}
+        </tbody>
+    </table>
+    </div>
+         {{> tocsvpartial }}
+    </div>
+

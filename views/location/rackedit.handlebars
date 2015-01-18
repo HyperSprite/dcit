@@ -146,15 +146,23 @@
         
 
     </ul>    
-     <div class="form-group">
+    <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
                 <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if rackUnique}} formaction='/location/rack/{{rackUnique}}' {{else}}formaction='/location/datacenter/{{abbreviation}}'{{/if}} >
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>
             </div>
         </div>
-     </form><form id="formCancel"></form> 
-               
+    </form>
+    <form id="formCancel"></form> 
+    <form id="deleteform" action="/location/rackdelete/{{rackUnique}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{rackUnique}}')">
+            <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+            <input type="hidden" name="rackUnique" value="{{rackUnique}}">
+            </form>       
      
 </div>
 </div>
+

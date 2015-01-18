@@ -41,6 +41,28 @@ var dcContactsSchema = mongoose.Schema({
         conNotes: String,   
 });
 
+var dcNetworkSchema = mongoose.Schema({
+        dcNetUnique:{type: String, unique: true, required: true,sparse: true},
+        dcNetType:{type: Number, required: true},
+        dcNetNetwork:{type: String, required: true},
+        dcNetMask:{type: Number, required: true},
+        dcNetVlan:Number,
+        dcNetDesc: String,
+        dcNetGateway:String,
+        dcNetDomain:String,
+        dcNetDns1:String,
+        dcNetDns2:String,
+        dcNetNTP1:String,
+        dcNetNTP2:String,
+        dcNetLdap1:String,
+        dcNetLdap2:String,
+        dcNetTftpHost:String,
+        createdOn: {type: Date, default: Date.now},
+        createdBy: String,
+        modifiedOn: {type: Date, default: Date.now},
+        modifiedBy: String,
+});
+
 var datacenterSchema = mongoose.Schema({
         fullName: {type: String, unique: true, required: true,index:1,sparse: true},
         abbreviation: {type: String, unique: true, required: true, index:1,sparse: true},
@@ -51,8 +73,9 @@ var datacenterSchema = mongoose.Schema({
         modifiedBy: String,
         contacts:[dcContactsSchema],
         cages:[dcCagesSchema],
+        networks:[dcNetworkSchema],
         powerNames: Array,
-        racks:[{ type: mongoose.Schema.ObjectId, ref: 'Rack' }]
+        racks:[{ type: mongoose.Schema.ObjectId, ref: 'Rack' }],
 });
 
 // gets Cages based on Datacenter ID
@@ -65,7 +88,7 @@ datacenterSchema.methods.getRacks = function(){
 };
 
 // Apply the uniqueValidator plugin to datacenterSchema
-//datacenterSchema.plugin(uniqueValidator);
+datacenterSchema.plugin(uniqueValidator);
 
 var Datacenter = mongoose.model('Datacenter', datacenterSchema);
 module.exports = Datacenter;

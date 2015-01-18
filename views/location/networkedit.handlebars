@@ -1,0 +1,134 @@
+<h2>{{fullName}} - <a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></h2>
+{{#if foundingCompany}}{{foundingCompany}}{{/if}}<br>
+
+<div class="datacenter"> 
+
+<div class="formContainer">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/network/{{abbreviation}}" method="POST">
+		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+        <input type="hidden" name="id" value="{{id}}">
+        {{#if dcNetId}}{{!-- this is how I work with copied network--}}
+            <input type="hidden" name="dcNetId" value="{{dcNetId}}">
+        {{/if}}
+        <div class="form-group">
+            <label for="field-dcNetType" class="col-sm-2 control-label" >ipV</label>
+            <div class="col-sm-4">
+                <select id="field-dcNetType" class="form-control"  name="dcNetType" >
+                    <option {{{selOption "" dcNetType}}}  >Select Type</option>
+                    <option {{{selOption 4 dcNetType}}} >4</option>
+                    <option {{{selOption 6 dcNetType}}} >6</option>
+                </select>
+            </div>
+        </div>    
+         <div class="form-group">
+            <label for="field-dcNetNetwork" class="col-sm-2 control-label"  >Network</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetNetwork" name="dcNetNetwork"  value="{{dcNetNetwork}}" placeholder="10.10.100.002" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetMask" class="col-sm-2 control-label" >Mask</label>
+            <div class="col-sm-4">
+                <select id="dcNetMask"  name="dcNetMask"  class="form-control">
+                    <option {{{selOption "" dcNetMask}}}  >Select Mask</option>
+                    
+                    {{#each optMask}}
+                    <option {{{selOption this ../dcNetMask}}} >{{this}}</option>
+                    {{/each}}
+                
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetGateway" class="col-sm-2 control-label" >Gateway</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetGateway" name="dcNetGateway" value="{{dcNetGateway}}" placeholder="10.10.100.1">
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="field-dcNetVlan" class="col-sm-2 control-label"  >vLan</label>
+            <div class="col-sm-4">
+                <input type="number" max="4096" class="form-control" id="field-dcNetVlan" name="dcNetVlan"  value="{{dcNetVlan}}" placeholder="1-4096" required>
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="field-dcNetDesc" class="col-sm-2 control-label" >Description</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetDesc" name="dcNetDesc" value="{{dcNetDesc}}" placeholder="Production App">
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="field-dcNetDomain" class="col-sm-2 control-label" >Domain Name</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetDomain" name="dcNetDomain" value="{{dcNetDomain}}" placeholder="prod.sampledomain.com">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetDns1" class="col-sm-2 control-label" >Primary DNS</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetDns1" name="dcNetDns1" value="{{dcNetDns1}}" placeholder="8.8.8.8">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetDns2" class="col-sm-2 control-label" >Secondary DNS</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetDns2" name="dcNetDns2" value="{{dcNetDns2}}" placeholder="8.8.4.4">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetNTP1" class="col-sm-2 control-label" >Primary NTP</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetNTP1" name="dcNetNTP1" value="{{dcNetNTP1}}" placeholder="10.10.100.2 or 0.pool.ntp.org">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetNTP2" class="col-sm-2 control-label" >Secondary NTP</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetNTP2" name="dcNetNTP2" value="{{dcNetNTP2}}" placeholder="10.10.100.3 or 1.pool.ntp.org">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetLdap1" class="col-sm-2 control-label" >Primary LDAP</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetLdap1" name="dcNetLdap1" value="{{dcNetLdap1}}" placeholder="10.10.100.4 or ldap1.sampledomain.com">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetLdap2" class="col-sm-2 control-label" >Secondary LDAP</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetLdap2" name="dcNetLdap2" value="{{dcNetLdap2}}" placeholder="10.10.100.5 or ldap2.sampledomain.com">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="field-dcNetTftpHost" class="col-sm-2 control-label" >TFTP Server</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="field-dcNetTftpHost" name="dcNetTftpHost" value="{{dcNetTftpHost}}" placeholder="10.10.100.5 or ldap2.sampledomain.com">
+            </div>
+        </div>
+
+    </ul>    
+    <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' 
+                formaction='/location/datacenter/{{abbreviation}}'>
+                {{#if dcNetUnique}} <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>{{/if}}
+            </div>
+        </div>
+    </form>
+    <form id="formCancel"></form> 
+    <form id="deleteform" action="/location/datacentersubdelete/{{abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{dcNetUnique}}')">
+            <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+            <input type="hidden" name="subId" value="{{dcNetId}}">
+            <input type="hidden" name="subName" value="{{dcNetUnique}}">
+            <input type="hidden" name="collectionName" value="datacenter">
+            <input type="hidden" name="collectionSub" value="network">
+            </form>       
+     
+</div>
+</div>
+

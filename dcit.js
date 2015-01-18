@@ -16,7 +16,8 @@ var http = require('http'),
     Optionsdb = require('./models/options.js'),
     MrSystemEnviron = require('./models/mrsystemenviron.js'),
     seedDataLoad = require('./seedDataLoad.js'),
-    logger = require('./lib/logger.js');
+    logger = require('./lib/logger.js'),
+    passport = require('passport');
 
     
 var app = express();
@@ -161,7 +162,9 @@ app.use(require('express-session')({
                  saveUninitialized: true,
                  resave: true,
                  }));
-                 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.json());

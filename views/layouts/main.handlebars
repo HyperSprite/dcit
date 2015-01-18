@@ -43,19 +43,22 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <header>
-         
+
+
 		</header>
          <div class="navbar" >
           <div class="container">
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
               <ul class="nav navbar-nav">
-                                        <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">DCIT<b class="caret"></b></a>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">DCIT  {{user}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                    {{#if user}}<li><a href="/user/profile">User Profile</a></li>{{else}}<li><a href="/user/login">Login</a></li>{{/if}}
                         <li><a href="/">Home</a></li>
                         <li><a href="/location/datacenter/list">Datacenters</a></li>
                         <li><a href="/env-role-reports">Environment & Role Reports</a></li>
                         <li><a href="/equipment-systems">Equipment & Systems</a></li>
+                        <li><a href="/location/racks">Racks</a></li>
                         <li><a href="/about">About</a></li>
                         <li><a href="/admin">Admin</a></li>
                         <li><a href="/systems">Systems</a></li>
@@ -99,7 +102,9 @@
                  </li> {{/if}}                 
               </ul>
             </nav>
+
           </div>
+
         </div>
         
 	    <div class="container">

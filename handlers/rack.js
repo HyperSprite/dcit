@@ -520,7 +520,8 @@ exports.dcRackPost = function(req,res){
 ------------------------------------------------------------------------
 */
 exports.rackDelete = function(req,res){
-    res.abbreviation = req.body.rackUnique;
+    res.abbreviation = req.body.abbreviation;
+    res.rackUnique = req.body.rackUnique;
 if (req.body.rackUnique){
         logger.info("delete got this far");
         Rack.findOne({rackUnique: req.body.rackUnique},function(err,racktodelete){
@@ -536,14 +537,14 @@ if (req.body.rackUnique){
                         intro: 'Ooops!',
                         message: 'Something went wrong, '+ req.body.subName +' was not deleted.',
                     };
-                    return res.redirect(303, '/location/rack/'+ res.abbreviation);
+                    return res.redirect(303, '/location/rack/'+ res.rackUnique);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
                     message: 'Contact '+ req.body.rackUnique +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/location/rack');
+                return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
                 }
             });
         }

@@ -1,4 +1,5 @@
-var     winston = require('winston'),
+var    winston = require('winston'),
+         user = require('./handlers/user.js')
           main = require('./handlers/main.js'),
 	   samples = require('./handlers/sample.js'),
       location = require('./handlers/location.js'),
@@ -19,7 +20,12 @@ module.exports = function(app){
 	app.get('/jquery-test', samples.jqueryTest);
 	app.get('/epic-fail', samples.epicFail);
 
-   
+   //users
+   app.get('/user', user.home);
+   app.get('/user/:data', isLoggedIn, user.home);
+
+
+
     // locations
         // URL is incoming / :datacenter is the req storage (this could have had a better name) 
         // Next part is the export file.name in handlers dir.
@@ -37,6 +43,9 @@ module.exports = function(app){
         app.post('/location/datacentercage/:datacenter', location.datacenterCagePost);
         app.get('/location/datacenterpower/:datacenter', location.datacenterPowerPages);
         app.post('/location/datacenterpower/:datacenter', location.datacenterPowerPost);
+        app.get('/location/network/:datacenter', location.datacenterNetworkPages);
+        app.post('/location/network/:datacenter', location.datacenterNetworkPost);
+
         app.get('/location/racks', rack.dcRackPages);
         app.get('/location/rack', rack.dcRackPages);
         app.get('/location/rack/:datacenter', rack.dcRackPages);
@@ -86,3 +95,14 @@ module.exports = function(app){
         app.get('/go/input', ajax.get);
         
 };
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}

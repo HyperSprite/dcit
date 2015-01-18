@@ -84,10 +84,13 @@
         {{/each}}
     </ul>
     <hr>
-        
+    <h4>Racks</h4>
         {{> location/rack-list}}
    
-   <hr>
+    <hr>
+    <h4><a href="/location/network/{{id}}-new">Networks</a></h4>
+        {{> location/network-list}}
+    <hr>
     <h4><a href="/location/datacenterpower/edit-{{id}}">Power Mains</a></h4>
     <ul id="powerUl" class="list-unstyled">    
         {{#each powerNames}}
