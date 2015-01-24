@@ -153,7 +153,10 @@ exports.dcSystemPages = function(req,res,next){
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
         
-    Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
+    Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'equipPorts':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
+    
+
+
         if(err) return next(err);
         if(!eq) return next();
         //logger.info("rk"+rk);
@@ -164,7 +167,7 @@ exports.dcSystemPages = function(req,res,next){
 
         logger.info ('System.findOne '+dcabbr);
         if(editLoad < 4){
-            tempEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
+            thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
         context = {
             titleNow: sy.systemName,
             menu1: sy.systemName+" as Endpoint",
@@ -205,7 +208,48 @@ exports.dcSystemPages = function(req,res,next){
             modifiedBy: sy.modifiedBy,
             modifiedOn: strTgs.dateMod(sy.modifiedOn), 
                 systemPorts: sy.systemPorts.map(function(sp){
+                    var isConsole;
+                    var isEthernet;
+                    var isInfiniband;
+                    var isInterconnect;
+                    var isNetMgmt;
+                    var isPower;
+                    var isSAN;
+                    switch(sp.sysPortType){
+                        case 'Console':
+                        isConsole = 'isConsole';
+                        break;
+                        case 'Ethernet':
+                        isEthernet = 'isEthernet';
+                        break;
+                        case 'Infiniband':
+                        isInfiniband = 'isInfiniband';
+                        break;
+                        case 'Interconnect':
+                        isInterconnect = 'isInterconnect';
+                        break;
+                        case 'NetMgmt':
+                        isNetMgmt ='isNetMgmt';
+                        break;
+                        case 'Power':
+                        isPower = 'isPower';
+                        break;
+                        case 'SAN':
+                        isSAN = 'isSAN';
+                        break;
+                        default:
+                        break;
+                    }
+                   
                     return {
+                    sysPortisConsole: isConsole,
+                    sysPortisEthernet: isEthernet,
+                    sysPortisInfiniband: isInfiniband,
+                    sysPortisInterconnect: isInterconnect, 
+                    sysPortisNetMgmt: isNetMgmt, 
+                    sysPortisPower: isPower, 
+                    sysPortisSAN: isSAN, 
+
                     sysPortId: sp._id,
                     sysPortType: sp.sysPortType,
                     sysPortName: sp.sysPortName,
@@ -221,15 +265,23 @@ exports.dcSystemPages = function(req,res,next){
                     sysPortCrossoverChecked: strTgs.setCheckBox(sp.sysPortCrossover),
                     };
                 }),
-            equipLocation: tempEquip.equipLocation,
-            equipLocationRack: strTgs.ruToLocation(tempEquip.equipLocation),
-            equipStatus: tempEquip.equipStatus,
-            equipStatusLight: strTgs.trueFalseIcon(tempEquip.equipStatus,tempEquip.equipStatus),
-            equipType: tempEquip.equipType,
-            equipMake: tempEquip.equipMake,
-            equipModel: tempEquip.equipModel,
-            equipSubModel: tempEquip.equipSubModel,
-            equipRUHieght: tempEquip.equipRUHieght,
+            equipLocation: thisEquip.equipLocation,
+            equipLocationRack: strTgs.ruToLocation(thisEquip.equipLocation),
+            equipStatus: thisEquip.equipStatus,
+            equipStatusLight: strTgs.trueFalseIcon(thisEquip.equipStatus,thisEquip.equipStatus),
+            equipType: thisEquip.equipType,
+            equipMake: thisEquip.equipMake,
+            equipModel: thisEquip.equipModel,
+            equipSubModel: thisEquip.equipSubModel,
+            equipRUHieght: thisEquip.equipRUHieght,
+            equipPorts: thisEquip.equipPorts.map(function(tep){
+                return {
+                    equipPortType: tep.equipPortType,
+                    equipPortsAddr: tep.equipPortsAddr,
+                    equipPortName: tep.equipPortName,
+                    equipPortsOpt: tep.equipPortsOpt,
+                };
+                }),
             }; 
         } else {
             context = {    
@@ -591,7 +643,7 @@ exports.dcSystemPost = function(req,res){
             }else{
             logger.info("existing port");
         var thisSubDoc = sys.systemPorts.id(bd.sysPortId[i]);
-                thisSubDoc.sysPortType= strTgs.clCleanUp(thisSubDoc.sysPortType,bd.sysPortType[i]);
+                thisSubDoc.sysPortType= strTgs.stcCleanup(thisSubDoc.sysPortType,bd.sysPortType[i]);
                 thisSubDoc.sysPortName= strTgs.clCleanUp(thisSubDoc.sysPortName,bd.sysPortName[i]);
                 thisSubDoc.sysPortAddress= strTgs.clCleanUp(thisSubDoc.sysPortAddress,bd.sysPortAddress[i]);
                 thisSubDoc.sysPortCablePath= strTgs.clCleanUp(thisSubDoc.sysPortCablePath,bd.sysPortCablePath[i]);

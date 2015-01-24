@@ -1,0 +1,45 @@
+<div>
+        <h5>{{systemName}} port config</h5>
+        <div class="span9" style="border: 2px solid grey">
+        <p>
+        {{systemName}}<br>
+        Location: {{equipLocation}}<br>
+        SN: {{systemEquipSN}} - {{equipMake}} {{equipModel}} {{equipSubModel}} {{#if equipRUHieght}} {{equipRUHieght}}U {{/if}}{{equipType}}<br>
+        <br>
+        {{#each equipPorts}}
+        {{#if equipPortsAddr}}
+        {{../../systemEquipSN}}-{{equipPortName}} : {{equipPortsAddr}}<br>
+        {{/if}}
+        {{/each}}
+        <br>
+        Power, Console and SAN______________________________<br>
+        {{#each systemPorts}}
+        {{#if sysPortisConsole}}
+        Console: {{sysPortEndPoint}}/{{sysPortEndPointPort}} Cisco rj45 Pinout Option:{{sysPortOptions}} Cable Path:{{sysPortCablePath}}<br>
+        {{/if}}
+        {{/each}}
+        {{#each systemPorts}}
+        {{#if sysPortisPower}}
+        Power: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
+        {{/if}}
+        {{/each}}
+        {{#each systemPorts}}
+        {{#if sysPortisSAN}}
+        SAN: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
+        {{/if}}
+        {{/each}}
+        <br>
+        Network ___________________________________________<br>
+        {{#each systemPorts}}
+        {{#if sysPortisEthernet}}
+        Port Label: {{../../systemName}}_{{sysPortName}}<br>
+        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}
+        <br> Vlan: {{sysPortVlan}}
+        <br> Options: {{sysPortOptions}} 
+        <br> Cable Path:{{sysPortCablePath}}<br><br>
+        {{/if}}
+        {{/each}}
+        __________________________________________________<br>
+        </p>
+        </div>
+        </div>
