@@ -16,13 +16,6 @@ var Datacenter = require('../models/datacenter.js'),
     
 var ObjectId = require('mongoose').Types.ObjectId;
 
-var LIUser = {'account':'admin',
-                'name':'Superuser',
-                'groups':['admin','base'],
-                };
-
-
-
 // convenience function for joining fields
 function smartJoin(arr, separator){
 	if(!separator) separator = ' ';
@@ -57,6 +50,7 @@ exports.datacenterPages = function(req,res,next){
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
             var context = {
+                user : req.user,
                 datacenters: datacenters.map(function(datacenter){
                     var dc = datacenter;
                     logger.info(dc);
@@ -68,12 +62,13 @@ exports.datacenterPages = function(req,res,next){
                         foundingCompany:dc.foundingCompany,
                         city:strTgs.arrayByType(dc.contacts,dbqCity),
                         country:strTgs.arrayByType(dc.contacts,dbqCountry),
+
                     };
                 })
             };
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
-            res.render('location/datacenter-list', context);
+            res.render('location/datacenter-list', context );
         });
 
 /*
@@ -100,7 +95,8 @@ Edit Contact
         var dc = datacenter;
         var context;
         if (dcSubId === 'new'){
-            context ={
+            context = {
+                user : req.user,
                 id:dc._id,
                 titleNow:dc.abbreviation,
                 fullName:dc.fullName,
@@ -117,6 +113,7 @@ Edit Contact
         if(!datacenter) return next();
         logger.info(datacenter);
             context ={
+                user : req.user,
                 id:dc._id,
                 fullName:dc.fullName,
                 abbreviation:dc.abbreviation,
@@ -181,7 +178,8 @@ If "New" is in the URL, it does New, otherwise it goes to existing
         if(!datacenter) return next();
         //logger.info(datacenter);
             var dc = datacenter;
-            var context ={
+            var context = {
+                user : req.user,
                 id:dc._id,
                 fullName:dc.fullName,
                 abbreviation:dc.abbreviation,
@@ -210,7 +208,8 @@ this takes the abbreviation and displays the matching datacenter details
         // looks up racks in Rack based on datacenter id
         Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err,racks){
         logger.info ('Rack - id to matching rack to datacenter'+ dc._id); 
-            var context ={
+            var context = {
+                user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
                 id:dc._id,
@@ -346,7 +345,7 @@ exports.datacenterPost = function(req,res){
                     abbreviation : req.body.abbreviation,
                     foundingCompany : req.body.foundingCompany,
                     createdOn: Date.now(),
-                    createdBy:'Admin',
+                    createdBy: req.user,
                     },function(err){
 	        if(err) {
 	        	console.error(err.stack);
@@ -379,7 +378,7 @@ exports.datacenterPost = function(req,res){
                     thisDoc.abbreviation = strTgs.uCleanUp(thisDoc.abbreviation,req.body.abbreviation);
                     thisDoc.foundingCompany = strTgs.uCleanUp(thisDoc.foundingCompany,req.body.foundingCompany); 
                     thisDoc.modifiedOn = Date.now();
-                    thisDoc.modifiedBy = 'Admin';
+                    thisDoc.modifiedBy = req.user;
                     }
 
 	    datacenter.save(function(err){
@@ -545,7 +544,8 @@ exports.datacenterCagePages = function(req,res,next){
 
             var dc = datacenter;
             logger.info ('dc>'+dc);
-            var context ={
+            var context = {
+                user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
                 titleNow:dc.abbreviation,
@@ -682,7 +682,8 @@ exports.datacenterPowerPages = function(req,res,next){
 
             var dc = datacenter;
             logger.info ('dc   >'+dc);
-            var context ={
+            var context = {
+                user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
                 titleNow:dc.abbreviation,
@@ -716,7 +717,7 @@ exports.datacenterPowerPost = function(req,res){
         } else {    
                     thisDoc.powerNames = strTgs.uCleanUp(thisDoc.powerNames,req.body.powerNames).split(','); // split makes this an array
                     thisDoc.modifiedOn = Date.now();
-                    thisDoc.modifiedBy = 'Admin';
+                    thisDoc.modifiedBy = req.user;
                     }
 
 	    datacenter.save(function(err){
@@ -775,7 +776,8 @@ exports.datacenterNetworkPages = function(req,res,next){
         var context;
         var nk;
         if (dcSubId === 'new'){
-            context ={
+            context = {
+                user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
                 fullName: dc.fullName,
@@ -787,7 +789,8 @@ exports.datacenterNetworkPages = function(req,res,next){
             res.render('location/networkedit', context);
         } else if (copy === true){ // copy
             nk = dc.networks.id(dcSubId);
-            context ={
+            context = {
+                user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
                 fullName:dc.fullName,
@@ -809,7 +812,8 @@ exports.datacenterNetworkPages = function(req,res,next){
             res.render('location/networkedit', context);
         } else { // edit
             nk = dc.networks.id(dcSubId);
-            context ={
+            context = {
+                user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
                 fullName:dc.fullName,
@@ -872,9 +876,9 @@ exports.datacenterNetworkPost = function(req,res,next){
             dcNetLdap1: strTgs.clTrim(data.dcNetLdap1),
             dcNetLdap2: strTgs.clTrim(data.dcNetLdap2),
             dcNetTftpHost: strTgs.clTrim(data.dcNetTftpHost),
-            createdBy:'Admin',
+            createdBy: req.user,
             createdOn: Date.now(),
-            modifiedBy: data.modifiedBy,
+            modifiedBy: req.user,
             modifiedOn: Date.now(),
         });
     } else {
@@ -895,7 +899,7 @@ exports.datacenterNetworkPost = function(req,res,next){
             thisSubDoc.dcNetLdap2= strTgs.clCleanUp(thisSubDoc.dcNetLdap2,data.dcNetLdap2);
             thisSubDoc.dcNetTftpHost= strTgs.clCleanUp(thisSubDoc.dcNetTftpHost,data.dcNetTftpHost);
             thisSubDoc.modifiedOn = Date.now();
-            thisSubDoc.modifiedBy ='Admin';
+            thisSubDoc.modifiedBy = req.user;
 
     }
             datacenter.save(function(err){

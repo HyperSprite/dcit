@@ -1,7 +1,8 @@
 // users
 var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
-      ObjectId = require('mongoose').Types.ObjectId;
+      ObjectId = require('mongoose').Types.ObjectId,
+      passport = require('passport');
 
 // Models
      var Users = require('../models/user.js'),
@@ -17,8 +18,31 @@ exports.home = function(req, res){
         res.render ('user/signup');
     } else if (req.params.data === 'profile'){
         res.render('user/profile', {
-            user : req.user // get the user out of session and pass to template
-        });
+        user : req.user // get the user out of session and pass to template
+    });     
+    } else if (req.params.data === 'logout'){
+        req.logout();
+        res.redirect('/');
     }
 };
 
+
+exports.localSignup = function(req, res){
+        if(successRedirect){
+            res.render('admin/profile');
+        }
+        if(failureRedirect){
+            res.render('user/signup');
+            req.session.flash = true;
+        }
+};
+
+exports.localLogin = function(req, res){
+        if(successRedirect){
+            res.render('admin/profile');
+        }
+        if(failureRedirect){
+            res.render('user/signup');
+            req.session.flash = true;
+        }
+};

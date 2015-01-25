@@ -1,35 +1,35 @@
 
 
-var http = require('http'),
-	https = require('https'),
-	express = require('express'),
-    mongoose = require('mongoose'),
-    bodyParser = require('body-parser'),
-	formidable = require('formidable'),
-	fs = require('fs'),
-    winston = require('winston'),
-	vhost = require('vhost'),
-    Datacenter = require('./models/datacenter.js'),
-    Rack = require('./models/rack.js'),
-    Equipment = require('./models/equipment.js'),
-    Systemdb = require('./models/system.js'),
-    Optionsdb = require('./models/options.js'),
-    MrSystemEnviron = require('./models/mrsystemenviron.js'),
-    seedDataLoad = require('./seedDataLoad.js'),
-    logger = require('./lib/logger.js'),
-    passport = require('passport');
+var        http = require('http'),
+          https = require('https'), 
+        express = require('express'),
+       mongoose = require('mongoose'),
+     bodyParser = require('body-parser'),
+     formidable = require('formidable'),
+	         fs = require('fs'),
+        winston = require('winston'),
+	      vhost = require('vhost'),
+       passport = require('passport'),   
+     Datacenter = require('./models/datacenter.js'),
+           Rack = require('./models/rack.js'),
+      Equipment = require('./models/equipment.js'),
+       Systemdb = require('./models/system.js'),
+      Optionsdb = require('./models/options.js'),
+MrSystemEnviron = require('./models/mrsystemenviron.js'),
+   seedDataLoad = require('./seedDataLoad.js'),
+         logger = require('./lib/logger.js');
 
-    
 var app = express();
 
-var LIUser = {'account':'admin',
-                'name':'Superuser',
-                'groups':['admin','base'],
-                };
+//var LIUser = {'account':'admin',
+//                'name':'Superuser',
+//                'groups':['admin','base'],
+//               };
 
 var credentials = require('./credentials.js');
-
 var emailService = require('./lib/email.js')(credentials);
+
+require('./config/passport')(passport);
 
 // set up handlebars view engine
 var handlebars = require('express-handlebars').create({
@@ -47,16 +47,11 @@ var handlebars = require('express-handlebars').create({
         selOption: function (current, field) {
           var results = ""; 
           results = 'value="' + current + '" ' + (field === current ? 'selected="selected"' : "");
-          /*logger.info("selOption r >"+results);
-          logger.info("selOption f >"+field);
-          logger.info("selOption c >"+current);
-          */
           return (results);
           }
-        
-
     }
 });
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -114,8 +109,6 @@ app.use(function(req, res, next){
 // logging
 switch(app.get('env')){
     case 'development':
-  
-       
        // var accessLogStream = fs.createWriteStream(__dirname + '/logs/dev/access.log', {flags: 'a'})
         //app.use(logger('tiny', {stream: accessLogStream}))
         break;
@@ -125,11 +118,6 @@ switch(app.get('env')){
         //app.use(logger('tiny', {stream: accessLogStream}))
         break;
 }
-
-//app.use(logger());
-
-
-
 
 logger.info('DCIT Log started');
 
@@ -150,25 +138,22 @@ switch(app.get('env')){
 }
 
 
-//var MongoSessionStore = require('mongoose-session')(require('connect'));
-//var sessionStore = new MongoSessionStore({ url: credentials.mongo.development.connectionString });
-
 app.use(require('cookie-parser')(credentials.cookieSecret));
-
-app.use(require('express-session')({ 
-                 key: 'session',
-                 secret: credentials.cookieSecret,
-                 store: require('mongoose-session')(mongoose),
-                 saveUninitialized: true,
-                 resave: true,
-                 }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(express.static(__dirname + '/public'));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require('express-session')({ 
+                key: 'session',
+                cookie:{
+                   maxAge: 3600000
+                },
+                secret: credentials.cookieSecret,
+                store: require('mongoose-session')(mongoose),
+                saveUninitialized: true,
+                resave: true,
+                }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(__dirname + '/public'));
 //app.use(bodyParser());
 // cross-site request forgery protection
 /*
@@ -179,9 +164,6 @@ app.use(function(req, res, next){
 	next();
 });
 */
-// database configuration
-// var mongoose = require('mongoose');
-
 
 exports.dropDatacenter = (function(Datacenter){
     Datacenter.find(function(err, datacenters){
@@ -223,8 +205,6 @@ exports.dropSystem = (function(Systemdb){
         });
     });    
 });
-
-// stuff from the book
 
 // flash message middleware
 app.use(function(req, res, next){

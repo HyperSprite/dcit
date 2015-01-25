@@ -7,7 +7,10 @@ var    winston = require('winston'),
      equipment = require('./handlers/equipment.js'),
         system = require('./handlers/system.js'),
          admin = require('./handlers/admin.js'),
-          ajax = require('./handlers/ajax.js');
+          ajax = require('./handlers/ajax.js'),
+      passport = require('passport');
+
+
 
 module.exports = function(app){
 
@@ -20,10 +23,22 @@ module.exports = function(app){
 	app.get('/jquery-test', samples.jqueryTest);
 	app.get('/epic-fail', samples.epicFail);
 
-   //users
-   app.get('/user', user.home);
-   app.get('/user/:data', isLoggedIn, user.home);
+//users
+    app.get('/user', user.home);
+    app.get('/user/:data', user.home);
+    app.get('/user/profile', isLoggedIn, user.home);
 
+   app.post('/user/signup', passport.authenticate('local-signup', {
+        successRedirect : '/user/profile', // redirect to the secure profile section
+        failureRedirect : '/user/signup', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }));
+
+   app.post('/user/login', passport.authenticate('local-login', {
+        successRedirect : '/user/profile', // redirect to the secure profile section
+        failureRedirect : '/user/login', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }));
 
 
     // locations
@@ -31,66 +46,63 @@ module.exports = function(app){
         // Next part is the export file.name in handlers dir.
         app.get('/location/datacenters', location.datacenterPages);
         app.get('/location/datacenter/:datacenter', location.datacenterPages);
-        app.post('/location/datacentercontact/:datacenter', location.datacenterContactPost);
-        app.post('/location/datacenterdelete/:datacenter', location.datacenterDelete);
-        app.post('/location/datacentersubdelete/:datacenter', location.datacenterSubDelete);
+        app.post('/location/datacentercontact/:datacenter', isLoggedIn, location.datacenterContactPost);
+        app.post('/location/datacenterdelete/:datacenter', isLoggedIn, location.datacenterDelete);
+        app.post('/location/datacentersubdelete/:datacenter', isLoggedIn, location.datacenterSubDelete);
+        app.post('/location/datacenterpost', isLoggedIn, location.datacenterPost);
         
-        app.post('/location/datacenterpost', location.datacenterPost);
-        
-
-        
-        app.get('/location/datacentercage/:datacenter', location.datacenterCagePages);
-        app.post('/location/datacentercage/:datacenter', location.datacenterCagePost);
-        app.get('/location/datacenterpower/:datacenter', location.datacenterPowerPages);
-        app.post('/location/datacenterpower/:datacenter', location.datacenterPowerPost);
-        app.get('/location/network/:datacenter', location.datacenterNetworkPages);
-        app.post('/location/network/:datacenter', location.datacenterNetworkPost);
+        app.get('/location/datacentercage/:datacenter', isLoggedIn, location.datacenterCagePages);
+        app.post('/location/datacentercage/:datacenter', isLoggedIn, location.datacenterCagePost);
+        app.get('/location/datacenterpower/:datacenter', isLoggedIn, location.datacenterPowerPages);
+        app.post('/location/datacenterpower/:datacenter', isLoggedIn, location.datacenterPowerPost);
+        app.get('/location/network/:datacenter', isLoggedIn, location.datacenterNetworkPages);
+        app.post('/location/network/:datacenter', isLoggedIn, location.datacenterNetworkPost);
 
         app.get('/location/racks', rack.dcRackPages);
         app.get('/location/rack', rack.dcRackPages);
         app.get('/location/rack/:datacenter', rack.dcRackPages);
-        app.post('/location/rack/:datacenter', rack.dcRackPost);
-        app.post('/location/rackdelete/:datacenter', rack.rackDelete);
-        app.post('/location/rackpower/:datacenter', rack.dcRackPowPost);
-        app.post('/location/racksubdelete/:datacenter', rack.rackSubDelete);
+        app.post('/location/rack/:datacenter', isLoggedIn, rack.dcRackPost);
+        app.post('/location/rackdelete/:datacenter', isLoggedIn, rack.rackDelete);
+        app.post('/location/rackpower/:datacenter', isLoggedIn, rack.dcRackPowPost);
+        app.post('/location/racksubdelete/:datacenter', isLoggedIn, rack.rackSubDelete);
         
         app.get('/equipment', equipment.dcEquipPages);
         app.get('/equipment/:datacenter', equipment.dcEquipPages);
         app.get('/equipment-systems', equipment.dcEquipSysPages);
         app.get('/equipment-systems/:datacenter', equipment.dcEquipSysPages);
         app.get('/elevation/:datacenter', equipment.dcRackElevationPage);
-        app.post('/equipment/:datacenter', equipment.dcEquipmentPost);
-        app.post('/equipmentdelete/:datacenter', equipment.dcEquipDelete);
-        app.post('/equipmentportdelete/:datacenter', equipment.equipSubDelete);
+        app.post('/equipment/:datacenter', isLoggedIn, equipment.dcEquipmentPost);
+        app.post('/equipmentdelete/:datacenter', isLoggedIn, equipment.dcEquipDelete);
+        app.post('/equipmentportdelete/:datacenter', isLoggedIn, equipment.equipSubDelete);
         
         app.get('/systems', system.dcSystemPages);
         app.get('/system/:datacenter', system.dcSystemPages);
         app.get('/endpoint/:datacenter', system.findEndpoints);
-        app.post('/system/:datacenter', system.dcSystemPost);
-        app.post('/systemdelete/:datacenter', system.dcsystemDelete);
-        app.post('/systemportdelete/:datacenter', system.dcsystemSubDelete);
+        app.post('/system/:datacenter', isLoggedIn, system.dcSystemPost);
+        app.post('/systemdelete/:datacenter', isLoggedIn, system.dcsystemDelete);
+        app.post('/systemportdelete/:datacenter', isLoggedIn, system.dcsystemSubDelete);
         
         app.get('/reports', system.dcSystemCountbyEnv);
         app.get('/env-role-reports',system.dcSystembyEnvRole);
         app.get('/env-role-report/:datacenter',system.dcSystembyEnvRole);
         
         // Admin 
-        app.get('/admin', admin.home);
-        app.get('/admin/:datacenter', admin.home);
-        app.get('/admin/optionsedit/:datacenter', admin.optionsEdit);
-        app.post('/admin/optionspost', admin.optionsEditPost);
-        app.post('/admin/uploadpost', admin.uploadPost);
-        app.post('/admin/uploaddelete', admin.uploadDeletePost);
-        app.post('/admin/csvtodb', admin.csvToDBPost);
-        app.get('/admin/optionsadmin/dropDatacenter', admin.dropDatacenterGet);
-        app.get('/admin/optionsadmin/dropRack', admin.dropRackGet);
-        app.get('/admin/optionsadmin/dropOptionsdb', admin.dropOptionsdbGet);
-        app.get('/admin/optionsadmin/dropEquipment', admin.dropEquipmentGet);
-        app.get('/admin/optionsadmin/dropSystem', admin.dropSystemGet);
-        app.get('/admin/optionsadmin/seedDatacenter', admin.seedDatacetnerGet);
-        app.get('/admin/optionsadmin/seedOptionsdb', admin.seedOptionsdbGet);
-        app.get('/admin/optionsadmin/seedEquipment', admin.seedEquipmentGet);
-        app.get('/admin/optionsadmin/seedSystem', admin.seedSystemGet);
+        app.get('/admin', isLoggedIn, admin.home);
+        app.get('/admin/:datacenter', isLoggedIn, admin.home);
+        app.get('/admin/optionsedit/:datacenter', isLoggedIn, admin.optionsEdit);
+        app.post('/admin/optionspost', isLoggedIn, admin.optionsEditPost);
+        app.post('/admin/uploadpost', isLoggedIn, admin.uploadPost);
+        app.post('/admin/uploaddelete', isLoggedIn, admin.uploadDeletePost);
+        app.post('/admin/csvtodb', isLoggedIn, admin.csvToDBPost);
+        app.get('/admin/optionsadmin/dropDatacenter', isLoggedIn, admin.dropDatacenterGet);
+        app.get('/admin/optionsadmin/dropRack', isLoggedIn, admin.dropRackGet);
+        app.get('/admin/optionsadmin/dropOptionsdb', isLoggedIn, admin.dropOptionsdbGet);
+        app.get('/admin/optionsadmin/dropEquipment', isLoggedIn, admin.dropEquipmentGet);
+        app.get('/admin/optionsadmin/dropSystem', isLoggedIn, admin.dropSystemGet);
+        app.get('/admin/optionsadmin/seedDatacenter', isLoggedIn, admin.seedDatacetnerGet);
+        app.get('/admin/optionsadmin/seedOptionsdb', isLoggedIn, admin.seedOptionsdbGet);
+        app.get('/admin/optionsadmin/seedEquipment', isLoggedIn, admin.seedEquipmentGet);
+        app.get('/admin/optionsadmin/seedSystem', isLoggedIn, admin.seedSystemGet);
 
         app.get('/go/input', ajax.get);
         
