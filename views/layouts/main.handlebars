@@ -47,16 +47,16 @@
 
 		</header>
          <div class="navbar" >
-          <div class="container">
+          <div >
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
               <ul class="nav navbar-nav">
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">DCIT  {{user.local.email}}<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  {{user.local.email}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                    {{#if user}}<li><a href="/user/profile">User Profile</a></li>{{else}}<li><a href="/user/login">Login</a></li>{{/if}}
+                    {{#if user}}<li><a href="/user/profile">User Profile</a></li>{{/if}}
                         <li><a href="/">Home</a></li>
                         <li><a href="/location/datacenter/list">Datacenters</a></li>
-                        <li><a href="/env-role-reports">Environment & Role Reports</a></li>
+                        <li><a href="/env-role-reports">Reports</a></li>
                         <li><a href="/equipment-systems">Equipment & Systems</a></li>
                         <li><a href="/location/racks">Racks</a></li>
                         <li><a href="/about">About</a></li>
@@ -66,6 +66,33 @@
                         <li><a href="/equipment">Equipment</a></li>
                     </ul>
                   </li>
+                  {{#if user}}{{else}}<li><a href="/user/login">Login</a></li>{{/if}}
+                 <li>
+                  <form id="multiForm" class="form-inline" role="form" autocomplete="off" action="/env-role-report/multi-" method="get">
+                  <div class="form-group">
+                  <label class="sr-only" for="field-multiCat">Search in</label> 
+                 <select id="field-multiCat" class="form-control" name="searchIn" >
+                    <option value="system~systemName" >System Names</option>
+                    <option value="system~systemTicket" >System Ticket</option>
+                    <option value="system~modifiedBy" >System Modified By</option>
+                    <option value="system~sysPortCablePath" >System Cable Number</option>
+                    <option value="equipment~equipSN" >Equipment SN</option>
+                    <option value="equipment~equipAssetTag" >Equipment Asset Tag</option>
+                    <option value="equipment~equipTicketNumber" >Equipment Ticket</option>
+                    <option value="equipment~equipPONum" >Equipment PO Number</option>
+                    <option value="equipment~equipInvoice" >Equipment Invoice</option>
+                    <option value="equipment~equipProjectNum" >Equipment Project</option>
+                    <option value="equipment~modifiedBy" >Equipment Modified By</option>
+                    <option value="equipment~equipPortsAddr" >Equipment MAC Address</option>
+                    <select>
+                    </div>
+                    <div class="form-group">
+                    <label class="sr-only" for="field-multiText">Search for</label> 
+                    <input id="field-multiText" type="text" class="form-control" pattern=".{3,}" required name="searchFor" placeholder="? (3 char min)">
+                    </div>
+                    <button type="submit" class="sr-only btn btn-primary" value='Submit'>Submit</button>
+                    </form>
+                 </li>  
      {{#if menu1}} <li><a href="{{menuLink1}}">{{menu1}}</a>
                  </li> {{/if}}
      {{#if menu2}} <li><a href="{{menuLink2}}">{{menu2}}</a>
@@ -99,7 +126,8 @@
                     </ul>
                  </li>{{/if}}
    {{#if lastPage}} <li><a href="{{lastPage}}">Back</a>
-                 </li> {{/if}}                 
+                 </li> {{/if}}
+             
               </ul>
             </nav>
 
@@ -107,7 +135,7 @@
 
         </div>
         
-	    <div class="container">
+	    <div class="container-fluid">
 			{{#if flash}}
 				<div class="alert alert-dismissible alert-{{flash.type}}">
 					<button type="button" class="close" 
@@ -115,7 +143,9 @@
 					<strong>{{flash.intro}}</strong> {{{flash.message}}}
 				</div>
 			{{/if}}
-
+      {{#if error}}
+          <div class="alert alert-danger">{{error}}</div>
+      {{/if}}
 		    {{{body}}}
       </div> <!-- /container -->  
       <div> <!-- footer-->
@@ -128,13 +158,6 @@
         
         <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script>window.jQuery || document.write('<script src="{{static '/vendor/js/jquery-2.1.1.min.js'}}"><\/script>')</script>
-		{{!-- since we've move jquery to the end of the body (instead of in head), we should really rename this bundle
-			to something other than "head", but i'm leaving it for consistency with the book. 
-		{{#each _bundles.js.head}}
-			<script src="{{static .}}"></script>
-		{{/each}}
-    	{{{_sections.jquery}}}
-        --}}
 		{{#if showTests}}
 			<div id="mocha"></div>
 			<script src="{{static '/vendor/mocha.js'}}"></script>

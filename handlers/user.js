@@ -33,7 +33,7 @@ exports.localSignup = function(req, res){
         }
         if(failureRedirect){
             res.render('user/signup');
-            req.session.flash = true;
+            req.flash = true;
         }
 };
 
@@ -43,6 +43,6 @@ exports.localLogin = function(req, res){
         }
         if(failureRedirect){
             res.render('user/signup');
-            req.session.flash = true;
+            req.flash = true;
         }
 };

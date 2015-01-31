@@ -36,6 +36,7 @@ exports.dcEquipPages = function(req,res,next){
         logger.info(err);
         }else{
             var context = {
+                user : req.user,
                 eqs: eqs.map(function(eq){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info(eq);
@@ -94,6 +95,7 @@ exports.dcEquipPages = function(req,res,next){
         var context;
         if (dcSubId === 'new'){
             context ={
+                user : req.user,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
                 abbreviation: uber.abbreviation,
@@ -120,6 +122,7 @@ exports.dcEquipPages = function(req,res,next){
         if (req.params.datacenter.indexOf ('copy') !=-1){
            //logger.info(rk);
                 context ={
+                    user : req.user,
                     rackParentDC: rk.rackParentDC,
                     fullName: uber.fullName,
                     abbreviation: uber.abbreviation,
@@ -144,6 +147,7 @@ exports.dcEquipPages = function(req,res,next){
         
        //logger.info(rk);
             context ={
+                user : req.user,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
                 abbreviation: uber.abbreviation,
@@ -211,6 +215,7 @@ exports.dcEquipPages = function(req,res,next){
         return tempRu; 
         };
             context ={
+                user : req.user,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
@@ -285,7 +290,8 @@ exports.dcEquipPages = function(req,res,next){
         if(editLoad < 4){
 
 
-             context = {    
+             context = {   
+                user : req.user, 
                                 menu1: eq.equipSN,
                                 menuLink1: '#',
                                 titleNow:eq.equipSN,
@@ -377,7 +383,8 @@ exports.dcEquipPages = function(req,res,next){
                         }; 
         
         } else {
-           context = {    
+           context = {
+            user : req.user, 
                                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
@@ -447,6 +454,7 @@ exports.dcEquipPages = function(req,res,next){
 exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
     var data = req.body;
+    context = { user : req.user, };
     res.abbreviation = strTgs.cTrim(data.equipSN);
     if(data.isEdit){
     res.abbreviation = strTgs.cTrim(data.isEdit);
@@ -478,7 +486,7 @@ exports.dcEquipmentPost = function(req,res){
                                 equipLocation: strTgs.locComb(data.equipLocationRack,data.equipLocationRu),
                                 equipSN: strTgs.cTrim(data.equipSN),
                                 equipAssetTag: strTgs.sTrim(data.equipAssetTag),
-                                equipTicketNumber: strTgs.sTrim(data.equipTicketNumber),
+                                equipTicketNumber: strTgs.cTrim(data.equipTicketNumber),
                                 equipInventoryStatus: data.equipInventoryStatus,
                                 equipStatus: strTgs.uTrim(data.equipStatus),
                                 equipIsVirtual: data.equipIsVirtual,
@@ -517,9 +525,9 @@ exports.dcEquipmentPost = function(req,res){
                                 equipPurchaseTerms: strTgs.uTrim(data.equipPurchaseTerms),
                                 equipPurchaseEnd: strTgs.uTrim(data.equipPurchaseEnd),
                                 equipNotes: strTgs.uTrim(data.equipNotes),
-                                createdBy:'Admin',
+                                createdBy: req.user,
                                 createdOn: Date.now(),
-                                modifiedBy: data.modifiedBy,
+                                modifiedBy: req.user,
                                 modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
@@ -537,7 +545,7 @@ exports.dcEquipmentPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };}
-                return res.redirect(303, '/equipment');
+                return res.redirect(303, '/equipment', context);
 	        }
             if (!data.wasCopy){
 	        req.session.flash = {
@@ -545,14 +553,14 @@ exports.dcEquipmentPost = function(req,res){
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/equipment/'+ res.abbreviation);
+	        return res.redirect(303, '/equipment/'+ res.abbreviation, context);
             } else { 
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/equipment/copy~edit-'+ res.abbreviation);
+	        return res.redirect(303, '/equipment/copy~edit-'+ res.abbreviation, context);
 
             }
 	    }
@@ -566,7 +574,7 @@ exports.dcEquipmentPost = function(req,res){
        //logger.info('existing id>'+thisDoc);
         if (err) {
             logger.info(err);
-            res.redirect('location/datacenter/'+res.abbreviation);
+            res.redirect('location/datacenter/'+res.abbreviation, context);
         } else {
     
     for(i=0;i<data.equipPortType.length;i++){
@@ -596,7 +604,7 @@ exports.dcEquipmentPost = function(req,res){
 
                         thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);
                         thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,data.equipAssetTag);
-                        thisDoc.equipTicketNumber = strTgs.uCleanUp(thisDoc.equipTicketNumber,data.equipTicketNumber);
+                        thisDoc.equipTicketNumber = strTgs.cCleanUp(thisDoc.equipTicketNumber,data.equipTicketNumber);
                         thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus,data.equipInventoryStatus);
                         thisDoc.equipStatus = strTgs.uCleanUp(thisDoc.equipStatus,data.equipStatus);
                         thisDoc.equipIsVirtual = strTgs.uCleanUp(thisDoc.equipIsVirtual,data.equipIsVirtual);
@@ -636,7 +644,7 @@ exports.dcEquipmentPost = function(req,res){
                         thisDoc.equipPurchaseEnd = strTgs.uCleanUp(thisDoc.equipPurchaseEnd,data.equipPurchaseEnd);
                         thisDoc.equipNotes = strTgs.uCleanUp(thisDoc.equipNotes,data.equipNotes);
                         thisDoc.modifiedOn = Date.now();
-                        thisDoc.modifiedBy ='Admin';
+                        thisDoc.modifiedBy = req.user;
                     }
 	    eq.save(function(err){
 	        if(err) {
@@ -646,14 +654,14 @@ exports.dcEquipmentPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, '/equipment/'+ res.abbreviation);
+	            return res.redirect(303, '/equipment/'+ res.abbreviation, context);
 	        }
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
 	        };
-	        return res.redirect(303, '/equipment/'+ res.abbreviation);
+	        return res.redirect(303, '/equipment/'+ res.abbreviation, context);
 	    });
 	});
 }
@@ -686,11 +694,12 @@ exports.dcEquipSysPages = function(req,res,next){
         if(!sys) return next();
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
-            var context = { 
+            var context = {
+                user : req.user,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
                   return {
-                            titleNow:dc.abbreviation,
+                            //titleNow:dc.abbreviation,
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,
@@ -748,7 +757,8 @@ exports.dcEquipSysPages = function(req,res,next){
         if(!sys) return next();
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
-            var context = { 
+            var context = {
+                    user : req.user,
                         rackView: req.params.datacenter,
                         menu1: req.params.datacenter,
                         menuLink1: '/location/rack/'+req.params.datacenter,
@@ -826,7 +836,8 @@ exports.dcRackElevationPage = function(req,res,next){
         if(!sys) return next();
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
-            var context = { 
+            var context = {
+                user : req.user,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
                   return {
@@ -890,6 +901,7 @@ exports.dcRackElevationPage = function(req,res,next){
         //logger.info('rk >>>>>>>>>>>'+rk);
         //logger.info('rk.rackUnique>'+rk.rackUnique);
             var context = {
+                user : req.user,
                 rackView: req.params.datacenter,
                 rackUnique: rk.rackUnique,
                 rackDescription: rk.rackDescription,
@@ -969,6 +981,7 @@ exports.dcRackElevationPage = function(req,res,next){
 ------------------------------------------------------------------------
 */
 exports.dcEquipDelete = function(req,res){
+    context = { user : req.user, };
     res.abbreviation = req.body.equipSN;
     res.newpage = req.body.equipLocationRack;
 if (req.body.equipSN){
@@ -986,14 +999,14 @@ if (req.body.equipSN){
                         intro: 'Ooops!',
                         message: 'Something went wrong, '+ req.body.equipSNtodelete +' was not deleted.',
                     };
-                    return res.redirect(303, '/location/equipment/'+ res.abbreviation);
+                    return res.redirect(303, '/location/equipment/'+ res.abbreviation, context);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
                     message: 'Equipment '+ res.abbreviation +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/equipment-systems/'+res.newpage);
+                return res.redirect(303, '/equipment-systems/'+res.newpage, context);
                 }
             });
         }
@@ -1007,6 +1020,7 @@ if (req.body.equipSN){
 */
 
 exports.equipSubDelete = function(req,res){
+    context = { user : req.user, };
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){
     Equipment.findById(req.body.id,req.body.subDoc,function (err, eq){
@@ -1023,14 +1037,14 @@ if (req.body.id && req.body.subId){
                         intro: 'Ooops!',
                         message: 'Something went wrong',
                     };
-                    return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
+                    return res.redirect(303, '/equipment/edit-'+ res.abbreviation, context);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
                     message: 'The port has been deleted.',
                 };
-                return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
+                return res.redirect(303, '/equipment/edit-'+ res.abbreviation, context);
                 }
             });
         }

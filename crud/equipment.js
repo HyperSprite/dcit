@@ -12,7 +12,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipLocation: strTgs.clTrim(data.equipLocation),
         equipSN: strTgs.cTrim(data.equipSN),
         equipAssetTag: strTgs.sTrim(data.equipAssetTag),
-        equipTicketNumber: strTgs.sTrim(data.equipTicketNumber),
+        equipTicketNumber: strTgs.cTrim(data.equipTicketNumber),
         equipInventoryStatus: strTgs.uTrim(data.equipInventoryStatus),
         equipStatus: strTgs.uTrim(data.equipStatus),
         equipIsVirtual: data.equipIsVirtual,

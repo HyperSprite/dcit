@@ -22,7 +22,10 @@ var Datacenter = require('../models/datacenter.js'),
     
 exports.home = function(req, res){
     if(!req.params.datacenter){
-    res.render ('admin/home');
+        context = {
+                user : req.user,
+            };
+    res.render ('admin/home', context );
 //
 //          Options page
 //
@@ -32,6 +35,7 @@ exports.home = function(req, res){
         //logger.info(opts);
         if (!opts){
         	context = {
+                user : req.user,
                 optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
             };
          
@@ -39,6 +43,7 @@ exports.home = function(req, res){
         }else{   
         if (err) return next (err);
         context ={
+                user : req.user,
                 menu1: 'Admin',
                 menuLink1: '/admin',
                 menu2: 'File Manager',
@@ -64,25 +69,27 @@ exports.home = function(req, res){
 //  Models page
 //
     }else if(req.params.datacenter === 'upload'){
-        res.render ('admin/upload');
+        context = {
+                user : req.user,
+            };
+        res.render ('admin/upload', context );
 //
 //  Database admin
 //
     }else if(req.params.datacenter === 'dbinsert'){
-    
-    
-    
-    
-        res.render ('admin/dbinsert');
+        context = {
+                user : req.user,
+            };
+        res.render ('admin/dbinsert', context );
 //    
 //  User Admin
 //
     }else if(req.params.datacenter === 'useradmin'){
+            context = {
+                user : req.user,
+            };
     
-    
-    
-    
-        res.render ('admin/useradmin');
+        res.render ('admin/useradmin', context );
 //    
 //  File Manager
 //
@@ -97,6 +104,7 @@ exports.home = function(req, res){
         }else{
         //logger.info('file-list'+fil);
             var context = {
+                    user : req.user,
                     optModels: strTgs.findThisInThatOpt('optModels',opt),
                 fil: fil.map(function(fi){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -127,21 +135,28 @@ exports.home = function(req, res){
 //  Joins
 //
     }else if(req.params.datacenter === 'joins'){
+            context = {
+                user : req.user,
+            };
     
     
     
-    
-        res.render ('admin/joins');   
+        res.render ('admin/joins', context);   
 //
 //  Models (not working)
 // 
     }else if(req.params.datacenter === 'models'){
-
-    res.render ('admin/models');
+            context = {
+                user : req.user,
+            };
+    res.render ('admin/models', context);
 
     }else{
     logger.info('datacenter >'+req.params.datacenter);
-    res.render ('admin/'+req.params.datacenter);
+            context = {
+                user : req.user,
+            };
+    res.render ('admin/'+req.params.datacenter, context);
     
 }
 };
@@ -152,6 +167,7 @@ exports.optionsEdit = function(req, res){
         
         if (dcInfo ==='new'){
             context={
+                user : req.user,
                 stat: 'isNew',
             };
         
@@ -160,6 +176,7 @@ exports.optionsEdit = function(req, res){
             Optionsdb.findOne({optListKey: dcInfo},function(err,opt){
             if(err)return next(err);
                 context={
+                    user : req.user,
                     menu1: 'Admin',
                     menuLink1: '/admin',
                     titleNow:'Option Edit',
@@ -175,6 +192,9 @@ exports.optionsEdit = function(req, res){
 
 exports.optionsEditPost = function(req,res,err){
     logger.info('optionsEditPost >'+ req.body.id);
+        context = {
+                user : req.user,
+            };
     var thisDoc;
      if (!req.body.id){
         Optionsdb.create({
@@ -182,7 +202,7 @@ exports.optionsEditPost = function(req,res,err){
                     optListKey: strTgs.csvCleanup(req.body.optListKey),
                     optListArray: strTgs.csvCleanup(req.body.optListArray),
                     createdOn: Date.now(),
-                    createdBy:'Admin',
+                    createdBy:req.user,
                     },function(err){
                      	    
 	        if(err) {
@@ -192,14 +212,15 @@ exports.optionsEditPost = function(req,res,err){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, '/admin/options');
+	            return res.redirect(303, '/admin/options', context);
 	        }
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
 	        };
-	        return res.redirect(303, '/admin/options');
+
+	        return res.redirect(303, '/admin/options', context);
 	    });            
                     
     } else {
@@ -219,14 +240,14 @@ exports.optionsEditPost = function(req,res,err){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, '/admin/options');
+	            return res.redirect(303, '/admin/options', context);
 	        }
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
 	        };
-	        return res.redirect(303, '/admin/options');
+	        return res.redirect(303, '/admin/options', context);
 	    });
     });    
 }
@@ -236,6 +257,9 @@ exports.optionsEditPost = function(req,res,err){
 //        
 exports.uploadPost = function(req,res){
     logger.info('date >'+Date.now());
+            context = {
+                user : req.user,
+            };
     var form = new formidable.IncomingForm();
     form.uploadDir = './userdata/';
     form.keepExtensions = true;
@@ -258,7 +282,7 @@ exports.uploadPost = function(req,res){
                 message: 'There was an error processing your submission. ' +
                     'Pelase try again.',
             };
-            return res.redirect(303, '/contest/vacation-photo');
+            return res.redirect(303, '/contest/vacation-photo', context);
         }
 
 
@@ -272,7 +296,7 @@ exports.uploadPost = function(req,res){
                     createdOn: Date.now(),
                     createdBy:'Admin',
                     },function(err){
-              if(err) return res.redirect(303, '/error');
+              if(err) return res.redirect(303, '/error', context);
         if(err) {
             res.session.flash = {
                 type: 'danger',
@@ -280,7 +304,7 @@ exports.uploadPost = function(req,res){
                 message: 'There was an error processing '+fileHRName+'. ' +
                     'Pelase try again.',
             };
-            return res.redirect(303, '/admin');
+            return res.redirect(303, '/admin', context);
         }else{
     
         req.session.flash = {
@@ -288,7 +312,7 @@ exports.uploadPost = function(req,res){
             intro: 'Awesome!',
             message: 'File '+fileHRName+' uploaded.',
         };
-        return res.redirect(303, '/admin/filemanager');
+        return res.redirect(303, '/admin/filemanager', context);
         }});
     });
 //});
@@ -298,6 +322,9 @@ exports.uploadPost = function(req,res){
 //
 exports.uploadDeletePost = function(req,res){
 if (req.body.id){
+            context = {
+                user : req.user,
+            };
         var bdy = req.body;
         logger.info('delete got this far');
         Fileinfo.findOne({_id: bdy.id},function(err,fileToDelete){
@@ -313,7 +340,7 @@ if (req.body.id){
                         intro: 'Ooops!',
                         message: 'Something went wrong, '+bdy.fileHRName+' was not deleted.',
                     };
-                    return res.redirect(303, '/admin/filemanager');
+                    return res.redirect(303, '/admin/filemanager', context);
                 } else {
                 logger.info('path/file ./'+bdy.filePath);
                 fs.unlink(bdy.filePath, function(err){
@@ -324,7 +351,7 @@ if (req.body.id){
                         intro: 'Ooops!',
                         message: 'Something went wrong, '+bdy.fileHRName+' was not deleted.',
                     };
-                    return res.redirect(303, '/admin/filemanager');
+                    return res.redirect(303, '/admin/filemanager', context);
                     } else {
                 
                     req.session.flash = {
@@ -332,7 +359,7 @@ if (req.body.id){
                     intro: 'Done!',
                     message: 'File '+ bdy.fileHRName+' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/admin/filemanager');
+                return res.redirect(303, '/admin/filemanager', context);
                 }});
                 }
             });
@@ -345,6 +372,9 @@ if (req.body.id){
 // 
 exports.csvToDBPost = function(req,res){
     //logger.info('csvToDBPost >'+req.body.file);
+            context = {
+                user : req.user,
+            };
     switch(req.body.fileDescription) {
     case 'Equipment':
         var equipmentStream = fs.createReadStream(req.body.file);
@@ -415,7 +445,7 @@ exports.csvToDBPost = function(req,res){
 }
     
 
- return res.redirect(303, '/admin/filemanager');
+ return res.redirect(303, '/admin/filemanager', context);
 };
 
 
@@ -424,55 +454,64 @@ exports.csvToDBPost = function(req,res){
 
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){
+    context = { user : req.user, };
     dcit.dropDatacenter(Datacenter);
 	logger.info('dropDatacenterGet');
-    return res.redirect(303, '/location/datacenter/list');    
+    return res.redirect(303, '/location/datacenter/list', context);   
 };
 
 exports.dropRackGet = function(req,res){
+        context = { user : req.user, };
     dcit.dropRack(Rack);
     logger.info('dropRackGet');
-	return res.redirect(303, '/location/datacenter/list'); 
+	return res.redirect(303, '/location/datacenter/list', context); 
 };
 
 exports.dropOptionsdbGet = function(req,res){
+        context = { user : req.user, };
     dcit.dropOptionsdb(Optionsdb);
     logger.info('dropOptionsdbGet');
-	return res.redirect(303, '/admin/options'); 
+	return res.redirect(303, '/admin/options', context);
 };
 
 exports.dropEquipmentGet = function(req,res){
+        context = { user : req.user, };
     dcit.dropEquipment(Equipment);
     logger.info('dropEquipmentGet');
-	return res.redirect(303, '/admin/options'); 
+	return res.redirect(303, '/admin/options', context); 
 };
 
 exports.dropSystemGet = function(req,res){
+        context = { user : req.user, };
     dcit.dropSystem(Systemdb);
     logger.info('dropSystemGet');
-	return res.redirect(303, '/admin/options'); 
+	return res.redirect(303, '/admin/options', context);
 };
 
 
 exports.seedDatacetnerGet = function(req,res){
+        context = { user : req.user, };
     seedDataLoad.seedDatacenter(Datacenter);
     logger.info('seedDatacetnerGet');
-	return res.redirect(303, '/location/datacenter/list');   
+	return res.redirect(303, '/location/datacenter/list', context);  
 };
 
 exports.seedOptionsdbGet = function(req,res){
+        context = { user : req.user, };
     seedDataLoad.seedOptionsDataBase(Optionsdb);
     logger.info('seedOptionsdbGet');
-	return res.redirect(303, '/admin/options');   
+	return res.redirect(303, '/admin/options', context);  
 };
 
 exports.seedEquipmentGet = function(req,res){
+        context = { user : req.user, };
     seedDataLoad.seedEquipmentDataBase(Equipment);
     logger.info('seedEquipmentGet');
-    return res.redirect(303, '/admin/options');
+    return res.redirect(303, '/admin/options', context);
 };
 exports.seedSystemGet = function(req,res){
+        context = { user : req.user, };
     seedDataLoad.seedSystemDataBase(Systemdb);
     logger.info('seedSystemGet');
-    return res.redirect(303, '/admin/options');   	
+    return res.redirect(303, '/admin/options', context);  	
 };

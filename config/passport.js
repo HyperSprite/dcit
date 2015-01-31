@@ -1,6 +1,6 @@
 // https://scotch.io/tutorials/easy-node-authentication-setup-and-local
 // config/passport.js
-
+//var flash    = require('connect-flash');
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 

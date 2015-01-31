@@ -11,25 +11,29 @@ var Datacenter = require('../models/datacenter.js'),
       Systemdb = require('../models/system.js');
     
 exports.home = function(req, res){
-	res.render('home');
+        context = { user : req.user, };
+	res.render('home', context);
 };
 
 exports.dropDatacenterGet = function(req,res){
     dcit.dropDatacenter(Datacenter);
 	logger.info("dropDatacenterGet");
-    res.render('home');    
+        context = { user : req.user, };
+    res.render('home', context);   
 };
 
 exports.dropRackGet = function(req,res){
     dcit.dropRack(Rack);
     logger.info('dropRackGet');
-	res.render('home');    
+        context = { user : req.user, };
+    res.render('home', context); 
 };
 
 exports.seedDatacetnerGet = function(req,res){
     seedDataLoad.seedDatacenter(Datacenter);
     logger.info('seedDatacetnerGet');
-	res.render('home');    
+        context = { user : req.user, };
+    res.render('home', context);
 };
 
 

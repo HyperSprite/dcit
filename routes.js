@@ -10,14 +10,11 @@ var    winston = require('winston'),
           ajax = require('./handlers/ajax.js'),
       passport = require('passport');
 
-
-
 module.exports = function(app){
 
 	// miscellaneous routes
 	app.get('/', main.home);
     app.get('/about', main.about);
-
 
 	// testing/sample routes
 	app.get('/jquery-test', samples.jqueryTest);
@@ -28,7 +25,7 @@ module.exports = function(app){
     app.get('/user/:data', user.home);
     app.get('/user/profile', isLoggedIn, user.home);
 
-   app.post('/user/signup', passport.authenticate('local-signup', {
+    app.post('/user/signup', passport.authenticate('local-signup', {
         successRedirect : '/user/profile', // redirect to the secure profile section
         failureRedirect : '/user/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
@@ -39,7 +36,6 @@ module.exports = function(app){
         failureRedirect : '/user/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
-
 
     // locations
         // URL is incoming / :datacenter is the req storage (this could have had a better name) 

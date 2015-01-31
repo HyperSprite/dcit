@@ -51,9 +51,9 @@ exports.datacenterPages = function(req,res,next){
          Datacenter.find(function(err, datacenters){
             var context = {
                 user : req.user,
-                datacenters: datacenters.map(function(datacenter){
-                    var dc = datacenter;
-                    logger.info(dc);
+                datacenters: datacenters.map(function(dc){
+                    //var dc = datacenter;
+                    //logger.info(dc);
                     return {
                         id: dc._id,
                         fullName: dc.fullName,

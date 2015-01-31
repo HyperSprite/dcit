@@ -17,7 +17,8 @@ var        http = require('http'),
       Optionsdb = require('./models/options.js'),
 MrSystemEnviron = require('./models/mrsystemenviron.js'),
    seedDataLoad = require('./seedDataLoad.js'),
-         logger = require('./lib/logger.js');
+         logger = require('./lib/logger.js'),
+          flash = require('connect-flash');
 
 var app = express();
 
@@ -153,6 +154,7 @@ app.use(require('express-session')({
                 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 app.use(express.static(__dirname + '/public'));
 //app.use(bodyParser());
 // cross-site request forgery protection
