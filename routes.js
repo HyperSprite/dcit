@@ -86,9 +86,12 @@ module.exports = function(app){
         app.get('/admin', isLoggedIn, admin.home);
         app.get('/admin/:datacenter', isLoggedIn, admin.home);
         app.get('/admin/optionsedit/:datacenter', isLoggedIn, admin.optionsEdit);
+        app.post('/admin/userprofileupdate', isLoggedIn, admin.userEditPost)
         app.post('/admin/optionspost', isLoggedIn, admin.optionsEditPost);
         app.post('/admin/uploadpost', isLoggedIn, admin.uploadPost);
         app.post('/admin/uploaddelete', isLoggedIn, admin.uploadDeletePost);
+        app.post('/admin/userprofile', isLoggedIn, admin.userEdit);
+        app.post('/admin/userdelete', isLoggedIn, admin.userDelete);
         app.post('/admin/csvtodb', isLoggedIn, admin.csvToDBPost);
         app.get('/admin/optionsadmin/dropDatacenter', isLoggedIn, admin.dropDatacenterGet);
         app.get('/admin/optionsadmin/dropRack', isLoggedIn, admin.dropRackGet);

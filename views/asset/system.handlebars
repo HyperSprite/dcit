@@ -41,7 +41,7 @@
             {{> assets/sysport-list}}
             
             <hr>
-            <div class="col-sm-9">
+            <div>
             {{#if systemIsVirual}} Is Virtual {{/if}}
             {{#if systemIsVirual}} Is Virtual {{/if}}
             
@@ -60,7 +60,7 @@
             {{#if systemStart}}Start Date: {{systemStart}}<br>{{/if}}
             {{#if systemEnd}}End Date: {{systemEnd}}<br>{{/if}}
             <br>
-            {{#if equipNotes}}Notes: {{equipNotes}}<br>{{/if}}
+            {{#if systemNotes}}Notes: {{systemNotes}}<br>{{/if}}
             {{#if createdBy}}Created By: {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
             Modified {{#if modifiedBy}}By: {{modifiedBy}}{{/if}}{{#if modifiedOn}}: {{modifiedOn}}<br>{{/if}}
             
@@ -76,14 +76,14 @@
         </li><br>
     </ul>
     <hr>
-    <div>
+
         
         {{>assets/config-portconfig}}
  
 
         {{> assets/config-acs6k}}
 
-        </div> 
+
     
 </div>
 

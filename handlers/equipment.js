@@ -454,7 +454,6 @@ exports.dcEquipPages = function(req,res,next){
 exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
     var data = req.body;
-    context = { user : req.user, };
     res.abbreviation = strTgs.cTrim(data.equipSN);
     if(data.isEdit){
     res.abbreviation = strTgs.cTrim(data.isEdit);
@@ -525,9 +524,9 @@ exports.dcEquipmentPost = function(req,res){
                                 equipPurchaseTerms: strTgs.uTrim(data.equipPurchaseTerms),
                                 equipPurchaseEnd: strTgs.uTrim(data.equipPurchaseEnd),
                                 equipNotes: strTgs.uTrim(data.equipNotes),
-                                createdBy: req.user,
+                                createdBy: req.user.local.email,
                                 createdOn: Date.now(),
-                                modifiedBy: req.user,
+                                modifiedBy: req.user.local.email,
                                 modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
@@ -545,7 +544,7 @@ exports.dcEquipmentPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };}
-                return res.redirect(303, '/equipment', context);
+                return res.redirect(303, '/equipment');
 	        }
             if (!data.wasCopy){
 	        req.session.flash = {
@@ -553,14 +552,14 @@ exports.dcEquipmentPost = function(req,res){
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/equipment/'+ res.abbreviation, context);
+	        return res.redirect(303, '/equipment/'+ res.abbreviation);
             } else { 
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
                 };
-	        return res.redirect(303, '/equipment/copy~edit-'+ res.abbreviation, context);
+	        return res.redirect(303, '/equipment/copy~edit-'+ res.abbreviation);
 
             }
 	    }
@@ -574,7 +573,7 @@ exports.dcEquipmentPost = function(req,res){
        //logger.info('existing id>'+thisDoc);
         if (err) {
             logger.info(err);
-            res.redirect('location/datacenter/'+res.abbreviation, context);
+            res.redirect('location/datacenter/'+res.abbreviation);
         } else {
     
     for(i=0;i<data.equipPortType.length;i++){
@@ -644,7 +643,7 @@ exports.dcEquipmentPost = function(req,res){
                         thisDoc.equipPurchaseEnd = strTgs.uCleanUp(thisDoc.equipPurchaseEnd,data.equipPurchaseEnd);
                         thisDoc.equipNotes = strTgs.uCleanUp(thisDoc.equipNotes,data.equipNotes);
                         thisDoc.modifiedOn = Date.now();
-                        thisDoc.modifiedBy = req.user;
+                        thisDoc.modifiedBy = req.user.local.email;
                     }
 	    eq.save(function(err){
 	        if(err) {
@@ -654,14 +653,14 @@ exports.dcEquipmentPost = function(req,res){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, '/equipment/'+ res.abbreviation, context);
+	            return res.redirect(303, '/equipment/'+ res.abbreviation);
 	        }
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
 	        };
-	        return res.redirect(303, '/equipment/'+ res.abbreviation, context);
+	        return res.redirect(303, '/equipment/'+ res.abbreviation);
 	    });
 	});
 }
@@ -981,7 +980,7 @@ exports.dcRackElevationPage = function(req,res,next){
 ------------------------------------------------------------------------
 */
 exports.dcEquipDelete = function(req,res){
-    context = { user : req.user, };
+    
     res.abbreviation = req.body.equipSN;
     res.newpage = req.body.equipLocationRack;
 if (req.body.equipSN){
@@ -999,14 +998,14 @@ if (req.body.equipSN){
                         intro: 'Ooops!',
                         message: 'Something went wrong, '+ req.body.equipSNtodelete +' was not deleted.',
                     };
-                    return res.redirect(303, '/location/equipment/'+ res.abbreviation, context);
+                    return res.redirect(303, '/location/equipment/'+ res.abbreviation);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
                     message: 'Equipment '+ res.abbreviation +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/equipment-systems/'+res.newpage, context);
+                return res.redirect(303, '/equipment-systems/'+res.newpage);
                 }
             });
         }
@@ -1020,7 +1019,7 @@ if (req.body.equipSN){
 */
 
 exports.equipSubDelete = function(req,res){
-    context = { user : req.user, };
+
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){
     Equipment.findById(req.body.id,req.body.subDoc,function (err, eq){
@@ -1037,14 +1036,14 @@ if (req.body.id && req.body.subId){
                         intro: 'Ooops!',
                         message: 'Something went wrong',
                     };
-                    return res.redirect(303, '/equipment/edit-'+ res.abbreviation, context);
+                    return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
                 } else {
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
                     message: 'The port has been deleted.',
                 };
-                return res.redirect(303, '/equipment/edit-'+ res.abbreviation, context);
+                return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
                 }
             });
         }

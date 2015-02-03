@@ -145,7 +145,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require('express-session')({ 
                 key: 'session',
                 cookie:{
-                   maxAge: 3600000
+                   maxAge: 36000000
                 },
                 secret: credentials.cookieSecret,
                 store: require('mongoose-session')(mongoose),
@@ -230,14 +230,16 @@ require('./routes.js')(app);
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
 	res.status(404);
-	res.render('404');
+    context = { user : req.user, };
+	res.render('404', context);
 });
 
 // 500 error handler (middleware)
 app.use(function(err, req, res, next){
 	console.error(err.stack);
 	res.status(500);
-	res.render('500');
+    context = { user : req.user, };
+	res.render('500', context);
 });
 
 var server;

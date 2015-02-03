@@ -10,7 +10,6 @@ var userSchema = mongoose.Schema({
         name: String,
         email: String,
         phone: String,
-        roles: Array,
         access: Number,
         createdOn: Date,
         lastAccessed: Date,

@@ -1,0 +1,42 @@
+<div>
+<h4>Users</h4>
+          <div id="dvData">
+    
+    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="edit">E</th>
+                <th class="table-sort" data-sort="type">Type</th>
+                <th class="table-sort" data-sort="id">ID</th>
+                <th class="table-sort" data-sort="email">Email</th>
+                <th class="table-sort" data-sort="phone">Phone</th>
+                <th class="table-sort" data-sort="access">Access</th>
+                <th class="table-sort" data-sort="createdOn">Created On</th>
+                <th class="table-sort" data-sort="lastAccessed">Last Accessed</th>
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each usr}}
+            <tr>
+                <td class="edit"><button type="submit" class="btn btn-success btn-xs" form="editform{{@index}}">E</button></td>
+                <td class="type">{{type}}</td>
+                <td class="id">{{id}}</td>
+                <td class="email">{{email}}</td>
+                <td class="phone">{{phone}}</td>
+                <td class="access">{{access}}</td>
+                <td class="createdOn">{{createdOn}}</td>
+                <td class="lastAccessed">{{lastAccessed}}</td>
+              </tr>  
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+         {{> tocsvpartial }}
+    </div>
+
+        {{#each usr}}
+            <form id="editform{{@index}}" action="/admin/userprofile" method="POST">
+            <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
+            <input type="hidden" name="id" value="{{id}}">
+            </form>
+        {{/each}} 

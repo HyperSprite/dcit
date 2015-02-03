@@ -10,6 +10,7 @@ var     logger = require('../lib/logger.js'),
 
 exports.home = function(req, res){
     logger.info(req.params.data);
+    logger.info('req.headers.referer'+req.headers.referer);
     if(!req.params.data){
     res.render ('user/home');
     } else if (req.params.data === 'login'){
@@ -38,6 +39,7 @@ exports.localSignup = function(req, res){
 };
 
 exports.localLogin = function(req, res){
+
         if(successRedirect){
             res.render('admin/profile');
         }

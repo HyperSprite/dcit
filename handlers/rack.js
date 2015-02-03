@@ -499,7 +499,7 @@ exports.dcRackPost = function(req,res){
                         thisDoc.rackNotes = strTgs.uCleanUp(thisDoc.rackNotes,req.body.rackNotes);
                         thisDoc.rUs = strTgs.uCleanUp(thisDoc.rUs,req.body.rUs);
                         thisDoc.modifiedOn = Date.now();
-                        thisDoc.modifiedBy ='Admin';
+                        thisDoc.modifiedBy =req.user.local.email;
                     }
 	    rack.save(function(err){
 	        if(err) {
@@ -605,9 +605,9 @@ exports.dcRackPowPost = function(req,res){
                     rackPowPhase: strTgs.sTrim(req.body.rackPowPhase),
                     rackPowAmps: strTgs.sTrim(req.body.rackPowAmps),
                     rackPowReceptacle: strTgs.cTrim(req.body.rackPowReceptacle),
-                    rackPowCreatedBy: 'Admin',
+                    rackPowCreatedBy: req.user.local.email,
                     rackPowCreatedOn: modifiedOn = Date.now(),
-                    rackPowModifiedby: 'Admin',
+                    rackPowModifiedby: req.user.local.email,
                     rackPowModifiedOn: modifiedOn = Date.now(),
                 });
         } else {
@@ -617,7 +617,7 @@ exports.dcRackPowPost = function(req,res){
                 thisSubDoc.rackPowAmps = strTgs.uCleanUp(thisSubDoc.rackPowAmps,req.body.rackPowAmps);
                 thisSubDoc.rackPowReceptacle = strTgs.uCleanUp(thisSubDoc.rackPowReceptacle,req.body.rackPowReceptacle);
                 thisSubDoc.modifiedOn = Date.now();
-                thisSubDoc.modifiedBy ='Admin';
+                thisSubDoc.modifiedBy =req.user.local.email;
                     }
 	    rk.save(function(err){
 	        if(err) {

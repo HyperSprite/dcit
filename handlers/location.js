@@ -378,7 +378,7 @@ exports.datacenterPost = function(req,res){
                     thisDoc.abbreviation = strTgs.uCleanUp(thisDoc.abbreviation,req.body.abbreviation);
                     thisDoc.foundingCompany = strTgs.uCleanUp(thisDoc.foundingCompany,req.body.foundingCompany); 
                     thisDoc.modifiedOn = Date.now();
-                    thisDoc.modifiedBy = req.user;
+                    thisDoc.modifiedBy = req.user.local.email;
                     }
 
 	    datacenter.save(function(err){
@@ -717,7 +717,7 @@ exports.datacenterPowerPost = function(req,res){
         } else {    
                     thisDoc.powerNames = strTgs.uCleanUp(thisDoc.powerNames,req.body.powerNames).split(','); // split makes this an array
                     thisDoc.modifiedOn = Date.now();
-                    thisDoc.modifiedBy = req.user;
+                    thisDoc.modifiedBy = req.user.local.email;
                     }
 
 	    datacenter.save(function(err){
@@ -876,9 +876,9 @@ exports.datacenterNetworkPost = function(req,res,next){
             dcNetLdap1: strTgs.clTrim(data.dcNetLdap1),
             dcNetLdap2: strTgs.clTrim(data.dcNetLdap2),
             dcNetTftpHost: strTgs.clTrim(data.dcNetTftpHost),
-            createdBy: req.user,
+            createdBy: req.user.local.email,
             createdOn: Date.now(),
-            modifiedBy: req.user,
+            modifiedBy: req.user.local.email,
             modifiedOn: Date.now(),
         });
     } else {
@@ -899,7 +899,7 @@ exports.datacenterNetworkPost = function(req,res,next){
             thisSubDoc.dcNetLdap2= strTgs.clCleanUp(thisSubDoc.dcNetLdap2,data.dcNetLdap2);
             thisSubDoc.dcNetTftpHost= strTgs.clCleanUp(thisSubDoc.dcNetTftpHost,data.dcNetTftpHost);
             thisSubDoc.modifiedOn = Date.now();
-            thisSubDoc.modifiedBy = req.user;
+            thisSubDoc.modifiedBy = req.user.local.email;
 
     }
             datacenter.save(function(err){

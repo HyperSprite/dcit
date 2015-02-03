@@ -746,9 +746,9 @@ exports.dcSystemPost = function(req,res){
                                 systemStart: bd.systemStart,
                                 systemEnd: bd.systemEnd,
                                 systemNotes: strTgs.uTrim(bd.systemNotes),
-                                createdBy:'Admin',
+                                createdBy: req.user.local.email,
                                 createdOn: Date.now(),
-                                modifiedBy: bd.modifiedBy,
+                                modifiedBy: req.user.local.email,
                                 modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
@@ -854,7 +854,7 @@ exports.dcSystemPost = function(req,res){
             thisDoc.systemEnd= bd.systemEnd;
             thisDoc.systemNotes= strTgs.uTrim(bd.systemNotes);
             thisDoc.modifiedOn = Date.now();
-            thisDoc.modifiedBy ='Admin';
+            thisDoc.modifiedBy = req.user.local.email;
                     }
 	    sys.save(function(err){
 	        if(err) {

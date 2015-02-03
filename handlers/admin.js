@@ -17,13 +17,16 @@ var Datacenter = require('../models/datacenter.js'),
      Optionsdb = require('../models/options.js'),
      Equipment = require('../models/equipment.js'),
       Systemdb = require('../models/system.js'),
+          User = require('../models/user.js'),
       Fileinfo = require('../models/fileinfo.js');
 
     
 exports.home = function(req, res){
+    logger.info('exports.home >'+req.params.datacenter);
     if(!req.params.datacenter){
         context = {
-                user : req.user,
+            lastPage : '/admin',
+            user : req.user,
             };
     res.render ('admin/home', context );
 //
@@ -35,14 +38,16 @@ exports.home = function(req, res){
         //logger.info(opts);
         if (!opts){
         	context = {
+                lastPage : '/admin/options',
                 user : req.user,
                 optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
             };
          
             res.render('admin/options', context );
-        }else{   
+        }else{
         if (err) return next (err);
         context ={
+                lastPage : '/admin/options',
                 user : req.user,
                 menu1: 'Admin',
                 menuLink1: '/admin',
@@ -70,7 +75,8 @@ exports.home = function(req, res){
 //
     }else if(req.params.datacenter === 'upload'){
         context = {
-                user : req.user,
+            lastPage : '/admin/upload',
+            user : req.user,
             };
         res.render ('admin/upload', context );
 //
@@ -78,18 +84,40 @@ exports.home = function(req, res){
 //
     }else if(req.params.datacenter === 'dbinsert'){
         context = {
-                user : req.user,
+            lastPage : '/admin/dbinsert',
+            user : req.user,
             };
         res.render ('admin/dbinsert', context );
 //    
 //  User Admin
 //
     }else if(req.params.datacenter === 'useradmin'){
+        
+        User.find({}).sort({'email':'desc'}).exec(function (err, usr) {
+            if(err){
+                logger.info(err);
+            }else{
             context = {
+                lastPage : '/admin/useradmin',
                 user : req.user,
+                usr: usr.map(function(ur){
+                    return {
+                        id : ur._id,
+                        email : ur.local.email,
+                        name : ur.local.name,
+                        phone : ur.local.phone,
+                        access : ur.local.access,
+                        createdOn : ur.local.createdOn,
+                        lastAccessed : ur.local.lastAccessed,                       
+                    };
+                })
             };
+         res.render ('admin/useradmin', context );  
+    }});
+
+
     
-        res.render ('admin/useradmin', context );
+
 //    
 //  File Manager
 //
@@ -104,6 +132,7 @@ exports.home = function(req, res){
         }else{
         //logger.info('file-list'+fil);
             var context = {
+                    lastPage : '/admin/filemanager',
                     user : req.user,
                     optModels: strTgs.findThisInThatOpt('optModels',opt),
                 fil: fil.map(function(fi){
@@ -136,6 +165,7 @@ exports.home = function(req, res){
 //
     }else if(req.params.datacenter === 'joins'){
             context = {
+                lastPage : '/admin/joins',
                 user : req.user,
             };
     
@@ -147,6 +177,7 @@ exports.home = function(req, res){
 // 
     }else if(req.params.datacenter === 'models'){
             context = {
+                lastPage : '/admin/models',
                 user : req.user,
             };
     res.render ('admin/models', context);
@@ -154,11 +185,67 @@ exports.home = function(req, res){
     }else{
     logger.info('datacenter >'+req.params.datacenter);
             context = {
+                lastPage : '/admin/'+req.params.datacenter,
                 user : req.user,
             };
     res.render ('admin/'+req.params.datacenter, context);
     
 }
+};
+
+exports.userEdit = function (req, res) {
+    var user = req.user;
+    User.findOne({'_id':req.body.id}, function(err,ur){
+        if(err){
+            logger(err);
+        }else{
+        logger.info('ur '+ur);
+        context = {
+                lastPage : '/admin/useradmin',
+                user : req.user,
+                id : ur._id,
+                email : ur.local.email,
+                name : ur.local.name,
+                phone : ur.local.phone,
+                access : ur.local.access,
+                createdOn : ur.local.createdOn,
+                lastAccessed : ur.local.lastAccessed,                       
+            };
+    res.render ('admin/userprofile', context);   
+    }});
+};
+
+exports.userEditPost = function (req, res) {
+        logger.info('userEditPost >'+ req.body.id);
+        var data = req.body;
+    User.findOne({'_id':req.body.id}, function(err,ur){
+        if (err){
+            logger.info(err);
+            res.redirect ('admin/useradmin');
+        } else {
+            ur.local.email = strTgs.uCleanUp(ur.local.email,data.email);
+            ur.local.name = strTgs.uCleanUp(ur.local.email,data.email);
+            ur.local.phone = strTgs.uCleanUp(ur.local.phone,data.phone);
+            ur.local.access = strTgs.uCleanUp(ur.local.access,data.access);
+        }
+        ur.save(function (err) {
+            if(err) {
+                logger.error(err.stack);
+                req.session.flash = {
+                    type: 'danger',
+                    intro: 'Ooops!',
+                    message: 'There was an error processing your request.',
+                };
+        return res.redirect(303, '/admin/useradmin');
+            }
+            req.session.flash = {
+                type: 'success',
+                intro: 'Thank you!',
+                message: 'Your update has been made.',
+            };
+        return res.redirect(303, '/admin/useradmin');
+        });
+    });   
 };
 
 exports.optionsEdit = function(req, res){
@@ -167,6 +254,7 @@ exports.optionsEdit = function(req, res){
         
         if (dcInfo ==='new'){
             context={
+                lastPage : '/admin/optionsedit',
                 user : req.user,
                 stat: 'isNew',
             };
@@ -176,6 +264,7 @@ exports.optionsEdit = function(req, res){
             Optionsdb.findOne({optListKey: dcInfo},function(err,opt){
             if(err)return next(err);
                 context={
+                    lastPage : '/admin/optionsedit',
                     user : req.user,
                     menu1: 'Admin',
                     menuLink1: '/admin',
@@ -192,9 +281,7 @@ exports.optionsEdit = function(req, res){
 
 exports.optionsEditPost = function(req,res,err){
     logger.info('optionsEditPost >'+ req.body.id);
-        context = {
-                user : req.user,
-            };
+
     var thisDoc;
      if (!req.body.id){
         Optionsdb.create({
@@ -212,7 +299,7 @@ exports.optionsEditPost = function(req,res,err){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, '/admin/options', context);
+	            return res.redirect(303, '/admin/options');
 	        }
 	        req.session.flash = {
 	            type: 'success',
@@ -220,7 +307,7 @@ exports.optionsEditPost = function(req,res,err){
 	            message: 'Your update has been made.',
 	        };
 
-	        return res.redirect(303, '/admin/options', context);
+	        return res.redirect(303, '/admin/options');
 	    });            
                     
     } else {
@@ -240,14 +327,14 @@ exports.optionsEditPost = function(req,res,err){
 	                intro: 'Ooops!',
 	                message: 'There was an error processing your request.',
 	            };
-	            return res.redirect(303, '/admin/options', context);
+	            return res.redirect(303, '/admin/options');
 	        }
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
 	            message: 'Your update has been made.',
 	        };
-	        return res.redirect(303, '/admin/options', context);
+	        return res.redirect(303, '/admin/options');
 	    });
     });    
 }
@@ -257,9 +344,7 @@ exports.optionsEditPost = function(req,res,err){
 //        
 exports.uploadPost = function(req,res){
     logger.info('date >'+Date.now());
-            context = {
-                user : req.user,
-            };
+    var userEmail = req.user.local.email;
     var form = new formidable.IncomingForm();
     form.uploadDir = './userdata/';
     form.keepExtensions = true;
@@ -282,7 +367,7 @@ exports.uploadPost = function(req,res){
                 message: 'There was an error processing your submission. ' +
                     'Pelase try again.',
             };
-            return res.redirect(303, '/contest/vacation-photo', context);
+            //return res.redirect(303, '/contest/vacation-photo');
         }
 
 
@@ -294,9 +379,9 @@ exports.uploadPost = function(req,res){
                     fileDescription: strTgs.csvCleanup(fields.fileDescription),
                     fileType: fields.fileType,
                     createdOn: Date.now(),
-                    createdBy:'Admin',
+                    createdBy: userEmail,
                     },function(err){
-              if(err) return res.redirect(303, '/error', context);
+              if(err) return res.redirect(303, '/error');
         if(err) {
             res.session.flash = {
                 type: 'danger',
@@ -304,7 +389,7 @@ exports.uploadPost = function(req,res){
                 message: 'There was an error processing '+fileHRName+'. ' +
                     'Pelase try again.',
             };
-            return res.redirect(303, '/admin', context);
+            return res.redirect(303, '/admin');
         }else{
     
         req.session.flash = {
@@ -312,7 +397,7 @@ exports.uploadPost = function(req,res){
             intro: 'Awesome!',
             message: 'File '+fileHRName+' uploaded.',
         };
-        return res.redirect(303, '/admin/filemanager', context);
+        return res.redirect(303, '/admin/filemanager');
         }});
     });
 //});
@@ -322,9 +407,7 @@ exports.uploadPost = function(req,res){
 //
 exports.uploadDeletePost = function(req,res){
 if (req.body.id){
-            context = {
-                user : req.user,
-            };
+
         var bdy = req.body;
         logger.info('delete got this far');
         Fileinfo.findOne({_id: bdy.id},function(err,fileToDelete){
@@ -340,7 +423,7 @@ if (req.body.id){
                         intro: 'Ooops!',
                         message: 'Something went wrong, '+bdy.fileHRName+' was not deleted.',
                     };
-                    return res.redirect(303, '/admin/filemanager', context);
+                    return res.redirect(303, '/admin/filemanager');
                 } else {
                 logger.info('path/file ./'+bdy.filePath);
                 fs.unlink(bdy.filePath, function(err){
@@ -351,7 +434,7 @@ if (req.body.id){
                         intro: 'Ooops!',
                         message: 'Something went wrong, '+bdy.fileHRName+' was not deleted.',
                     };
-                    return res.redirect(303, '/admin/filemanager', context);
+                    return res.redirect(303, '/admin/filemanager');
                     } else {
                 
                     req.session.flash = {
@@ -359,7 +442,7 @@ if (req.body.id){
                     intro: 'Done!',
                     message: 'File '+ bdy.fileHRName+' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/admin/filemanager', context);
+                return res.redirect(303, '/admin/filemanager');
                 }});
                 }
             });
@@ -372,9 +455,7 @@ if (req.body.id){
 // 
 exports.csvToDBPost = function(req,res){
     //logger.info('csvToDBPost >'+req.body.file);
-            context = {
-                user : req.user,
-            };
+
     switch(req.body.fileDescription) {
     case 'Equipment':
         var equipmentStream = fs.createReadStream(req.body.file);
@@ -445,73 +526,100 @@ exports.csvToDBPost = function(req,res){
 }
     
 
- return res.redirect(303, '/admin/filemanager', context);
+ return res.redirect(303, '/admin/filemanager');
 };
 
+/*---------------------------------------------------------------------
+---------------------------- User Delete ------------------------------
+------------------------------------------------------------------------
+*/
+exports.userDelete = function(req,res){
+    res.abbreviation = req.body.email;
+   
 
+if (req.body.id){
+        logger.info('delete got this far id >'+ req.body.id);
+        User.findById(req.body.id,function(err,userToDelete){
+        if(err){
+        logger.info(err);
+        //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+        }else{
+            userToDelete.remove(function(err){
+                if(err){
+                logger.info(err);
+                req.session.flash = {
+                        type: 'danger',
+                        intro: 'Ooops!',
+                        message: 'Something went wrong, '+ res.abbreviation +' was not deleted.',
+                    };
+                    return res.redirect(303, '/admin/useradmin');
+                } else {
+                    req.session.flash = {
+                    type: 'success',
+                    intro: 'Done!',
+                    message: 'User '+ res.abbreviation +' has been deleted.',
+                };
+                return res.redirect(303, '/admin/useradmin');
+                }
+            });
+        }
+    });
+}
+};
 
 
 
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){
-    context = { user : req.user, };
     dcit.dropDatacenter(Datacenter);
 	logger.info('dropDatacenterGet');
-    return res.redirect(303, '/location/datacenter/list', context);   
+    return res.redirect(303, '/location/datacenter/list');   
 };
 
 exports.dropRackGet = function(req,res){
-        context = { user : req.user, };
     dcit.dropRack(Rack);
     logger.info('dropRackGet');
-	return res.redirect(303, '/location/datacenter/list', context); 
+	return res.redirect(303, '/location/datacenter/list'); 
 };
 
 exports.dropOptionsdbGet = function(req,res){
-        context = { user : req.user, };
     dcit.dropOptionsdb(Optionsdb);
     logger.info('dropOptionsdbGet');
-	return res.redirect(303, '/admin/options', context);
+	return res.redirect(303, '/admin/options');
 };
 
 exports.dropEquipmentGet = function(req,res){
-        context = { user : req.user, };
     dcit.dropEquipment(Equipment);
     logger.info('dropEquipmentGet');
-	return res.redirect(303, '/admin/options', context); 
+	return res.redirect(303, '/admin/options'); 
 };
 
 exports.dropSystemGet = function(req,res){
-        context = { user : req.user, };
     dcit.dropSystem(Systemdb);
     logger.info('dropSystemGet');
-	return res.redirect(303, '/admin/options', context);
+	return res.redirect(303, '/admin/options');
 };
 
 
 exports.seedDatacetnerGet = function(req,res){
-        context = { user : req.user, };
     seedDataLoad.seedDatacenter(Datacenter);
     logger.info('seedDatacetnerGet');
-	return res.redirect(303, '/location/datacenter/list', context);  
+	return res.redirect(303, '/location/datacenter/list');  
 };
 
 exports.seedOptionsdbGet = function(req,res){
-        context = { user : req.user, };
     seedDataLoad.seedOptionsDataBase(Optionsdb);
     logger.info('seedOptionsdbGet');
-	return res.redirect(303, '/admin/options', context);  
+	return res.redirect(303, '/admin/options');  
 };
 
 exports.seedEquipmentGet = function(req,res){
-        context = { user : req.user, };
     seedDataLoad.seedEquipmentDataBase(Equipment);
     logger.info('seedEquipmentGet');
-    return res.redirect(303, '/admin/options', context);
+    return res.redirect(303, '/admin/options');
 };
 exports.seedSystemGet = function(req,res){
-        context = { user : req.user, };
     seedDataLoad.seedSystemDataBase(Systemdb);
     logger.info('seedSystemGet');
-    return res.redirect(303, '/admin/options', context);  	
+    return res.redirect(303, '/admin/options');  	
 };
