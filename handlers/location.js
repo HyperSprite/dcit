@@ -45,11 +45,20 @@ Datacenter List
 this is the DC List block. Looks for "List" in the URL and returns list of datacenters with city and country from Main contact.
 */
 exports.datacenterPages = function(req,res,next){
+        if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     logger.info('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
     if (req.params.datacenter === 'list' || !req.params.datacenter){
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 datacenters: datacenters.map(function(dc){
                     //var dc = datacenter;
@@ -96,6 +105,7 @@ Edit Contact
         var context;
         if (dcSubId === 'new'){
             context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 titleNow:dc.abbreviation,
@@ -113,6 +123,7 @@ Edit Contact
         if(!datacenter) return next();
         logger.info(datacenter);
             context ={
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 fullName:dc.fullName,
@@ -163,6 +174,14 @@ this is the DC edit block. Looks for "edit" in the URL and redirects to a form t
 If "New" is in the URL, it does New, otherwise it goes to existing
 */
     } else if (req.params.datacenter.indexOf ('edit') !=-1){
+            if(!req.user || req.user.access < 3){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{
         logger.info('else if (req.params.datacenter.indexOf ("edit")');
         start = req.params.datacenter.indexOf ('-');
         dcabbr = req.params.datacenter.substring (start+1);
@@ -179,6 +198,7 @@ If "New" is in the URL, it does New, otherwise it goes to existing
         //logger.info(datacenter);
             var dc = datacenter;
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 fullName:dc.fullName,
@@ -190,7 +210,7 @@ If "New" is in the URL, it does New, otherwise it goes to existing
         //logger.info(context);
         res.render('location/datacenteredit', context);  
         });
-        }
+        }}
     }  else {
 
 /*
@@ -209,6 +229,7 @@ this takes the abbreviation and displays the matching datacenter details
         Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err,racks){
         logger.info ('Rack - id to matching rack to datacenter'+ dc._id); 
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
@@ -316,6 +337,7 @@ this takes the abbreviation and displays the matching datacenter details
         });
         });
     }
+}
 };
 /*
 Datacenter Contact Post
@@ -335,6 +357,14 @@ uCleanUp = function(old,current){
 New Datacenter working
 */
 exports.datacenterPost = function(req,res){
+    if (!req.user || req.user.access < 4){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
     logger.info('datacenterPost abbreviation>'+res.abbreviation);
@@ -400,9 +430,18 @@ exports.datacenterPost = function(req,res){
 	    });
 	});
 }
+}
 };
   
 exports.datacenterContactPost = function(req,res){
+    if (req.user || req.user.access < 3){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
     logger.info('id>'+req.body.id);
@@ -486,11 +525,20 @@ exports.datacenterContactPost = function(req,res){
 	        return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
 	    });
 	});
+}
 }; 
 
 // datacenter delete
 
 exports.datacenterDelete = function(req,res){
+    if (!req.user || req.user.access < 5){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     res.abbreviation = req.body.id;
 if (req.body.id){
         logger.info('delete got this far');
@@ -520,6 +568,7 @@ if (req.body.id){
         }
     });
 }
+}
 };
 /*
 Datacenter Cage Edit 
@@ -528,6 +577,14 @@ Working - Done
 this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects to a form to edit the Datacenter.
 */  
 exports.datacenterCagePages = function(req,res,next){
+    if (!req.user || req.user.access < 3){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
     logger.info('exports.datacenterCagePages');
     start = req.params.datacenter.indexOf ('-');
@@ -545,6 +602,7 @@ exports.datacenterCagePages = function(req,res,next){
             var dc = datacenter;
             logger.info ('dc>'+dc);
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
@@ -573,7 +631,7 @@ exports.datacenterCagePages = function(req,res,next){
 
         res.render('location/datacentercage', context);  
         });
-
+}
 };
 /*
 Datacenter Cage Post
@@ -582,6 +640,14 @@ this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects 
 */  
 
 exports.datacenterCagePost = function(req,res){
+    if (!req.user || req.user.access < 3){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
     logger.info('@ id '+ req.body.id);
@@ -657,6 +723,7 @@ exports.datacenterCagePost = function(req,res){
 	        return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
 	    });
 	});
+}
 }; 
 
 /*
@@ -666,6 +733,14 @@ Working - Done
 this is the DC Power edit block. Looks for "cage/edit-" in the URL and redirects to a form to edit the Datacenter.
 */  
 exports.datacenterPowerPages = function(req,res,next){
+    if (!req.user || req.user.access < 3){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
     logger.info('exports.datacenterPowerPages');
     start = req.params.datacenter.indexOf ('-');
@@ -683,6 +758,7 @@ exports.datacenterPowerPages = function(req,res,next){
             var dc = datacenter;
             logger.info ('dc   >'+dc);
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
@@ -698,10 +774,18 @@ exports.datacenterPowerPages = function(req,res,next){
 
         res.render('location/datacenterpower', context);  
         });
-
+}
 };
 
 exports.datacenterPowerPost = function(req,res){
+    if (!req.user || req.user.access < 3){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
     logger.info('PowerPost id '+ req.body.id);
@@ -738,6 +822,7 @@ exports.datacenterPowerPost = function(req,res){
 	        return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
 	    });
 	});
+}
 };
 
 // ********************************************************************
@@ -752,6 +837,14 @@ exports.datacenterPowerPost = function(req,res){
 
 
 exports.datacenterNetworkPages = function(req,res,next){
+    if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     // /location/network/{{id}}-new
     // /location/network/{{../id}}-{{dcNetId}}
     // /location/network/{{../id}}-{{dcNetId}}~copy
@@ -777,6 +870,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         var nk;
         if (dcSubId === 'new'){
             context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
@@ -790,6 +884,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         } else if (copy === true){ // copy
             nk = dc.networks.id(dcSubId);
             context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
@@ -813,6 +908,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         } else { // edit
             nk = dc.networks.id(dcSubId);
             context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
@@ -842,9 +938,18 @@ exports.datacenterNetworkPages = function(req,res,next){
         }}); 
 }
 });
+}
 };
 
 exports.datacenterNetworkPost = function(req,res,next){
+    if (!req.user || req.user.access < 4){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     logger.info('exports.datacenterNetworkPost');
     var data = req.body;
     res.abbreviation = data.abbreviation;
@@ -921,7 +1026,7 @@ exports.datacenterNetworkPost = function(req,res,next){
         });
 
 });
-
+}
 };
 
 
@@ -930,7 +1035,15 @@ exports.datacenterNetworkPost = function(req,res,next){
 
 // contact and cage Delete
 
-exports.datacenterSubDelete = function(req,res){     
+exports.datacenterSubDelete = function(req,res){
+if (!req.user || req.user.access < 4){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{    
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){
             
@@ -967,4 +1080,7 @@ if (req.body.id && req.body.subId){
                 };
                 return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
                 }
-            }); } }); } };
+            }); 
+    } }); }
+}
+};

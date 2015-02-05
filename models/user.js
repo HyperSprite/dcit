@@ -4,13 +4,13 @@ var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
 var userSchema = mongoose.Schema({
+    access: Number,    
     local:{
         authId: String,
         password: String,
         name: String,
         email: String,
         phone: String,
-        access: Number,
         createdOn: Date,
         lastAccessed: Date,
     },

@@ -4,13 +4,13 @@
   <li>{{abbreviation}}</li>
 </ol>
 
-<h2>{{fullName}} - <a href="/location/datacenter/edit-{{abbreviation}}">{{abbreviation}}</a></h2>
+<h2>{{fullName}} - {{#if access.edit}}<a href="/location/datacenter/edit-{{abbreviation}}">{{abbreviation}}</a>{{else}}{{abbreviation}}{{/if}}</h2>
 {{#if foundingCompany}}{{foundingCompany}}{{/if}}
 <br>
 <hr>
 <div class="datacenter">
     <h4>Contacts</h4>
-    <h6><a href="/location/datacenter/contact~{{id}}-new">New</a></h6>
+    {{#if access.edit}}<h6><a href="/location/datacenter/contact~{{id}}-new">New</a></h6>{{/if}}
     <ul id="eachUl"class="list-unstyled"> 
         {{#each contacts}}
             <li>

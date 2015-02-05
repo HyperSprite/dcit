@@ -393,20 +393,24 @@
     </ul>    
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
+            {{#if access.edit}}
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
-                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>{{/if}}
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' 
+                {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
+                {{#if access.delete}}
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>{{/if}}
             </div>
         </div>
      </form><form id="formCancel"></form> 
-      
+    {{#if access.delete}}
      <form id="deleteform" action="/equipmentdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
         <input type="hidden" name="equipLocationRack" value="{{equipLocationRack}}">
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="equipSN" value="{{equipSN}}">
     </form>
-     
+    {{/if}}
+    {{#if access.edit}}
         {{#if equipPorts}}
         {{#each equipPorts}}
             <form id="deleteform{{@index}}" action="/equipmentportdelete/{{../equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this port?')">
@@ -419,6 +423,7 @@
             </form>
         {{/each}}
         {{/if}}
+    {{/if}}
 
  <script language="Javascript" type="text/javascript">
 <!--

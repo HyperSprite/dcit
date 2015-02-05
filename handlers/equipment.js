@@ -28,6 +28,14 @@ this is the Equip List block. Looks for 'List' in the URL and returns list of Eq
 */
 exports.dcEquipPages = function(req,res,next){
     logger.info('***********exports.dcEquipPages First >' +req.params.datacenter);
+    if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     if (!req.params.datacenter ){
     logger.info('in List');
     // this looks for 'list' as the / url. if it exists, it prints the datacenter list
@@ -36,6 +44,7 @@ exports.dcEquipPages = function(req,res,next){
         logger.info(err);
         }else{
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 eqs: eqs.map(function(eq){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -95,6 +104,7 @@ exports.dcEquipPages = function(req,res,next){
         var context;
         if (dcSubId === 'new'){
             context ={
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
@@ -122,6 +132,7 @@ exports.dcEquipPages = function(req,res,next){
         if (req.params.datacenter.indexOf ('copy') !=-1){
            //logger.info(rk);
                 context ={
+                    access : strTgs.accessCheck(req.user),
                     user : req.user,
                     rackParentDC: rk.rackParentDC,
                     fullName: uber.fullName,
@@ -147,6 +158,7 @@ exports.dcEquipPages = function(req,res,next){
         
        //logger.info(rk);
             context ={
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
@@ -215,6 +227,7 @@ exports.dcEquipPages = function(req,res,next){
         return tempRu; 
         };
             context ={
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
@@ -261,7 +274,9 @@ exports.dcEquipPages = function(req,res,next){
     
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
-        
+    
+    Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
+
 
     Rack.find({},{ 'rUs':1,'rackUnique':1,'_id': 0},{sort:{rackUnique:1}},function(err, rk){
         if(err) return next(err);
@@ -289,8 +304,10 @@ exports.dcEquipPages = function(req,res,next){
         
         if(editLoad < 4){
 
+            tempSys = strTgs.findThisInThat(eq.equipSN,sys);
 
-             context = {   
+             context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user, 
                                 menu1: eq.equipSN,
                                 menuLink1: '#',
@@ -380,10 +397,16 @@ exports.dcEquipPages = function(req,res,next){
                                 modifiedOn: strTgs.dateMod(er.modifiedOn), 
                             };
                             }),
+                            systemName: tempSys.systemName,
+                            systemEnviron: tempSys.systemEnviron,
+                            systemRole: tempSys.systemRole,
+                            systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
+                            sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                         }; 
         
         } else {
            context = {
+            access : strTgs.accessCheck(req.user),
             user : req.user, 
                                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
@@ -442,8 +465,9 @@ exports.dcEquipPages = function(req,res,next){
         }else{
         res.render('asset/equipment', context);  
         }
-        });});});
+        });});});});
     }
+}
 };
     
 
@@ -453,6 +477,14 @@ exports.dcEquipPages = function(req,res,next){
 */
 exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
+    if (!req.user || req.user.access < 3){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     var data = req.body;
     res.abbreviation = strTgs.cTrim(data.equipSN);
     if(data.isEdit){
@@ -664,6 +696,7 @@ exports.dcEquipmentPost = function(req,res){
 	    });
 	});
 }
+}
 };
   
 
@@ -679,6 +712,14 @@ exports.dcEquipPortPostAJAX = function(req,res){
 // ---------------------------------------------------------------------
 
 exports.dcEquipSysPages = function(req,res,next){
+    if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     logger.info('***********exports.dcEquipSysPages First >' +req.params.datacenter);
     if (!req.params.datacenter){
     logger.info('in EquipSysPages - List');
@@ -694,6 +735,7 @@ exports.dcEquipSysPages = function(req,res,next){
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
@@ -757,7 +799,8 @@ exports.dcEquipSysPages = function(req,res,next){
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
-                    user : req.user,
+                access : strTgs.accessCheck(req.user),
+                user : req.user,
                         rackView: req.params.datacenter,
                         menu1: req.params.datacenter,
                         menuLink1: '/location/rack/'+req.params.datacenter,
@@ -811,6 +854,7 @@ exports.dcEquipSysPages = function(req,res,next){
             res.render('asset/equipsys-list', context);
         });});
     }
+}
 };
 
 
@@ -821,6 +865,14 @@ exports.dcEquipSysPages = function(req,res,next){
 // ---------------------------------------------------------------------
 
 exports.dcRackElevationPage = function(req,res,next){
+        if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     logger.info('***********exports.dcRackElevationPage First >' +req.params.datacenter);
     if (!req.params.datacenter){
     logger.info('in EquipSysPages - List');
@@ -836,6 +888,7 @@ exports.dcRackElevationPage = function(req,res,next){
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
@@ -900,6 +953,7 @@ exports.dcRackElevationPage = function(req,res,next){
         //logger.info('rk >>>>>>>>>>>'+rk);
         //logger.info('rk.rackUnique>'+rk.rackUnique);
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 rackView: req.params.datacenter,
                 rackUnique: rk.rackUnique,
@@ -972,6 +1026,7 @@ exports.dcRackElevationPage = function(req,res,next){
             res.render('asset/elevation', context);
         });});});
     }
+}
 };
 
 
@@ -980,6 +1035,14 @@ exports.dcRackElevationPage = function(req,res,next){
 ------------------------------------------------------------------------
 */
 exports.dcEquipDelete = function(req,res){
+    if (!req.user || req.user.access < 4){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     
     res.abbreviation = req.body.equipSN;
     res.newpage = req.body.equipLocationRack;
@@ -1011,6 +1074,7 @@ if (req.body.equipSN){
         }
     });
 }
+}
 };
 
 /* ---------------------------------------------------------------------
@@ -1019,6 +1083,14 @@ if (req.body.equipSN){
 */
 
 exports.equipSubDelete = function(req,res){
+if (!req.user || req.user.access < 4){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
 
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){
@@ -1048,5 +1120,6 @@ if (req.body.id && req.body.subId){
             });
         }
     });
+}
 }
 };

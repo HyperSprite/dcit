@@ -28,6 +28,14 @@ var start  = '',
 this is the Equip List block. Looks for 'List' in the URL and returns list of Equipment.
 */
 exports.dcSystemPages = function(req,res,next){
+    if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     logger.info('***********exports.dcSystemPages First >' +req.params.datacenter);
     if (!req.params.datacenter ){
     logger.info('in List');
@@ -38,6 +46,7 @@ exports.dcSystemPages = function(req,res,next){
         }else{
         //logger.info('system-list'+sys);
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 sys: sys.map(function(sy){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -97,6 +106,7 @@ exports.dcSystemPages = function(req,res,next){
         }
       
             context ={
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'New System',
                 sysNameList: sysUni,
@@ -135,7 +145,7 @@ exports.dcSystemPages = function(req,res,next){
             logger.info('view system '+dcabbr);
         }
         logger.info('editLoad >'+editLoad);
-    
+
     
     Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
         if(err) return next(err);
@@ -171,6 +181,7 @@ exports.dcSystemPages = function(req,res,next){
         if(editLoad < 4){
             thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
         context = {
+            access : strTgs.accessCheck(req.user),
             user : req.user,
             titleNow: sy.systemName,
             menu1: sy.systemName+' as Endpoint',
@@ -288,6 +299,7 @@ exports.dcSystemPages = function(req,res,next){
             }; 
         } else {
             context = {
+                    access : strTgs.accessCheck(req.user),
                     user : req.user,
                     equipSNList: eqUni,
                     optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
@@ -324,6 +336,7 @@ exports.dcSystemPages = function(req,res,next){
         }
         });});});});
     }
+}
 };
 
     function queryString(findThis,opt,searchIn){   
@@ -374,6 +387,11 @@ exports.dcSystemPages = function(req,res,next){
             query = Equipment.find({equipLocation : ''});
             logger.info('query12'+query);
             break;
+        case 13: // Not In Service
+            query = Equipment.find({'equipStatus':{nin:'In Service'}});
+            logger.info('query11'+query);
+            break;
+
         case 18: // multi SystemDB
             switch (searchIn){
                 case 'equipSN':
@@ -425,6 +443,14 @@ exports.dcSystemPages = function(req,res,next){
 // -------------------------------------------------------------
         
 exports.dcSystembyEnvRole = function(req,res,next){
+    if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
     var editLoad,
         searchDb,
@@ -457,6 +483,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
 
         }else if(req.params.datacenter.indexOf ('homeless') !=-1){
             editLoad = 12;
+
+        }else if(req.params.datacenter.indexOf ('eqnis') !=-1){
+            editLoad = 13;
 
         }else if(req.params.datacenter.indexOf ('multi') !=-1){
             searchIn = req.query.searchIn.substring (req.query.searchIn.indexOf('~')+1);
@@ -493,6 +522,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
          
         //logger.info('system-list'+sys);
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 titleNow: searchFor,
                 equipsys: 'true',
@@ -506,8 +536,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
                 drop3:'Make',
                 drop3url:'/env-role-report/make-',
                 drop3each: make.sort(),
-                menu1: 'Homeless Equipment',
-                menuLink1: '/env-role-report/homeless-',
+
             
                 eqs: sys.map(function(sy){
                 tempSys = strTgs.findThisInThat2(sy.systemEquipSN,eqs);
@@ -550,6 +579,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
          
         //logger.info('system-list'+sys);
             var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 titleNow: searchFor,
                 equipsys: 'true',
@@ -563,8 +593,6 @@ exports.dcSystembyEnvRole = function(req,res,next){
                 drop3:'Make',
                 drop3url:'/env-role-report/make-',
                 drop3each: make.sort(),
-                menu1: 'Homeless Equipment',
-                menuLink1: '/env-role-report/homeless-',
 
                 eqs: eqs.map(function(eq){
                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
@@ -597,6 +625,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
 
     }else{
         var context = {
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 titleNow: searchFor,
                 reportType: req.body.systemEnviron,
@@ -608,12 +637,11 @@ exports.dcSystembyEnvRole = function(req,res,next){
                 drop2each: role.sort(),
                 drop3:'Make',
                 drop3url:'/env-role-report/make-',
-                drop3each: make.sort(),
-                menu1: 'Homeless Equipment',
-                menuLink1: '/env-role-report/homeless-',                
+                drop3each: make.sort(),     
         };
         res.render('asset/env-role-report', context);
         }});});});
+}
 };
 
 // Map Reduce in use !! for count of systems in env.
@@ -639,6 +667,14 @@ exports.dcSystemCountbyEnv  = function(req,res,next){
 };
 
 exports.findEndpoints = function(req,res,next){
+    if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     var fEndPoint = req.params.datacenter.toLowerCase();
     if(!fEndPoint){
     logger.warn('findEndpoints: No endpoint found');
@@ -650,6 +686,7 @@ exports.findEndpoints = function(req,res,next){
         if(err) return next(err);
         //logger.info('sys > '+sys);
         context = {
+            access : strTgs.userLevel(req.user.local.access),
             user : req.user,
                 titleNow:fEndPoint,
                 menu1:fEndPoint,
@@ -679,6 +716,7 @@ exports.findEndpoints = function(req,res,next){
         res.render('asset/endpointports-list', context);  
     
     });}
+}
 };
 
 
@@ -693,6 +731,14 @@ exports.findEndpoints = function(req,res,next){
 ------------------------------------------------------------------------
 */
 exports.dcSystemPost = function(req,res){
+    if (!req.user || req.user.access < 3){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     var bd = req.body;
     // this makes the abbreviation available for the URL
     res.abbreviation = strTgs.clTrim(bd.systemName);
@@ -875,12 +921,21 @@ exports.dcSystemPost = function(req,res){
 	    });
 	});
 }
+}
 };
 /*---------------------------------------------------------------------
 ---------------------------- System Delete ------------------------------
 ------------------------------------------------------------------------
 */
 exports.dcsystemDelete = function(req,res){
+    if (!req.user || req.user.access < 4){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     res.abbreviation = req.body.systemName;
     res.newpage = req.body.equipLocationRack;
 if (req.body.systemName){
@@ -911,6 +966,7 @@ if (req.body.systemName){
         }
     });
 }
+}
 };
 
 /* ---------------------------------------------------------------------
@@ -919,6 +975,14 @@ if (req.body.systemName){
 */
 
 exports.dcsystemSubDelete = function(req,res){
+        if (!req.user || req.user.access < 4){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){
     Systemdb.findById(req.body.id,req.body.subDoc,function (err, sys){
@@ -947,5 +1011,6 @@ if (req.body.id && req.body.subId){
             });
         }
     });
+}
 }
 };

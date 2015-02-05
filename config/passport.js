@@ -41,11 +41,26 @@ module.exports = function(passport) {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) {
-
+        // DefaultAcess sets the default level for a new user.
+        // All access is addeditive
+        // 1 = Limited
+        // 2 = Read access
+        // 3 = Edit access
+        // 4 = Delete access
+        // 5 = All access
+        var defaultAcess = 1;
         // asynchronous
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
-
+        // Check to see if User db exists, 
+        // if not, set the first user to level 5 access (root)
+        User.find(function(err, users){
+            if(!users.length){
+                defaultAcess = 5;
+              //  logger.info('New Local Users db created on');
+              //  logger.info(local.email + ' given level 5 access');
+            }
+        })
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email }, function(err, user) {
@@ -56,8 +71,9 @@ module.exports = function(passport) {
             // check to see if theres already a user with that email
             if (user) {
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                
             } else {
-
+                
                 // if there is no user with that email
                 // create the user
                 var newUser            = new User();
@@ -65,11 +81,14 @@ module.exports = function(passport) {
                 // set the user's local credentials
                 newUser.local.email    = email;
                 newUser.local.password = newUser.generateHash(password);
+                newUser.access = defaultAcess;
+                newUser.createdOn = Date.now();
 
                 // save the user
                 newUser.save(function(err) {
                     if (err)
                         throw err;
+
                     return done(null, newUser);
                 });
             }
@@ -79,6 +98,8 @@ module.exports = function(passport) {
         });
 
     }));
+// logger.info(local.email + ' local account already exists');
+// logger.info(local.email + ' new local account created');
 
     // =========================================================================
     // LOCAL LOGIN =============================================================
@@ -103,16 +124,22 @@ module.exports = function(passport) {
 
             // if no user is found, return the message
             if (!user)
-                return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                
+                return done(null, false, req.flash('loginMessage', 'Opps! Login Failed.')); // req.flash is the way to set flashdata using connect-flash
 
             // if the user is found but the password is wrong
             if (!user.validPassword(password))
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+               
+                return done(null, false, req.flash('loginMessage', 'Oops! Failed Login.')); // create the loginMessage and save it to session as flashdata
 
             // all is well, return successful user
+           
             return done(null, user);
         });
 
     }));
 
 };
+// logger.info('ACCESS FAILED >'+local.email + ' no local account!');
+// logger.info('ACCESS FAILED >'+local.email + ' incorrect local password!');
+// logger.info('ACCESS granted for >'+local.email);

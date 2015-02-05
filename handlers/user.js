@@ -27,8 +27,18 @@ exports.home = function(req, res){
     }
 };
 
+var VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
 exports.localSignup = function(req, res){
+        if(!req.email.match(VALID_EMAIL_REGEX)) {
+        req.session.flash = {
+            type: 'danger',
+            intro: 'Validation error!',
+            message: 'The email address you entered was  not valid.',
+        };
+        return res.redirect(303, 'user/signup');
+    }else{
+
         if(successRedirect){
             res.render('admin/profile');
         }
@@ -36,15 +46,17 @@ exports.localSignup = function(req, res){
             res.render('user/signup');
             req.flash = true;
         }
+    }
 };
 
 exports.localLogin = function(req, res){
 
         if(successRedirect){
-            res.render('admin/profile');
+            res.render('/');
         }
         if(failureRedirect){
             res.render('user/signup');
             req.flash = true;
         }
 };
+

@@ -23,10 +23,19 @@ var Datacenter = require('../models/datacenter.js'),
     
 exports.home = function(req, res){
     logger.info('exports.home >'+req.params.datacenter);
+    if (!req.user || req.user.access < 5){
+        req.session.flash = {
+                type: 'danger',
+                intro: 'Ooops!',
+                message: 'Not Authorized!',
+                };
+            return res.redirect(303, '/');
+    }else{         
     if(!req.params.datacenter){
         context = {
             lastPage : '/admin',
-            user : req.user,
+            access : strTgs.accessCheck(req.user),
+            user : req.user
             };
     res.render ('admin/home', context );
 //
@@ -39,6 +48,7 @@ exports.home = function(req, res){
         if (!opts){
         	context = {
                 lastPage : '/admin/options',
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
             };
@@ -48,6 +58,7 @@ exports.home = function(req, res){
         if (err) return next (err);
         context ={
                 lastPage : '/admin/options',
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 menu1: 'Admin',
                 menuLink1: '/admin',
@@ -76,6 +87,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'upload'){
         context = {
             lastPage : '/admin/upload',
+            access : strTgs.accessCheck(req.user),
             user : req.user,
             };
         res.render ('admin/upload', context );
@@ -85,6 +97,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'dbinsert'){
         context = {
             lastPage : '/admin/dbinsert',
+            access : strTgs.accessCheck(req.user),
             user : req.user,
             };
         res.render ('admin/dbinsert', context );
@@ -93,20 +106,21 @@ exports.home = function(req, res){
 //
     }else if(req.params.datacenter === 'useradmin'){
         
-        User.find({}).sort({'email':'desc'}).exec(function (err, usr) {
+        User.find({}).sort({'access':'desc'}).exec(function (err, usr) {
             if(err){
                 logger.info(err);
             }else{
             context = {
                 lastPage : '/admin/useradmin',
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 usr: usr.map(function(ur){
                     return {
                         id : ur._id,
+                        usrAccess : ur.access,
                         email : ur.local.email,
                         name : ur.local.name,
                         phone : ur.local.phone,
-                        access : ur.local.access,
                         createdOn : ur.local.createdOn,
                         lastAccessed : ur.local.lastAccessed,                       
                     };
@@ -133,6 +147,7 @@ exports.home = function(req, res){
         //logger.info('file-list'+fil);
             var context = {
                     lastPage : '/admin/filemanager',
+                    access : strTgs.accessCheck(req.user),
                     user : req.user,
                     optModels: strTgs.findThisInThatOpt('optModels',opt),
                 fil: fil.map(function(fi){
@@ -166,6 +181,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'joins'){
             context = {
                 lastPage : '/admin/joins',
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
             };
     
@@ -178,6 +194,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'models'){
             context = {
                 lastPage : '/admin/models',
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
             };
     res.render ('admin/models', context);
@@ -186,15 +203,23 @@ exports.home = function(req, res){
     logger.info('datacenter >'+req.params.datacenter);
             context = {
                 lastPage : '/admin/'+req.params.datacenter,
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
             };
     res.render ('admin/'+req.params.datacenter, context);
-    
-}
+    }
+    }
 };
 
 exports.userEdit = function (req, res) {
-    var user = req.user;
+    if (!req.user || req.user.access < 5){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     User.findOne({'_id':req.body.id}, function(err,ur){
         if(err){
             logger(err);
@@ -202,31 +227,50 @@ exports.userEdit = function (req, res) {
         logger.info('ur '+ur);
         context = {
                 lastPage : '/admin/useradmin',
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 id : ur._id,
-                email : ur.local.email,
-                name : ur.local.name,
-                phone : ur.local.phone,
-                access : ur.local.access,
-                createdOn : ur.local.createdOn,
-                lastAccessed : ur.local.lastAccessed,                       
+                usrAccess : ur.access,
+                locEmail : ur.local.email,
+                locName : ur.local.name,
+                locPhone : ur.local.phone,
+                LocCreatedOn : ur.local.createdOn,
+                locLastAccessed : ur.local.lastAccessed,                       
             };
     res.render ('admin/userprofile', context);   
     }});
+}
 };
 
+var VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
 exports.userEditPost = function (req, res) {
+    if (!req.user || req.user.access < 5){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
         logger.info('userEditPost >'+ req.body.id);
         var data = req.body;
     User.findOne({'_id':req.body.id}, function(err,ur){
         if (err){
             logger.info(err);
             res.redirect ('admin/useradmin');
+        }else if(!data.locEmail.match(VALID_EMAIL_REGEX)) {
+        req.session.flash = {
+            type: 'danger',
+            intro: 'Validation error!',
+            message: 'The email address you entered was  not valid.',
+        };
+        return res.redirect(303, '/admin/useradmin');
         } else {
-            ur.local.email = strTgs.uCleanUp(ur.local.email,data.email);
-            ur.local.name = strTgs.uCleanUp(ur.local.email,data.email);
-            ur.local.phone = strTgs.uCleanUp(ur.local.phone,data.phone);
-            ur.local.access = strTgs.uCleanUp(ur.local.access,data.access);
+            ur.local.email = strTgs.uCleanUp(ur.local.email,data.locEmail);
+            ur.local.name = strTgs.uCleanUp(ur.local.name,data.locName);
+            ur.local.phone = strTgs.uCleanUp(ur.local.phone,data.locPhone);
+            ur.access = strTgs.uCleanUp(ur.access,data.usrAccess);
         }
         ur.save(function (err) {
             if(err) {
@@ -245,16 +289,26 @@ exports.userEditPost = function (req, res) {
             };
         return res.redirect(303, '/admin/useradmin');
         });
-    });   
+    });
+    }   
 };
 
 exports.optionsEdit = function(req, res){
+    if (!req.user || req.user.access < 5){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     var dcInfo = req.params.datacenter;
             logger.info('|dcInfo  >'+dcInfo);
         
         if (dcInfo ==='new'){
             context={
                 lastPage : '/admin/optionsedit',
+                access : strTgs.accessCheck(req.user),
                 user : req.user,
                 stat: 'isNew',
             };
@@ -265,6 +319,7 @@ exports.optionsEdit = function(req, res){
             if(err)return next(err);
                 context={
                     lastPage : '/admin/optionsedit',
+                    access : strTgs.accessCheck(req.user),
                     user : req.user,
                     menu1: 'Admin',
                     menuLink1: '/admin',
@@ -276,11 +331,19 @@ exports.optionsEdit = function(req, res){
                 };
             res.render('admin/optionsedit', context);
             });
-    }
+    }}
 };
 
 exports.optionsEditPost = function(req,res,err){
     logger.info('optionsEditPost >'+ req.body.id);
+        if (!req.user || req.user.access < 5){
+        req.session.flash = {
+                type: 'danger',
+                intro: 'Ooops!',
+                message: 'Not Authorized!',
+                };
+            return res.redirect(303, '/');
+    }else{
 
     var thisDoc;
      if (!req.body.id){
@@ -337,7 +400,7 @@ exports.optionsEditPost = function(req,res,err){
 	        return res.redirect(303, '/admin/options');
 	    });
     });    
-}
+}}
 };
 //
 // Upload POST working
@@ -406,6 +469,14 @@ exports.uploadPost = function(req,res){
 // Upload Delete File POST
 //
 exports.uploadDeletePost = function(req,res){
+        if (!req.user || req.user.access < 5){
+        req.session.flash = {
+                type: 'danger',
+                intro: 'Ooops!',
+                message: 'Not Authorized!',
+                };
+            return res.redirect(303, '/');
+    }else{ 
 if (req.body.id){
 
         var bdy = req.body;
@@ -448,7 +519,7 @@ if (req.body.id){
             });
         }
     });
-}
+}}
 };
 //
 //  CSV to DB
@@ -534,6 +605,14 @@ exports.csvToDBPost = function(req,res){
 ------------------------------------------------------------------------
 */
 exports.userDelete = function(req,res){
+    if (!req.user || req.user.access < 5){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
     res.abbreviation = req.body.email;
    
 
@@ -564,62 +643,143 @@ if (req.body.id){
             });
         }
     });
-}
+}}
 };
 
 
 
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{    
     dcit.dropDatacenter(Datacenter);
 	logger.info('dropDatacenterGet');
-    return res.redirect(303, '/location/datacenter/list');   
+    return res.redirect(303, '/location/datacenter/list');
+}
 };
 
 exports.dropRackGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{      
     dcit.dropRack(Rack);
     logger.info('dropRackGet');
-	return res.redirect(303, '/location/datacenter/list'); 
+	return res.redirect(303, '/location/datacenter/list');
+    } 
 };
 
 exports.dropOptionsdbGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{  
     dcit.dropOptionsdb(Optionsdb);
     logger.info('dropOptionsdbGet');
 	return res.redirect(303, '/admin/options');
+    }
 };
 
 exports.dropEquipmentGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{      
     dcit.dropEquipment(Equipment);
     logger.info('dropEquipmentGet');
-	return res.redirect(303, '/admin/options'); 
+	return res.redirect(303, '/admin/options');
+    }
 };
 
 exports.dropSystemGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{  
     dcit.dropSystem(Systemdb);
     logger.info('dropSystemGet');
 	return res.redirect(303, '/admin/options');
+    }
 };
 
 
 exports.seedDatacetnerGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{  
     seedDataLoad.seedDatacenter(Datacenter);
     logger.info('seedDatacetnerGet');
-	return res.redirect(303, '/location/datacenter/list');  
+	return res.redirect(303, '/location/datacenter/list');
+    } 
 };
 
 exports.seedOptionsdbGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{  
     seedDataLoad.seedOptionsDataBase(Optionsdb);
     logger.info('seedOptionsdbGet');
-	return res.redirect(303, '/admin/options');  
+	return res.redirect(303, '/admin/options');
+    }
 };
 
 exports.seedEquipmentGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{      
     seedDataLoad.seedEquipmentDataBase(Equipment);
     logger.info('seedEquipmentGet');
     return res.redirect(303, '/admin/options');
+    }
 };
 exports.seedSystemGet = function(req,res){
+    if(!req.user || req.user.access < 5){
+        req.session.flash = {
+        type: 'danger',
+        intro: 'Not Authorized!',
+        message: 'You are not authorized for this action.',
+    };
+        return res.redirect(303, '/home');
+    }else{  
     seedDataLoad.seedSystemDataBase(Systemdb);
     logger.info('seedSystemGet');
-    return res.redirect(303, '/admin/options');  	
+    return res.redirect(303, '/admin/options');
+    }	
 };

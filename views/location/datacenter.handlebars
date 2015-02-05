@@ -1,16 +1,16 @@
-<h2>{{fullName}} - <a href="/location/datacenter/edit-{{abbreviation}}">{{abbreviation}}</a></h2>
+<h2>{{fullName}} -{{#if access.edit}} <a href="/location/datacenter/edit-{{abbreviation}}">{{abbreviation}}</a>{{else}}{{abbreviation}}{{/if}}</h2>
 {{#if foundingCompany}}{{foundingCompany}}{{/if}}
 <br>
 <hr>
 <div class="racks">
-    <h4><a href="/location/datacenter/contact~{{id}}-new">Contacts</a></h4>
+    <h4>{{#if access.edit}}<a href="/location/datacenter/contact~{{id}}-new">Contacts</a>{{else}}Contacts{{/if}}</h4>
     <ul id="eachUl"class="list-unstyled"> 
         {{#each contacts}}
             <li>
             <div class="row">
                 <div class="col-sm-9">
                 <address>
-                <strong>{{#if conName}}<a href="/location/datacenter/contact~{{../../id}}-{{conId}}">{{conName}}</a><br>{{/if}}</strong>
+                <strong>{{#if conName}}{{#if ../access.edit}}<a href="/location/datacenter/contact~{{../../id}}-{{conId}}">{{conName}}</a>{{else}}{{conName}}{{/if}}<br>{{/if}}</strong>
                 {{#if conType}}{{conType}}<br>{{/if}}
                     <div class="row">
                         <div class="col-xs-8 col-sm-6">
@@ -41,16 +41,16 @@
             </li><br>
         {{/each}}
         </ul>
-        
+        {{#if access.edit}}
             <input form="formNewEquip" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Equipment' formaction='/equipment/new'>
             <input form="formNewSyst" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Systems' formaction='/system/new'>
             <form id="formNewEquip"></form>
             <form id="formNewSyst"></form>
-        
+        {{/if}}
         
         
     <hr>        
-    <h4><input type='submit' class='btn btn-warning btn-xs' formaction='/location/datacentercage/edit-{{id}}' form="formEdit" formmethod="get" value='E'> Cages</h4>
+    <h4>{{#if access.edit}}<input type='submit' class='btn btn-warning btn-xs' formaction='/location/datacentercage/edit-{{id}}' form="formEdit" formmethod="get" value='E'>{{/if}}Cages</h4>
     
     
     <form id=formEdit></form>
@@ -72,10 +72,10 @@
             {{#if cageNotes}}Notes:{{cageNotes}}<br>{{/if}}
             <br>
             <ul id="racksUl" class="list-unstyled">
-            <li>
+            {{#if ../access.edit}}<li>
             <input form="formNewRack{{@index}}" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Rack' formaction='/location/rack/newrack~{{../id}}-{{id}}'>
             <form id="formNewRack{{@index}}"></form>
-            </li>
+            </li>{{/if}}
             <li>
             
             </li>
@@ -88,10 +88,10 @@
         {{> location/rack-list}}
    
     <hr>
-    <h4><a href="/location/network/{{id}}-new">Networks</a></h4>
+    <h4>{{#if access.edit}}<a href="/location/network/{{id}}-new">Networks</a>{{else}}Networks{{/if}}</h4>
         {{> location/network-list}}
     <hr>
-    <h4><a href="/location/datacenterpower/edit-{{id}}">Power Mains</a></h4>
+    <h4>{{#if access.edit}}<a href="/location/datacenterpower/edit-{{id}}">Power Mains</a>{{else}}Power Mains{{/if}}</h4>
     <ul id="powerUl" class="list-unstyled">    
         {{#each powerNames}}
         <li>

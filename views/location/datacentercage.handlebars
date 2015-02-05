@@ -75,7 +75,9 @@ $('form#datacenterForm').serializeJSON();
                 <textarea rows="3" class="form-control" id="fieldcageNotes{{@index}}" name="cageNotes[{{@index}}]">{{cageNotes}}</textarea>
             </div>
         </div>
+        {{#if ../access.delete}}
         {{#if cageNickname}}<button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button>{{/if}}
+        {{/if}}
         {{/each}}
         {{else}}
 
@@ -133,7 +135,7 @@ $('form#datacenterForm').serializeJSON();
             </div>
         </div>
      </form><form id="formCancel"></form> 
-            
+        {{#if access.delete}}    
         {{#if cages}}
         {{#each cages}}
             <form id="deleteform{{@index}}" action="/location/datacentersubdelete/{{../abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{cageNickname}}')">
@@ -146,6 +148,7 @@ $('form#datacenterForm').serializeJSON();
             <input type="hidden" name="collectionSub" value="cages">
             </form>
         {{/each}}
+        {{/if}}
         {{/if}}
 </div>
 </div>

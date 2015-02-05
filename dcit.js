@@ -30,6 +30,7 @@ var app = express();
 var credentials = require('./credentials.js');
 var emailService = require('./lib/email.js')(credentials);
 
+
 require('./config/passport')(passport);
 
 // set up handlebars view engine
@@ -52,6 +53,7 @@ var handlebars = require('express-handlebars').create({
           }
     }
 });
+//require('./lib/helpers.js');
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');

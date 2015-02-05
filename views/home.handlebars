@@ -1,6 +1,23 @@
 
+{{#if user}}{{else}}
 
+<form class="form-inline" action="/user/login" method="post">
+  <div class="form-group">
+    <label class="sr-only" for="userEmail">Email address</label>
+    <input type="email" class="form-control" id="userEmail" name="email"  placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="userPassword">Password</label>
+    <input type="password" class="form-control" id="userPassword" name="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-default">Sign in</button>  <a href="/user/signup">Signup</a>
+</form>
+<br>
+
+{{/if}}
+<br>
 <h1>Welcome to DCIT</h1>
 <p>Data Center Information Tracking is a one stop data center information repository. Facilities, Power, Equipment and Systems all in one place.</p>  
 
 <p>This site has only been tested in Chrome. It uses HTML5 extensively and many features are still not available in other browsers. Sorry, I just don't have time to test more than one at this time.</p>
+

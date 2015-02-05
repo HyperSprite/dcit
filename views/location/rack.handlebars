@@ -37,7 +37,7 @@
                 {{#if modifiedBy}}Modified By: {{modifiedBy}}<br>{{/if}}
                 {{#if modifiedOn}}Modified On: {{modifiedOn}}<br>{{/if}}
                 <br>
-               
+               {{#if access.edit}}
                     <form id="deleteform" action="/location/rackdelete/{{rackUnique}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{rackUnique}}. This can not be undone!')">
                     <input type="hidden" name="_csrf" value="{{_csrfToken}}">
                     <input type="hidden" name="rackUnique" value="{{rackUnique}}">
@@ -47,8 +47,10 @@
                     <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
                     <form id=formCopy></form>
                     <input type='submit' class='btn btn-warning btn-xs' formaction='/location/rack/edit-{{rackUnique}}' form="formEdit" formmethod="get" value='Edit Rack'>
-                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='Copy Rack'>
+                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='Copy Rack'>{{/if}}
+                    {{#if access.delete}}
                     <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete Rack</button>
+                    {{/if}}
                 </div>
             </div>
             </li><br>

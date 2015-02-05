@@ -55,7 +55,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipNotes: strTgs.uTrim(data.equipNotes),
         createdBy:'Admin',
         createdOn: strTgs.compareDates(data.modifiedOn),
-        modifiedBy: req.body.modifiedBy,
+        modifiedBy: req.user.local.email,
         modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
 	        if(err) {
@@ -158,7 +158,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 if(data.equipNotes){
                 thisDoc.equipNotes = strTgs.uTrim(data.equipNotes);}
                 thisDoc.modifiedOn = dates.convert(data.modifiedOn);
-                thisDoc.modifiedBy ='Admin';
+                thisDoc.modifiedBy =req.user.local.email;
 
         eq.save(function(err){
             if(err){
@@ -195,7 +195,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 equipPortsAddr: strTgs.mTrim(data.equipPortsAddr),
                 equipPortName: strTgs.sTrim(data.equipPortName),
                 equipPortsOpt: strTgs.sTrim(data.equipPortsOpt),
-                modifiedBy: req.body.modifiedBy,
+                modifiedBy: req.user.local.email,
                 modifiedOn: strTgs.compareDates(data.modifiedOn),   
         });
         eq.save(function(err){
@@ -221,7 +221,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 thisDoc.equipPortsAddr= strTgs.mTrim(data.equipPortsAddr);}
                 if(data.equipPortsOpt){
                 thisDoc.equipPortsOpt= strTgs.sTrim(data.equipPortsOpt);}
-                thisDoc.modifiedBy= req.body.modifiedBy;
+                thisDoc.modifiedBy= req.user.local.email;
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn);
             eq.save(function(err){
             if(err){

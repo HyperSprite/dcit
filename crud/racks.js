@@ -27,7 +27,7 @@ exports.rackPowerCreate = function (data,req){
                     rackPowPhase: strTgs.sTrim(data.rackPowPhase),
                     rackPowAmps: strTgs.sTrim(data.rackPowAmps),
                     rackPowReceptacle: strTgs.cTrim(data.rackPowReceptacle),
-                    rackPowModifiedby: 'Admin',
+                    rackPowModifiedby: req.user.local.email,
                     rackPowModifiedOn: strTgs.compareDates(data.modifiedOn),
                 });
                 eq.save(function(err){
@@ -53,7 +53,7 @@ exports.rackPowerCreate = function (data,req){
                 thisDoc.rackPowAmps = strTgs.uCleanUp(thisDoc.rackPowAmps,data.rackPowAmps);
                 thisDoc.rackPowReceptacle = strTgs.uCleanUp(thisDoc.rackPowReceptacle,data.rackPowReceptacle);
                 thisDoc.modifiedOn = strTgs.compareDates(data.modifiedOn);
-                thisDoc.modifiedBy ='Admin';  
+                thisDoc.modifiedBy = req.user.local.email;  
             rk.save(function(err){
             if(err){
                 logger.info('EqPortCreate Failed - '+err+' : '+data.index+' equipSN '+strTgs.cTrim(data.equipSN)+' found');

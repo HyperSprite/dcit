@@ -53,23 +53,26 @@
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  {{user.local.email}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                    {{#if user}}
+                        <li><a href="/">Home</a></li>
+                        {{#if access.read}}<li><a href="/location/datacenter/list">Datacenters</a></li>{{/if}}
+                        {{#if access.read}}<li><a href="/env-role-reports">Reports</a></li>{{/if}}
+                        {{#if access.edit}}<li><a href="/env-role-report/homeless-">Equipment w/ no Location</li>{{/if}}
+                        {{#if access.root}}<li><a href="/env-role-report/eqnis-">Equipment Not In Service</li>{{/if}}
+                        {{#if access.delete}}<li><a href="/equipment">Equipment (slow)</a></li>{{/if}}
+                        {{#if access.delete}}<li><a href="/systems">Systems (slow)</a></li>{{/if}}
+                        {{#if access.delete}}<li><a href="/equipment-systems">Equipment & Systems (slower)</a></li>{{/if}}
+                        {{#if access.delete}}<li><a href="/location/racks">Racks</a></li>{{/if}}
+                        {{#if access.root}}<li><a href="/admin">Admin</a></li>{{/if}}
+                        {{#if access.root}}<li><a href="/jquery-test">jquery Test</a></li>{{/if}}
+                        <li><a href="/about">About</a></li>
+                        {{#if user}}
                         <li><a href="/user/profile">User Profile</a></li>
                         <li><a href="/user/logout">Logout</a><li>
-                    {{/if}}
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/location/datacenter/list">Datacenters</a></li>
-                        <li><a href="/env-role-reports">Reports</a></li>
-                        <li><a href="/equipment-systems">Equipment & Systems</a></li>
-                        <li><a href="/location/racks">Racks</a></li>
-                        <li><a href="/about">About</a></li>
-                        <li><a href="/admin">Admin</a></li>
-                        <li><a href="/systems">Systems</a></li>
-                        <li><a href="/jquery-test">jquery Test</a></li>
-                        <li><a href="/equipment">Equipment</a></li>
+                        {{/if}}
+                        
                     </ul>
                   </li>
-                  {{#if user}}{{else}}<li><a href="/user/login">Login</a></li>{{/if}}
+                  {{#if access.read}}
                  <li>
                   <form id="multiForm" class="form-inline" role="form" autocomplete="off" action="/env-role-report/multi-" method="get">
                   <div class="form-group">
@@ -95,15 +98,7 @@
                     </div>
                     <button type="submit" class="sr-only btn btn-primary" value='Submit'>Submit</button>
                     </form>
-                 </li>  
-     {{#if menu1}} <li><a href="{{menuLink1}}">{{menu1}}</a>
-                 </li> {{/if}}
-     {{#if menu2}} <li><a href="{{menuLink2}}">{{menu2}}</a>
-                 </li> {{/if}}
-     {{#if menu3}} <li><a href="{{menuLink3}}">{{menu3}}</a>
-                 </li> {{/if}}
-     {{#if menu4}} <li><a href="{{menuLink4}}">{{menu4}}</a>
-                 </li> {{/if}}
+                 </li>
    {{#if drop1}} <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop1}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -128,8 +123,19 @@
                     {{/each}}
                     </ul>
                  </li>{{/if}}
+
+     {{#if menu1}} <li><a href="{{menuLink1}}">{{menu1}}</a>
+                 </li> {{/if}}
+     {{#if menu2}} <li><a href="{{menuLink2}}">{{menu2}}</a>
+                 </li> {{/if}}
+     {{#if menu3}} <li><a href="{{menuLink3}}">{{menu3}}</a>
+                 </li> {{/if}}
+     {{#if menu4}} <li><a href="{{menuLink4}}">{{menu4}}</a>
+                 </li> {{/if}}
+
    {{#if lastPage}} <li><a href="{{lastPage}}">Back</a>
                  </li> {{/if}}
+                 {{/if}}
              
               </ul>
             </nav>
@@ -146,15 +152,13 @@
 					<strong>{{flash.intro}}</strong> {{{flash.message}}}
 				</div>
 			{{/if}}
-      {{#if error}}
-          <div class="alert alert-danger">{{error}}</div>
-      {{/if}}
+
 		    {{{body}}}
-      </div> <!-- /container -->  
+      </div> <!-- /container --> 
+
       <div> <!-- footer-->
 			<hr>
 			<footer>
-
 				<p>&copy; DCIT 2014</p>
 			</footer>
       </div> <!-- /footer-->

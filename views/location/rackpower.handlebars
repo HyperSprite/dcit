@@ -96,15 +96,17 @@
     </ul>    
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
+                {{#if access.edit}}
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>{{/if}}
                 <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/location/rack/{{rackUnique}}' >
-                {{#if rackPowUnique}}<button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button>{{/if}}
+                {{#if access.delete}}
+                {{#if rackPowUnique}}<button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button>{{/if}}{{/if}}
             </div>
         </div>
      </form>
      <form id="formCancel"></form>
-
+     {{#if access.delete}}
         <form id="deleteform" action="/location/racksubdelete/{{abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{conName}}')">
             <input type="hidden" name="_csrf" value="{{_csrfToken}}">
             <input type="hidden" name="id" value="{{rackId}}">
@@ -112,5 +114,6 @@
             <input type="hidden" name="subId" value="{{rackPowId}}">
             <input type="hidden" name="subName" value="{{rackPowUnique}}">
         </form>
+        {{/if}}
 </div>
 </div>

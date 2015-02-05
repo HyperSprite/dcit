@@ -29,9 +29,9 @@ Systemdb.create({
                     systemStart: dates.convert(data.systemStart),
                     systemEnd: dates.convert(data.systemEnd),
                     systemNotes: strTgs.uTrim(data.systemNotes),
-                    createdBy:'Admin',
+                    createdBy: req.user.local.email,
                     createdOn: Date.now(),
-                    modifiedBy: data.modifiedBy,
+                    modifiedBy: req.user.local.email,
                     modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
         if(err) {
@@ -88,7 +88,7 @@ Systemdb.create({
             if(data.systemNotes){
             thisDoc.systemNotes= strTgs.uTrim(data.systemNotes);}
             thisDoc.modifiedOn = dates.convert(data.modifiedOn);
-            thisDoc.modifiedBy ='Admin';
+            thisDoc.modifiedBy = req.user.local.email;
         
         sys.save(function(err){
             if(err){
@@ -132,7 +132,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 sysPortVlan: strTgs.sTrim(data.sysPortVlan),
                 sysPortOptions: strTgs.stcTrim(data.sysPortOptions),
                 sysPortURL: strTgs.clTrim(data.sysPortURL),
-                modifiedBy: req.body.modifiedBy,
+                modifiedBy: req.user.local.email,
                 modifiedOn: strTgs.compareDates(data.modifiedOn), 
             });
             sys.save(function(err){
@@ -170,7 +170,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 thisDoc.sysPortOptions= strTgs.stcTrim(data.sysPortOptions);}
                 if(data.sysPortType){
                 thisDoc.sysPortURL= strTgs.clTrim(data.sysPortURL);}
-                thisDoc.modifiedBy= req.body.modifiedBy;
+                thisDoc.modifiedBy= req.user.local.email;
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn); 
             sys.save(function(err){
             if(err){

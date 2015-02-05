@@ -19,10 +19,10 @@
         <tbody class="list">
             {{#each racks}}
                 <tr>
-                    <td class="rackEdit"><form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+                    <td class="rackEdit">{{#if ../access.edit}}<form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
                     <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
                     <input type='submit' class='btn btn-warning btn-xs' formaction='/location/rack/edit-{{rackUnique}}' form="formEdit" formmethod="get" value='E'>
-                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='C'> {{@index}}</td>                
+                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/edit~copy-{{rackUnique}}' form="formCopy" formmethod="get" value='C'> {{@index}}{{/if}}</td>                
                     <td class="rackNickname">{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}" target="_blank">{{rackUnique}}</a>{{else}}{{rackUnique}}{{/if}}</td>
                     <td class="rackName"><a href="/location/rack/{{rackUnique}}" target="_blank">{{rackName}}</a></td>
                     <td class="rackStatus">{{{rackStatus}}}</td>

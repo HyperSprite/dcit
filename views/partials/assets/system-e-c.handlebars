@@ -1,4 +1,6 @@
 {{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+{{#if access.edit}}
 <form id="formCopy" class="form-inline"><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
 <input type='submit' class='btn btn-warning btn-xs' formaction='/system/edit-{{systemName}}' form="formEdit" formmethod="get" value='E'>
 <input type='submit' class='btn btn-info btn-xs' formaction='/system/edit~copy-{{systemName}}' form="formCopy" formmethod="get" value='C'><form id=formEdit class="form-inline"></form>
+{{/if}}
