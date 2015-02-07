@@ -273,6 +273,7 @@ this takes the abbreviation and displays the matching datacenter details
                     var cg = cage;
                     return {
                             id:cg._id,
+                            dcid:dc._id,
                             cageNickname:cg.cageNickname,
                             cageAbbreviation: cg.cageAbbreviation,
                             cageName: cg.cageName,
@@ -375,7 +376,7 @@ exports.datacenterPost = function(req,res){
                     abbreviation : req.body.abbreviation,
                     foundingCompany : req.body.foundingCompany,
                     createdOn: Date.now(),
-                    createdBy: req.user,
+                    createdBy: req.user.local.email,
                     },function(err){
 	        if(err) {
 	        	console.error(err.stack);

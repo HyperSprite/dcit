@@ -15,7 +15,7 @@
                 <th class="table-sort" data-sort="equipSN ">Equipment SN</th>
                 <th class="table-sort" data-sort="equipStatus">Status</th>
                 <th class="table-sort" data-sort="makeModel">Make - Model</th>
-                <th class="table-sort" data-sort="sysmodifiedOn">System Mod</th> 
+                <th class="table-sort" data-sort="equipAcquisition">Acquisition</th> 
             </tr>
         </thead>
         <tbody class="list">
@@ -31,7 +31,7 @@
                 <td class="equipSN"><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
                 <td class="equipStatus">{{{equipStatusLight}}}</td>
                 <td class="modifiedOn">{{equipMake}} {{equipModel}}</td>
-                <td class="sysmodifiedOn">{{sysmodifiedOn}}</td>
+                <td class="equipAcquisition">{{#if equipWarrantyMo}}<mark>{{equipAcquisition}}</mark>{{else}}{{equipAcquisition}}{{/if}}</td>
                 
             </tr>  
         {{/each}}

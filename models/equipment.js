@@ -65,6 +65,8 @@ var equipmentSchema = mongoose.Schema({
     equipRecieved: {type: Date, default: Date.now},
     equipAcquisition: Date,
     equipInService: Date,
+    equipEndOfLife: Date,
+    equipWarrantyMo: Number,
     equipPONum: String,
     equipInvoice: String,
     equipProjectNum: String,

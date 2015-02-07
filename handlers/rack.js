@@ -32,7 +32,7 @@ exports.dcRackPages = function(req,res,next){
             message: 'Not Authorized!',
             };
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     logger.info('***********exports.dcRackPages First >' +req.params.datacenter);
     if (!req.params.datacenter){
     logger.info('in List');
@@ -227,18 +227,18 @@ link to this looks
 
 
     } else if (req.params.datacenter.indexOf ('newrack') !=-1){
-        //logger.info('else if (req.params.datacenter.indexOf ('newrack')');
-        //logger.info('datacenter '+req.params.datacenter);
+        logger.info('else if (req.params.datacenter.indexOf (newrack)');
+        logger.info('datacenter '+req.params.datacenter);
         start = req.params.datacenter.indexOf ('~')+1;
-        //    logger.info('|start   >'+start);
+            logger.info('|start   >'+start);
         dcInfo = req.params.datacenter.substring (start);
-        //    logger.info('|dcInfo  >'+dcInfo);
+            logger.info('|dcInfo  >'+dcInfo);
         dcSplit = dcInfo.indexOf ('-');
-        //    logger.info('|dcSplit >'+dcSplit);
+            logger.info('|dcSplit >'+dcSplit);
         dcSubId = dcInfo.substring (dcSplit+1);
-        //    logger.info('|dcSubId >'+dcSubId);
+            logger.info('|dcSubId >'+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-        //    logger.info('|dcId    >'+dcId);
+            logger.info('|dcId    >'+dcId);
 
         Datacenter.findById(dcId,function(err,datacenter){
         var dc = datacenter;
@@ -252,7 +252,7 @@ link to this looks
         //logger.info('Rack is datacenter');
         var thisSubDoc = datacenter.cages.id(dcSubId);
         if(err) return next(err);
-        //logger.info('datacener= '+datacenter);
+        logger.info('datacener= '+datacenter);
             context ={
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
@@ -458,7 +458,7 @@ exports.dcRackPost = function(req,res){
                         rUs: strTgs.sTrim(req.body.rUs),
                         rackNotes: strTgs.uTrim(req.body.rackNotes),
                         createdOn: Date.now(),
-                        createdBy:'Admin',                        
+                        createdBy:req.user.local.email,                        
 
                     },function(err){
 	        if(err) {

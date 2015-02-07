@@ -86,7 +86,7 @@ Systemdb.create({
             if(data.systemEnd){
             thisDoc.systemEnd= dates.convert(data.systemEnd);}
             if(data.systemNotes){
-            thisDoc.systemNotes= strTgs.uTrim(data.systemNotes);}
+            thisDoc.systemNotes= strTgs.noteAdd(thisDoc.systemNotes,data.systemNotes);}
             thisDoc.modifiedOn = dates.convert(data.modifiedOn);
             thisDoc.modifiedBy = req.user.local.email;
         

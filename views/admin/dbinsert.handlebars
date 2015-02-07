@@ -2,4 +2,36 @@
 
 <h4>Database Insert</h4>
 
-<p>instructions will go here</p>
+<div class="row">
+  <div class="col-md-8">
+<p>These templates allow bulk uploads of new information. Care must be taken, you can overwrite existing data in bulk meaning by the time you figure out what you've done, you have probably done it to hundreds of systems. Many of the data checks are bypassed for speed and considering this is a root level access, I assume you are responsible enough to do this properly</p>
+
+<p>There are a few key things to keep in mind. Also note the case sensitivity.</p>
+    <ul>
+        <li><h5>index</h5>
+        <p>Index is required for each row. This can also help you track down issues with uploading later. Simply put 1, 2 , 3 in the first column. Select all three and drag the little box in the lower right down as many rows as it takes for every line.<p></li>
+        <li><h5>overwrite</h5>
+        <p>Overwrite allows you to overwrite the Equipment or Systems you are looking for. If you set this to no or leave it out, if an existing SN or System name is found, it will skip that document. If overwrite is yes, it will change any update any populated fields.</p></li>
+        <li><h5>Drop Downs</h5>
+        <p>Drop downs are not in the spredsheets but insted on the Options page. Currently there is no check to make sure you got them correct, this can have an adverse effect on your data integrety. So check these before upload. Note: these are also case sensitive.</p></li>
+    </ul>
+</div>
+
+  <div class="col-md-4">
+    <h4> Schema Templates</h4>
+    <p>Use the <a href="/admin/filemanager">File Manager</a> page to upload the CSV file into the inventory.</p>
+        <ul>
+            <li><a href="/downloads/equipment.csv">equipment.csv</a></li>
+            <li><a href="/downloads/equipment-ports.csv">equipment-ports.csv</a></li>
+            <li><a href="/downloads/systems.csv">systems.csv</a></li>
+            <li><a href="/downloads/system-ports.csv">system-ports.csv</a></li>
+        </ul>
+  </div>
+
+
+</div>
+
+
+
+
+

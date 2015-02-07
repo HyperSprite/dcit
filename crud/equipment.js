@@ -43,6 +43,8 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipRecieved: dates.convert(data.equipRecieved),
         equipAcquisition: dates.convert(data.equipAcquisition),
         equipInService: dates.convert(data.equipInService),
+        equipEndOfLife: dates.convert(data.equipEndOfLife),
+        equipWarrantyMo: strTgs.uTrim(data.equipWarrantyMo),        
         equipPONum: strTgs.uTrim(data.equipPONum),
         equipInvoice: strTgs.uTrim(data.equipInvoice),
         equipProjectNum: strTgs.uTrim(data.equipProjectNum),
@@ -137,6 +139,10 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 thisDoc.equipAcquisition = dates.convert(data.equipAcquisition);}
                 if(data.equipInService){
                 thisDoc.equipInService = dates.convert(data.equipInService);}
+                if(data.equipEndOfLife){
+                thisDoc.equipEndOfLife = dates.convert(data.equipEndOfLife);}
+                if(data.equipWarrantyMo){
+                thisDoc.equipWarrantyMo = dates.convert(data.equipWarrantyMo);}
                 if(data.equipPONum){
                 thisDoc.equipPONum = strTgs.uTrim(data.equipPONum);}
                 if(data.equipInvoice){
@@ -156,7 +162,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 if(data.equipPurchaseEnd){
                 thisDoc.equipPurchaseEnd = dates.convert(data.equipPurchaseEnd);}
                 if(data.equipNotes){
-                thisDoc.equipNotes = strTgs.uTrim(data.equipNotes);}
+                thisDoc.equipNotes = strTgs.noteAdd(thisDoc.equipNotes,data.equipNotes);}
                 thisDoc.modifiedOn = dates.convert(data.modifiedOn);
                 thisDoc.modifiedBy =req.user.local.email;
 

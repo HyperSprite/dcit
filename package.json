@@ -23,7 +23,7 @@
     "express-handlebars": "^1.0.3",
     "express-logger": "^0.0.3",
     "express-session": "^1.2.1",
-    "forever-agent": "^0.5.2",
+    "fast-csv": "0.5",
     "form-serializer": "^2.0.1",
     "formidable": "^1.0.15",
     "grunt-contrib-less": "^0.11.1",
@@ -31,7 +31,7 @@
     "json-stringify-safe": "^5.0.0",
     "loadtest": "^0.2.11",
     "method-override": "^2.3.1",
-    "mongoose": "^3.8.20",
+    "mongoose": "3.8",
     "mongoose-session": "0.0.2",
     "mongoose-unique-validator": "^0.4.1",
     "node-uuid": "^1.4.1",
@@ -41,7 +41,7 @@
     "q": "^1.0.1",
     "underscore": "^1.6.0",
     "vhost": "^2.0.0",
-    "winston": "^0.8.3"
+    "winston": "^0.9.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

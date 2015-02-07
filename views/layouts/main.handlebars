@@ -57,7 +57,8 @@
                         {{#if access.read}}<li><a href="/location/datacenter/list">Datacenters</a></li>{{/if}}
                         {{#if access.read}}<li><a href="/env-role-reports">Reports</a></li>{{/if}}
                         {{#if access.edit}}<li><a href="/env-role-report/homeless-">Equipment w/ no Location</li>{{/if}}
-                        {{#if access.root}}<li><a href="/env-role-report/eqnis-">Equipment Not In Service</li>{{/if}}
+                        {{#if access.delete}}<li><a href="/env-role-report/eqnis-">Equipment Spares</li>{{/if}}
+                        {{#if access.delete}}<li><a href="/env-role-report/eol-">Equipment End of Life</li>{{/if}}
                         {{#if access.delete}}<li><a href="/equipment">Equipment (slow)</a></li>{{/if}}
                         {{#if access.delete}}<li><a href="/systems">Systems (slow)</a></li>{{/if}}
                         {{#if access.delete}}<li><a href="/equipment-systems">Equipment & Systems (slower)</a></li>{{/if}}

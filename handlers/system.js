@@ -388,10 +388,13 @@ exports.dcSystemPages = function(req,res,next){
             logger.info('query12'+query);
             break;
         case 13: // Not In Service
-            query = Equipment.find({'equipStatus':{nin:'In Service'}});
-            logger.info('query11'+query);
+            query = Equipment.find({'equipStatus':{$nin:['In Service','In Service with issues','End of Life','End of Life - Recycled','End of Life - RMA']}});
+            logger.info('query13'+query);
             break;
-
+        case 14: // End of life    
+            query = Equipment.find({'equipStatus':{$in:['End of Life','Missing','End of Life - Recycled','End of Life - RMA']}});
+            logger.info('query13'+query);
+            break;
         case 18: // multi SystemDB
             switch (searchIn){
                 case 'equipSN':
@@ -487,6 +490,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
         }else if(req.params.datacenter.indexOf ('eqnis') !=-1){
             editLoad = 13;
 
+        }else if(req.params.datacenter.indexOf ('eol') !=-1){
+            editLoad = 14;
+
         }else if(req.params.datacenter.indexOf ('multi') !=-1){
             searchIn = req.query.searchIn.substring (req.query.searchIn.indexOf('~')+1);
             logger.info('searchIn '+searchIn);
@@ -518,7 +524,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
         logger.info(err);
         }else{
         logger.info('2-9 >'+searchFor);
-        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn',function(err,eqs){
+        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo',function(err,eqs){
          
         //logger.info('system-list'+sys);
             var context = {
@@ -559,6 +565,8 @@ exports.dcSystembyEnvRole = function(req,res,next){
                             equipMake: tempSys.equipMake,
                             equipModel: tempSys.equipModel,
                             equipSubModel: tempSys.equipSubModel,
+                            equipAcquisition: strTgs.dateMod(tempSys.equipAcquisition),
+                            equipWarrantyMo: strTgs.addAndCompDates(tempSys.equipAcquisition, tempSys.equipWarrantyMo),
                     };
                 }),
             };
@@ -615,6 +623,8 @@ exports.dcSystembyEnvRole = function(req,res,next){
                             equipMake: eq.equipMake,
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
+                            equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
+                            equipWarrantyMo: strTgs.addAndCompDates(eq.equipAcquisition, eq.equipWarrantyMo),
                     };
                 }),
             };
@@ -686,7 +696,7 @@ exports.findEndpoints = function(req,res,next){
         if(err) return next(err);
         //logger.info('sys > '+sys);
         context = {
-            access : strTgs.userLevel(req.user.local.access),
+            access : strTgs.accessCheck(req.user),
             user : req.user,
                 titleNow:fEndPoint,
                 menu1:fEndPoint,

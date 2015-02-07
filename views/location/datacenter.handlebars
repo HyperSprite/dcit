@@ -73,7 +73,7 @@
             <br>
             <ul id="racksUl" class="list-unstyled">
             {{#if ../access.edit}}<li>
-            <input form="formNewRack{{@index}}" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Rack' formaction='/location/rack/newrack~{{../id}}-{{id}}'>
+            <input form="formNewRack{{@index}}" type='submit' class='btn btn-success btn-xs' formmethod="get" novalidate value='New Rack' formaction='/location/rack/newrack~{{dcid}}-{{id}}'>
             <form id="formNewRack{{@index}}"></form>
             </li>{{/if}}
             <li>

@@ -36,7 +36,23 @@
         Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}
         <br> Vlan: {{sysPortVlan}}
         <br> Options: {{sysPortOptions}} 
-        <br> Cable Path:{{sysPortCablePath}}<br><br>
+        <br> Cable Path:{{sysPortCablePath}}
+        {{#if sysPortAddress}}<br> IP: {{sysPortAddress}}{{/if}}
+        {{#if sysPortURL}}<br> FQDN: {{sysPortURL}}{{/if}}
+        <br><br>     
+        {{/if}}
+        {{/each}}
+        {{#each systemPorts}}
+        {{#if sysPortisNetMgmt}}
+        Port Label: {{../../systemName}}_{{sysPortName}}<br>
+        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}
+        <br> Vlan: {{sysPortVlan}}
+        <br> Options: {{sysPortOptions}} 
+        <br> Cable Path:{{sysPortCablePath}}
+        {{#if sysPortAddress}}<br> IP: <a href='http://{{sysPortAddress}}'>{{sysPortAddress}}</a>{{/if}}
+        {{#if sysPortURL}}<br> FQDN: <a href='http://{{sysPortURL}}'>{{sysPortURL}}</a>{{/if}}
+        <br><br>
+
         {{/if}}
         {{/each}}
         __________________________________________________<br>

@@ -61,7 +61,7 @@ exports.dcEquipPages = function(req,res,next){
                             equipMake: eq.equipMake,
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                            equipAcquisition: strTgs.addAndCompDates(eq.equipAcquisition, eq.equipWarrantyMo),
                             equipPONum: eq.equipPONum,
                             equipProjectNum: eq.equipProjectNum,
                             createdOn: strTgs.dateMod(eq.createdOn),
@@ -356,6 +356,8 @@ exports.dcEquipPages = function(req,res,next){
                                 equipRecieved: strTgs.dateMod(eq.equipRecieved),
                                 equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
                                 equipInService: strTgs.dateMod(eq.equipInService),
+                                equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
+                                equipWarrantyMo: eq.equipWarrantyMo,
                                 equipPONum: eq.equipPONum,
                                 equipInvoice: eq.equipInvoice,
                                 equipProjectNum: eq.equipProjectNum,
@@ -446,6 +448,8 @@ exports.dcEquipPages = function(req,res,next){
                                 equipRecieved: strTgs.dateMod(eq.equipRecieved),
                                 equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
                                 equipInService: strTgs.dateMod(eq.equipInService),
+                                equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
+                                equipWarrantyMo: eq.equipWarrantyMo,
                                 equipPONum: eq.equipPONum,
                                 equipInvoice: eq.equipInvoice,
                                 equipProjectNum: eq.equipProjectNum,
@@ -546,6 +550,8 @@ exports.dcEquipmentPost = function(req,res){
                                 equipRecieved: strTgs.uTrim(data.equipRecieved),
                                 equipAcquisition: strTgs.uTrim(data.equipAcquisition),
                                 equipInService: strTgs.uTrim(data.equipInService),
+                                equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
+                                equipWarrantyMo: eq.equipWarrantyMo,
                                 equipPONum: strTgs.uTrim(data.equipPONum),
                                 equipInvoice: strTgs.uTrim(data.equipInvoice),
                                 equipProjectNum: strTgs.uTrim(data.equipProjectNum),
@@ -664,6 +670,8 @@ exports.dcEquipmentPost = function(req,res){
                         thisDoc.equipRecieved = strTgs.uCleanUp(thisDoc.equipRecieved,data.equipRecieved);
                         thisDoc.equipAcquisition = strTgs.uCleanUp(thisDoc.equipAcquisition,data.equipAcquisition);
                         thisDoc.equipInService = strTgs.uCleanUp(thisDoc.equipInService,data.equipInService);
+                        thisDoc.equipEndOfLife = strTgs.uCleanUp(thisDoc.equipEndOfLife,data.equipEndOfLife);
+                        thisDoc.equipWarrantyMo = strTgs.uCleanUp(thisDoc.equipWarrantyMo,data.equipWarrantyMo);
                         thisDoc.equipPONum = strTgs.uCleanUp(thisDoc.equipPONum,data.equipPONum);
                         thisDoc.equipInvoice = strTgs.uCleanUp(thisDoc.equipInvoice,data.equipInvoice);
                         thisDoc.equipProjectNum = strTgs.uCleanUp(thisDoc.equipProjectNum,data.equipProjectNum);
