@@ -3,9 +3,8 @@ var     strTgs = require('../lib/stringThings.js'),
   seedDataLoad = require('../seedDataLoad.js'),
           dcit = require('../dcit.js'),
       ObjectId = require('mongoose').Types.ObjectId,
-        logger = require('../lib/logger.js'),
       IpSNCalc = require( 'ip-subnet-calculator' );
-
+       var logger = require('../lib/logger.js');
 // Models
 var Datacenter = require('../models/datacenter.js'),
           Rack = require('../models/rack.js'),
@@ -53,7 +52,7 @@ exports.datacenterPages = function(req,res,next){
             };
         return res.redirect(303, '/');
     }else{ 
-    logger.info('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
+//logger.info('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
     if (req.params.datacenter === 'list' || !req.params.datacenter){
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
@@ -121,7 +120,7 @@ Edit Contact
 
         if(err) return next(err);
         if(!datacenter) return next();
-        logger.info(datacenter);
+//logger.info(datacenter);
             context ={
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
@@ -182,7 +181,7 @@ If "New" is in the URL, it does New, otherwise it goes to existing
     };
         return res.redirect(303, '/home');
     }else{
-        logger.info('else if (req.params.datacenter.indexOf ("edit")');
+//logger.info('else if (req.params.datacenter.indexOf ("edit")');
         start = req.params.datacenter.indexOf ('-');
         dcabbr = req.params.datacenter.substring (start+1);
         
@@ -223,11 +222,11 @@ this takes the abbreviation and displays the matching datacenter details
         if(err) return next(err);
         if(!datacenter) return next();
         //logger.info(datacenter);
-        logger.info ('Datacenter.findOne - abbreviation to matching datacenter');
+        //logger.info ('Datacenter.findOne - abbreviation to matching datacenter');
         var dc = datacenter;
         // looks up racks in Rack based on datacenter id
         Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err,racks){
-        logger.info ('Rack - id to matching rack to datacenter'+ dc._id); 
+        //logger.info ('Rack - id to matching rack to datacenter'+ dc._id); 
             var context = {
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
@@ -368,7 +367,7 @@ exports.datacenterPost = function(req,res){
     }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    logger.info('datacenterPost abbreviation>'+res.abbreviation);
+    //logger.info('datacenterPost abbreviation>'+res.abbreviation);
     if (!req.body.id){
     Datacenter.create({
 
@@ -399,7 +398,7 @@ exports.datacenterPost = function(req,res){
 	} else {
     Datacenter.findById(req.body.id, function(err, datacenter){
     var thisDoc = datacenter;
-    logger.info('id>'+thisDoc);
+    //logger.info('id>'+thisDoc);
         if (err) {
             logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
@@ -445,9 +444,9 @@ exports.datacenterContactPost = function(req,res){
     }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    logger.info('id>'+req.body.id);
-    logger.info('abbreviation>'+req.body.abbreviation);
-    logger.info('conId       >'+req.body.conId);
+    //logger.info('id>'+req.body.id);
+    //logger.info('abbreviation>'+req.body.abbreviation);
+    //logger.info('conId       >'+req.body.conId);
     Datacenter.findById(req.body.id, 'contacts modifiedOn', function(err, datacenter){
     var thisSubDoc = datacenter.contacts.id(req.body.conId);
         if (err) {
@@ -542,10 +541,10 @@ exports.datacenterDelete = function(req,res){
     }else{ 
     res.abbreviation = req.body.id;
 if (req.body.id){
-        logger.info('delete got this far');
+        //logger.info('delete got this far');
         Datacenter.findOne({_id: req.body.id},function(err,datacentertodelete){
         if(err){
-        logger.info(err);
+        //logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             datacentertodelete.remove(function(err){
@@ -587,16 +586,16 @@ exports.datacenterCagePages = function(req,res,next){
         return res.redirect(303, '/');
     }else{ 
     //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
-    logger.info('exports.datacenterCagePages');
+    //logger.info('exports.datacenterCagePages');
     start = req.params.datacenter.indexOf ('-');
     var searchId = req.params.datacenter.substring (start+1);
-        logger.info('edit called ' + searchId); 
+        //logger.info('edit called ' + searchId); 
     //  logger.info(obj_dccage);
     var query = Datacenter.findOne({_id: searchId});
         query.exec(function(err,datacenter){
         if(err) return next(err);
         //logger.info("datacenter :" + datacenter);
-        logger.info('1 v19 ');
+        //logger.info('1 v19 ');
         if(!datacenter) return next();
         //logger.info("2 ");
 
@@ -659,7 +658,7 @@ exports.datacenterCagePost = function(req,res){
                 logger.info(err);
                 return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
             } else if (!req.body.cageName){
-                logger.info('no cageName');
+                //logger.info('no cageName');
                 req.session.flash = {
 	                type: 'danger',
 	                intro: 'Ooops!',
@@ -669,20 +668,20 @@ exports.datacenterCagePost = function(req,res){
             } else {
             //using index returned from handlebars and count to get loop count
                 for(i=0;i<req.body.index.length;i++){
-                    logger.info('indx > '+req.body.index.length);
-                    logger.info('cageId           > '+req.body.cageId);
-                    logger.info('cageNickname     > '+req.body.cageNickname);
-                    logger.info('cageAbbreviation > '+req.body.cageAbbreviation);
-                    logger.info('cageName         > '+req.body.cageName);
-                    logger.info('cageWattPSM      > '+req.body.cageWattPSM);
+                    //logger.info('indx > '+req.body.index.length);
+                    //logger.info('cageId           > '+req.body.cageId);
+                    //logger.info('cageNickname     > '+req.body.cageNickname);
+                    //logger.info('cageAbbreviation > '+req.body.cageAbbreviation);
+                    //logger.info('cageName         > '+req.body.cageName);
+                    //logger.info('cageWattPSM      > '+req.body.cageWattPSM);
                 var checkVar = req.body.cageName[i];
-                    logger.info ('cageName> '+checkVar);
+                    //logger.info ('cageName> '+checkVar);
             // this is for empty +1    
                 if (!checkVar){
-                    logger.info('no content cage');
+                    //logger.info('no content cage');
             // this is for more than one new cage
             } else if (req.body.cageId[i] ==='new'){
-                    logger.info ('picked new cage');
+                    //logger.info ('picked new cage');
             // this section for empty cage page    
                     datacenter.cages.push({
                         cageNickname : strTgs.uTrim(req.body.cageNickname[i]),
@@ -695,7 +694,7 @@ exports.datacenterCagePost = function(req,res){
                     });
             // this is for existing cages    strTgs.uCleanUp(thisSubDoc.conType,req.body.conType);
             }else{
-                    logger.info('existing cage');
+                    //logger.info('existing cage');
                     var thisSubDoc = datacenter.cages.id(req.body.cageId[i]);
                         thisSubDoc.cageNickname = strTgs.uTrim(req.body.cageNickname[i]);
                         thisSubDoc.cageAbbreviation = strTgs.cTrim(req.body.cageAbbreviation[i]);
@@ -743,21 +742,21 @@ exports.datacenterPowerPages = function(req,res,next){
         return res.redirect(303, '/');
     }else{ 
     //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
-    logger.info('exports.datacenterPowerPages');
+    //logger.info('exports.datacenterPowerPages');
     start = req.params.datacenter.indexOf ('-');
     var searchId = req.params.datacenter.substring (start+1);
-        logger.info('edit called ' + searchId); 
+    //    logger.info('edit called ' + searchId); 
     //  logger.info(obj_dccage);
     var query = Datacenter.findOne({_id: searchId});
         query.exec(function(err,datacenter){
         if(err) return next(err);
         //logger.info("datacenter :" + datacenter);
-        logger.info('Power v19 ');
+        //logger.info('Power v19 ');
         if(!datacenter) return next();
         //logger.info("2 ");
 
             var dc = datacenter;
-            logger.info ('dc   >'+dc);
+            //logger.info ('dc   >'+dc);
             var context = {
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
@@ -789,12 +788,12 @@ exports.datacenterPowerPost = function(req,res){
     }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    logger.info('PowerPost id '+ req.body.id);
+    //logger.info('PowerPost id '+ req.body.id);
     var i = 1;
     // having the [i]index at the end of the form field collects it properly
     Datacenter.findById(req.body.id, 'power modifiedOn', function(err, datacenter){
     var thisDoc = datacenter;
-    logger.info('id>'+thisDoc);
+    //logger.info('id>'+thisDoc);
         if (err) {
             logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
@@ -853,7 +852,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         if(err)return next(err);
 
     var copy;
-    logger.info('exports.datacenterNetworkPages');
+    //logger.info('exports.datacenterNetworkPages');
     dcInfo = req.params.datacenter;
     if (dcInfo){
         dcSplit = dcInfo.indexOf ('-');
@@ -862,7 +861,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         if (dcSubId.indexOf ('copy') !=-1){
             dcSubId = dcSubId.substring (0,dcSubId.indexOf ('~'));
             copy = true;
-            logger.info('copy >'+dcSubId);
+            //logger.info('copy >'+dcSubId);
         }
         
         Datacenter.findById(dcId,function(err,datacenter){
@@ -951,21 +950,21 @@ exports.datacenterNetworkPost = function(req,res,next){
             };
         return res.redirect(303, '/');
     }else{ 
-    logger.info('exports.datacenterNetworkPost');
+    //logger.info('exports.datacenterNetworkPost');
     var data = req.body;
     res.abbreviation = data.abbreviation;
     var dcNetUnique = data.abbreviation+'-'+strTgs.clTrim(data.dcNetNetwork)+'/'+strTgs.clTrim(data.dcNetMask);
-    logger.info('id>'+data.id);
-    logger.info('abbreviation>'+data.abbreviation);
-    logger.info('dcNetId       >'+data.dcNetId);
+    //logger.info('id>'+data.id);
+    //logger.info('abbreviation>'+data.abbreviation);
+    //logger.info('dcNetId       >'+data.dcNetId);
     Datacenter.findById(data.id, 'networks modifiedOn', function(err, datacenter){
     if (err) {
-        logger.info(err);
+        //logger.info(err);
         res.redirect('location/datacenter/'+res.abbreviation);    
 
     } else if (!data.dcNetId){
         //   logger.info(datacenter);
-        logger.info('New network '+data.dcNetNetwork+'/'+data.dcNetMask);
+        //logger.info('New network '+data.dcNetNetwork+'/'+data.dcNetMask);
         datacenter.networks.push({
             dcNetUnique: dcNetUnique,
             dcNetType: strTgs.clTrim(data.dcNetType),
@@ -1056,13 +1055,13 @@ if (req.body.id && req.body.subId){
         }else{            
             if(req.body.collectionSub === 'contact'){
                datacenter.contacts.id(req.body.subId).remove();
-                logger.info('delete: '+req.body.subId+' - '+req.body.subName);
+                //logger.info('delete: '+req.body.subId+' - '+req.body.subName);
             } else if (req.body.collectionSub === 'cages'){//(req.body.collectionSub === "cages")
                 datacenter.cages.id(req.body.subId).remove();
-                logger.info('delete: '+req.body.subId+' - '+req.body.subName);
+                //logger.info('delete: '+req.body.subId+' - '+req.body.subName);
             } else if (req.body.collectionSub === 'network'){//(req.body.collectionSub === "network")
                 datacenter.networks.id(req.body.subId).remove();
-                logger.info('delete: '+req.body.subId+' - '+req.body.subName);
+                //logger.info('delete: '+req.body.subId+' - '+req.body.subName);
             }
             datacenter.save(function(err){
                 if(err){

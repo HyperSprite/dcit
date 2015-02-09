@@ -7,7 +7,6 @@ var        http = require('http'),
      bodyParser = require('body-parser'),
      formidable = require('formidable'),
 	         fs = require('fs'),
-        winston = require('winston'),
 	      vhost = require('vhost'),
        passport = require('passport'),   
      Datacenter = require('./models/datacenter.js'),
@@ -17,8 +16,10 @@ var        http = require('http'),
       Optionsdb = require('./models/options.js'),
 MrSystemEnviron = require('./models/mrsystemenviron.js'),
    seedDataLoad = require('./seedDataLoad.js'),
-         logger = require('./lib/logger.js'),
           flash = require('connect-flash');
+
+var          winston = require('winston'),
+              logger = require('./lib/logger.js');
 
 var app = express();
 
@@ -108,6 +109,8 @@ app.use(function(req, res, next){
     // execute the rest of the request chain in the domain
     domain.run(next);
 });
+//app.use(('winston')({ 'stream': logger.stream }));
+
 
 // logging
 switch(app.get('env')){
@@ -140,10 +143,11 @@ switch(app.get('env')){
         throw new Error('Unknown execution environment: ' + app.get('env'));
 }
 
-
 app.use(require('cookie-parser')(credentials.cookieSecret));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
 app.use(require('express-session')({ 
                 key: 'session',
                 cookie:{
@@ -156,59 +160,27 @@ app.use(require('express-session')({
                 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(flash());
 app.use(express.static(__dirname + '/public'));
-//app.use(bodyParser());
-// cross-site request forgery protection
+
+
 /*
+// cross-site request forgery protection
 app.use(require('csurf')());
 app.use(function(req, res, next){
-	res.locals._csrfToken = req.csrfToken();
-    
-	next();
+       res.locals._csrfToken = req.csrfToken(); 
+       next();
+});
+app.use(function (err, req, res, next) {
+  if (err.code !== 'EBADCSRFTOKEN') return next(err)
+  // handle CSRF token errors here 
+    logger.warn('crsf error req.csrfToken >'+req.csrfToken());
+
+  res.status(403)
+  res.send('session has expired or form tampered with')
 });
 */
-
-exports.dropDatacenter = (function(Datacenter){
-    Datacenter.find(function(err, datacenters){
-    // this will need to be removed once we start using real data
-    // or it will delete the real data
-        if(datacenters.length) mongoose.connection.collections.datacenters.drop( function(err) {
-        logger.info('Datacenters collection dropped');
-        });
-    });
-});
-exports.dropRack = (function(Rack){
-    Rack.find(function(err, racks){
-        if(racks.length) mongoose.connection.collections.racks.drop(function(err) {
-        logger.info('Racks collection dropped');
-        });
-    });
-});
-
-exports.dropOptionsdb = (function(Optionsdb){
-    Optionsdb.find(function(err, optionsdbs){
-        if(optionsdbs.length) mongoose.connection.collections.optionsdbs.drop(function(err) {
-        logger.info('Optionsdbs collection dropped');
-        });
-    });    
-});
-
-exports.dropEquipment = (function(Equipment){
-    Equipment.find(function(err, equipment){
-        if(equipment.length) mongoose.connection.collections.equipment.drop(function(err) {
-        logger.info('Equipment collection dropped');
-        });
-    });    
-});
-
-exports.dropSystem = (function(Systemdb){
-    Systemdb.find(function(err, systemdb){
-        if(systemdb.length) mongoose.connection.collections.systemdbs.drop(function(err) {
-        logger.info('Systemdb collection dropped');
-        });
-    });    
-});
 
 // flash message middleware
 app.use(function(req, res, next){

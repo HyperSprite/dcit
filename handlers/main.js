@@ -1,11 +1,10 @@
 
-var     logger = require('../lib/logger.js'),
-        strTgs = require('../lib/stringThings.js'),
+var     strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
-
+var     logger = require('../lib/logger.js');
  
 exports.home = function(req, res){
-    logger.info('exports.home');
+    //logger.info('exports.home');
         context = {
             access : strTgs.accessCheck(req.user),
             user : req.user,

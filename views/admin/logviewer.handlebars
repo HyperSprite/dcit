@@ -1,0 +1,30 @@
+<h4>Log Viewer</a>
+<div>
+<h5>{{filename}}</h5>
+
+
+<div id="dvData">
+    
+    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="index">index</th>
+                <th class="table-sort" data-sort="message">Message</th>
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each data}}
+            <tr>
+                
+                <td class="index">{{@index}}</tc>
+                <td class="message" >{{message}}</td>
+                
+                
+            </tr>  
+        {{/each}}
+  
+        </tbody>
+    </table>
+        </div>
+         {{> tocsvpartial }}
+    </div>

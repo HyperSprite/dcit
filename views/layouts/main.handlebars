@@ -54,21 +54,29 @@
                     <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  {{user.local.email}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/">Home</a></li>
-                        {{#if access.read}}<li><a href="/location/datacenter/list">Datacenters</a></li>{{/if}}
-                        {{#if access.read}}<li><a href="/env-role-reports">Reports</a></li>{{/if}}
-                        {{#if access.edit}}<li><a href="/env-role-report/homeless-">Equipment w/ no Location</li>{{/if}}
-                        {{#if access.delete}}<li><a href="/env-role-report/eqnis-">Equipment Spares</li>{{/if}}
-                        {{#if access.delete}}<li><a href="/env-role-report/eol-">Equipment End of Life</li>{{/if}}
-                        {{#if access.delete}}<li><a href="/equipment">Equipment (slow)</a></li>{{/if}}
-                        {{#if access.delete}}<li><a href="/systems">Systems (slow)</a></li>{{/if}}
-                        {{#if access.delete}}<li><a href="/equipment-systems">Equipment & Systems (slower)</a></li>{{/if}}
-                        {{#if access.delete}}<li><a href="/location/racks">Racks</a></li>{{/if}}
-                        {{#if access.root}}<li><a href="/admin">Admin</a></li>{{/if}}
-                        {{#if access.root}}<li><a href="/jquery-test">jquery Test</a></li>{{/if}}
-                        <li><a href="/about">About</a></li>
+                        {{#if access.read}}
+                              <li><a href="/location/datacenter/list">Datacenters</a></li>
+                              <li><a href="/env-role-reports">Reports</a></li>
+                              <li><a href="/env-role-report/homeless-">Equipment w/ no Location</li>
+                        {{/if}}
+                        {{#if access.delete}}
+                              
+                             <li><a href="/env-role-report/eqnis-">Equipment Spares</li>
+                              <li><a href="/env-role-report/eol-">Equipment End of Life</li>
+                              <li><a href="/equipment">Equipment All</a></li>
+                              <li><a href="/systems">Systems All</a></li>
+                              <li><a href="/systemports-list">Systems Ports All</a></li>
+                              <li><a href="/equipment-systems">Equipment & Systems All</a></li>
+                              <li><a href="/location/racks">Racks All</a></li>
+                              
+                        {{/if}}
+                        {{#if access.root}}
+                        {{> admin/adminlinks}}
+                        {{/if}}
+                              <li><a href="/about">About</a></li>
                         {{#if user}}
-                        <li><a href="/user/profile">User Profile</a></li>
-                        <li><a href="/user/logout">Logout</a><li>
+                              <li><a href="/user/profile">User Profile</a></li>
+                              <li><a href="/user/logout">Logout</a><li>
                         {{/if}}
                         
                     </ul>

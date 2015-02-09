@@ -6,6 +6,13 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 // load up the user model
 var User            = require('../models/user');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+  transports: [
+    new winston.transports.DailyRotateFile({filename: '../logs/accessLog', json: false}),
+    ],
+  exitOnError: true
+});
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -57,10 +64,9 @@ module.exports = function(passport) {
         User.find(function(err, users){
             if(!users.length){
                 defaultAcess = 5;
-              //  logger.info('New Local Users db created on');
-              //  logger.info(local.email + ' given level 5 access');
+                logger.warn('New Local Users db created');
             }
-        })
+        });
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email }, function(err, user) {
@@ -70,6 +76,7 @@ module.exports = function(passport) {
 
             // check to see if theres already a user with that email
             if (user) {
+                logger.warn('Email taken,'+email);
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                 
             } else {
@@ -83,6 +90,7 @@ module.exports = function(passport) {
                 newUser.local.password = newUser.generateHash(password);
                 newUser.access = defaultAcess;
                 newUser.createdOn = Date.now();
+                logger.warn(email+' created with acess level '+defaultAcess);
 
                 // save the user
                 newUser.save(function(err) {
@@ -119,22 +127,22 @@ module.exports = function(passport) {
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email }, function(err, user) {
             // if there are any errors, return the error before anything else
-            if (err)
+            if (err){
                 return done(err);
-
             // if no user is found, return the message
-            if (!user)
-                
+            }else if (!user){
+                logger.warn('ACCESS FAILED,'+email);
                 return done(null, false, req.flash('loginMessage', 'Opps! Login Failed.')); // req.flash is the way to set flashdata using connect-flash
 
             // if the user is found but the password is wrong
-            if (!user.validPassword(password))
-               
+            }else if (!user.validPassword(password)){
+               logger.warn('PASSWORD FAILED,'+email);
                 return done(null, false, req.flash('loginMessage', 'Oops! Failed Login.')); // create the loginMessage and save it to session as flashdata
 
             // all is well, return successful user
-           
+           }else{
             return done(null, user);
+        }
         });
 
     }));

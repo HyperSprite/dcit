@@ -1,4 +1,6 @@
 
+var logDir = '../logs/';
+
 var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
           dcit = require('../dcit.js'),
@@ -22,7 +24,7 @@ var Datacenter = require('../models/datacenter.js'),
 
     
 exports.home = function(req, res){
-    logger.info('exports.home >'+req.params.datacenter);
+    //logger.info('exports.home >'+req.params.datacenter);
     if (!req.user || req.user.access < 5){
         req.session.flash = {
                 type: 'danger',
@@ -42,7 +44,7 @@ exports.home = function(req, res){
 //          Options page
 //
     }else if (req.params.datacenter  === 'options'){
-     logger.info('called admin.options');     
+     //logger.info('called admin.options');     
         Optionsdb.find(function(err,opts){
         //logger.info(opts);
         if (!opts){
@@ -90,7 +92,7 @@ exports.home = function(req, res){
             access : strTgs.accessCheck(req.user),
             user : req.user,
             };
-        res.render ('admin/upload', context );
+        res.render ('admin/upload', context);
 //
 //  Database admin
 //
@@ -129,8 +131,62 @@ exports.home = function(req, res){
          res.render ('admin/useradmin', context );  
     }});
 
+// ///////////////////////////////////////////////////////
+// //    Log reader ------------------------------------------------
+// ///////////////////////////////////////////////////////    
 
-    
+    }else if(req.params.datacenter === 'logs'){
+
+    fs.readdir(logDir, function (err, files) {
+      if (err) throw err;
+      //logger.info('files'+files);
+
+
+        context = {
+            lastPage : '/admin/logs',
+            access : strTgs.accessCheck(req.user),
+            user : req.user,
+            files: files.map(function(name) {
+                return {name: name};
+            })
+        };
+       res.render ('admin/logs', context);
+      });
+// ///////////////////////////////////////////////////////
+// //    Log View ------------------------------------------------
+// /////////////////////////////////////////////////////// 
+
+
+
+    }else if(req.params.datacenter.indexOf ('logviewer') !=-1){
+        start = req.params.datacenter.indexOf ('-')+1;
+            //logger.info('|start   >'+start);
+        filename = req.params.datacenter.substring (start);
+            //logger.info('|filename    >'+filename);
+
+        fs.readFile(logDir+filename, function (err, datas) {
+          if (err) throw err;
+          //logger.log(data);
+           datas = datas.toString();
+           datas = datas.split('\n');
+
+
+            context = {
+            lastPage : '/admin/logs',
+            access : strTgs.accessCheck(req.user),
+            user : req.user,
+            filename : filename,
+            data: datas.map(function (da) {
+                return {
+                    message: da,
+                };
+            })
+        };
+       res.render ('admin/logviewer', context);
+
+        });   
+
+
 
 //    
 //  File Manager
@@ -142,7 +198,7 @@ exports.home = function(req, res){
     
     Fileinfo.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, fil){
         if(err){
-        logger.info(err);
+        //logger.info(err);
         }else{
         //logger.info('file-list'+fil);
             var context = {
@@ -200,7 +256,7 @@ exports.home = function(req, res){
     res.render ('admin/models', context);
 
     }else{
-    logger.info('datacenter >'+req.params.datacenter);
+    //logger.info('datacenter >'+req.params.datacenter);
             context = {
                 lastPage : '/admin/'+req.params.datacenter,
                 access : strTgs.accessCheck(req.user),
@@ -222,9 +278,9 @@ exports.userEdit = function (req, res) {
     }else{ 
     User.findOne({'_id':req.body.id}, function(err,ur){
         if(err){
-            logger(err);
+            logger.warn(err);
         }else{
-        logger.info('ur '+ur);
+        //logger.info('ur '+ur);
         context = {
                 lastPage : '/admin/useradmin',
                 access : strTgs.accessCheck(req.user),
@@ -253,11 +309,11 @@ exports.userEditPost = function (req, res) {
             };
         return res.redirect(303, '/');
     }else{ 
-        logger.info('userEditPost >'+ req.body.id);
+        //logger.info('userEditPost >'+ req.body.id);
         var data = req.body;
     User.findOne({'_id':req.body.id}, function(err,ur){
         if (err){
-            logger.info(err);
+            logger.warn(err);
             res.redirect ('admin/useradmin');
         }else if(!data.locEmail.match(VALID_EMAIL_REGEX)) {
         req.session.flash = {
@@ -335,7 +391,7 @@ exports.optionsEdit = function(req, res){
 };
 
 exports.optionsEditPost = function(req,res,err){
-    logger.info('optionsEditPost >'+ req.body.id);
+    //logger.info('optionsEditPost >'+ req.body.id);
         if (!req.user || req.user.access < 5){
         req.session.flash = {
                 type: 'danger',
@@ -376,7 +432,7 @@ exports.optionsEditPost = function(req,res,err){
     } else {
         Optionsdb.findById(req.body.id,function(err,opt){
         if (err) {
-            logger.info(err);
+            logger.warn(err);
             }else{
                     //logger.info(opt);
                     opt.optListArray = strTgs.csvCleanup(req.body.optListArray);
@@ -404,15 +460,17 @@ exports.optionsEditPost = function(req,res,err){
 };
 //
 // Upload POST working
-//        
+//
+
+
 exports.uploadPost = function(req,res){
-    logger.info('date >'+Date.now());
+    //logger.info('date >'+Date.now());
     var userEmail = req.user.local.email;
     var form = new formidable.IncomingForm();
     form.uploadDir = './userdata/';
     form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
-    logger.info('files >'+files);
+    //logger.info('files >'+files);
     var file = files.newCSVfile;
     var fileHRName = strTgs.clTrim(file.name);
     var base = './public/userdata/';
@@ -420,7 +478,7 @@ exports.uploadPost = function(req,res){
     var dateStr = Date.now();
     var fileName = dateStr+'-'+fileHRName;
     var newPath = dir + fileName;
-    logger.info('dir+filename >'+dir + fileName);
+    //logger.info('dir+filename >'+dir + fileName);
 
      if(err) return res.redirect(303, '/error');
         if(err) {
@@ -465,6 +523,7 @@ exports.uploadPost = function(req,res){
     });
 //});
 };
+
 //
 // Upload Delete File POST
 //
@@ -480,15 +539,15 @@ exports.uploadDeletePost = function(req,res){
 if (req.body.id){
 
         var bdy = req.body;
-        logger.info('delete got this far');
+        //logger.info('delete got this far');
         Fileinfo.findOne({_id: bdy.id},function(err,fileToDelete){
         if(err){
-        logger.info(err);
+        //logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             fileToDelete.remove(function(err){
                 if(err){
-                logger.info(err);
+                //logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -496,10 +555,10 @@ if (req.body.id){
                     };
                     return res.redirect(303, '/admin/filemanager');
                 } else {
-                logger.info('path/file ./'+bdy.filePath);
+                //logger.info('path/file ./'+bdy.filePath);
                 fs.unlink(bdy.filePath, function(err){
                     if(err){
-                logger.info(err);
+                //logger.info(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -521,6 +580,44 @@ if (req.body.id){
     });
 }}
 };
+//  ////////////////////////////////////////
+//  //  Delte log file -----------------------------------------
+//  ////////////////////////////////////////
+exports.logdelete = function(req,res){
+        if (!req.user || req.user.access < 5){
+        req.session.flash = {
+                type: 'danger',
+                intro: 'Ooops!',
+                message: 'Not Authorized!',
+                };
+            return res.redirect(303, '/');
+    }else{ 
+    if (req.body.name){
+        var fileName = logDir+req.body.name;
+        logger.info('delete got this far'+fileName );
+            fs.unlink(fileName, function(err){
+                    if(err){
+logger.warn('failed '+fileName+ 'delete');
+                req.session.flash = {
+                        type: 'danger',
+                        intro: 'Ooops!',
+                        message: 'Something went wrong, '+fileName+' was not deleted.',
+                    };
+                    return res.redirect(303, '/admin/logs');
+                    } else {
+                
+                    req.session.flash = {
+                    type: 'success',
+                    intro: 'Done!',
+                    message: 'File '+fileName+' has been deleted. Good luck with that one',
+                };
+                return res.redirect(303, '/admin/logs');
+                }});
+                }
+        }
+};
+
+
 //
 //  CSV to DB
 // 
@@ -534,12 +631,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(equipmentStream, {headers : true})
             .on('data', function(data){
             if(!data.equipSN){
-            logger.info('No Equipment SN');
+            //logger.info('No Equipment SN');
         }else{
             equipmentCrud.equipmentCreate(data,req);
          }})
             .on('end', function(){
-             logger.info('done');
+             //logger.info('done');
         });
         break;
     case 'Equipment.equipPorts':
@@ -548,12 +645,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(equipPortsStream, {headers : true})
             .on('data', function(data){
             if(!data.equipSN){
-            logger.info('Equipment Port error');
+            //logger.info('Equipment Port error');
         }else{
             equipmentCrud.equipmentPortCreate(data,req);
          }})
             .on('end', function(){
-             logger.info('done');
+             //logger.info('done');
         });
     
         break;
@@ -563,12 +660,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(systemdbStream, {headers : true})
             .on('data', function(data){
             if(!data.systemName){
-            logger.info('No System Name');
+            //logger.info('No System Name');
         }else{
             systemdbCrud.systemdbCreate(data,req);
          }})
             .on('end', function(){
-             logger.info('done');
+             //logger.info('done');
         });
     
         break;
@@ -578,12 +675,12 @@ exports.csvToDBPost = function(req,res){
             .fromStream(systemPortsStream, {headers : true})
             .on('data', function(data){
             if(!strTgs.clTrim(data.systemName)){
-            logger.info('systemPortsStream Error on index '+data.index+' systemName not found');
+            //logger.info('systemPortsStream Error on index '+data.index+' systemName not found');
         }else{
             systemdbCrud.systemdbPortsCreate(data,req);
          }})
             .on('end', function(){
-             logger.info('done');
+             //logger.info('done');
         });
     
         break;        
@@ -617,15 +714,15 @@ exports.userDelete = function(req,res){
    
 
 if (req.body.id){
-        logger.info('delete got this far id >'+ req.body.id);
+        //logger.info('delete got this far id >'+ req.body.id);
         User.findById(req.body.id,function(err,userToDelete){
         if(err){
-        logger.info(err);
+        logger.warn(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             userToDelete.remove(function(err){
                 if(err){
-                logger.info(err);
+                logger.warn(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -659,7 +756,7 @@ exports.dropDatacenterGet = function(req,res){
         return res.redirect(303, '/home');
     }else{    
     dcit.dropDatacenter(Datacenter);
-	logger.info('dropDatacenterGet');
+	logger.warn('dropDatacenterGet');
     return res.redirect(303, '/location/datacenter/list');
 }
 };
@@ -674,7 +771,7 @@ exports.dropRackGet = function(req,res){
         return res.redirect(303, '/home');
     }else{      
     dcit.dropRack(Rack);
-    logger.info('dropRackGet');
+    logger.warn('dropRackGet');
 	return res.redirect(303, '/location/datacenter/list');
     } 
 };
@@ -689,7 +786,7 @@ exports.dropOptionsdbGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     dcit.dropOptionsdb(Optionsdb);
-    logger.info('dropOptionsdbGet');
+    logger.warn('dropOptionsdbGet');
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -704,7 +801,7 @@ exports.dropEquipmentGet = function(req,res){
         return res.redirect(303, '/home');
     }else{      
     dcit.dropEquipment(Equipment);
-    logger.info('dropEquipmentGet');
+    logger.warn('dropEquipmentGet');
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -719,7 +816,7 @@ exports.dropSystemGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     dcit.dropSystem(Systemdb);
-    logger.info('dropSystemGet');
+    logger.warn('dropSystemGet');
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -735,7 +832,7 @@ exports.seedDatacetnerGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     seedDataLoad.seedDatacenter(Datacenter);
-    logger.info('seedDatacetnerGet');
+    logger.warn('seedDatacetnerGet');
 	return res.redirect(303, '/location/datacenter/list');
     } 
 };
@@ -750,7 +847,7 @@ exports.seedOptionsdbGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     seedDataLoad.seedOptionsDataBase(Optionsdb);
-    logger.info('seedOptionsdbGet');
+    logger.warn('seedOptionsdbGet');
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -765,7 +862,7 @@ exports.seedEquipmentGet = function(req,res){
         return res.redirect(303, '/home');
     }else{      
     seedDataLoad.seedEquipmentDataBase(Equipment);
-    logger.info('seedEquipmentGet');
+    logger.warn('seedEquipmentGet');
     return res.redirect(303, '/admin/options');
     }
 };
@@ -779,7 +876,7 @@ exports.seedSystemGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     seedDataLoad.seedSystemDataBase(Systemdb);
-    logger.info('seedSystemGet');
+    logger.warn('seedSystemGet');
     return res.redirect(303, '/admin/options');
     }	
 };

@@ -1,8 +1,14 @@
 // Equipment crud
-var logger = require('../lib/logger.js'), 
- Equipment = require('../models/equipment.js'),
+var Equipment = require('../models/equipment.js'),
     strTgs = require('../lib/stringThings.js'),
      dates = require('../lib/dates.js');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+  transports: [
+    new winston.transports.DailyRotateFile({filename: '../logs/uploadLog', json: false}),
+    ],
+  exitOnError: true
+});
          
 exports.equipmentCreate = function (data,req) {
 Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
@@ -55,17 +61,17 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipPurchaseTerms: strTgs.uTrim(data.equipPurchaseTerms),
         equipPurchaseEnd: dates.convert(data.equipPurchaseEnd),
         equipNotes: strTgs.uTrim(data.equipNotes),
-        createdBy:'Admin',
+        createdBy: req.user.local.email,
         createdOn: strTgs.compareDates(data.modifiedOn),
         modifiedBy: req.user.local.email,
         modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
 	        if(err) {
 
-                logger.warn('equipmentCreate Failed write : '+data.equipSN);
+                logger.warn('csvUpload','eqCreate Failed,'+data.index+','+data.equipSN);
                 return (err.stack);
             }else{
-                logger.info('equipmentCreate Sucessful write :'+data.index+' : '+data.equipSN);
+                logger.info('csvUpload','eqCreate Sucess,'+data.index+','+data.equipSN);
                 return ('done');
             }
     });
@@ -73,9 +79,9 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
     }else{
         var thisDoc = eq;
         if(data.overwite === 'no'){
-            logger.warn('EqCreate CSV date overwite=no: '+data.index+' '+data.equipSN);
+            logger.warn('csvUpload','eqCreate Failed no CSV date overwite=no,'+data.index+','+data.equipSN);
         }else if(!data.modifiedOn && !data.overwrite){
-            logger.warn('EqCreate CSV no modifiedOn or overwite: '+data.index+' '+data.equipSN);
+            logger.warn('csvUpload','eqCreate Failed CSV no modifiedOn or overwite,'+data.index+','+data.equipSN);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
                 if(data.equipLocationRack && data.equipLocationRu){
                 thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);}
@@ -168,16 +174,16 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
 
         eq.save(function(err){
             if(err){
-                logger.warn(err);
-                logger.warn('equipmentCreate Failed - No idea what when wrong :'+data.index+' equipSN '+strTgs.cTrim(data.equipSN)+' found');
+                logger.warn('csvUpload',err);
+                logger.warn('csvUpload','eqCreate Failed - Unknown,'+data.index+','+strTgs.cTrim(data.equipSN));
             }else{
-            logger.info('equipmentCreate Sucessful write :'+data.index+' : '+data.equipSN);
+            logger.info('csvUpload','eqCreate Sucess,'+data.index+','+data.equipSN);
             return ('done');
             }
         });
 
         }else{
-            logger.warn('equipmentCreate Failed - Modified date is older than the existing date for :'+data.index+' equipSN '+strTgs.cTrim(data.equipSN));
+            logger.warn('csvUpload','eqCreate Failed modifiedOn older than existing,'+data.index+','+strTgs.cTrim(data.equipSN));
         }
     }
     });
@@ -185,16 +191,16 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
 exports.equipmentPortCreate = function (data,req) {
 Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
     if (err) {
-        logger.warn('PortCreate'+data.equipSN+err);
+        logger.warn('csvUpload','eqPortCreate Err,'+data.equipSN+err);
     }else if(!eq){
-        logger.warn('PortCreate Failed lookup :'+data.equipSN.toUpperCase()+' not found');
+        logger.warn('csvUpload','eqPortCreate Failed lookup,'+data.index+','+data.equipSN.toUpperCase());
     } else {
         var portArray = [];
             for(var i = eq.equipPorts.length - 1; i >= 0; i--) {
                 portArray[i] = eq.equipPorts[i].equipPortName;
             }
         var portPosition = portArray.indexOf(data.equipPortName);
-            //logger.info('portPosition >'+portPosition);
+            //logger.info('csvUpload','portPosition >'+portPosition);
         if(portPosition === -1){
             eq.equipPorts.push({
                 equipPortType: strTgs.sTrim(data.equipPortType),
@@ -206,20 +212,20 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         });
         eq.save(function(err){
         if(err) {
-            logger.warn(err);
-            logger.warn('PortCreate Failed write :'+data.equipSN);
+            logger.warn('csvUpload',err);
+            logger.warn('csvUpload','eqPortCreate Failed,'+data.index+','+data.equipSN);
             return (err.stack);
         }else{
-            logger.info('PortCreate Sucessful write :'+data.index+' : '+data.equipSN);
+            logger.info('csvUpload','eqPortCreate Sucessful,'+data.index+','+data.equipSN);
             return ('done');
         }
     });
     } else {
         var thisDoc = eq.equipPorts[portPosition];
         if(data.overwite === 'no'){
-            logger.warn('EqPortCreate CSV date overwite=no: '+data.index+' '+data.equipSN);
+            logger.warn('csvUpload','eqPortCreate Failed CSV date overwite=no,'+data.index+','+data.equipSN);
         }else if(!data.modifiedOn && !data.overwrite){
-            logger.warn('EqPortCreate CSV no modifiedOn or overwite: '+data.index+' '+data.equipSN);
+            logger.warn('csvUpload','eqPortCreate Failed CSV no modifiedOn or overwite,'+data.index+','+data.equipSN);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
                 if(data.equipPortType){
                 thisDoc.equipPortType= strTgs.sTrim(data.equipPortType);}
@@ -231,14 +237,14 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn);
             eq.save(function(err){
             if(err){
-                logger.info('EqPortCreate Failed - '+err+' : '+data.index+' equipSN '+strTgs.cTrim(data.equipSN)+' found');
+                logger.warn('csvUpload','eqPortCreate Failed,'+err+','+data.index+','+strTgs.cTrim(data.equipSN));
             }else{
-            logger.info('EqPortCreate Sucessful write :'+data.index+' : '+data.equipSN);
+            logger.info('csvUpload','eqPortCreate Sucessful write,'+data.index+','+data.equipSN);
             return ('done');
             }
         });
     } else {
-        logger.warn('EqPortCreate CSV modifiedOn date older: '+data.index+' '+data.equipSN);
+        logger.warn('csvUpload','eqPortCreate Failed CSV modifiedOn date older,'+data.index+','+data.equipSN);
     }
 
     }}

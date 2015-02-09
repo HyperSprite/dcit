@@ -9,8 +9,8 @@ var     logger = require('../lib/logger.js'),
      Optionsdb = require('../models/options.js');
 
 exports.home = function(req, res){
-    logger.info(req.params.data);
-    logger.info('req.headers.referer'+req.headers.referer);
+//    logger.info(req.params.data);
+//    logger.info('req.headers.referer'+req.headers.referer);
     if(!req.params.data){
     res.render ('user/home');
     } else if (req.params.data === 'login'){

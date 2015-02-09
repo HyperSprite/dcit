@@ -1,7 +1,14 @@
-var   logger = require('../lib/logger.js'),
-    Systemdb = require('../models/system.js'),
+var Systemdb = require('../models/system.js'),
       strTgs = require('../lib/stringThings.js'),
        dates = require('../lib/dates.js');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+  transports: [
+    new winston.transports.DailyRotateFile({filename: '../logs/uploadLog', json: false}),
+    ],
+  exitOnError: true
+});
+
     
 exports.systemdbCreate = function (data,req) {
     Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
@@ -35,19 +42,19 @@ Systemdb.create({
                     modifiedOn: strTgs.compareDates(data.modifiedOn),
     },function(err){
         if(err) {
-            logger.info('systemdbCreate Failed write :'+data.index+' : '+data.systemName);
+            logger.info('sysCreate Failed,'+data.index+','+data.systemName);
             return (err.stack);
         }else{
-            logger.info('systemdbCreate Sucessful write :'+data.index+' : '+data.systemName);
+            logger.info('sysCreate Sucessful,'+data.index+','+data.systemName);
             return ('done');
         }
     });
     }else{
         var thisDoc = sys;
         if(data.overwite === 'no'){
-            logger.warn('SysCreate CSV date overwite=no: '+data.index+' '+data.systemName);
+            logger.warn('sysCreate CSV date overwite=no,'+data.index+','+data.systemName);
         }else if(!data.modifiedOn && !data.overwrite){
-            logger.warn('SysCreate CSV no modifiedOn or overwite: '+data.index+' '+data.systemName);
+            logger.warn('sysCreate CSV no modifiedOn or overwite,'+data.index+','+data.systemName);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
             if(data.systemEquipSN){   
             thisDoc.systemEquipSN= strTgs.sTrim(data.systemEquipSN);}
@@ -93,15 +100,15 @@ Systemdb.create({
         sys.save(function(err){
             if(err){
                 logger.warn(err);
-                logger.warn('systemdbCreate Failed - No idea what when wrong :'+data.index+' systemName '+strTgs.clTrim(data.systemName)+' found');
+                logger.warn('sysCreate Failed Unknown,'+data.index+','+strTgs.clTrim(data.systemName));
             }else{
-            logger.info('systemdbCreate Sucessful write :'+data.index+' : '+data.systemName);
+            logger.info('sysCreate Sucessful write,'+data.index+','+data.systemName);
             return ('done');
             }
         });
 
         }else{
-            logger.warn('systemdbCreate Failed - Modified date is older than the existing date for :'+data.index+' systemName '+strTgs.clTrim(data.systemName));
+            logger.warn('sysCreate Failed modifiedOn is older than existing,'+data.index+','+strTgs.clTrim(data.systemName));
         }
     }
     });
@@ -110,16 +117,16 @@ exports.systemdbPortsCreate = function (data,req) {
 // Lookup system
 Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
     if (err) {
-        logger.warn('PortCreate'+data.systemName+err);
+        logger.warn('sysPortCreate,'+data.index+','+data.systemName+err);
     }else if(!sys){
-        logger.warn('PortCreate Failed lookup :'+data.systemName.toLowerCase()+' not found');
+        logger.warn('sysPortCreate Failed lookup,'+data.index+','+data.systemName.toLowerCase());
     } else {
         var portArray = [];
             for(var i = sys.systemPorts.length - 1; i >= 0; i--) {
                 portArray[i] = sys.systemPorts[i].sysPortName;
             }
         var portPosition = portArray.indexOf(data.sysPortName);
-            logger.info('portPosition >'+portPosition);
+            //logger.info('upload','portPosition >'+portPosition);
         if(portPosition === -1){
             sys.systemPorts.push({
                 sysPortType: strTgs.sTrim(data.sysPortType),
@@ -137,20 +144,20 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
             });
             sys.save(function(err){
 	        if(err) {
-                logger.warn(err+data.index);
-                logger.warn('systemdbPortsCreate Failed write :'+data.index+' : '+data.systemName);
+                logger.warn('sysPortCreate Error,'+data.index+','+err);
+                logger.warn('sysPortsCreate Failed write,'+data.index+','+data.systemName);
                 return (err.stack);
             }else{
-                logger.info('systemdbPortsCreate Sucessful write :'+data.index+' : '+data.systemName);
+                logger.info('sysPortsCreate Sucessful write,'+data.index+','+data.systemName);
                 return ('done');
             }
     });
     }else{
         var thisDoc = sys.systemPorts[portPosition];
         if(data.overwite === 'no'){
-            logger.warn('SysPortCreate CSV date overwite=no: '+data.index+' '+data.systemName);
+            logger.warn('sysPortCreate CSV date overwite=no,'+data.index+','+data.systemName);
         }else if(!data.modifiedOn && !data.overwrite){
-            logger.warn('SysPortCreate CSV no modifiedOn or overwite: '+data.index+' '+data.systemName);
+            logger.warn('sysPortCreate CSV no modifiedOn or overwite,'+data.index+','+data.systemName);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){    
                 if(data.sysPortType){
                 thisDoc.sysPortType= strTgs.sTrim(data.sysPortType);}
@@ -174,14 +181,14 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn); 
             sys.save(function(err){
             if(err){
-                logger.warn('SysPortCreate Failed - '+err+' '+data.index+' systemName '+strTgs.clTrim(data.systemName)+' found');
+                logger.warn('sysPortCreate Failed,'+data.index+','+strTgs.clTrim(data.systemName)+','+err);
             }else{
-            logger.info('SysPortCreate Sucessful write :'+data.index+' '+data.systemName);
+                logger.info('sysPortCreate Sucessful write,'+data.index+','+data.systemName);
             return ('done');
             }
         });
     } else {
-        logger.warn('SysPortCreate CSV modifiedOn date older: '+data.index+' '+data.systemName);
+        logger.warn('SysPortCreate CSV modifiedOn date older,'+data.index+','+data.systemName);
     }
     }}
 });

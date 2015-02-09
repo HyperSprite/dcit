@@ -74,6 +74,7 @@ module.exports = function(app){
         app.get('/systems', system.dcSystemPages);
         app.get('/system/:datacenter', system.dcSystemPages);
         app.get('/endpoint/:datacenter', system.findEndpoints);
+        app.get('/systemports-list', system.dcSystemPortPages);
         app.post('/system/:datacenter', isLoggedIn, system.dcSystemPost);
         app.post('/systemdelete/:datacenter', isLoggedIn, system.dcsystemDelete);
         app.post('/systemportdelete/:datacenter', isLoggedIn, system.dcsystemSubDelete);
@@ -91,6 +92,7 @@ module.exports = function(app){
         app.post('/admin/uploadpost', isLoggedIn, admin.uploadPost);
         app.post('/admin/uploaddelete', isLoggedIn, admin.uploadDeletePost);
         app.post('/admin/userprofile', isLoggedIn, admin.userEdit);
+        app.post('/admin/logdelete', isLoggedIn, admin.logdelete);
         app.post('/admin/userdelete', isLoggedIn, admin.userDelete);
         app.post('/admin/csvtodb', isLoggedIn, admin.csvToDBPost);
         app.get('/admin/optionsadmin/dropDatacenter', isLoggedIn, admin.dropDatacenterGet);

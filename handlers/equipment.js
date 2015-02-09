@@ -27,7 +27,7 @@ var start  = '',
 this is the Equip List block. Looks for 'List' in the URL and returns list of Equipment.
 */
 exports.dcEquipPages = function(req,res,next){
-    logger.info('***********exports.dcEquipPages First >' +req.params.datacenter);
+    //logger.info('***********exports.dcEquipPages First >' +req.params.datacenter);
     if (!req.user || req.user.access < 2){
     req.session.flash = {
             type: 'danger',
@@ -37,7 +37,7 @@ exports.dcEquipPages = function(req,res,next){
         return res.redirect(303, '/');
     }else{ 
     if (!req.params.datacenter ){
-    logger.info('in List');
+    //logger.info('in List');
     // this looks for 'list' as the / url. if it exists, it prints the datacenter list
         Equipment.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, eqs){
         if(err){
@@ -79,18 +79,18 @@ exports.dcEquipPages = function(req,res,next){
 ------------------------------------------------------------------------
 */
     } else if (req.params.datacenter.indexOf ('circuit') !=-1){
-        logger.info('else if (req.params.datacenter.indexOf ("circuit")');
-        logger.info('rack '+req.params.datacenter);
+        //logger.info('else if (req.params.datacenter.indexOf ("circuit")');
+        //logger.info('rack '+req.params.datacenter);
         start = req.params.datacenter.indexOf ('~')+1;
-            logger.info('|start   >'+start);
+            //logger.info('|start   >'+start);
         dcInfo = req.params.datacenter.substring (start);
-            logger.info('|dcInfo  >'+dcInfo);
+            //logger.info('|dcInfo  >'+dcInfo);
         dcSplit = dcInfo.indexOf ('>');
-            logger.info('|dcSplit >'+dcSplit);
+            //logger.info('|dcSplit >'+dcSplit);
         dcSubId = dcInfo.substring (dcSplit+1);
-            logger.info('|dcSubId >'+dcSubId);
+            //logger.info('|dcSubId >'+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
-            logger.info('|dcId    >'+dcId);
+            //logger.info('|dcId    >'+dcId);
         
         
         
@@ -194,13 +194,13 @@ exports.dcEquipPages = function(req,res,next){
 
 
     } else if (req.params.datacenter.indexOf ('new') !=-1){
-        logger.info('else if (req.params.datacenter.indexOf ("newequip")');
-        logger.info('datacenter '+req.params.datacenter);
+        //logger.info('else if (req.params.datacenter.indexOf ("newequip")');
+        //logger.info('datacenter '+req.params.datacenter);
         start = req.params.datacenter.indexOf ('-')+1;
-            logger.info('|start   >'+start);
+            //logger.info('|start   >'+start);
         dcId = req.params.datacenter.substring (start);
         
-            logger.info('|dcId    >'+dcId);
+            //logger.info('|dcId    >'+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
@@ -247,21 +247,21 @@ exports.dcEquipPages = function(req,res,next){
 */
 
     if (req.params.datacenter.indexOf ('edit') !=-1){
-        logger.info('else if (req.params.datacenter.indexOf ("edit")');
+        //logger.info('else if (req.params.datacenter.indexOf ("edit")');
     // this section decides if it is a Copy, Edit or View
         start = req.params.datacenter.indexOf ('-');
         dcabbr = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ('copy') !=-1){
             editLoad = 5;
-            logger.info('copy equip '+dcabbr);
+            //logger.info('copy equip '+dcabbr);
         } else {
             editLoad = 3;
-            logger.info('edit equip '+dcabbr);
+            //logger.info('edit equip '+dcabbr);
         }
         } else {
             editLoad = 1;
             dcabbr = req.params.datacenter;
-            logger.info('view equip '+dcabbr);
+            //logger.info('view equip '+dcabbr);
         }
         
   
@@ -464,7 +464,7 @@ exports.dcEquipPages = function(req,res,next){
  
         //logger.info(context);
         if (editLoad > 2){
-            logger.info('equipment Edit');
+            //logger.info('equipment Edit');
             res.render('asset/equipmentedit', context); 
         }else{
         res.render('asset/equipment', context);  
@@ -494,18 +494,18 @@ exports.dcEquipmentPost = function(req,res){
     if(data.isEdit){
     res.abbreviation = strTgs.cTrim(data.isEdit);
     }
-    logger.info('dcRackPost abbreviation>'+res.abbreviation);
+    //logger.info('dcRackPost abbreviation>'+res.abbreviation);
     // isEdit and wasCopy = equipment name using #if from handlebars
     if (!data.isEdit){
     if (data.wasCopy){
     res.abbreviation = strTgs.cTrim(data.equipSN);
     }
-    logger.info('new Equipment in DC');
+    //logger.info('new Equipment in DC');
     varPortsNew = function(body){
     if(typeof data.equipPortsAddr[i] !== 'undefined'){
     var Ports = [];
     for(i=0;i<body.equipPortType.length;i++){
-        logger.info('equipPortType.length '+body.equipPortType.length);
+        //logger.info('equipPortType.length '+body.equipPortType.length);
         Ports[i]=({
             equipPortType: strTgs.sTrim(body.equipPortType[i]),
             equipPortsAddr: strTgs.mTrim(body.equipPortsAddr[i]),
@@ -610,18 +610,18 @@ exports.dcEquipmentPost = function(req,res){
     var thisDoc = eq;
        //logger.info('existing id>'+thisDoc);
         if (err) {
-            logger.info(err);
+            //logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
     
     for(i=0;i<data.equipPortType.length;i++){
         
-        logger.info('equip \n PortType >'+data.equipPortType[i] +' - addr >'+ data.equipPortsAddr[i] +' - name >'+ data.equipPortName[i] +' - Opt >'+ data.equipPortsOpt[i]);
+        //logger.info('equip \n PortType >'+data.equipPortType[i] +' - addr >'+ data.equipPortsAddr[i] +' - name >'+ data.equipPortName[i] +' - Opt >'+ data.equipPortsOpt[i]);
         
         if(data.equipPortType[i] === ''){
-        logger.info('equipPortType nonw');
+        //logger.info('equipPortType nonw');
             } else if(data.equipPortId[i] === 'new'){
-            logger.info('new port >'+data.equipPortId[i]);
+            //logger.info('new port >'+data.equipPortId[i]);
             eq.equipPorts.push({
             equipPortType: strTgs.sTrim(data.equipPortType[i]),
             equipPortsAddr: strTgs.mTrim(data.equipPortsAddr[i]),
@@ -629,7 +629,7 @@ exports.dcEquipmentPost = function(req,res){
             equipPortsOpt: strTgs.sTrim(data.equipPortsOpt[i]),
             });
             }else{
-            logger.info('existing port');
+            //logger.info('existing port');
         var thisSubDoc = eq.equipPorts.id(data.equipPortId[i]);
             thisSubDoc.equipPortType = strTgs.uCleanUp(thisSubDoc.equipPortType,data.equipPortType[i]);
             thisSubDoc.equipPortsAddr = strTgs.mCleanUp(thisSubDoc.equipPortsAddr,data.equipPortsAddr[i]);
@@ -687,7 +687,7 @@ exports.dcEquipmentPost = function(req,res){
                     }
 	    eq.save(function(err){
 	        if(err) {
-	        	console.error(err.stack);
+	        	logger.error(err.stack);
 	            req.session.flash = {
 	                type: 'danger',
 	                intro: 'Ooops!',
@@ -728,9 +728,9 @@ exports.dcEquipSysPages = function(req,res,next){
             };
         return res.redirect(303, '/');
     }else{ 
-    logger.info('***********exports.dcEquipSysPages First >' +req.params.datacenter);
+    //logger.info('***********exports.dcEquipSysPages First >' +req.params.datacenter);
     if (!req.params.datacenter){
-    logger.info('in EquipSysPages - List');
+    //logger.info('in EquipSysPages - List');
     // this looks for 'list' as the / url. if it exists, it prints the datacenter list
         Equipment.find({}).exec(function(err, eqs){
         if(err) return next(err);
@@ -881,9 +881,9 @@ exports.dcRackElevationPage = function(req,res,next){
             };
         return res.redirect(303, '/');
     }else{ 
-    logger.info('***********exports.dcRackElevationPage First >' +req.params.datacenter);
+    //logger.info('***********exports.dcRackElevationPage First >' +req.params.datacenter);
     if (!req.params.datacenter){
-    logger.info('in EquipSysPages - List');
+    //logger.info('in EquipSysPages - List');
     // this looks for 'list' as the / url. if it exists, it prints the datacenter list
         Equipment.find({}).exec(function(err, eqs){
         if(err) return next(err);
@@ -1055,10 +1055,10 @@ exports.dcEquipDelete = function(req,res){
     res.abbreviation = req.body.equipSN;
     res.newpage = req.body.equipLocationRack;
 if (req.body.equipSN){
-        logger.info('delete got this far');
+        //logger.info('delete got this far');
         Equipment.findOne({equipSN: req.body.equipSN},function(err,equipSNtodelete){
         if(err){
-        logger.info(err);
+        //logger.info(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             equipSNtodelete.remove(function(err){

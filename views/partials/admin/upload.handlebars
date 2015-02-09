@@ -1,8 +1,8 @@
 <div>
 <form id="fileupload" class="form-horizontal" role="form" 
 		enctype="multipart/form-data" method="POST"
-		action="/admin/uploadpost?{{_csrfToken}}">
-	<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+		action="/admin/uploadpost">
+	
 	<input type="hidden" name="fileType" value="csv">
 
 
@@ -26,7 +26,7 @@
         </div> 
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
-                        
+                        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
                         <button type="submit"  value="Upload" class="btn btn-default btn-xs">Submit</button>
                         <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
              </div>

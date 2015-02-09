@@ -42,7 +42,7 @@ exports.dcSystemPages = function(req,res,next){
     // this looks for 'list' as the / url. if it exists, it prints the datacenter list
         Systemdb.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, sys){
         if(err){
-        logger.info(err);
+logger.warn('dcSystemPages'+err);
         }else{
         //logger.info('system-list'+sys);
             var context = {
@@ -76,12 +76,12 @@ exports.dcSystemPages = function(req,res,next){
 
 
     } else if (req.params.datacenter.indexOf ('new') !=-1){
-        logger.info('else if (req.params.datacenter.indexOf ("newSys")');
-        logger.info('datacenter '+req.params.datacenter);
+        //logger.info('else if (req.params.datacenter.indexOf ("newSys")');
+        //logger.info('datacenter '+req.params.datacenter);
         start = req.params.datacenter.indexOf ('-')+1;
-            logger.info('|start   >'+start);
+        //    logger.info('|start   >'+start);
         dcId = req.params.datacenter.substring (start);
-            logger.info('|dcId    >'+dcId);
+        //    logger.info('|dcId    >'+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
@@ -134,17 +134,17 @@ exports.dcSystemPages = function(req,res,next){
         dcabbr = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ('copy') !=-1){
             editLoad = 5;
-            logger.info('copy system '+dcabbr);
+        //    logger.info('copy system '+dcabbr);
         } else {
             editLoad = 3;
-            logger.info('edit system '+dcabbr);
+        //    logger.info('edit system '+dcabbr);
         }
         } else {
             editLoad = 1;
             dcabbr = req.params.datacenter;
-            logger.info('view system '+dcabbr);
+        //    logger.info('view system '+dcabbr);
         }
-        logger.info('editLoad >'+editLoad);
+        //logger.info('editLoad >'+editLoad);
 
     
     Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
@@ -177,7 +177,7 @@ exports.dcSystemPages = function(req,res,next){
         eqUni[i] = eq[i].equipSN;
         }
 
-        logger.info ('System.findOne '+dcabbr);
+        //logger.info ('System.findOne '+dcabbr);
         if(editLoad < 4){
             thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
         context = {
@@ -222,13 +222,13 @@ exports.dcSystemPages = function(req,res,next){
             modifiedBy: sy.modifiedBy,
             modifiedOn: strTgs.dateMod(sy.modifiedOn), 
                 systemPorts: sy.systemPorts.map(function(sp){
-                    var isConsole;
-                    var isEthernet;
-                    var isInfiniband;
-                    var isInterconnect;
-                    var isNetMgmt;
-                    var isPower;
-                    var isSAN;
+                    var isConsole,
+                        isEthernet,
+                        isInfiniband,
+                        isInterconnect,
+                        isNetMgmt,
+                        isPower,
+                        isSAN;
                     switch(sp.sysPortType){
                         case 'Console':
                         isConsole = 'isConsole';
@@ -329,7 +329,7 @@ exports.dcSystemPages = function(req,res,next){
  
         //logger.info(context);
         if (editLoad > 2){
-            logger.info('System Edit(end)');
+        //    logger.info('System Edit(end)');
             res.render('asset/systemedit', context); 
         }else{
         res.render('asset/system', context);  
@@ -339,16 +339,79 @@ exports.dcSystemPages = function(req,res,next){
 }
 };
 
+//  /////////////////////////////////////////////////////////////////////////
+//  _______ System Ports Report  __________________________________________________
+//  ////////////////////////////////////////////////////////////////////////
+
+exports.dcSystemPortPages = function(req,res,next){
+    if (!req.user || req.user.access < 2){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{ 
+    //logger.info('--------------------exports.dcSystemPortPages First >');
+    if (!req.params.datacenter ){
+        Systemdb.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, sys){
+        if(err){
+    //    logger.info(err);
+        }else{
+        //logger.info('system-list'+sys);
+            var context = {
+                access : strTgs.accessCheck(req.user),
+                user : req.user,
+                sys: sys.map(function(sy){
+                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
+                    //logger.info('sy Map>'+sy);
+                    return {
+                            systemPorts: sy.systemPorts.map(function(sp){
+                        return {
+                                systemName: sy.systemName,
+                                equipSN: sy.systemEquipSN,
+                                sysPortId: sp._id,
+                                sysPortType: sp.sysPortType,
+                                sysPortName: sp.sysPortName,
+                                sysPortAddress: sp.sysPortAddress,
+                                sysPortCablePath: sp.sysPortCablePath,
+                                sysPortEndPoint: sp.sysPortEndPoint,
+                                sysPortEndPointPre: sp.sysPortEndPointPre,
+                                sysPortEndPointPort: sp.sysPortEndPointPort,
+                                sysPortVlan: sp.sysPortVlan,
+                                sysPortOptions: sp.sysPortOptions,
+                                sysPortURL: sp.sysPortURL,
+                                sysPortCrossover: sp.sysPortCrossover,
+                                sysPortCrossoverChecked: strTgs.setCheckBox(sp.sysPortCrossover),
+                        };
+                       }         
+                    )};
+                })
+            };
+            // the 'location/datacenter-list' is the view that will be called
+            // context is the data from above
+            res.render('asset/systemports-list', context);
+        }});
+    }
+
+    } 
+};
+
+
+//  /////////////////////////////////////////////////////////////////////////
+//  _______ EquipSys Report Switch __________________________________________________
+//  ////////////////////////////////////////////////////////////////////////
+
     function queryString(findThis,opt,searchIn){   
-        logger.info('searchIn '+searchIn);
+    //    logger.info('searchIn '+searchIn);
         switch (opt){
         case 2: // by Environment
             query = Systemdb.find({systemEnviron : findThis});
-            logger.info('query2'+query);
+    //        logger.info('query2'+query);
             break;
         case 3: //by Role
             query = Systemdb.find({systemRole : findThis});
-            logger.info('query3'+query);
+    //        logger.info('query3'+query);
             break;
         case 4: // by System Name (no longer used, now uses Multi)
             query = Systemdb.find({ 'systemName': { '$regex': findThis, '$options': 'i' } });
@@ -372,7 +435,7 @@ exports.dcSystemPages = function(req,res,next){
                     query = Systemdb.find({ 'systemPorts.sysPortCablePath': { '$regex': findThis, '$options': 'i' } });
                 break;   
                 default:
-                    logger.info('no opt for queryString');
+    //                logger.info('no opt for queryString');
                 break;
                 }
             break;
@@ -381,19 +444,19 @@ exports.dcSystemPages = function(req,res,next){
             break;
         case 11: // by Make
             query = Equipment.find({equipMake : findThis});
-            logger.info('query11'+query);
+    //        logger.info('query11'+query);
             break;
         case 12: // Homeless equipment
             query = Equipment.find({equipLocation : ''});
-            logger.info('query12'+query);
+    //        logger.info('query12'+query);
             break;
         case 13: // Not In Service
             query = Equipment.find({'equipStatus':{$nin:['In Service','In Service with issues','End of Life','End of Life - Recycled','End of Life - RMA']}});
-            logger.info('query13'+query);
+    //        logger.info('query13'+query);
             break;
         case 14: // End of life    
             query = Equipment.find({'equipStatus':{$in:['End of Life','Missing','End of Life - Recycled','End of Life - RMA']}});
-            logger.info('query13'+query);
+    //        logger.info('query13'+query);
             break;
         case 18: // multi SystemDB
             switch (searchIn){
@@ -429,12 +492,12 @@ exports.dcSystemPages = function(req,res,next){
                     query = Equipment.find({ 'equipPorts.equipPortsAddr': { '$regex': findThis, '$options': 'i' } });
                 break; 
                 default:
-                    logger.info('no opt for queryString');
+                    //logger.info('no opt for queryString');
                 break;
             }
             break;
             default:
-            logger.info('no opt for queryString');
+    //        logger.info('no opt for queryString');
         break;
         }
         return query;
@@ -454,7 +517,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
             };
         return res.redirect(303, '/');
     }else{ 
-    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
+//    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
     var editLoad,
         searchDb,
         searchIn,
@@ -462,7 +525,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
     
     if(!req.params.datacenter){
             editLoad = 1;
-            logger.info('none slected');
+//            logger.info('none slected');
         }else{
         
         start = req.params.datacenter.indexOf ('-');
@@ -495,9 +558,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
 
         }else if(req.params.datacenter.indexOf ('multi') !=-1){
             searchIn = req.query.searchIn.substring (req.query.searchIn.indexOf('~')+1);
-            logger.info('searchIn '+searchIn);
+//            logger.info('searchIn '+searchIn);
             searchFor = req.query.searchFor;
-            logger.info('searchFor '+searchFor);
+//            logger.info('searchFor '+searchFor);
             if (req.query.searchIn.indexOf ('system') !=-1){
                 editLoad = 8;
             }else if (req.query.searchIn.indexOf ('equipment') !=-1){
@@ -505,9 +568,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
             }    
         }else {
             editLoad = 1;
-            logger.info('none slected');
+//            logger.info('none slected');
         }}
-        logger.info('page type selected >'+editLoad);
+//        logger.info('page type selected >'+editLoad);
     
         Systemdb.distinct('systemEnviron').exec(function(err,env){
         //logger.info(env);
@@ -521,9 +584,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
         query = queryString(searchFor,editLoad,searchIn);
         query.sort({'systemName': 'asc'}).exec(function(err, sys){
         if(err){
-        logger.info(err);
+logger.warn(asc+' '+err);
         }else{
-        logger.info('2-9 >'+searchFor);
+//        logger.info('2-9 >'+searchFor);
         Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo',function(err,eqs){
          
         //logger.info('system-list'+sys);
@@ -580,9 +643,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
         query = queryString(searchFor,editLoad,searchIn);
         query.sort({'equipSN': 'asc'}).exec(function(err, eqs){
         if(err){
-        logger.info(err);
+logger.warn(asc+' '+err);
         }else{
-        logger.info('>9 >'+searchFor);
+        //logger.info('>9 >'+searchFor);
         Systemdb.find({},'systemName systemEquipSN systemEnviron systemRole systemTicket systemInventoryStatus systemTicket systemStatus modifiedOn',function(err,sys){
          
         //logger.info('system-list'+sys);
@@ -687,10 +750,10 @@ exports.findEndpoints = function(req,res,next){
     }else{ 
     var fEndPoint = req.params.datacenter.toLowerCase();
     if(!fEndPoint){
-    logger.warn('findEndpoints: No endpoint found');
+//    logger.warn('findEndpoints: No endpoint found');
     return;
     }else{
-    logger.info('findEndpoints >'+fEndPoint);
+//    logger.info('findEndpoints >'+fEndPoint);
 
         Systemdb.find({'systemPorts.sysPortEndPoint': fEndPoint},'systemName systemPorts.sysPortName systemPorts.sysPortCablePath systemPorts.sysPortEndPoint systemPorts.sysPortEndPointPre systemPorts.sysPortEndPointPort systemPorts.sysPortVlan systemPorts.sysPortOptions systemPorts.sysPortAddress systemPorts.sysPortType',function(err,sys){
         if(err) return next(err);
@@ -752,17 +815,17 @@ exports.dcSystemPost = function(req,res){
     var bd = req.body;
     // this makes the abbreviation available for the URL
     res.abbreviation = strTgs.clTrim(bd.systemName);
-    logger.info('dcRackPost abbreviation>'+strTgs.clTrim(bd.systemName));
+ //   logger.info('dcRackPost abbreviation>'+strTgs.clTrim(bd.systemName));
 
     //logger.info('rUs expanded >'+ strTgs.compUs(req.body.rUs));
     if (!bd.isEdit){
 
-    logger.info('new System in DC');
+    //logger.info('new System in DC');
     varPortsNew = function(bd){
     if(typeof bd.sysPortName[i] !== 'undefined'){
     var Ports = [];
     for(i=0;i<bd.sysPortName.length;i++){
-        logger.info('sysPortName.length '+bd.sysPortName.length);
+    //    logger.info('sysPortName.length '+bd.sysPortName.length);
         Ports[i]=({
             sysPortType: strTgs.sTrim(bd.sysPortType[i]),
             sysPortName: strTgs.sTrim(bd.sysPortName[i]),
@@ -808,7 +871,7 @@ exports.dcSystemPost = function(req,res){
                                 modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
-	        	console.error(err.stack);
+	        	logger.warn(err.stack);
                 if(err.stack.indexOf ('matching')!=-1){
                 req.session.flash = {
 	                type: 'danger',
@@ -850,16 +913,16 @@ exports.dcSystemPost = function(req,res){
     var thisDoc = sys;
        //logger.info('existing id>'+thisDoc);
         if (err) {
-            logger.info(err);
+            logger.warn(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
     
     for(i=0;i<bd.sysPortType.length;i++){
-        logger.info('equip \n Portname >'+bd.sysPortName[i] +' - path >'+ bd.sysPortCablePath[i] +' - endpoint >'+ bd.sysPortEndPoint[i] +' - Opt >'+ bd.sysPortOptions[i]/*+'crossover'+strTgs.doCheckbox(bd.sysPortCrossover[i]  future*/);
+    //    logger.info('equip \n Portname >'+bd.sysPortName[i] +' - path >'+ bd.sysPortCablePath[i] +' - endpoint >'+ bd.sysPortEndPoint[i] +' - Opt >'+ bd.sysPortOptions[i]/*+'crossover'+strTgs.doCheckbox(bd.sysPortCrossover[i]  future*/);
         if(!bd.sysPortType[i]){
-            logger.info('No new port');
+    //        logger.info('No new port');
             }else if(bd.sysPortId[i] === 'new'){
-            logger.info('new port >'+bd.sysPortId[i]);
+    //        logger.info('new port >'+bd.sysPortId[i]);
             sys.systemPorts.push({
                 sysPortType: strTgs.sTrim(bd.sysPortType[i]),
                 sysPortName: strTgs.sTrim(bd.sysPortName[i]),
@@ -874,7 +937,7 @@ exports.dcSystemPost = function(req,res){
     /*            sysPortCrossover: strTgs.doCheckbox(bd.sysPortCrossover[i]),  future*/
             });
             }else{
-            logger.info('existing port');
+    //        logger.info('existing port');
         var thisSubDoc = sys.systemPorts.id(bd.sysPortId[i]);
                 thisSubDoc.sysPortType= strTgs.stcCleanup(thisSubDoc.sysPortType,bd.sysPortType[i]);
                 thisSubDoc.sysPortName= strTgs.clCleanUp(thisSubDoc.sysPortName,bd.sysPortName[i]);
@@ -949,15 +1012,15 @@ exports.dcsystemDelete = function(req,res){
     res.abbreviation = req.body.systemName;
     res.newpage = req.body.equipLocationRack;
 if (req.body.systemName){
-        logger.info('delete got this far');
+    //    logger.info('delete got this far');
         Systemdb.findOne({systemName: req.body.systemName},function(err,systemNametodelete){
         if(err){
-        logger.info(err);
+        logger.warn(err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             systemNametodelete.remove(function(err){
                 if(err){
-                logger.info(err);
+                logger.warn(err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -997,13 +1060,13 @@ exports.dcsystemSubDelete = function(req,res){
 if (req.body.id && req.body.subId){
     Systemdb.findById(req.body.id,req.body.subDoc,function (err, sys){
         if(err){
-        logger.info(err);
+logger.warn('dcsystemSubDelete'+err);
         //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
         }else{
             sys.systemPorts.id(req.body.subId).remove();
             sys.save(function(err){
                 if(err){
-                logger.info(err);
+logger.warn('dcsystemSubDelete2'+err);
                 req.session.flash = {
                         type: 'danger',
                         intro: 'Ooops!',
@@ -1024,3 +1087,5 @@ if (req.body.id && req.body.subId){
 }
 }
 };
+
+// eof
