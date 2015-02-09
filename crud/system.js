@@ -1,10 +1,11 @@
+var logconfig = require('./../logconfig.js');
 var Systemdb = require('../models/system.js'),
       strTgs = require('../lib/stringThings.js'),
        dates = require('../lib/dates.js');
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new winston.transports.DailyRotateFile({filename: '../logs/uploadLog', json: false}),
+    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.uploadLog, json: false}),
     ],
   exitOnError: true
 });
@@ -148,7 +149,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 logger.warn('sysPortsCreate Failed write,'+data.index+','+data.systemName);
                 return (err.stack);
             }else{
-                logger.info('sysPortsCreate Sucessful write,'+data.index+','+data.systemName);
+                logger.info('sysPortsCreate Sucessful write,'+data.index+','+data.systemName','+data.systemPortName);
                 return ('done');
             }
     });
@@ -183,7 +184,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
             if(err){
                 logger.warn('sysPortCreate Failed,'+data.index+','+strTgs.clTrim(data.systemName)+','+err);
             }else{
-                logger.info('sysPortCreate Sucessful write,'+data.index+','+data.systemName);
+                logger.info('sysPortCreate Sucessful write,'+data.index+','+data.systemName','+data.systemPortName);
             return ('done');
             }
         });

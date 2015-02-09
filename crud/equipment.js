@@ -1,11 +1,11 @@
-// Equipment crud
+var logconfig = require('./../logconfig.js');
 var Equipment = require('../models/equipment.js'),
     strTgs = require('../lib/stringThings.js'),
      dates = require('../lib/dates.js');
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new winston.transports.DailyRotateFile({filename: '../logs/uploadLog', json: false}),
+    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.uploadLog, json: false}),
     ],
   exitOnError: true
 });
@@ -216,7 +216,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
             logger.warn('csvUpload','eqPortCreate Failed,'+data.index+','+data.equipSN);
             return (err.stack);
         }else{
-            logger.info('csvUpload','eqPortCreate Sucessful,'+data.index+','+data.equipSN);
+            logger.info('csvUpload','eqPortCreate Sucessful,'+data.index+','+data.equipSN+','+data.equipPortName);
             return ('done');
         }
     });
@@ -239,7 +239,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
             if(err){
                 logger.warn('csvUpload','eqPortCreate Failed,'+err+','+data.index+','+strTgs.cTrim(data.equipSN));
             }else{
-            logger.info('csvUpload','eqPortCreate Sucessful write,'+data.index+','+data.equipSN);
+            logger.info('csvUpload','eqPortCreate Sucessful write,'+data.index+','+data.equipSN','+data.equipPortName);
             return ('done');
             }
         });

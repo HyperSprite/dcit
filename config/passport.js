@@ -1,6 +1,5 @@
-// https://scotch.io/tutorials/easy-node-authentication-setup-and-local
-// config/passport.js
-//var flash    = require('connect-flash');
+var logconfig = require('./../logconfig.js');
+
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 
@@ -9,7 +8,7 @@ var User            = require('../models/user');
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new winston.transports.DailyRotateFile({filename: '../logs/accessLog', json: false}),
+    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.accessLog, json: false}),
     ],
   exitOnError: true
 });

@@ -36,7 +36,7 @@ exports.dcSystemPages = function(req,res,next){
             };
         return res.redirect(303, '/');
     }else{ 
-    logger.info('***********exports.dcSystemPages First >' +req.params.datacenter);
+    //logger.info('***********exports.dcSystemPages First >' +req.params.datacenter);
     if (!req.params.datacenter ){
     logger.info('in List');
     // this looks for 'list' as the / url. if it exists, it prints the datacenter list
