@@ -8,7 +8,7 @@ var User            = require('../models/user');
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.accessLog, json: false}),
+    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.fileName.accessLog, json: false}),
     ],
   exitOnError: true
 });

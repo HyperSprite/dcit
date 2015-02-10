@@ -128,7 +128,7 @@ logger.warn('dcSystemPages'+err);
 ------------------------------------------------------------------------
 */
     if (req.params.datacenter.indexOf ('edit') !=-1){
-        logger.info('else if (req.params.datacenter.indexOf ("edit")');
+    //    logger.info('else if (req.params.datacenter.indexOf ("edit")');
     // this section decides if it is a Copy, Edit or View
         start = req.params.datacenter.indexOf ('-');
         dcabbr = req.params.datacenter.substring (start+1);
@@ -433,6 +433,10 @@ exports.dcSystemPortPages = function(req,res,next){
                 case 'sysPortCablePath':
                     findThis = strTgs.stTrim(findThis);
                     query = Systemdb.find({ 'systemPorts.sysPortCablePath': { '$regex': findThis, '$options': 'i' } });
+                break;
+                case 'sysPortEndPoint':
+                    findThis = strTgs.stTrim(findThis);
+                    query = Systemdb.find({ 'systemPorts.sysPortEndPoint': { '$regex': findThis, '$options': 'i' } });
                 break;   
                 default:
     //                logger.info('no opt for queryString');
@@ -458,7 +462,7 @@ exports.dcSystemPortPages = function(req,res,next){
             query = Equipment.find({'equipStatus':{$in:['End of Life','Missing','End of Life - Recycled','End of Life - RMA']}});
     //        logger.info('query13'+query);
             break;
-        case 18: // multi SystemDB
+        case 18: // multi Equipment
             switch (searchIn){
                 case 'equipSN':
                     findThis = strTgs.cTrim(findThis);
@@ -1048,6 +1052,7 @@ if (req.body.systemName){
 */
 
 exports.dcsystemSubDelete = function(req,res){
+    logger.info('portSubDelete');
         if (!req.user || req.user.access < 4){
     req.session.flash = {
             type: 'danger',

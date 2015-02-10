@@ -4,8 +4,8 @@ module.exports ={
     fileName : {
         accessLog : 'accessLog',
         appMainLog : 'appMainLog',
-        uploadLog : 'uploadLog',
         exceptionLog : 'exceptionLog',
+        uploadLog : 'uploadLog',
     },
 };
 

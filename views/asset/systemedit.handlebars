@@ -374,9 +374,8 @@
     </form>
     {{/if}}
      
-        {{#if systemPorts}}
-        {{#each systemPorts}}
         {{#if access.delete}}
+        {{#each systemPorts}}
             <form id="deleteform{{@index}}" action="/systemportdelete/{{../systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this port?')">
             <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
             <input type="hidden" name="id" value="{{../systemId}}">
@@ -385,9 +384,8 @@
             <input type="hidden" name="collectionName" value="Systemdb">
             <input type="hidden" name="collectionSub" value="systemPorts">
             </form>
-        {{/if}}    
         {{/each}}
-        {{/if}}
+        {{/if}}    
 
  <script language="Javascript" type="text/javascript">
 <!--

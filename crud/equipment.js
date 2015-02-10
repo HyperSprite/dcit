@@ -5,7 +5,7 @@ var Equipment = require('../models/equipment.js'),
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.uploadLog, json: false}),
+    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.fileName.uploadLog, json: false}),
     ],
   exitOnError: true
 });
@@ -239,7 +239,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
             if(err){
                 logger.warn('csvUpload','eqPortCreate Failed,'+err+','+data.index+','+strTgs.cTrim(data.equipSN));
             }else{
-            logger.info('csvUpload','eqPortCreate Sucessful write,'+data.index+','+data.equipSN','+data.equipPortName);
+            logger.info('csvUpload','eqPortCreate Sucessful write,'+data.index+','+data.equipSN+','+data.equipPortName);
             return ('done');
             }
         });

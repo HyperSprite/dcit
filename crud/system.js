@@ -5,7 +5,7 @@ var Systemdb = require('../models/system.js'),
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.uploadLog, json: false}),
+    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.fileName.uploadLog, json: false}),
     ],
   exitOnError: true
 });
@@ -146,10 +146,9 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
             sys.save(function(err){
 	        if(err) {
                 logger.warn('sysPortCreate Error,'+data.index+','+err);
-                logger.warn('sysPortsCreate Failed write,'+data.index+','+data.systemName);
                 return (err.stack);
             }else{
-                logger.info('sysPortsCreate Sucessful write,'+data.index+','+data.systemName','+data.systemPortName);
+                logger.info('sysPortsCreate Sucessful New write,'+data.index+','+data.systemName+','+data.sysPortName);
                 return ('done');
             }
     });
@@ -162,21 +161,21 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){    
                 if(data.sysPortType){
                 thisDoc.sysPortType= strTgs.sTrim(data.sysPortType);}
-                if(data.sysPortType){
+                if(data.sysPortAddress){
                 thisDoc.sysPortAddress= strTgs.sTrim(data.sysPortAddress);}
-                if(data.sysPortType){
+                if(data.sysPortCablePath){
                 thisDoc.sysPortCablePath= strTgs.stTrim(data.sysPortCablePath);}
-                if(data.sysPortType){
+                if(data.sysPortEndPoint){
                 thisDoc.sysPortEndPoint= strTgs.clTrim(data.sysPortEndPoint);}
-                if(data.sysPortType){
+                if(data.sysPortEndPointPre){
                 thisDoc.sysPortEndPointPre= strTgs.clTrim(data.sysPortEndPointPre);}
-                if(data.sysPortType){
+                if(data.sysPortEndPointPort){
                 thisDoc.sysPortEndPointPort= strTgs.clTrim(data.sysPortEndPointPort);}
-                if(data.sysPortType){
+                if(data.sysPortVlan){
                 thisDoc.sysPortVlan= strTgs.sTrim(data.sysPortVlan);}
-                if(data.sysPortType){
+                if(data.sysPortOptions){
                 thisDoc.sysPortOptions= strTgs.stcTrim(data.sysPortOptions);}
-                if(data.sysPortType){
+                if(data.sysPortURL){
                 thisDoc.sysPortURL= strTgs.clTrim(data.sysPortURL);}
                 thisDoc.modifiedBy= req.user.local.email;
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn); 
@@ -184,7 +183,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
             if(err){
                 logger.warn('sysPortCreate Failed,'+data.index+','+strTgs.clTrim(data.systemName)+','+err);
             }else{
-                logger.info('sysPortCreate Sucessful write,'+data.index+','+data.systemName','+data.systemPortName);
+                logger.info('sysPortCreate Sucessful Update write,'+data.index+','+data.systemName+','+data.sysPortName);
             return ('done');
             }
         });

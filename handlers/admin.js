@@ -37,7 +37,8 @@ exports.home = function(req, res){
         context = {
             lastPage : '/admin',
             access : strTgs.accessCheck(req.user),
-            user : req.user
+            user : req.user,
+            titleNow: 'Admin Home',
             };
     res.render ('admin/home', context );
 //
@@ -52,6 +53,7 @@ exports.home = function(req, res){
                 lastPage : '/admin/options',
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                titleNow: 'Admin Options',
                 optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
             };
          
@@ -66,7 +68,7 @@ exports.home = function(req, res){
                 menuLink1: '/admin',
                 menu2: 'File Manager',
                 menuLink2: '/admin/filemanager',
-                titleNow:'Options',
+                titleNow: 'Admin Options',
 
             optList: opts.map(function(opt){
             return{
@@ -91,6 +93,7 @@ exports.home = function(req, res){
             lastPage : '/admin/upload',
             access : strTgs.accessCheck(req.user),
             user : req.user,
+            titleNow: 'Admin Upload',
             };
         res.render ('admin/upload', context);
 //
@@ -101,6 +104,7 @@ exports.home = function(req, res){
             lastPage : '/admin/dbinsert',
             access : strTgs.accessCheck(req.user),
             user : req.user,
+            titleNow: 'Admin DB Insert',
             };
         res.render ('admin/dbinsert', context );
 //    
@@ -116,6 +120,7 @@ exports.home = function(req, res){
                 lastPage : '/admin/useradmin',
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                titleNow: 'Admin User Manager',
                 usr: usr.map(function(ur){
                     return {
                         id : ur._id,
@@ -146,6 +151,7 @@ exports.home = function(req, res){
             lastPage : '/admin/logs',
             access : strTgs.accessCheck(req.user),
             user : req.user,
+            titleNow: 'Admin Logs',
             files: files.map(function(name) {
                 return {name: name};
             })
@@ -176,6 +182,7 @@ exports.home = function(req, res){
             access : strTgs.accessCheck(req.user),
             user : req.user,
             filename : filename,
+            titleNow: 'Admin Logs',
             data: datas.map(function (da) {
                 return {
                     message: da,
@@ -205,6 +212,7 @@ exports.home = function(req, res){
                     lastPage : '/admin/filemanager',
                     access : strTgs.accessCheck(req.user),
                     user : req.user,
+                    titleNow: 'Admin Upload',
                     optModels: strTgs.findThisInThatOpt('optModels',opt),
                 fil: fil.map(function(fi){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -239,6 +247,7 @@ exports.home = function(req, res){
                 lastPage : '/admin/joins',
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                titleNow: 'Admin Joins',
             };
     
     
@@ -252,6 +261,7 @@ exports.home = function(req, res){
                 lastPage : '/admin/models',
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                titleNow: 'Admin Models',
             };
     res.render ('admin/models', context);
 
@@ -261,6 +271,7 @@ exports.home = function(req, res){
                 lastPage : '/admin/'+req.params.datacenter,
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                titleNow: 'Admin',
             };
     res.render ('admin/'+req.params.datacenter, context);
     }
@@ -285,6 +296,7 @@ exports.userEdit = function (req, res) {
                 lastPage : '/admin/useradmin',
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                titleNow: ur.local.name,
                 id : ur._id,
                 usrAccess : ur.access,
                 locEmail : ur.local.email,
@@ -366,6 +378,7 @@ exports.optionsEdit = function(req, res){
                 lastPage : '/admin/optionsedit',
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                titleNow: 'Admin Options Edit',
                 stat: 'isNew',
             };
         
@@ -379,7 +392,7 @@ exports.optionsEdit = function(req, res){
                     user : req.user,
                     menu1: 'Admin',
                     menuLink1: '/admin',
-                    titleNow:'Option Edit',
+                    titleNow:'Admin Option Edit',
                     id: opt._id,
                     optListName: opt.optListName,
                     optListKey: opt.optListKey,
@@ -566,7 +579,7 @@ if (req.body.id){
                     };
                     return res.redirect(303, '/admin/filemanager');
                     } else {
-                
+                    logger.warn('Uploaded File Deleted,'+bdy.fileHRName);
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
@@ -594,7 +607,7 @@ exports.logdelete = function(req,res){
     }else{ 
     if (req.body.name){
         var fileName = logDir+req.body.name;
-        logger.info('delete got this far'+fileName );
+        
             fs.unlink(fileName, function(err){
                     if(err){
 logger.warn('failed '+fileName+ 'delete');
@@ -605,7 +618,7 @@ logger.warn('failed '+fileName+ 'delete');
                     };
                     return res.redirect(303, '/admin/logs');
                     } else {
-                
+                    logger.info('Log File Deleted,'+fileName+',by,'+req.user.local.email);
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
@@ -730,6 +743,7 @@ if (req.body.id){
                     };
                     return res.redirect(303, '/admin/useradmin');
                 } else {
+                    logger.info('User Deleted,'+res.abbreviation+',by,'+req.user.local.email);
                     req.session.flash = {
                     type: 'success',
                     intro: 'Done!',
@@ -754,9 +768,9 @@ exports.dropDatacenterGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{    
+    }else{
     dcit.dropDatacenter(Datacenter);
-	logger.warn('dropDatacenterGet');
+	logger.warn('dropDatacenter by,'+req.user.local.email);
     return res.redirect(303, '/location/datacenter/list');
 }
 };
@@ -771,7 +785,7 @@ exports.dropRackGet = function(req,res){
         return res.redirect(303, '/home');
     }else{      
     dcit.dropRack(Rack);
-    logger.warn('dropRackGet');
+    logger.warn('dropRack by,'+req.user.local.email);
 	return res.redirect(303, '/location/datacenter/list');
     } 
 };
@@ -786,7 +800,7 @@ exports.dropOptionsdbGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     dcit.dropOptionsdb(Optionsdb);
-    logger.warn('dropOptionsdbGet');
+    logger.warn('dropOptionsdb by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -801,7 +815,7 @@ exports.dropEquipmentGet = function(req,res){
         return res.redirect(303, '/home');
     }else{      
     dcit.dropEquipment(Equipment);
-    logger.warn('dropEquipmentGet');
+    logger.warn('dropEquipment by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -816,7 +830,7 @@ exports.dropSystemGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     dcit.dropSystem(Systemdb);
-    logger.warn('dropSystemGet');
+    logger.warn('dropSystem by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -832,7 +846,7 @@ exports.seedDatacetnerGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     seedDataLoad.seedDatacenter(Datacenter);
-    logger.warn('seedDatacetnerGet');
+    logger.warn('seedDatacetner by,'+req.user.local.email);
 	return res.redirect(303, '/location/datacenter/list');
     } 
 };
@@ -847,7 +861,7 @@ exports.seedOptionsdbGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     seedDataLoad.seedOptionsDataBase(Optionsdb);
-    logger.warn('seedOptionsdbGet');
+    logger.warn('seedOptionsdb by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
     }
 };
@@ -862,7 +876,7 @@ exports.seedEquipmentGet = function(req,res){
         return res.redirect(303, '/home');
     }else{      
     seedDataLoad.seedEquipmentDataBase(Equipment);
-    logger.warn('seedEquipmentGet');
+    logger.warn('seedEquipment by,'+req.user.local.email);
     return res.redirect(303, '/admin/options');
     }
 };
@@ -876,7 +890,7 @@ exports.seedSystemGet = function(req,res){
         return res.redirect(303, '/home');
     }else{  
     seedDataLoad.seedSystemDataBase(Systemdb);
-    logger.warn('seedSystemGet');
+    logger.warn('seedSystem by,'+req.user.local.email);
     return res.redirect(303, '/admin/options');
     }	
 };
