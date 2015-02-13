@@ -59,6 +59,7 @@ exports.datacenterPages = function(req,res,next){
             var context = {
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                session: req.session,
                 datacenters: datacenters.map(function(dc){
                     //var dc = datacenter;
                     //logger.info(dc);

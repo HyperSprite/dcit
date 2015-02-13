@@ -20,7 +20,7 @@
         
         <link rel="stylesheet" href="{{static '/vendor/tablesort/css/tablesort.css'}}">
         <link rel="stylesheet" href="{{static '/vendor/tablesort/css/styles.css'}}">
-		<link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap.min.css'}}">
+		    <link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap.min.css'}}">
         <link rel="stylesheet" href="{{static '/css/custom.css'}}">
         <style>
             body {
@@ -28,15 +28,17 @@
                 padding-bottom: 14px;
             }
         </style>
-		<link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap-theme.min.css'}}">
+		    <link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap-theme.min.css'}}">
 		{{!--
         {{#each _bundles.css}}
 			<link rel="stylesheet" href="{{static .}}">
 		{{/each}}
         --}}
 
-		<script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
+		    <script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
         <script src="{{static '/vendor/js/d3.v3.js'}}"></script>
+{{!-- jstz is for timezone work --}}
+  
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -48,110 +50,8 @@
 		</header>
          <div class="navbar" >
           <div >
-            <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-              <ul class="nav navbar-nav">
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  {{user.local.email}}<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/">Home</a></li>
-                        {{#if access.read}}
-                              <li><a href="/location/datacenter/list">Datacenters</a></li>
-                              <li><a href="/env-role-reports">Reports</a></li>
-                        {{/if}}
-                        {{#if access.edit}}
-                              <li><a href="/env-role-report/homeless-">Equipment w/ no Location</li>
-                        {{/if}}
-                        {{#if access.delete}}
-                              <li><a href="/env-role-report/eqnis-">Equipment Spares</li>
-                              <li><a href="/env-role-report/eol-">Equipment End of Life</li>
-                              <li><a href="/equipment">Equipment All</a></li>
-                              <li><a href="/systems">Systems All</a></li>
-                              <li><a href="/systemports-list">Systems Ports All</a></li>
-                              <li><a href="/equipment-systems">Equipment & Systems All</a></li>
-                              <li><a href="/location/racks">Racks All</a></li>
-                        {{/if}}
-                        {{#if access.root}}
-                            {{> admin/adminlinks}}
-                        {{/if}}
-                              <li><a href="/about">About</a></li>
-                        {{#if user}}
-                              <li><a href="/user/profile">User Profile</a></li>
-                              <li><a href="/user/logout">Logout</a><li>
-                        {{/if}}
-                        
-                    </ul>
-                  </li>
-                  {{#if access.read}}
-                 <li>
-                  <form id="multiForm" class="form-inline" role="form" autocomplete="off" action="/env-role-report/multi-" method="get">
-                  <div class="form-group">
-                  <label class="sr-only" for="field-multiCat">Search in</label> 
-                 <select id="field-multiCat" class="form-control" name="searchIn" >
-                    <option value="system~systemName" >System Names</option>
-                    <option value="system~systemTicket" >System Ticket</option>
-                    <option value="system~modifiedBy" >System Modified By</option>
-                    <option value="system~sysPortEndPoint">System EndPoint</option>
-                    <option value="system~sysPortCablePath" >System Cable Number</option>
-                    <option value="equipment~equipSN" >Equipment SN</option>
-                    <option value="equipment~equipAssetTag" >Equipment Asset Tag</option>
-                    <option value="equipment~equipTicketNumber" >Equipment Ticket</option>
-                    <option value="equipment~equipPONum" >Equipment PO Number</option>
-                    <option value="equipment~equipInvoice" >Equipment Invoice</option>
-                    <option value="equipment~equipProjectNum" >Equipment Project</option>
-                    <option value="equipment~modifiedBy" >Equipment Modified By</option>
-                    <option value="equipment~equipPortsAddr" >Equipment MAC Address</option>
-                    <select>
-                    </div>
-                    <div class="form-group">
-                    <label class="sr-only" for="field-multiText">Search for</label> 
-                    <input id="field-multiText" type="text" class="form-control" pattern=".{3,}" required name="searchFor" placeholder="? (3 char min)">
-                    </div>
-                    <button type="submit" class="sr-only btn btn-primary" value='Submit'>Submit</button>
-                    </form>
-                 </li>
-   {{#if drop1}} <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop1}}<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    {{#each drop1each}}
-                    <li><a href="{{{../drop1url}}}{{this}}">{{this}}</a></li>
-                    {{/each}}
-                    </ul>
-                 </li>{{/if}}
-   {{#if drop2}} <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop2}}<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    {{#each drop2each}}
-                    <li><a href="{{{../drop2url}}}{{this}}">{{this}}</a></li>
-                    {{/each}}
-                    </ul>
-                 </li>{{/if}}
-   {{#if drop3}} <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop3}}<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    {{#each drop3each}}
-                    <li><a href="{{{../drop3url}}}{{this}}">{{this}}</a></li>
-                    {{/each}}
-                    </ul>
-                 </li>{{/if}}
-
-     {{#if menu1}} <li><a href="{{menuLink1}}">{{menu1}}</a>
-                 </li> {{/if}}
-     {{#if menu2}} <li><a href="{{menuLink2}}">{{menu2}}</a>
-                 </li> {{/if}}
-     {{#if menu3}} <li><a href="{{menuLink3}}">{{menu3}}</a>
-                 </li> {{/if}}
-     {{#if menu4}} <li><a href="{{menuLink4}}">{{menu4}}</a>
-                 </li> {{/if}}
-
-   {{#if lastPage}} <li><a href="{{lastPage}}">Back</a>
-                 </li> {{/if}}
-                 {{/if}}
-             
-              </ul>
-            </nav>
-
+           {{> topnav}}
           </div>
-
         </div>
         
 	    <div class="container-fluid">
@@ -169,12 +69,12 @@
       <div> <!-- footer-->
 			<hr>
 			<footer>
-				<p>&copy; DCIT 2014</p>
+				<p>&copy; DCIT 2014 <a href="/about">About</a>{{#if session}} - {{session.timezone}}{{/if}}</p>
 			</footer>
       </div> <!-- /footer-->
         
-        <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script>window.jQuery || document.write('<script src="{{static '/vendor/js/jquery-2.1.1.min.js'}}"><\/script>')</script>
+      <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+		  <script>window.jQuery || document.write('<script src="{{static '/vendor/js/jquery-2.1.1.min.js'}}"><\/script>')</script>
 		{{#if showTests}}
 			<div id="mocha"></div>
 			<script src="{{static '/vendor/mocha.js'}}"></script>
@@ -190,11 +90,12 @@
 			<script>mocha.run();</script>
 		{{/if}}
 
-		<script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
+		    <script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
         <script src="{{static '/vendor/tablesort/tablesort.js'}}"></script>
-		<script src="{{static '/js/main.js'}}"></script>
+		    <script src="{{static '/js/main.js'}}"></script>
         <script src="{{static '/js/tocsvpartial.js'}}"></script>
         <script src="{{static '/vendor/js/handlebars.min.js'}}"></script>
+        <script src="{{static '/vendor/js/jstz-1.0.4.min.js'}}"></script>
         <script type="text/javascript">
             
             $(function () {
@@ -202,6 +103,10 @@
                 // http://www.jqueryscript.net/table/jQuery-Plugin-For-Sortable-Searchable-Tables-Tablesort.html
             });
         </script>
+        <script> 
+            $('input#timezone').val( jstz.determine().name() );
+        </script>
+
 
     </body>
 </html>

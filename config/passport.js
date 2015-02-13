@@ -140,6 +140,8 @@ module.exports = function(passport) {
 
             // all is well, return successful user
            }else{
+            logger.info('User Time Zone '+req.body.timezone);
+            req.session.timezone = req.body.timezone;
             return done(null, user);
         }
         });

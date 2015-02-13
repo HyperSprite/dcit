@@ -6,22 +6,24 @@ var        http = require('http'),
        mongoose = require('mongoose'),
      bodyParser = require('body-parser'),
      formidable = require('formidable'),
-	         fs = require('fs'),
-	      vhost = require('vhost'),
-       passport = require('passport'),   
+	           fs = require('fs'),
+	        vhost = require('vhost'),
+       passport = require('passport'),
+         moment = require('moment'),
+          flash = require('connect-flash'),   
      Datacenter = require('./models/datacenter.js'),
            Rack = require('./models/rack.js'),
       Equipment = require('./models/equipment.js'),
        Systemdb = require('./models/system.js'),
       Optionsdb = require('./models/options.js'),
 MrSystemEnviron = require('./models/mrsystemenviron.js'),
-   seedDataLoad = require('./seedDataLoad.js'),
-          flash = require('connect-flash');
+   seedDataLoad = require('./seedDataLoad.js');
 
 var          winston = require('winston'),
               logger = require('./lib/logger.js');
 
 var app = express();
+moment().format();
 
 //var LIUser = {'account':'admin',
 //                'name':'Superuser',
@@ -142,7 +144,7 @@ switch(app.get('env')){
     default:
         throw new Error('Unknown execution environment: ' + app.get('env'));
 }
-
+app.use(express.static(__dirname + '/public'));
 app.use(require('cookie-parser')(credentials.cookieSecret));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -151,7 +153,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require('express-session')({ 
                 key: 'session',
                 cookie:{
-                   maxAge: 36000000
+                   maxAge: 80000000
+
                 },
                 secret: credentials.cookieSecret,
                 store: require('mongoose-session')(mongoose),
@@ -162,7 +165,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(flash());
-app.use(express.static(__dirname + '/public'));
+
 
 
 /*

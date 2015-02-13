@@ -1,6 +1,7 @@
 
 var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
+         dates = require('../lib/dates.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
 // Models
@@ -35,7 +36,7 @@ exports.dcSystemPages = function(req,res,next){
             message: 'Not Authorized!',
             };
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     //logger.info('***********exports.dcSystemPages First >' +req.params.datacenter);
     if (!req.params.datacenter ){
     logger.info('in List');
@@ -166,8 +167,8 @@ logger.warn('dcSystemPages'+err);
         if(err)return next(err);
         
     Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'equipPorts':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
-    
-
+        
+logger.info('Date: '+sy.systemInstall);
 
         if(err) return next(err);
         if(!eq) return next();
@@ -180,6 +181,19 @@ logger.warn('dcSystemPages'+err);
         //logger.info ('System.findOne '+dcabbr);
         if(editLoad < 4){
             thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
+
+            if(thisEquip !== false){
+            thisEquipPortsMaped = thisEquip.equipPorts.map(function(tep){
+                return {
+                    equipPortType: tep.equipPortType,
+                    equipPortsAddr: tep.equipPortsAddr,
+                    equipPortName: tep.equipPortName,
+                    equipPortsOpt: tep.equipPortsOpt,
+                };
+                });
+            }else{
+                thisEquipPortsMaped = '';
+            }
         context = {
             access : strTgs.accessCheck(req.user),
             user : req.user,
@@ -213,7 +227,12 @@ logger.warn('dcSystemPages'+err);
             systemApplications: sy.systemApplications,
             systemSupLic: sy.systemSupLic,
             systemSupEndDate: strTgs.dateMod(sy.systemSupEndDate),
-            systemInstall: strTgs.dateMod(sy.systemInstall),
+            
+
+            systemInstall: dates.convert(sy.systemInstall),
+            systemInstallLong: sy.systemInstall,
+            systemInstallDates: sy.systemInstall,
+
             systemStart: strTgs.dateMod(sy.systemStart),
             systemEnd: strTgs.dateMod(sy.systemEnd),
             systemNotes: sy.systemNotes,
@@ -287,15 +306,9 @@ logger.warn('dcSystemPages'+err);
             equipMake: thisEquip.equipMake,
             equipModel: thisEquip.equipModel,
             equipSubModel: thisEquip.equipSubModel,
-            equipRUHieght: thisEquip.equipRUHieght,
-            equipPorts: thisEquip.equipPorts.map(function(tep){
-                return {
-                    equipPortType: tep.equipPortType,
-                    equipPortsAddr: tep.equipPortsAddr,
-                    equipPortName: tep.equipPortName,
-                    equipPortsOpt: tep.equipPortsOpt,
-                };
-                }),
+            equipRUHieght: thisEquip.equipRUHieght,           
+            equipPorts: thisEquipPortsMaped,
+            
             }; 
         } else {
             context = {
@@ -848,32 +861,32 @@ exports.dcSystemPost = function(req,res){
     }};
     
     Systemdb.create({
-                                systemPorts: varPortsNew(bd),
-                                systemName: strTgs.clTrim(bd.systemName),
-                                systemEquipSN: strTgs.sTrim(bd.systemEquipSN),
-                                systemEnviron: strTgs.sTrim(bd.systemEnviron),
-                                systemRole: strTgs.uTrim(bd.systemRole),
-                                systemInventoryStatus: bd.systemInventoryStatus,
-                                systemTicket: strTgs.sTrim(bd.systemTicket),
-                                systemStatus: bd.systemStatus,
-                                systemOwner: strTgs.uTrim(bd.systemOwner),
-                                systemImpact: bd.systemImpact,
-                                systemIsVirtual: bd.systemIsVirtual,
-                                systemParentId: strTgs.sTrim(bd.systemParentId),
-                                systemOSType: strTgs.uTrim(bd.systemOSType),
-                                systemOSVersion: strTgs.uTrim(bd.systemOSVersion),
-                                systemApplications: strTgs.uTrim(bd.systemApplications),
-                                systemSupLic: strTgs.uTrim(bd.systemSupLic),
-                                systemSupEndDate: bd.systemSupEndDate,
-                                systemInstall: bd.systemInstall,
-                                systemStart: bd.systemStart,
-                                systemEnd: bd.systemEnd,
-                                systemNotes: strTgs.uTrim(bd.systemNotes),
-                                createdBy: req.user.local.email,
-                                createdOn: Date.now(),
-                                modifiedBy: req.user.local.email,
-                                modifiedOn: Date.now(),
-                    },function(err){
+            systemPorts: varPortsNew(bd),
+            systemName: strTgs.clTrim(bd.systemName),
+            systemEquipSN: strTgs.sTrim(bd.systemEquipSN),
+            systemEnviron: strTgs.sTrim(bd.systemEnviron),
+            systemRole: strTgs.uTrim(bd.systemRole),
+            systemInventoryStatus: bd.systemInventoryStatus,
+            systemTicket: strTgs.sTrim(bd.systemTicket),
+            systemStatus: bd.systemStatus,
+            systemOwner: strTgs.uTrim(bd.systemOwner),
+            systemImpact: bd.systemImpact,
+            systemIsVirtual: bd.systemIsVirtual,
+            systemParentId: strTgs.sTrim(bd.systemParentId),
+            systemOSType: strTgs.uTrim(bd.systemOSType),
+            systemOSVersion: strTgs.uTrim(bd.systemOSVersion),
+            systemApplications: strTgs.uTrim(bd.systemApplications),
+            systemSupLic: strTgs.uTrim(bd.systemSupLic),
+            systemSupEndDate: bd.systemSupEndDate,
+            systemInstall: bd.systemInstall,
+            systemStart: bd.systemStart,
+            systemEnd: bd.systemEnd,
+            systemNotes: strTgs.uTrim(bd.systemNotes),
+            createdBy: req.user.local.email,
+            createdOn: Date.now(),
+            modifiedBy: req.user.local.email,
+            modifiedOn: Date.now(),
+    },function(err){
 	        if(err) {
 	        	logger.warn(err.stack);
                 if(err.stack.indexOf ('matching')!=-1){
@@ -989,6 +1002,18 @@ exports.dcSystemPost = function(req,res){
 	            };
 	            return res.redirect(303, '/system/'+ res.abbreviation);
 	        }
+    // this updates EndPoints when the system name changes
+            if (thisDoc.systemName !== strTgs.clTrim(bd.systemName)){
+                Systemdb.find({'systemPorts.sysPortEndPoint': thisDoc.systemName},'systemName systemPorts.sysPortName systemPorts.sysPortEndPoint',function(err,sys){
+                    sys.map(function(sy){
+                        sy.systemPorts.map(function(sysPort){
+                            if (thisDoc.systemName === sysPort.systemPorts.sysPortEndPoint){
+                                systemdbCrud.systemdbPortsCreate(sysPort,req);
+                            }else{
+                                logger.warn('EndPoint error'+ sysPort.systemPorts.sysPortEndPoint);
+                            }});});
+                  
+            });}
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',

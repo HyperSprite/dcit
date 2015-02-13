@@ -1,0 +1,19 @@
+Saving a system port on new system.
+
+I think this is because the system is not created yet, I will need to check to see if this happens on equipment as well.
+
+2015-02-11T22:29:42.710Z - info: undefined
+2015-02-11T22:29:42.711Z - info: port creat :undefined
+2015-02-11T22:29:42.711Z - info: sysPortName.length 5
+TypeError: Cannot read property '0' of undefined
+    at varPortsNew (/home/cdunavan/Dropbox/dcit/handlers/system.js:859:50)
+    at exports.dcSystemPost (/home/cdunavan/Dropbox/dcit/handlers/system.js:866:46)
+    at Layer.handle [as handle_request] (/home/cdunavan/Dropbox/dcit/node_modules/express/lib/router/layer.js:82:5)
+    at next (/home/cdunavan/Dropbox/dcit/node_modules/express/lib/router/route.js:110:13)
+    at isLoggedIn (/home/cdunavan/Dropbox/dcit/routes.js:117:16)
+    at Layer.handle [as handle_request] (/home/cdunavan/Dropbox/dcit/node_modules/express/lib/router/layer.js:82:5)
+    at next (/home/cdunavan/Dropbox/dcit/node_modules/express/lib/router/route.js:110:13)
+    at Route.dispatch (/home/cdunavan/Dropbox/dcit/node_modules/express/lib/router/route.js:91:3)
+    at Layer.handle [as handle_request] (/home/cdunavan/Dropbox/dcit/node_modules/express/lib/router/layer.js:82:5)
+    at /home/cdunavan/Dropbox/dcit/node_modules/express/lib/router/index.js:267:22
+2015-02-11T22:30:22.708Z - info: Date: Tue Feb 10 2015 16:00:00 GMT-0800 (PST)
