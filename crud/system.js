@@ -32,15 +32,15 @@ Systemdb.create({
                     systemOSVersion: strTgs.uTrim(data.systemOSVersion),
                     systemApplications: strTgs.uTrim(data.systemApplications),
                     systemSupLic: strTgs.uTrim(data.systemSupLic),
-                    systemSupEndDate: dates.convert(data.systemSupEndDate),
-                    systemInstall: dates.convert(data.systemInstall),
-                    systemStart: dates.convert(data.systemStart),
-                    systemEnd: dates.convert(data.systemEnd),
+                    systemSupEndDate: strTgs.convertDates(data.systemSupEndDate,req.session.ses.timezone),
+                    systemInstall: strTgs.convertDates(data.systemInstall,req.session.ses.timezone),
+                    systemStart: strTgs.convertDates(data.systemStart,req.session.ses.timezone),
+                    systemEnd: strTgs.convertDates(data.systemEnd,req.session.ses.timezone),
                     systemNotes: strTgs.uTrim(data.systemNotes),
                     createdBy: req.user.local.email,
                     createdOn: Date.now(),
                     modifiedBy: req.user.local.email,
-                    modifiedOn: strTgs.compareDates(data.modifiedOn),
+                    modifiedOn: strTgs.compareDates(data.modifiedOn,req.session.ses.timezone),
     },function(err){
         if(err) {
             logger.info('sysCreate Failed,'+data.index+','+data.systemName);
@@ -86,16 +86,16 @@ Systemdb.create({
             if(data.systemSupLic){
             thisDoc.systemSupLic= strTgs.uTrim(data.systemSupLic);}
             if(data.systemSupEndDate){
-            thisDoc.systemSupEndDate= dates.convert(data.systemSupEndDate);}
+            thisDoc.systemSupEndDate= strTgs.convertDates(data.systemSupEndDate,req.session.ses.timezone);}
             if(data.systemInstall){
-            thisDoc.systemInstall= dates.convert(data.systemInstall);}
+            thisDoc.systemInstall= strTgs.convertDates(data.systemInstall,req.session.ses.timezone);}
             if(data.systemStart){
-            thisDoc.systemStart= dates.convert(data.systemStart);}
+            thisDoc.systemStart= strTgs.convertDates(data.systemStart,req.session.ses.timezone);}
             if(data.systemEnd){
-            thisDoc.systemEnd= dates.convert(data.systemEnd);}
+            thisDoc.systemEnd= strTgs.convertDates(data.systemEnd,req.session.ses.timezone);}
             if(data.systemNotes){
             thisDoc.systemNotes= strTgs.noteAdd(thisDoc.systemNotes,data.systemNotes);}
-            thisDoc.modifiedOn = dates.convert(data.modifiedOn);
+            thisDoc.modifiedOn = strTgs.convertDates(data.modifiedOn,req.session.ses.timezone);
             thisDoc.modifiedBy = req.user.local.email;
         
         sys.save(function(err){
@@ -141,7 +141,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 sysPortOptions: strTgs.stcTrim(data.sysPortOptions),
                 sysPortURL: strTgs.clTrim(data.sysPortURL),
                 modifiedBy: req.user.local.email,
-                modifiedOn: strTgs.compareDates(data.modifiedOn), 
+                modifiedOn: strTgs.compareDates(data.modifiedOn,req.session.ses.timezone), 
             });
             sys.save(function(err){
 	        if(err) {
@@ -178,7 +178,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 if(data.sysPortURL){
                 thisDoc.sysPortURL= strTgs.clTrim(data.sysPortURL);}
                 thisDoc.modifiedBy= req.user.local.email;
-                thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn); 
+                thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn,req.session.ses.timezone); 
             sys.save(function(err){
             if(err){
                 logger.warn('sysPortCreate Failed,'+data.index+','+strTgs.clTrim(data.systemName)+','+err);

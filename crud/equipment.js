@@ -42,14 +42,14 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipHDDCount: strTgs.uTrim(data.equipHDDCount),
         equipHDDType: strTgs.uTrim(data.equipHDDType),
         equipNICCount:strTgs.uTrim(data.equipNICCount),
-        etuipNICType:strTgs.uTrim(data.etuipNICType),
+        equipNICType:strTgs.uTrim(data.equipNICType),
         equipPSUCount: strTgs.uTrim(data.equipPSUCount),
         equipPSUDraw: strTgs.uTrim(data.equipPSUDraw),
         equipAddOns: strTgs.uTrim(data.equipAddOns),
-        equipRecieved: dates.convert(data.equipRecieved),
-        equipAcquisition: dates.convert(data.equipAcquisition),
-        equipInService: dates.convert(data.equipInService),
-        equipEndOfLife: dates.convert(data.equipEndOfLife),
+        equipRecieved: strTgs.convertDates(data.equipRecieved),
+        equipAcquisition: strTgs.convertDates(data.equipAcquisition),
+        equipInService: strTgs.convertDates(data.equipInService),
+        equipEndOfLife: strTgs.convertDates(data.equipEndOfLife),
         equipWarrantyMo: strTgs.uTrim(data.equipWarrantyMo),        
         equipPONum: strTgs.uTrim(data.equipPONum),
         equipInvoice: strTgs.uTrim(data.equipInvoice),
@@ -59,7 +59,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipPurchaseType: strTgs.uTrim(data.equipPurchaseType),
         equipPurchaser: strTgs.uTrim(data.equipPurchaser),
         equipPurchaseTerms: strTgs.uTrim(data.equipPurchaseTerms),
-        equipPurchaseEnd: dates.convert(data.equipPurchaseEnd),
+        equipPurchaseEnd: strTgs.convertDates(data.equipPurchaseEnd),
         equipNotes: strTgs.uTrim(data.equipNotes),
         createdBy: req.user.local.email,
         createdOn: strTgs.compareDates(data.modifiedOn),
@@ -140,15 +140,15 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 if(data.equipAddOns){
                 thisDoc.equipAddOns = strTgs.uTrim(data.equipAddOns);}
                 if(data.equipRecieved){
-                thisDoc.equipRecieved = dates.convert(data.equipRecieved);}
+                thisDoc.equipRecieved = strTgs.convertDates(data.equipRecieved,req.session.ses.timezone);}
                 if(data.equipAcquisition){
-                thisDoc.equipAcquisition = dates.convert(data.equipAcquisition);}
+                thisDoc.equipAcquisition = strTgs.convertDates(data.equipAcquisition,req.session.ses.timezone);}
                 if(data.equipInService){
-                thisDoc.equipInService = dates.convert(data.equipInService);}
+                thisDoc.equipInService = strTgs.convertDates(data.equipInService,req.session.ses.timezone);}
                 if(data.equipEndOfLife){
-                thisDoc.equipEndOfLife = dates.convert(data.equipEndOfLife);}
+                thisDoc.equipEndOfLife = strTgs.convertDates(data.equipEndOfLife,req.session.ses.timezone);}
                 if(data.equipWarrantyMo){
-                thisDoc.equipWarrantyMo = dates.convert(data.equipWarrantyMo);}
+                thisDoc.equipWarrantyMo = strTgs.convertDates(data.equipWarrantyMo,req.session.ses.timezone);}
                 if(data.equipPONum){
                 thisDoc.equipPONum = strTgs.uTrim(data.equipPONum);}
                 if(data.equipInvoice){
@@ -166,10 +166,10 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 if(data.equipPurchaseTerms){
                 thisDoc.equipPurchaseTerms = strTgs.uTrim(data.equipPurchaseTerms);}
                 if(data.equipPurchaseEnd){
-                thisDoc.equipPurchaseEnd = dates.convert(data.equipPurchaseEnd);}
+                thisDoc.equipPurchaseEnd = strTgs.convertDates(data.equipPurchaseEnd,req.session.ses.timezone);}
                 if(data.equipNotes){
                 thisDoc.equipNotes = strTgs.noteAdd(thisDoc.equipNotes,data.equipNotes);}
-                thisDoc.modifiedOn = dates.convert(data.modifiedOn);
+                thisDoc.modifiedOn = strTgs.compareDates(data.modifiedOn,req.session.ses.timezone);
                 thisDoc.modifiedBy =req.user.local.email;
 
         eq.save(function(err){
@@ -208,7 +208,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 equipPortName: strTgs.sTrim(data.equipPortName),
                 equipPortsOpt: strTgs.sTrim(data.equipPortsOpt),
                 modifiedBy: req.user.local.email,
-                modifiedOn: strTgs.compareDates(data.modifiedOn),   
+                modifiedOn: strTgs.compareDates(data.modifiedOn,req.session.ses.timezone),   
         });
         eq.save(function(err){
         if(err) {
@@ -234,7 +234,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 if(data.equipPortsOpt){
                 thisDoc.equipPortsOpt= strTgs.sTrim(data.equipPortsOpt);}
                 thisDoc.modifiedBy= req.user.local.email;
-                thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn);
+                thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn,req.session.ses.timezone);
             eq.save(function(err){
             if(err){
                 logger.warn('csvUpload','eqPortCreate Failed,'+err+','+data.index+','+strTgs.cTrim(data.equipSN));

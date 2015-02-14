@@ -23,7 +23,8 @@ var          winston = require('winston'),
               logger = require('./lib/logger.js');
 
 var app = express();
-moment().format();
+
+
 
 //var LIUser = {'account':'admin',
 //                'name':'Superuser',
@@ -165,8 +166,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(flash());
-
-
 
 /*
 // cross-site request forgery protection

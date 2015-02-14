@@ -2,6 +2,7 @@
 var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
          dates = require('../lib/dates.js'),
+        moment = require('moment'),
       ObjectId = require('mongoose').Types.ObjectId;
 
 // Models
@@ -179,7 +180,7 @@ logger.info('Date: '+sy.systemInstall);
         }
 
         //logger.info ('System.findOne '+dcabbr);
-        if(editLoad < 4){
+        if(editLoad < 4){ // Edit or View
             thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
 
             if(thisEquip !== false){
@@ -227,12 +228,7 @@ logger.info('Date: '+sy.systemInstall);
             systemApplications: sy.systemApplications,
             systemSupLic: sy.systemSupLic,
             systemSupEndDate: strTgs.dateMod(sy.systemSupEndDate),
-            
-
-            systemInstall: dates.convert(sy.systemInstall),
-            systemInstallLong: sy.systemInstall,
-            systemInstallDates: sy.systemInstall,
-
+            systemInstall: strTgs.dateMod(sy.systemInstall),
             systemStart: strTgs.dateMod(sy.systemStart),
             systemEnd: strTgs.dateMod(sy.systemEnd),
             systemNotes: sy.systemNotes,
@@ -310,7 +306,7 @@ logger.info('Date: '+sy.systemInstall);
             equipPorts: thisEquipPortsMaped,
             
             }; 
-        } else {
+        } else { // Copy
             context = {
                     access : strTgs.accessCheck(req.user),
                     user : req.user,
@@ -334,9 +330,10 @@ logger.info('Date: '+sy.systemInstall);
                     systemOSVersion: sy.systemOSVersion,
                     systemApplications: sy.systemApplications,
                     systemSupLic: sy.systemSupLic,
-                    systemSupEndDate: sy.systemSupEndDate,
-                    systemInstall: sy.systemInstall,
-                    systemStart: sy.systemStart,
+                    systemSupEndDate: strTgs.dateMod(sy.systemSupEndDate),
+                    systemInstall: strTgs.dateMod(sy.systemInstall),
+                    systemStart: strTgs.dateMod(sy.systemStart),
+                    systemEnd: strTgs.dateMod(sy.systemEnd),
             };     
         }                    
  
@@ -839,7 +836,7 @@ exports.dcSystemPost = function(req,res){
 
     //logger.info('new System in DC');
     varPortsNew = function(bd){
-    if(typeof bd.sysPortName[i] !== 'undefined'){
+    if(!bd.sysPortName[i] !== ''){
     var Ports = [];
     for(i=0;i<bd.sysPortName.length;i++){
     //    logger.info('sysPortName.length '+bd.sysPortName.length);
@@ -877,10 +874,10 @@ exports.dcSystemPost = function(req,res){
             systemOSVersion: strTgs.uTrim(bd.systemOSVersion),
             systemApplications: strTgs.uTrim(bd.systemApplications),
             systemSupLic: strTgs.uTrim(bd.systemSupLic),
-            systemSupEndDate: bd.systemSupEndDate,
-            systemInstall: bd.systemInstall,
-            systemStart: bd.systemStart,
-            systemEnd: bd.systemEnd,
+            systemSupEndDate: strTgs.dateAddTZ(bd.systemSupEndDate,req.session.ses.timezone),
+            systemInstall: strTgs.dateAddTZ(bd.systemInstall,req.session.ses.timezone),
+            systemStart: strTgs.dateAddTZ(bd.systemStart,req.session.ses.timezone),
+            systemEnd: strTgs.dateAddTZ(bd.systemEnd,req.session.ses.timezone),
             systemNotes: strTgs.uTrim(bd.systemNotes),
             createdBy: req.user.local.email,
             createdOn: Date.now(),
@@ -984,12 +981,14 @@ exports.dcSystemPost = function(req,res){
             thisDoc.systemOSVersion= strTgs.uTrim(bd.systemOSVersion);
             thisDoc.systemApplications= strTgs.uTrim(bd.systemApplications);
             thisDoc.systemSupLic= strTgs.uTrim(bd.systemSupLic);
-            thisDoc.systemSupEndDate= bd.systemSupEndDate;
-            thisDoc.systemInstall= bd.systemInstall;
-            thisDoc.systemStart= bd.systemStart;
-            thisDoc.systemEnd= bd.systemEnd;
+
+            thisDoc.systemSupEndDate= strTgs.dCleanup(thisDoc.systemSupEndDate,bd.systemSupEndDate,req.session.ses.timezone);
+            thisDoc.systemInstall= strTgs.dCleanup(thisDoc.systemInstall,bd.systemInstall,req.session.ses.timezone);
+            thisDoc.systemStart= strTgs.dCleanup(thisDoc.systemStart,bd.systemStart,req.session.ses.timezone);
+            thisDoc.systemEnd= strTgs.dCleanup(thisDoc.systemEnd,bd.systemEnd,req.session.ses.timezone);
+            
             thisDoc.systemNotes= strTgs.uTrim(bd.systemNotes);
-            thisDoc.modifiedOn = Date.now();
+            thisDoc.modifiedOn = moment();
             thisDoc.modifiedBy = req.user.local.email;
                     }
 	    sys.save(function(err){

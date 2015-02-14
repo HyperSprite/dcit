@@ -158,7 +158,7 @@
         <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('tbody1','tr',10);">+ 1</button>
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='{{ses.lastPage}}'{{/if}} >
         </div>
         <hr>
         <ul id="eachUl"class="list-unstyled">    
@@ -282,7 +282,7 @@
             </div>
         </div>     
                 <div class="form-group">
-            <label for="field-equipHDDCount" class="col-sm-2 control-label" >HDD count</label>
+            <label for="field-equipHDDCount" class="col-sm-2 control-label" >HDD Count</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="equipHDDCount" name="equipHDDCount"  value="{{equipHDDCount}}" placeholder="8">
             </div>
@@ -292,7 +292,22 @@
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="equipHDDType" name="equipHDDType"  value="{{equipHDDType}}" placeholder="250gb SAS 10k 2.5">
             </div>
+        </div>
+    
+        <div class="form-group">
+            <label for="field-equipNICCount" class="col-sm-2 control-label" >NIC Count</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipNICCount" name="equipNICCount"  value="{{equipNICCount}}" placeholder="4">
+            </div>
         </div>     
+        <div class="form-group">
+            <label for="field-equipNICType" class="col-sm-2 control-label" >NIC Type</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipNICType" name="equipNICType"  value="{{equipNICType}}" placeholder="Intel Pro 1000">
+            </div>
+        </div>
+
+
                 <div class="form-group">
             <label for="field-equipPSUCount" class="col-sm-2 control-label" >PSU Count</label>
             <div class="col-sm-4">
@@ -410,7 +425,7 @@
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>{{/if}}
                 <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' 
-                {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='/equipment/{{abbreviation}}'{{/if}} >
+                {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='{{ses.lastPage}}'{{/if}} >
                 {{#if access.delete}}
                 <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>{{/if}}
             </div>

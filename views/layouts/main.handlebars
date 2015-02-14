@@ -69,7 +69,8 @@
       <div> <!-- footer-->
 			<hr>
 			<footer>
-				<p>&copy; DCIT 2014 <a href="/about">About</a>{{#if session}} - {{session.timezone}}{{/if}}</p>
+				<p>&copy; DCIT 2014 <a href="/about">About</a>{{#if ses.access.root}} - {{ses.timezone}}</p>
+        {{session.user.local.email}}- access:root={{ses.access.root}},delete={{ses.access.delete}}{{/if}}
 			</footer>
       </div> <!-- /footer-->
         

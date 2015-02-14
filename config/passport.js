@@ -1,4 +1,6 @@
-var logconfig = require('./../logconfig.js');
+var logconfig = require('./../logconfig.js'),
+       strTgs = require('../lib/stringThings.js'),
+    Optionsdb = require('../models/options.js');
 
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
@@ -12,6 +14,17 @@ var logger = new (winston.Logger)({
     ],
   exitOnError: true
 });
+
+exports.accessCheck = function (check){
+var access = new Object();
+if(!check){access.noAccess=1;}else{
+if(check.access > 4){access.root = 1;}
+if(check.access > 3){access.delete = 1;}
+if(check.access > 2){access.edit = 1;}
+if(check.access > 1){access.read = 1;}
+}
+return access;
+};
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -140,15 +153,58 @@ module.exports = function(passport) {
 
             // all is well, return successful user
            }else{
-            logger.info('User Time Zone '+req.body.timezone);
-            req.session.timezone = req.body.timezone;
+            logger.info(user.local.email+' in time zone '+req.body.timezone);
+           Optionsdb.find(function(err,opts){
+               if(opts){
+               optList = {
+                   optList: opts.map(function(opt){
+                   return{
+                       optListName: opt.optListName,
+                       optListKey: opt.optListKey,
+                       optListArray: opt.optListArray,
+                   };
+               }),};}
+            req.session.ses = {
+                timezone : req.body.timezone,
+                optList : optList,
+                access : exports.accessCheck(user),
+            };
             return done(null, user);
+    });    
         }
         });
 
     }));
 
 };
-// logger.info('ACCESS FAILED >'+local.email + ' no local account!');
-// logger.info('ACCESS FAILED >'+local.email + ' incorrect local password!');
-// logger.info('ACCESS granted for >'+local.email);
+/*
+req.session.sesUser :{
+    timezone : timezone,
+    user : {
+            authId :  string,
+            password : string,
+            name : string,
+            email : string,
+            phone : string,
+            createdOn : date,
+            lastAccessed : date,
+        },
+    access : {
+        root :
+        delete :
+        edit :
+        read :
+        noaccess : 
+        }
+
+
+    }
+    }
+
+
+}
+
+
+
+
+*/

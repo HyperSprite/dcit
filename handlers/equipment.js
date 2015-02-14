@@ -350,6 +350,8 @@ exports.dcEquipPages = function(req,res,next){
                                 equipRaidLayout: eq.equipRaidLayout,
                                 equipHDDCount: eq.equipHDDCount,
                                 equipHDDType: eq.equipHDDType,
+                                equipNICCount: eq.equipNICCount,
+                                equipNICType: eq.equipNICType,
                                 equipPSUCount: eq.equipPSUCount,
                                 equipPSUDraw: eq.equipPSUDraw,
                                 equipAddOns: eq.equipAddOns,
@@ -442,13 +444,15 @@ exports.dcEquipPages = function(req,res,next){
                                 equipRaidLayout: eq.equipRaidLayout,
                                 equipHDDCount: eq.equipHDDCount,
                                 equipHDDType: eq.equipHDDType,
+                                equipNICCount: eq.equipNICCount,
+                                equipNICType: eq.equipNICType,
                                 equipPSUCount: eq.equipPSUCount,
                                 equipPSUDraw: eq.equipPSUDraw,
                                 equipAddOns: eq.equipAddOns,
                                 equipRecieved: strTgs.dateMod(eq.equipRecieved),
                                 equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
                                 equipInService: strTgs.dateMod(eq.equipInService),
-                                equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
+                            //    equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
                                 equipWarrantyMo: eq.equipWarrantyMo,
                                 equipPONum: eq.equipPONum,
                                 equipInvoice: eq.equipInvoice,
@@ -502,7 +506,7 @@ exports.dcEquipmentPost = function(req,res){
     }
     //logger.info('new Equipment in DC');
     varPortsNew = function(body){
-    if(typeof data.equipPortsAddr[i] !== 'undefined'){
+    if(data.equipPortsAddr[0] !== ''){
     var Ports = [];
     for(i=0;i<body.equipPortType.length;i++){
         //logger.info('equipPortType.length '+body.equipPortType.length);
@@ -544,14 +548,16 @@ exports.dcEquipmentPost = function(req,res){
                                 equipRaidLayout: strTgs.uTrim(data.equipRaidLayout),
                                 equipHDDCount: strTgs.uTrim(data.equipHDDCount),
                                 equipHDDType: strTgs.uTrim(data.equipHDDType),
+                                equipNICCount: strTgs.uTrim(data.equipNICCount),
+                                equipNICType: strTgs.uTrim(data.equipNICType),
                                 equipPSUCount: strTgs.uTrim(data.equipPSUCount),
                                 equipPSUDraw: strTgs.uTrim(data.equipPSUDraw),
                                 equipAddOns: strTgs.uTrim(data.equipAddOns),
-                                equipRecieved: strTgs.uTrim(data.equipRecieved),
-                                equipAcquisition: strTgs.uTrim(data.equipAcquisition),
-                                equipInService: strTgs.uTrim(data.equipInService),
-                                equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
-                                equipWarrantyMo: eq.equipWarrantyMo,
+                                equipRecieved: strTgs.dateAddTZ(data.equipRecieved,req.session.ses.timezone),
+                                equipAcquisition: strTgs.dateAddTZ(data.equipAcquisition,req.session.ses.timezone),
+                                equipInService: strTgs.dateAddTZ(data.equipInService,req.session.ses.timezone),
+                                equipEndOfLife: strTgs.dateAddTZ(data.equipEndOfLife,req.session.ses.timezone),
+                                equipWarrantyMo: data.equipWarrantyMo,
                                 equipPONum: strTgs.uTrim(data.equipPONum),
                                 equipInvoice: strTgs.uTrim(data.equipInvoice),
                                 equipProjectNum: strTgs.uTrim(data.equipProjectNum),
@@ -560,7 +566,7 @@ exports.dcEquipmentPost = function(req,res){
                                 equipPurchaseType: strTgs.uTrim(data.equipPurchaseType),
                                 equipPurchaser: strTgs.uTrim(data.equipPurchaser),
                                 equipPurchaseTerms: strTgs.uTrim(data.equipPurchaseTerms),
-                                equipPurchaseEnd: strTgs.uTrim(data.equipPurchaseEnd),
+                                equipPurchaseEnd: strTgs.dateAddTZ(data.equipPurchaseEnd,req.session.ses.timezone),
                                 equipNotes: strTgs.uTrim(data.equipNotes),
                                 createdBy: req.user.local.email,
                                 createdOn: Date.now(),
@@ -664,13 +670,15 @@ exports.dcEquipmentPost = function(req,res){
                         thisDoc.equipRaidLayout = strTgs.uCleanUp(thisDoc.equipRaidLayout,data.equipRaidLayout);
                         thisDoc.equipHDDCount = strTgs.uCleanUp(thisDoc.equipHDDCount,data.equipHDDCount);
                         thisDoc.equipHDDType = strTgs.uCleanUp(thisDoc.equipHDDType,data.equipHDDType);
+                        thisDoc.equipNICCount = strTgs.uCleanUp(thisDoc.equipNICCount,data.equipNICCount);
+                        thisDoc.equipNICType = strTgs.uCleanUp(thisDoc.equipNICType,data.equipNICType);
                         thisDoc.equipPSUCount = strTgs.uCleanUp(thisDoc.equipPSUCount,data.equipPSUCount);
                         thisDoc.equipPSUDraw = strTgs.uCleanUp(thisDoc.equipPSUDraw,data.equipPSUDraw);
                         thisDoc.equipAddOns = strTgs.uCleanUp(thisDoc.equipAddOns,data.equipAddOns);
-                        thisDoc.equipRecieved = strTgs.uCleanUp(thisDoc.equipRecieved,data.equipRecieved);
-                        thisDoc.equipAcquisition = strTgs.uCleanUp(thisDoc.equipAcquisition,data.equipAcquisition);
-                        thisDoc.equipInService = strTgs.uCleanUp(thisDoc.equipInService,data.equipInService);
-                        thisDoc.equipEndOfLife = strTgs.uCleanUp(thisDoc.equipEndOfLife,data.equipEndOfLife);
+                        thisDoc.equipRecieved = strTgs.dCleanup(thisDoc.equipRecieved,data.equipRecieved,req.session.ses.timezone);
+                        thisDoc.equipAcquisition = strTgs.dCleanup(thisDoc.equipAcquisition,data.equipAcquisition,req.session.ses.timezone);
+                        thisDoc.equipInService = strTgs.dCleanup(thisDoc.equipInService,data.equipInService,req.session.ses.timezone);
+                        thisDoc.equipEndOfLife = strTgs.dCleanup(thisDoc.equipEndOfLife,data.equipEndOfLife,req.session.ses.timezone);
                         thisDoc.equipWarrantyMo = strTgs.uCleanUp(thisDoc.equipWarrantyMo,data.equipWarrantyMo);
                         thisDoc.equipPONum = strTgs.uCleanUp(thisDoc.equipPONum,data.equipPONum);
                         thisDoc.equipInvoice = strTgs.uCleanUp(thisDoc.equipInvoice,data.equipInvoice);
@@ -680,7 +688,7 @@ exports.dcEquipmentPost = function(req,res){
                         thisDoc.equipPurchaseType = strTgs.uCleanUp(thisDoc.equipPurchaseType,data.equipPurchaseType);
                         thisDoc.equipPurchaser = strTgs.uCleanUp(thisDoc.equipPurchaser,data.equipPurchaser);
                         thisDoc.equipPurchaseTerms = strTgs.uCleanUp(thisDoc.equipPurchaseTerms,data.equipPurchaseTerms);
-                        thisDoc.equipPurchaseEnd = strTgs.uCleanUp(thisDoc.equipPurchaseEnd,data.equipPurchaseEnd);
+                        thisDoc.equipPurchaseEnd = strTgs.dCleanup(thisDoc.equipPurchaseEnd,data.equipPurchaseEnd,req.session.ses.timezone);
                         thisDoc.equipNotes = strTgs.uCleanUp(thisDoc.equipNotes,data.equipNotes);
                         thisDoc.modifiedOn = Date.now();
                         thisDoc.modifiedBy = req.user.local.email;
