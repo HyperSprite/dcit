@@ -154,23 +154,13 @@ module.exports = function(passport) {
             // all is well, return successful user
            }else{
             logger.info(user.local.email+' in time zone '+req.body.timezone);
-           Optionsdb.find(function(err,opts){
-               if(opts){
-               optList = {
-                   optList: opts.map(function(opt){
-                   return{
-                       optListName: opt.optListName,
-                       optListKey: opt.optListKey,
-                       optListArray: opt.optListArray,
-                   };
-               }),};}
+           
             req.session.ses = {
                 timezone : req.body.timezone,
-                optList : optList,
                 access : exports.accessCheck(user),
             };
             return done(null, user);
-    });    
+        
         }
         });
 
