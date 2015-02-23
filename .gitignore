@@ -12,7 +12,7 @@ logs*
 credentials.js
 seedDataLoad.js
 scraps2.html
-*.csv
+
 
 # don't commit log files
 log

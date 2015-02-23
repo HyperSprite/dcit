@@ -1,0 +1,22 @@
+input.form-fixer {
+    padding: 1px;
+    height: 28px;
+}
+textarea.form-fixer {
+    padding: 1px;
+    height: 28px;
+}
+div.marginRow{
+   margin-bottom:0px !important; 
+}
+/* this is for Rack Elevations */
+svg {
+    background-color: lightgray;
+}
+.rackcontainer {
+    float:left;
+    width:100%;
+}
+.rackcol {
+    float:left;
+}
