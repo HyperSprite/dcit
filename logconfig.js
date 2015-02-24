@@ -1,5 +1,6 @@
 
 module.exports ={
+    uploadDir : '../userdata/',
     logDir : '../log/',
     fileName : {
         accessLog : 'accessLog',
@@ -10,3 +11,4 @@ module.exports ={
 };
 
 //var logconfig = require('../lib/logconfig.js');
+// logconfig.uploadDir

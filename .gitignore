@@ -8,7 +8,6 @@ dump*
 .DS_Store
 
 # we don't want to accidentally check our secret credentials into the repo
-credentials.js
 scraps2.html
 
 # don't commit log files
