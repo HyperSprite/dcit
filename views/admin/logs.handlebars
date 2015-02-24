@@ -1,0 +1,34 @@
+<div>
+<h4>Log Files</h4>
+
+
+<div id="dvData">
+    
+    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
+        <thead>
+            <tr>
+                <th class="table-sort" data-sort="index">index</th>
+                <th class="table-sort" data-sort="message">Name</th>
+            </tr>
+        </thead>
+        <tbody class="list">
+        {{#each files}}
+            <tr>
+                
+                <td class="index"><button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button> : {{@index}}</td>
+                <td class="message" ><a href="/admin/logviewer-{{name}}">{{name}}</td>
+             
+            </tr>  
+        {{/each}}
+  
+        </tbody>
+    </table>
+        </div>
+         {{> tocsvpartial }}
+    </div>
+{{#each files}}
+    <form id="deleteform{{@index}}" action="/admin/logdelete" method="POST" onsubmit="return confirm('Are you sure you want to delete {{name}}. This can not be undone!')">
+        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="name" value="{{name}}">
+    </form>
+{{/each}}

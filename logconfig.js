@@ -1,6 +1,6 @@
 
 module.exports ={
-    logDir : '../logs/',
+    logDir : '../log/',
     fileName : {
         accessLog : 'accessLog',
         appMainLog : 'appMainLog',

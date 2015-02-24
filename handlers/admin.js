@@ -1,5 +1,4 @@
 
-var logDir = '../logs/';
 
 var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
@@ -11,7 +10,8 @@ var     logger = require('../lib/logger.js'),
   seedDataLoad = require('../seedDataLoad.js'),
  equipmentCrud = require('../crud/equipment.js'),
   systemdbCrud = require('../crud/system.js'),
-      ObjectId = require('mongoose').Types.ObjectId;
+      ObjectId = require('mongoose').Types.ObjectId,
+     logconfig = require('./../logconfig.js');
 
 // Models
 var Datacenter = require('../models/datacenter.js'),
@@ -142,7 +142,7 @@ exports.home = function(req, res){
 
     }else if(req.params.datacenter === 'logs'){
 
-    fs.readdir(logDir, function (err, files) {
+    fs.readdir(logconfig.logDir, function (err, files) {
       if (err) throw err;
       //logger.info('files'+files);
 
@@ -170,7 +170,7 @@ exports.home = function(req, res){
         filename = req.params.datacenter.substring (start);
             //logger.info('|filename    >'+filename);
 
-        fs.readFile(logDir+filename, function (err, datas) {
+        fs.readFile(logconfig.logDir+filename, function (err, datas) {
           if (err) throw err;
           //logger.log(data);
            datas = datas.toString();
@@ -480,7 +480,7 @@ exports.uploadPost = function(req,res){
     //logger.info('date >'+Date.now());
     var userEmail = req.user.local.email;
     var form = new formidable.IncomingForm();
-    form.uploadDir = './userdata/';
+    form.uploadDir = logconfig.uploadDir;
     form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
     //logger.info('files >'+files);
@@ -606,7 +606,7 @@ exports.logdelete = function(req,res){
             return res.redirect(303, '/');
     }else{ 
     if (req.body.name){
-        var fileName = logDir+req.body.name;
+        var fileName = logconfig.logDir+req.body.name;
         
             fs.unlink(fileName, function(err){
                     if(err){
