@@ -851,7 +851,7 @@ exports.dcSystemPost = function(req,res){
             sysPortVlan: strTgs.sTrim(bd.sysPortVlan[i]),
             sysPortOptions: strTgs.clTrim(bd.sysPortOptions[i]),
             sysPortURL: strTgs.clTrim(bd.sysPortURL[i]),
-            sysPortCrossover: bd.sysPortCrossover[i],
+            //sysPortCrossover: bd.sysPortCrossover[i],
             });
         }
         return Ports;
