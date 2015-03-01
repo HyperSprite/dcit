@@ -106,6 +106,9 @@ module.exports = function(app){
         app.get('/admin/optionsadmin/seedSystem', isLoggedIn, admin.seedSystemGet);
 
         app.get('/go/input', ajax.get);
+        app.get('/autocomplete/allSystemNames', ajax.allSystemNames);
+        app.get('/autocomplete/allEquipSN', ajax.allEquipSN);
+        app.get('/autocomplete/allLocationRack', ajax.allLocationRack);
         
 };
 

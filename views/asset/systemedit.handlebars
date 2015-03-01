@@ -51,14 +51,9 @@
         </div>  
         
         <div class="form-group">
-            <label for="field-systemEquipSN" class="col-sm-2 control-label" >Equipment</label>
-            <div class="col-sm-4">
-                <input list="systemEquipSN" id="field-systemEquipSN" class="form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" >
-                <datalist id="systemEquipSN">
-                    {{#each equipSNList}}
-                    <option {{{this}}}>{{this}}</option>
-                    {{/each}}
-                </datalist>
+            <label for="systemEquipSN" class="col-sm-2 control-label" >Equipment</label>
+            <div class="col-sm-4  ui-widget">
+                <input type="text" id="systemEquipSN" class="form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" >
             </div>
         </div> 
         {{#if equipLocation}}<div class="form-group">
@@ -116,13 +111,9 @@
                             <div class="col-sm-2 ">
                                 <input type="text"  id="sysPortName{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortName[{{@index}}]"value="{{sysPortName}}" placeholder="e0, con, netmgmt">
                             </div>    
-                            <div class="col-sm-2">
-                                <input list="systemEquipSN{{@index}}" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console">
-                                <datalist id="systemEquipSN{{@index}}">
-                                    {{#each ../sysNameList}}
-                                    <option {{{this}}}>{{this}}</option>
-                                    {{/each}}
-                                </datalist>
+                            <div class="col-sm-2 ui-widget">
+                                <input type="text" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console">
+                                
                             </div>    
                             <div class="col-sm-1">
                                 <input type="text"   id="sysPortEndPointPre{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[{{@index}}]"value="{{sysPortEndPointPre}}" placeholder="Blade">
@@ -184,14 +175,9 @@
                             <div class="col-sm-2 ">
                                 <input type="text"  id="sysPortName0" class="form-control col-sm-2 form-fixer" name="sysPortName[0]" placeholder="e0, con, netmgmt">
                             </div>    
-                            <div class="col-sm-2">
-                                <input list="systemEquipSN0" id="sysPortEndPoint0" class="form-control col-sm-2 form-fixer" name="sysPortEndPoint[0]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console">
-                                <datalist id="systemEquipSN0">
-                                    {{#each ../sysNameList}}
-                                    <option {{{this}}}>{{this}}</option>
-                                    {{/each}}
-                                </datalist>
-                            </div>  
+                            <div class="col-sm-2 ui-widget">
+                                <input type="text" id="sysPortEndPoint0" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[0]" placeholder="Pick a Switch, PDU, Console">
+                            </div>   
                             <div class="col-sm-1">
                                 <input type="text"   id="sysPortEndPointPre0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[0]" placeholder="Blade">
                             </div>    
@@ -403,4 +389,33 @@ function addField(area,field,limit) {
     
 }
 //-->
-</script>        
+</script> 
+{{#if systemPorts}}
+{{#each systemPorts}}
+{{! jquery autocomplete https://github.com/devbridge/jQuery-Autocomplete}}
+<script>
+
+    $('#sysPortEndPoint{{@index}}').autocomplete({
+        serviceUrl: '/autocomplete/allSystemNames',
+        minChars: 3,
+        autoFocus:true,
+    });
+{{/each}}
+{{else}}
+</script>
+<script>
+    $('#sysPortEndPoint0').autocomplete({
+        serviceUrl: '/autocomplete/allSystemNames',
+        minChars: 3,
+        autoFocus:true,
+    });
+</script>
+{{/if}}
+<script>
+    $('#systemEquipSN').autocomplete({
+        serviceUrl: '/autocomplete/allEquipSN',
+        minChars: 3,
+        autoFocus:true,
+    });
+</script>
+
