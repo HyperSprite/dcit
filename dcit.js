@@ -24,16 +24,8 @@ var          winston = require('winston'),
 
 var app = express();
 
-
-
-//var LIUser = {'account':'admin',
-//                'name':'Superuser',
-//                'groups':['admin','base'],
-//               };
-
 var credentials = require('./credentials.js');
 var emailService = require('./lib/email.js')(credentials);
-
 
 require('./config/passport')(passport);
 
