@@ -384,33 +384,21 @@ function addField(area,field,limit) {
     
     if(document.createElement) { 
          //Older Method
-        field_area.insertAdjacentHTML('beforeend', '{{> assets/systemeditPlus1}}');
+        field_area.insertAdjacentHTML('beforeend', {{> assets/systemeditPlus1}});
     }
     
 }
 //-->
 </script> 
-{{#if systemPorts}}
-{{#each systemPorts}}
-{{! jquery autocomplete https://github.com/devbridge/jQuery-Autocomplete}}
-<script>
 
-    $('#sysPortEndPoint{{@index}}').autocomplete({
-        serviceUrl: '/autocomplete/allSystemNames',
-        minChars: 3,
-        autoFocus:true,
-    });
-{{/each}}
-{{else}}
-</script>
 <script>
-    $('#sysPortEndPoint0').autocomplete({
-        serviceUrl: '/autocomplete/allSystemNames',
+    $("[id^='sysPortEndPoint']").autocomplete({
+        serviceUrl: "/autocomplete/allSystemNames",
         minChars: 3,
         autoFocus:true,
-    });
+    });              
 </script>
-{{/if}}
+
 <script>
     $('#systemEquipSN').autocomplete({
         serviceUrl: '/autocomplete/allEquipSN',

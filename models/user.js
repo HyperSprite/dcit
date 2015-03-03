@@ -1,7 +1,7 @@
 // user.js
 
-var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+var        mongoose = require('mongoose'),
+             bcrypt = require('bcrypt-nodejs');
 
 var userSchema = mongoose.Schema({
     access: Number,    
@@ -29,3 +29,4 @@ userSchema.methods.validPassword = function(password) {
 
 var User = mongoose.model('User', userSchema);
 module.exports = User;
+

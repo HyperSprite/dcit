@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator'); 
+var        mongoose = require('mongoose'),
+    uniqueValidator = require('mongoose-unique-validator'); 
 
 //   Systems 
 
@@ -55,3 +55,4 @@ systemdbSchema.plugin(uniqueValidator);
 
 var Systemdb = mongoose.model('Systemdb', systemdbSchema);
 module.exports = Systemdb;
+

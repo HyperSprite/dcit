@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator'); 
+var        mongoose = require('mongoose'),
+    uniqueValidator = require('mongoose-unique-validator'); 
 
 // Equipment
 
@@ -88,5 +88,8 @@ equipmentSchema.plugin(uniqueValidator);
 
 equipmentSchema.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.' });
 
+
 var Equipment = mongoose.model('Equipment', equipmentSchema);
 module.exports = Equipment;
+
+

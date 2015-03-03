@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator'); 
-var Rack = require('../models/rack.js');
+var        mongoose = require('mongoose'),
+    uniqueValidator = require('mongoose-unique-validator'), 
+               Rack = require('../models/rack.js');
 
 var dcCagesSchema = mongoose.Schema({
         cageNickname:{type: String, required: true},
@@ -90,5 +90,7 @@ datacenterSchema.methods.getRacks = function(){
 // Apply the uniqueValidator plugin to datacenterSchema
 datacenterSchema.plugin(uniqueValidator);
 
+
 var Datacenter = mongoose.model('Datacenter', datacenterSchema);
 module.exports = Datacenter;
+

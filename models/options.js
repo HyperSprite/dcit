@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator'); 
+var        mongoose = require('mongoose'),
+    uniqueValidator = require('mongoose-unique-validator');
 
 
 var optionsSchema = mongoose.Schema({

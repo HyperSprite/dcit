@@ -1,5 +1,4 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator'); 
+var        mongoose = require('mongoose'); 
 
 // future to audit rack power, could be manual, could pull from PDUs
 var rackPowNowSchema = mongoose.Schema({
@@ -58,5 +57,7 @@ rackSchema.methods.getrUs = function(){
 // Apply the uniqueValidator plugin to datacenterSchema
 //rackSchema.plugin(uniqueValidator);
 
+
 var Rack = mongoose.model('Rack', rackSchema);
 module.exports = Rack;
+
