@@ -668,7 +668,7 @@ logger.warn(asc+' '+err);
             var context = {
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
-                titleNow: searchFor,
+                titleNow: '.. '+searchFor,
                 equipsys: 'true',
                 reportType: req.body.systemEnviron,
                 drop1:'Environment',

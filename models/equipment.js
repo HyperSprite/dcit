@@ -58,7 +58,7 @@ var equipmentSchema = mongoose.Schema({
     equipHDDCount: String,
     equipHDDType: String,
     equipNICCount: Number,
-    etuipNICType: String,
+    equipNICType: String,
     equipPSUCount: Number,
     equipPSUDraw: Number,
     equipAddOns: String,
