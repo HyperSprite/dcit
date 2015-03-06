@@ -778,14 +778,53 @@ exports.findEndpoints = function(req,res,next){
             access : strTgs.accessCheck(req.user),
             user : req.user,
                 titleNow:fEndPoint,
+                sysPortEndPoint:fEndPoint,
                 menu1:fEndPoint,
                 menuLink1: '/system/'+fEndPoint,
                 sys: sys.map(function(sy){
                     return {
-
                         systemPorts: sy.systemPorts.map(function(sysPort){
                         if(sysPort.sysPortEndPoint===fEndPoint){
+                    var isConsole,
+                        isEthernet,
+                        isInfiniband,
+                        isInterconnect,
+                        isNetMgmt,
+                        isPower,
+                        isSAN;
+                        switch(sysPort.sysPortType){
+                        case 'Console':
+                        isConsole = 'isConsole';
+                        break;
+                        case 'Ethernet':
+                        isEthernet = 'isEthernet';
+                        break;
+                        case 'Infiniband':
+                        isInfiniband = 'isInfiniband';
+                        break;
+                        case 'Interconnect':
+                        isInterconnect = 'isInterconnect';
+                        break;
+                        case 'NetMgmt':
+                        isNetMgmt ='isNetMgmt';
+                        break;
+                        case 'Power':
+                        isPower = 'isPower';
+                        break;
+                        case 'SAN':
+                        isSAN = 'isSAN';
+                        break;
+                        default:
+                        break;
+                    }
                         return{
+                        sysPortisConsole: isConsole,
+                        sysPortisEthernet: isEthernet,
+                        sysPortisInfiniband: isInfiniband,
+                        sysPortisInterconnect: isInterconnect, 
+                        sysPortisNetMgmt: isNetMgmt, 
+                        sysPortisPower: isPower, 
+                        sysPortisSAN: isSAN,
                         systemName: sy.systemName,
                         sysPortName: sysPort.sysPortName,
                         sysPortCablePath: sysPort.sysPortCablePath,
