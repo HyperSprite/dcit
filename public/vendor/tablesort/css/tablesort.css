@@ -21,7 +21,8 @@ th {
 }
 
 td {
-  font-weight: 300;
+  font-weight    : 300;
+  vertical-align : top;
 }
 
 td,th {

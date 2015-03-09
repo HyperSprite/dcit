@@ -15,7 +15,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
     if(!eq){
 
     Equipment.create({
-        equipLocation: strTgs.clTrim(data.equipLocation),
+        equipLocation: strTgs.locComb(data.equipLocationRack,data.equipLocationRu),
         equipSN: strTgs.cTrim(data.equipSN),
         equipAssetTag: strTgs.sTrim(data.equipAssetTag),
         equipTicketNumber: strTgs.cTrim(data.equipTicketNumber),

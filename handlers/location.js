@@ -1,10 +1,10 @@
     
-var     strTgs = require('../lib/stringThings.js'),
-  seedDataLoad = require('../seedDataLoad.js'),
-          dcit = require('../dcit.js'),
-      ObjectId = require('mongoose').Types.ObjectId,
-      IpSNCalc = require( 'ip-subnet-calculator' );
-       var logger = require('../lib/logger.js');
+var         strTgs = require('../lib/stringThings.js'),
+      seedDataLoad = require('../seedDataLoad.js'),
+              dcit = require('../dcit.js'),
+          ObjectId = require('mongoose').Types.ObjectId,
+            logger = require('../lib/logger.js'),
+IpSubnetCalculator = require( 'ip-subnet-calculator' );
 // Models
 var Datacenter = require('../models/datacenter.js'),
           Rack = require('../models/rack.js'),
@@ -287,8 +287,10 @@ this takes the abbreviation and displays the matching datacenter details
                     
                 }),
                 networks: dc.networks.map(function(nk){
-                    // var iPRange = IpSNCalc.calculateCIDRPrefix(nk.dcNetNetwork,nk.dcNetMask);     
-
+                var iPRange;
+                    if(nk !== false){
+                iPRange = IpSubnetCalculator.calculateSubnetMask(nk.dcNetNetwork,nk.dcNetMask);     
+                    }
                     return {
                                 dcNetId: nk._id,
                                 dcNetUnique: nk.dcNetUnique,
@@ -306,9 +308,9 @@ this takes the abbreviation and displays the matching datacenter details
                                 dcNetLdap1: nk.dcNetLdap1,
                                 dcNetLdap2: nk.dcNetLdap2,
                                 dcNetTftpHost: nk.dcNetTftpHost,
-                                //iPRangeipLowStr: iPRange.ipLowStr,
-                                //iPRangeipHighStr: iPRange.ipHighStr,
-                                //iPRangeprefixMaskStr: iPRange.prefixMaskStr
+                                ipLowStr: iPRange.ipLowStr,
+                                ipHighStr: iPRange.ipHighStr,
+                                prefixMaskStr: iPRange.prefixMaskStr
                     };
                 }),
 

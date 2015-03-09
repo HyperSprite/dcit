@@ -28,7 +28,7 @@
                     <input type='submit' class='btn btn-info btn-xs' formaction='/location/network/{{../id}}-{{dcNetId}}~copy' form="formCopy" formmethod="get" value='C'>
                      {{@index}}{{/if}}</td>
                     <td class="dcNetType">{{dcNetType}}</td>     
-                    <td class="dcNetNickname">{{dcNetUnique}}</td>
+                    <td class="dcNetNickname">{{dcNetUnique}}<br><br>Start {{ipLowStr}}<br>End {{ipHighStr}}<br>Mask {{prefixMaskStr}}</td>
                     <td class="dcNetVlan">{{dcNetVlan}}</td>
                     <td class="dcNetDesc">{{{dcNetDesc}}}</td>
                     <td class="dcNetGateway">{{dcNetGateway}}</td>

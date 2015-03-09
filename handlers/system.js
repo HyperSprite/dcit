@@ -209,7 +209,7 @@ logger.warn('dcSystemPages'+err);
             var hasIlom;
             if(thisEquip.equipMake.indexOf ('Oracle') !=-1 && thisEquip.equipModel.indexOf ('x') !=-1){
                 hasIlom = 1;
-                logger.info('hasIlom >'+hasIlom);
+                //logger.info('hasIlom >'+hasIlom);
             }
             if(thisEquip !== false){
             thisEquipPortsMaped = thisEquip.equipPorts.map(function(tep){
