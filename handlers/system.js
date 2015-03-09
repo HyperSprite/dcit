@@ -12,6 +12,7 @@ var Datacenter = require('../models/datacenter.js'),
      Equipment = require('../models/equipment.js'),
       Systemdb = require('../models/system.js');
 MrSystemEnviron= require('../models/mrsystemenviron.js');
+var IpSubnetCalculator = require( 'ip-subnet-calculator' );
 
 var start  = '',
     editLoad =0,
@@ -133,20 +134,27 @@ logger.warn('dcSystemPages'+err);
     //    logger.info('else if (req.params.datacenter.indexOf ("edit")');
     // this section decides if it is a Copy, Edit or View
         start = req.params.datacenter.indexOf ('-');
-        dcabbr = req.params.datacenter.substring (start+1);
+        syName = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ('copy') !=-1){
             editLoad = 5;
-        //    logger.info('copy system '+dcabbr);
+        //    logger.info('copy system '+sysName);
         } else {
             editLoad = 3;
-        //    logger.info('edit system '+dcabbr);
+        //    logger.info('edit system '+sysName);
         }
         } else {
             editLoad = 1;
-            dcabbr = req.params.datacenter;
-        //    logger.info('view system '+dcabbr);
+            syName = req.params.datacenter;
+        //    logger.info('view system '+sysName);
         }
         //logger.info('editLoad >'+editLoad);
+
+
+// note to self, may need to seperate this out so I can do the DC search which is not needed on the on the copy.
+// or
+// move datacenter search up, return only network 
+// then do two find this in that, find DC from Loc, then Find vlan, down in the port section to get the ports
+
 
     
     Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
@@ -157,7 +165,7 @@ logger.warn('dcSystemPages'+err);
         sysUni[i] = sysName[i].systemName;
         }
 
-    Systemdb.findOne({systemName: dcabbr.toLowerCase()},function(err,sy){
+    Systemdb.findOne({systemName: syName.toLowerCase()},function(err,sy){
         if(err) return next(err);
         if(!sy) return next();
         //logger.info(datacenter);
@@ -168,8 +176,16 @@ logger.warn('dcSystemPages'+err);
         if(err)return next(err);
         
     Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'equipPorts':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
+    var dcabbr,thisEquip;
+    if(editLoad < 4){
+        thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
+        dcabbr = strTgs.getDCfromLoc(thisEquip.equipLocation);
+    }
+    Datacenter.findOne({abbreviation: dcabbr},{'networks':1,'_id':0},function(err,oneDC){
         
-logger.info('Date: '+sy.systemInstall);
+
+
+//logger.info('Date: '+sy.systemInstall);
 
         if(err) return next(err);
         if(!eq) return next();
@@ -181,8 +197,20 @@ logger.info('Date: '+sy.systemInstall);
 
         //logger.info ('System.findOne '+dcabbr);
         if(editLoad < 4){ // Edit or View
-            thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
+            //thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
+            
+            var dcNet,findThis;
+            
+            //dcabbr = strTgs.getDCfromLoc(thisEquip.equipLocation);
+            //logger.info('dc > '+dc);
+            //thisDC = strTgs.findThisInThatDC(dcabbr,dc);
+            //logger.info('thisDC > '+thisDC);
 
+            var hasIlom;
+            if(thisEquip.equipMake.indexOf ('Oracle') !=-1 && thisEquip.equipModel.indexOf ('x') !=-1){
+                hasIlom = 1;
+                logger.info('hasIlom >'+hasIlom);
+            }
             if(thisEquip !== false){
             thisEquipPortsMaped = thisEquip.equipPorts.map(function(tep){
                 return {
@@ -201,7 +229,7 @@ logger.info('Date: '+sy.systemInstall);
             titleNow: sy.systemName,
             menu1: sy.systemName+' as Endpoint',
             menuLink1: '/endpoint/'+sy.systemName,
-            awesomplete: 1,
+            ilom: hasIlom,
             sysNameList: sysUni,
             equipSNList: eqUni,
             optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
@@ -244,7 +272,9 @@ logger.info('Date: '+sy.systemInstall);
                         isInterconnect,
                         isNetMgmt,
                         isPower,
-                        isSAN;
+                        isSAN,
+                        dcNet,
+                        netMask;
                     switch(sp.sysPortType){
                         case 'Console':
                         isConsole = 'isConsole';
@@ -260,6 +290,21 @@ logger.info('Date: '+sy.systemInstall);
                         break;
                         case 'NetMgmt':
                         isNetMgmt ='isNetMgmt';
+                        
+                        if(!sp.sysPortVlan){
+                            //logger.info('findThisInThat.findThis is null');
+                            dcNet = false;
+                            netMask = false;
+                        }else{
+                            //logger.info('dc > '+oneDC);
+                            dcNet=strTgs.findThisInThatNetwork(sp.sysPortVlan,oneDC.networks);
+                            if(dcNet !== false){
+                            netMask = IpSubnetCalculator.calculateSubnetMask( dcNet.dcNetNetwork, dcNet.dcNetMask );
+                            netMask = netMask.prefixMaskStr;
+                            }
+                        }
+                        //dcNet = strTgs.findThisInThatNetwork(sp.sysPortVlan,dc);
+                        //logger.info('system.dcNetwork >>>'+ dcNet);
                         break;
                         case 'Power':
                         isPower = 'isPower';
@@ -270,7 +315,7 @@ logger.info('Date: '+sy.systemInstall);
                         default:
                         break;
                     }
-                   
+
                     return {
                     sysPortisConsole: isConsole,
                     sysPortisEthernet: isEthernet,
@@ -279,6 +324,9 @@ logger.info('Date: '+sy.systemInstall);
                     sysPortisNetMgmt: isNetMgmt, 
                     sysPortisPower: isPower, 
                     sysPortisSAN: isSAN, 
+
+                    dcNet: dcNet,
+                    netMask: netMask,
 
                     sysPortId: sp._id,
                     sysPortType: sp.sysPortType,
@@ -311,7 +359,6 @@ logger.info('Date: '+sy.systemInstall);
             context = {
                     access : strTgs.accessCheck(req.user),
                     user : req.user,
-                    awesomplete: 1,
                     equipSNList: eqUni,
                     optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                     optSystStatus: strTgs.findThisInThatOpt('optSystStatus',opt),
@@ -346,7 +393,7 @@ logger.info('Date: '+sy.systemInstall);
         }else{
         res.render('asset/system', context);  
         }
-        });});});});
+        });});});});});
     }
 }
 };

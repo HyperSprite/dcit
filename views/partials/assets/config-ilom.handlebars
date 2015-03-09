@@ -1,0 +1,20 @@
+{{#if ilom}}
+  <div>
+  <h5>Ilom Config</h5>
+    {{#each systemPorts}}
+      {{#if sysPortisNetMgmt}}
+        <div class="span9" style="border: 2px solid grey">
+          <p>
+          set pendingipdiscovery=static<br>
+          set pendingipaddress={{sysPortAddress}}<br>
+          set pendingipnetmask={{netMask}}<br>
+          set pendingipgateway={{dcNet.dcNetGateway}}<br>
+          set commitpending=true<br>
+          set /SP/services/ssh state=enabled<br>
+          set /SP/services/https servicestate=enabled port=443<br>
+          </p>
+        </div>   
+      {{/if}}
+    {{/each}}
+  </div>
+{{/if}}

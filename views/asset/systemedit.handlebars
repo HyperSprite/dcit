@@ -101,7 +101,7 @@
                     <td>
                         <div class="form-group row marginRow">
                             <div class="col-sm-2">
-                            <input list="sysPortType{{@index}}" id="form-sysPortType{{@index}}" class="form-control form-fixer" name="sysPortType[{{@index}}]" value="{{sysPortType}}" > 
+                            <input list="sysPortType{{@index}}" id="form-sysPortType{{@index}}" class="form-control form-fixer" name="sysPortType[{{@index}}]" value="{{sysPortType}}" autocomplete="off"> 
                             <datalist id="sysPortType{{@index}}">
                                 {{#each ../optSystPortType}}
                                     <option {{{this}}}>{{this}}</option>
@@ -165,7 +165,7 @@
                     <td>
                         <div class="form-group row marginRow">
                             <div class="col-sm-2">
-                            <input list="sysPortType0" id="form-sysPortType0" class="form-control form-fixer" name="sysPortType[0]" > 
+                            <input list="sysPortType0" id="form-sysPortType0" class="form-control form-fixer" name="sysPortType[0]" autocomplete="off"> 
                             <datalist id="sysPortType0">
                                 {{#each ../optSystPortType}}
                                     <option {{{this}}}>{{this}}</option>

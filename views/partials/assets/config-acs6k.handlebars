@@ -1,7 +1,7 @@
     <div>
-        <h5>Avocent Console Config {{sysPortEndPoint}}</h5>
         {{#each systemPorts}}
         {{#if sysPortisConsole}}
+        <h5>Avocent Console Config {{sysPortEndPoint}}</h5>
         {{sysPortEndPoint}}<br>
       <div class="span9" style="border: 2px solid grey">
         <p>cd /ports/serial_ports<br>
@@ -24,5 +24,4 @@
         </div>   
             {{/if}}
         {{/each}}
-        {{!--/each--}}
     </div>
