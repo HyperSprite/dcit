@@ -206,8 +206,9 @@ logger.warn('dcSystemPages'+err);
             //thisDC = strTgs.findThisInThatDC(dcabbr,dc);
             //logger.info('thisDC > '+thisDC);
 
-            var hasIlom;
-            if(thisEquip.equipMake.indexOf ('Oracle') !=-1 && thisEquip.equipModel.indexOf ('x') !=-1){
+            var hasIlom,makeMod;
+            makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
+            if(makeMod.indexOf ('oracle') !=-1 && makeMod.indexOf ('x') !=-1){
                 hasIlom = 1;
                 //logger.info('hasIlom >'+hasIlom);
             }

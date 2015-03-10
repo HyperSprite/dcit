@@ -32,7 +32,7 @@
         Network ___________________________________________<br>
         {{#each systemPorts}}
         {{#if sysPortisEthernet}}
-        Port Label: {{../../systemName}}_{{sysPortName}}<br>
+        Port Label: {{../../systemName}}-{{sysPortName}}<br>
         Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}
         <br> Vlan: {{sysPortVlan}}
         <br> Options: {{sysPortOptions}} 
@@ -44,13 +44,13 @@
         {{/each}}
         {{#each systemPorts}}
         {{#if sysPortisNetMgmt}}
-        Port Label: {{../../systemName}}_{{sysPortName}}<br>
+        Port Label: {{../../systemName}}-{{sysPortName}}<br>
         Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}
         <br> Vlan: {{sysPortVlan}}
         <br> Options: {{sysPortOptions}} 
         <br> Cable Path:{{sysPortCablePath}}
-        {{#if sysPortAddress}}<br> IP: <a href='http://{{sysPortAddress}}'>{{sysPortAddress}}</a>{{/if}}
-        {{#if sysPortURL}}<br> FQDN: <a href='http://{{sysPortURL}}'>{{sysPortURL}}</a>{{/if}}
+        {{#if sysPortAddress}}<br> IP: <a href='https://{{sysPortAddress}}'>{{sysPortAddress}}</a>{{/if}}
+        {{#if sysPortURL}}<br> FQDN: <a href='https://{{sysPortURL}}'>{{sysPortURL}}</a>{{/if}}
         <br><br>
 
         {{/if}}
