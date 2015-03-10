@@ -1,10 +1,12 @@
 {{#if ilom}}
   <div>
-  <h5>Ilom Config</h5>
     {{#each systemPorts}}
       {{#if sysPortisNetMgmt}}
+      <h5>Ilom Config</h5>
         <div class="span9" style="border: 2px solid grey">
           <p>
+          set /SP hostname={{../../systemName}}-ipmi<br>
+          cd /SP/network<br>
           set pendingipdiscovery=static<br>
           set pendingipaddress={{sysPortAddress}}<br>
           set pendingipnetmask={{netMask}}<br>

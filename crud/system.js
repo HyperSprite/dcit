@@ -101,15 +101,15 @@ Systemdb.create({
         sys.save(function(err){
             if(err){
                 logger.warn(err);
-                logger.warn('sysCreate Failed Unknown,'+data.index+','+strTgs.clTrim(data.systemName));
+                logger.warn('sysUpdate Failed Unknown,'+data.index+','+strTgs.clTrim(data.systemName));
             }else{
-            logger.info('sysCreate Sucessful write,'+data.index+','+data.systemName);
+            logger.info('sysUpdate Sucessful write,'+data.index+','+data.systemName);
             return ('done');
             }
         });
 
         }else{
-            logger.warn('sysCreate Failed modifiedOn is older than existing,'+data.index+','+strTgs.clTrim(data.systemName));
+            logger.warn('sysUpdate Failed modifiedOn is older than existing,'+data.index+','+strTgs.clTrim(data.systemName));
         }
     }
     });
@@ -155,9 +155,9 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
     }else{
         var thisDoc = sys.systemPorts[portPosition];
         if(data.overwite === 'no'){
-            logger.warn('sysPortCreate CSV date overwite=no,'+data.index+','+data.systemName);
+            logger.warn('sysPortUpdate CSV date overwite=no,'+data.index+','+data.systemName);
         }else if(!data.modifiedOn && !data.overwrite){
-            logger.warn('sysPortCreate CSV no modifiedOn or overwite,'+data.index+','+data.systemName);
+            logger.warn('sysPortUpdate CSV no modifiedOn or overwite,'+data.index+','+data.systemName);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){    
                 if(data.sysPortType){
                 thisDoc.sysPortType= strTgs.sTrim(data.sysPortType);}
@@ -181,14 +181,14 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn,req.session.ses.timezone); 
             sys.save(function(err){
             if(err){
-                logger.warn('sysPortCreate Failed,'+data.index+','+strTgs.clTrim(data.systemName)+','+err);
+                logger.warn('sysPortUpdate Failed,'+data.index+','+strTgs.clTrim(data.systemName)+','+err);
             }else{
-                logger.info('sysPortCreate Sucessful Update write,'+data.index+','+data.systemName+','+data.sysPortName);
+                logger.info('sysPortUpdate Sucessful Update write,'+data.index+','+data.systemName+','+data.sysPortName);
             return ('done');
             }
         });
     } else {
-        logger.warn('SysPortCreate CSV modifiedOn date older,'+data.index+','+data.systemName);
+        logger.warn('SysPortUpdate CSV modifiedOn date older,'+data.index+','+data.systemName);
     }
     }}
 });

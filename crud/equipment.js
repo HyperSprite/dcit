@@ -79,9 +79,9 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
     }else{
         var thisDoc = eq;
         if(data.overwite === 'no'){
-            logger.warn('csvUpload','eqCreate Failed no CSV date overwite=no,'+data.index+','+data.equipSN);
+            logger.warn('csvUpload','eqUpdate Failed no CSV date overwite=no,'+data.index+','+data.equipSN);
         }else if(!data.modifiedOn && !data.overwrite){
-            logger.warn('csvUpload','eqCreate Failed CSV no modifiedOn or overwite,'+data.index+','+data.equipSN);
+            logger.warn('csvUpload','eqUpdate Failed CSV no modifiedOn or overwite,'+data.index+','+data.equipSN);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
                 if(data.equipLocationRack && data.equipLocationRu){
                 thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);}
@@ -175,15 +175,15 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         eq.save(function(err){
             if(err){
                 logger.warn('csvUpload',err);
-                logger.warn('csvUpload','eqCreate Failed - Unknown,'+data.index+','+strTgs.cTrim(data.equipSN));
+                logger.warn('csvUpload','eqUpdate Failed - Unknown,'+data.index+','+strTgs.cTrim(data.equipSN));
             }else{
-            logger.info('csvUpload','eqCreate Sucess,'+data.index+','+data.equipSN);
+            logger.info('csvUpload','eqUpdate Sucess,'+data.index+','+data.equipSN);
             return ('done');
             }
         });
 
         }else{
-            logger.warn('csvUpload','eqCreate Failed modifiedOn older than existing,'+data.index+','+strTgs.cTrim(data.equipSN));
+            logger.warn('csvUpload','eqUpdate Failed modifiedOn older than existing,'+data.index+','+strTgs.cTrim(data.equipSN));
         }
     }
     });
@@ -223,9 +223,9 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
     } else {
         var thisDoc = eq.equipPorts[portPosition];
         if(data.overwite === 'no'){
-            logger.warn('csvUpload','eqPortCreate Failed CSV date overwite=no,'+data.index+','+data.equipSN);
+            logger.warn('csvUpload','eqPortUpdate Failed CSV date overwite=no,'+data.index+','+data.equipSN);
         }else if(!data.modifiedOn && !data.overwrite){
-            logger.warn('csvUpload','eqPortCreate Failed CSV no modifiedOn or overwite,'+data.index+','+data.equipSN);
+            logger.warn('csvUpload','eqPortUpdate Failed CSV no modifiedOn or overwite,'+data.index+','+data.equipSN);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
                 if(data.equipPortType){
                 thisDoc.equipPortType= strTgs.sTrim(data.equipPortType);}
@@ -237,14 +237,14 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn,req.session.ses.timezone);
             eq.save(function(err){
             if(err){
-                logger.warn('csvUpload','eqPortCreate Failed,'+err+','+data.index+','+strTgs.cTrim(data.equipSN));
+                logger.warn('csvUpload','eqPortUpdate Failed,'+err+','+data.index+','+strTgs.cTrim(data.equipSN));
             }else{
-            logger.info('csvUpload','eqPortCreate Sucessful write,'+data.index+','+data.equipSN+','+data.equipPortName);
+            logger.info('csvUpload','eqPortUpdate Sucessful write,'+data.index+','+data.equipSN+','+data.equipPortName);
             return ('done');
             }
         });
     } else {
-        logger.warn('csvUpload','eqPortCreate Failed CSV modifiedOn date older,'+data.index+','+data.equipSN);
+        logger.warn('csvUpload','eqPortUpdate Failed CSV modifiedOn date older,'+data.index+','+data.equipSN);
     }
 
     }}
