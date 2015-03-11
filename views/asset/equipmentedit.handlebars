@@ -1,7 +1,7 @@
 
 <hr>
 <div class="racks">
-    <h4>{{#if equipSN}}Equipment{{else}}New Equipmnt{{/if}}</h4>
+    <h4>{{#if equipSN}}Equipment{{else}}New Equipment{{/if}}</h4>
     <div class="datacenter"> 
 
 <div class="formContainer">
@@ -41,10 +41,10 @@
         <div class="form-group">
             <label for="equipLocationRack" class="col-sm-2 control-label" >Location</label>
             <div class="col-xs-3 ui-widget">
-                <input type="text" id="equipLocationRack" class="form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name"> 
+                <input type="text" id="equipLocationRack" class="form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" > 
             </div>
             <div class="col-xs-2">
-                <input list="field-equipLocationRu" id="field-equipLocationRu" class="form-control  form-group-sm col-xs-3" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number"> 
+                <input list="equipLocationRu" id="field-equipLocationRu" class="form-control  form-group-sm col-xs-3" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" > 
                     <datalist id="equipLocationRu">
                     <option "0a" >0a</option>
                     <option "0b" >0b</option>
@@ -208,7 +208,7 @@
             </div>
         </div>        
         <div class="form-group">
-            <label for="field-equipRUHieght" class="col-sm-2 control-label" >Hieght in RU</label>
+            <label for="field-equipRUHieght" class="col-sm-2 control-label" >Height in RU</label>
             <div class="col-sm-4">
                 <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1">
             </div>
@@ -319,19 +319,19 @@
             </div>
         </div>   
         <div class="form-group">
-            <label for="field-equipRecieved" class="col-sm-2 control-label" >Date Recieved</label>
+            <label for="field-equipRecieved" class="col-sm-2 control-label" >Date Received</label>
             <div class="col-sm-4">
                 <input type="date" class="form-control" id="equipRecieved" name="equipRecieved"  value="{{equipRecieved}}" >
             </div>
         </div>   
         <div class="form-group">
-            <label for="field-equipAcquisition" class="col-sm-2 control-label" >Date Aquired</label>
+            <label for="field-equipAcquisition" class="col-sm-2 control-label" >Date Acquired</label>
             <div class="col-sm-4">
                 <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" >
             </div>
         </div>   
                 <div class="form-group">
-            <label for="field-equipInService" class="col-sm-2 control-label" >Date First in Serivce</label>
+            <label for="field-equipInService" class="col-sm-2 control-label" >Date First in Service</label>
             <div class="col-sm-4">
                 <input type="date" class="form-control" id="equipInService" name="equipInService"  value="{{equipInService}}" >
             </div>
@@ -397,7 +397,7 @@
             </div>
         </div>          
                         <div class="form-group">
-            <label for="field-equipPurchaseEnd" class="col-sm-2 control-label" >Purcahse End</label>
+            <label for="field-equipPurchaseEnd" class="col-sm-2 control-label" >Purchase End</label>
             <div class="col-sm-4">
                 <input type="date" class="form-control" id="equipPurchaseEnd" name="equipPurchaseEnd"  value="{{equipPurchaseEnd}}" placeholder="3 year lease">
             </div>
