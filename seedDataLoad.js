@@ -4,7 +4,7 @@ exports.seedOptionsDataBase = (function(Optionsdb){
 new Optionsdb({
     optListName: 'Equipment Status',
     optListKey: 'optEquipStatus',
-    optListArray:['Not yet ordered','Ordered','In transit','Received','Spare','In Service','In Service with issues','Spare with issues','Out for RMA','Damaged','Decommissioned','End of Life - Recycled','End of Life - RMA','Missing'],
+    optListArray:['Not yet ordered','Ordered','In transit','Received','Spare','Ready','In Service','In Service with issues','Spare with issues','Out for RMA','Damaged','Decommissioned','End of Life - Recycled','End of Life - RMA','Missing'],
     }).save();
 new Optionsdb({
     optListName: 'Equipment Type',
@@ -14,7 +14,7 @@ new Optionsdb({
 new Optionsdb({
     optListName: 'System Status',
     optListKey: 'optSystStatus',
-    optListArray:['Not Started','Work Pending','Waiting on Approval','Waiting on Hardware','In Progress','Handed Off','In Service','Decommission','Test','Temporary','Canceled'],
+    optListArray:['Not Started','Work Pending','Waiting on Approval','Waiting on Hardware','In Progress','Ready','Handed Off','In Service','Decommission','Test','Temporary','Canceled'],
     }).save();
 new Optionsdb({
     optListName: 'System Port Type',
@@ -24,20 +24,20 @@ new Optionsdb({
 new Optionsdb({
     optListName: 'Environment',
     optListKey: 'optEnvironment',
-    optListArray:['dc1','dc2','ri2','ri3','ri4','ri5','sp1','qa1','qa2','stage3','stage4','eng1','eng2','bp1','tserv','tserv2'],
+    optListArray:['Prod','UAT','QA','Eng'],
     }).save();
 new Optionsdb({
     optListName: 'Rack Status',
     optListKey: 'optRackStatus',
-    optListArray:['Possible','Next Build','Build in Progress','In Service','Blocked','Decommissioned','Storage'],
+    optListArray:['Possible','Next Build','Build in Progress','Ready','In Service','Blocked','Decommissioned','Storage'],
     }).save();
 new Optionsdb({
     optListName: 'Level',
     optListKey: 'optImpactLevel',
-    optListArray:['5','4','3','2','1'],
+    optListArray:[9,8,7,6,5,4,3,2,1,0],
     }).save();
 new Optionsdb({
-    optListName: 'Net Mask',
+    optListName: 'Netmask',
     optListKey: 'optMask',
     optListArray:[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],
     }).save();

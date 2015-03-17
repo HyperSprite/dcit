@@ -111,6 +111,9 @@
         </script>
         <script> 
             $('input#timezone').val( jstz.determine().name() );
+            $('.noEnterSubmit').keypress(function(e){
+                if ( e.which == 13 ) return false;
+            });
         </script>
 
 

@@ -21,7 +21,7 @@
         <div class="form-group">
             <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipSN" name="equipSN" placeholder="*Required" required>
+                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" required>
             </div>
         </div>
         {{/if}}
@@ -41,10 +41,10 @@
         <div class="form-group">
             <label for="equipLocationRack" class="col-sm-2 control-label" >Location</label>
             <div class="col-xs-3 ui-widget">
-                <input type="text" id="equipLocationRack" class="form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" > 
+                <input type="text" id="equipLocationRack" class="noEnterSubmit form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" > 
             </div>
             <div class="col-xs-2">
-                <input list="equipLocationRu" id="field-equipLocationRu" class="form-control  form-group-sm col-xs-3" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" > 
+                <input list="equipLocationRu" id="field-equipLocationRu" class="noEnterSubmit form-control  form-group-sm col-xs-3" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" maxlength="2" > 
                     <datalist id="equipLocationRu">
                     <option "0a" >0a</option>
                     <option "0b" >0b</option>
@@ -110,7 +110,7 @@
                         
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[{{@index}}]"value="{{equipPortsAddr}}" placeholder="01:23:45:67:89:AB:CD">
+                        <input type="text" class="noEnterSubmit form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[{{@index}}]"value="{{equipPortsAddr}}" placeholder="01:23:45:67:89:AB:CD">
                         
                     </td>
                     <td>
@@ -135,7 +135,7 @@
                         <input type="text" class="form-control form-group-sm"  id="equipPortName0" name="equipPortName[0]" placeholder="e0, con, netmgmt">
                     </td>
                     <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsAddr0" name="equipPortsAddr[0]" placeholder="01:23:45:67:89:AB:CD" > 
+                        <input type="text" class=" noEnterSubmit form-control form-group-sm"  id="equipPortsAddr0" name="equipPortsAddr[0]" placeholder="01:23:45:67:89:AB:CD" > 
                     </td>
                     <td>
                         <input type="text" class="form-control form-group-sm"  id="equipPortsOpt0" name="equipPortsOpt[0]" placeholder="Options">

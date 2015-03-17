@@ -45,7 +45,7 @@ this is the DC List block. Looks for "List" in the URL and returns list of datac
 */
 exports.datacenterPages = function(req,res,next){
         if (!req.user || req.user.access < 2){
-    req.session.flash = {
+            req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
             message: 'Not Authorized!',
@@ -107,6 +107,7 @@ Edit Contact
             context = {
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                ses: req.session.ses,
                 id:dc._id,
                 titleNow:dc.abbreviation,
                 fullName:dc.fullName,
@@ -125,6 +126,7 @@ Edit Contact
             context ={
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                ses: req.session.ses,
                 id:dc._id,
                 fullName:dc.fullName,
                 abbreviation:dc.abbreviation,
@@ -200,6 +202,7 @@ If "New" is in the URL, it does New, otherwise it goes to existing
             var context = {
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                ses: req.session.ses,
                 id:dc._id,
                 fullName:dc.fullName,
                 abbreviation:dc.abbreviation,
@@ -231,6 +234,7 @@ this takes the abbreviation and displays the matching datacenter details
             var context = {
                 access : strTgs.accessCheck(req.user),
                 user : req.user,
+                ses: req.session.ses,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
                 id:dc._id,
@@ -243,6 +247,7 @@ this takes the abbreviation and displays the matching datacenter details
                 contacts: dc.contacts.map(function(contact){
                     var ct = contact;
                     return {
+                        id:dc._id,
                         conId: ct.id,
                         conType: ct.conType,
                         conName: ct.conName,
@@ -437,7 +442,7 @@ exports.datacenterPost = function(req,res){
 };
   
 exports.datacenterContactPost = function(req,res){
-    if (req.user || req.user.access < 3){
+    if (!req.user || req.user.access < 3){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',

@@ -4,7 +4,7 @@
        {{#each systemPorts}}
         {{#if sysPortisConsole}}
         <p>cd /ports/serial_ports<br>
-           set_cas <mark>{{sysPortEndPointPort}}</mark><br>
+           set_cas <mark>{{sysPortEndPointPortClean}}</mark><br>
            set enable_cisco_rj45_pin-out=<mark>{{sysPortOptions}}</mark><br>
            set status=enabled<br>
            set speed=9600<br>

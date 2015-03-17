@@ -206,14 +206,15 @@ logger.warn('dcSystemPages'+err);
             //thisDC = strTgs.findThisInThatDC(dcabbr,dc);
             //logger.info('thisDC > '+thisDC);
 
+
             var hasIlom,makeMod;
+            if(thisEquip !== false){
             makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
             logger.info('makeMod >'+makeMod);
-            if(makeMod.indexOf ('oracle') !=-1 && makeMod.indexOf ('x') !=-1){
-                hasIlom = 1;
-                //logger.info('hasIlom >'+hasIlom);
-            }
-            if(thisEquip !== false){
+                if(makeMod.indexOf ('oracle') !=-1 && makeMod.indexOf ('x') !=-1){
+                    hasIlom = 1;
+                    //logger.info('hasIlom >'+hasIlom);
+                }
             thisEquipPortsMaped = thisEquip.equipPorts.map(function(tep){
                 return {
                     equipPortType: tep.equipPortType,
@@ -293,7 +294,7 @@ logger.warn('dcSystemPages'+err);
                         case 'NetMgmt':
                         isNetMgmt ='isNetMgmt';
                         
-                        if(!sp.sysPortVlan){
+                        if(!sp.sysPortVlan  || thisEquip === false){
                             //logger.info('findThisInThat.findThis is null');
                             dcNet = false;
                             netMask = false;
@@ -880,6 +881,7 @@ exports.findEndpoints = function(req,res,next){
                         sysPortEndPoint: sysPort.sysPortEndPoint,
                         sysPortEndPointPre: sysPort.sysPortEndPointPre,
                         sysPortEndPointPort: strTgs.pad(sysPort.sysPortEndPointPort),
+                        sysPortEndPointPortClean: sysPort.sysPortEndPointPort,
                         sysPortVlan: sysPort.sysPortVlan,
                         sysPortOptions: sysPort.sysPortOptions,
                         sysPortAddress: sysPort.sysPortAddress,

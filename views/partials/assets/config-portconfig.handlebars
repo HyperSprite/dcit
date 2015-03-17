@@ -15,17 +15,17 @@
         Power, Console and SAN______________________________<br>
         {{#each systemPorts}}
         {{#if sysPortisConsole}}
-        Console: {{sysPortEndPoint}}/{{sysPortEndPointPort}} Cisco rj45 Pinout Option:{{sysPortOptions}} Cable Path:{{sysPortCablePath}}<br>
+        Console: {{sysPortEndPoint}}/{{sysPortEndPointPortClean}} Cisco rj45 Pinout Option:{{sysPortOptions}} Cable Path:{{sysPortCablePath}}<br>
         {{/if}}
         {{/each}}
         {{#each systemPorts}}
         {{#if sysPortisPower}}
-        Power: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
+        Power: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
         {{/if}}
         {{/each}}
         {{#each systemPorts}}
         {{#if sysPortisSAN}}
-        SAN: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
+        SAN: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
         {{/if}}
         {{/each}}
         <br>
@@ -33,7 +33,7 @@
         {{#each systemPorts}}
         {{#if sysPortisEthernet}}
         Port Label: {{../../systemName}}-{{sysPortName}}<br>
-        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}
+        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}}
         <br> Vlan: {{sysPortVlan}}
         <br> Options: {{sysPortOptions}} 
         <br> Cable Path:{{sysPortCablePath}}
@@ -45,7 +45,7 @@
         {{#each systemPorts}}
         {{#if sysPortisNetMgmt}}
         Port Label: {{../../systemName}}-{{sysPortName}}<br>
-        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}
+        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}}
         <br> Vlan: {{sysPortVlan}}
         <br> Options: {{sysPortOptions}} 
         <br> Cable Path:{{sysPortCablePath}}
