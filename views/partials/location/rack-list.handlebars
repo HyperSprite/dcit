@@ -13,10 +13,7 @@
                 <th class="table-sort" data-sort="rackRow">Row</th>
                 <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
                 <th class="table-sort" data-sort="rackDescription">Description</th>
-                <th class="table-sort" data-sort="elevation"><abbr title="Elevation">E</abbr></th>
-                <th class="table-sort" data-sort="detail"><abbr title="Detail">D</abbr></th>
-                
-                
+                <th class="table-sort" data-sort="elevationdetail">E D</th>
             </tr>
         </thead>
         <tbody class="list">
@@ -34,8 +31,7 @@
                     <td class="rackRow">{{rackRow}}</td>
                     <td class="modifiedOn">{{modifiedOn}}</td>
                     <td class="rackDescription">{{rackDescription}}</td>
-                    <td class="elevation"><a href="/elevation/{{rackUnique}}" target="_blank">E</a></td>
-                    <td class="detail"><a href="/equipment-systems/{{rackUnique}}" target="_blank">D</a></td>
+                    <td class="elevationdetail"><a href="/elevation/{{rackUnique}}" target="_blank">E</a> <a href="/equipment-systems/{{rackUnique}}" target="_blank">D</a></td>
                 </tr>  
             {{/each}}
         </tbody>
