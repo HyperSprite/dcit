@@ -251,7 +251,7 @@ logger.warn('dcSystemPages'+err);
             systemStatus: sy.systemStatus,
             systemStatusLit: strTgs.trueFalseIcon(sy.systemStatus,sy.systemStatus),
             systemOwner: sy.systemOwner,
-            systemImpact: sy.systemImpact,
+        //    systemImpact: sy.systemImpact,
             systemIsVirtual: sy.systemIsVirtual,
             systemIsVirtualChecked: strTgs.setCheckBox(sy.systmeIsVirtual),
             systemParentId: sy.systemParentId,
@@ -374,7 +374,7 @@ logger.warn('dcSystemPages'+err);
                     systemTicket: sy.systemTicket,
                     systemStatus: sy.systemStatus,
                     systemOwner: sy.systemOwner,
-                    systemImpact: sy.systemImpact,
+               //     systemImpact: sy.systemImpact,
                     systemIsVirtual: sy.systemIsVirual,
                     systemIsVirtualChecked: strTgs.setCheckBox(sy.systmeIsVirtual),
                     systemParentId: sy.systemParentId,
@@ -959,7 +959,7 @@ exports.dcSystemPost = function(req,res){
         systemTicket: strTgs.sTrim(bd.systemTicket),
         systemStatus: bd.systemStatus,
         systemOwner: strTgs.uTrim(bd.systemOwner),
-        systemImpact: bd.systemImpact,
+    //    systemImpact: bd.systemImpact,
         systemIsVirtual: bd.systemIsVirtual,
         systemParentId: strTgs.sTrim(bd.systemParentId),
         systemOSType: strTgs.uTrim(bd.systemOSType),
@@ -1066,7 +1066,7 @@ exports.dcSystemPost = function(req,res){
             thisDoc.systemTicket= strTgs.sTrim(bd.systemTicket);
             thisDoc.systemStatus= bd.systemStatus;
             thisDoc.systemOwner= strTgs.uTrim(bd.systemOwner);
-            thisDoc.systemImpact= bd.systemImpact;
+        //    thisDoc.systemImpact= bd.systemImpact;
             thisDoc.systemIsVirtual= bd.systemIsVirtual;
             thisDoc.systemParentId= strTgs.sTrim(bd.systemParentId);
             thisDoc.systemOSType= strTgs.uTrim(bd.systemOSType);

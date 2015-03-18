@@ -31,7 +31,7 @@ var systemdbSchema = mongoose.Schema({
     systemTicket: String,
     systemStatus: String,
     systemOwner: String,
-    systemImpact: Number,
+    systemImpact: String,
     systemIsVirtual: {type: Boolean, default: false},
     systemParentId: String,
     systemOSType: String,
