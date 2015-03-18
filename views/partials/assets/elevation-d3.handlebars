@@ -28,7 +28,7 @@
             };        
 
             {{#each eqs}}
-             
+              
                 var rl = {{../rUs}}-{{equipLocationRu}};  //find the location by on ru
                 var rc = rl*u;  //stretch that to fit
                 var ht = u*{{equipRUHieght}};
@@ -50,6 +50,7 @@
                 var cy = ru+12;
                 var cc = "{{equipStatusLight}}";
                 var cr = 4; 
+{{#if fullRack}}var opc = {{fullRack}};{{/if}}
                 
                 svg.append("rect")
                     .attr("x", ct)
@@ -57,8 +58,9 @@
                     .attr("width", wt)
                     .attr("height", ht)
                     .attr("stroke", "black")
+{{#if fullRack}}                .attr("fill-opacity", opc){{/if}}                  
                     .attr("fill", fc);
-
+   
                 svg.append("text")
                     .attr("x", sx)
                     .attr("y", sy)

@@ -908,7 +908,11 @@ exports.dcRackElevationPage = function(req,res,next){
                 user : req.user,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                 
+                 
+                  
                   return {
+                            
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,
@@ -992,9 +996,15 @@ exports.dcRackElevationPage = function(req,res,next){
                 if(isNaN(test)===true){
                 eq.equipLocation = 1;
                 }
-
+                var fullRack;
+                if(eq.equipType === 'Full Rack'){
+                    fullRack = 0.1;
+                    logger.info('fullRack 1 '+ fullRack);
+                 }else{
+                    logger.info('fullRack 2 '+ eq.equipType);
+                 }
                   return {
-                            
+                            fullRack : fullRack,
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipLocationRu: strTgs.ruElevation(eq.equipLocation),
