@@ -1,28 +1,39 @@
+<div class="row">
+<div class="col-md-1">
+</div>
+{{#if user}}
+<div class="col-md-7">
+  {{> help/topbarsearch}}
+</div>
+{{else}}
+  <div class="col-md-7">
 
-{{#if user}}{{else}}
+  <form class="form-inline" action="/user/login" method="post">
+    <div class="form-group">
+      <label class="sr-only" for="userEmail">Email address</label>
+      <input type="email" class="form-control" id="userEmail" name="email" pattern=".{10,}" required placeholder="Enter email">
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="userPassword">Password</label>
+      <input type="password" class="form-control" id="userPassword" name="password"  pattern=".{8,}" required placeholder="Password">
+    </div>
+    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+   
+    <input type="hidden" name="timezone" id="timezone">
+    <button type="submit" class="btn btn-default">Sign in</button>  <a href="/user/signup">Signup</a>
+  </form>
+  <br>
 
 
-<form class="form-inline" action="/user/login" method="post">
-  <div class="form-group">
-    <label class="sr-only" for="userEmail">Email address</label>
-    <input type="email" class="form-control" id="userEmail" name="email" pattern=".{10,}" required placeholder="Enter email">
+  <br>
+  <h1>Welcome to DCIT</h1>
+  <p>Data Center Information Tracking is a one stop data center information repository. Facilities, Power, Equipment and Systems all in one place.</p>  
+
+  <p>This site has only been tested on the latest Chrome. It uses HTML5 extensively and many features are still not available in other browsers. Sorry, I just don't have time to test more than one at this time.</p>
   </div>
-  <div class="form-group">
-    <label class="sr-only" for="userPassword">Password</label>
-    <input type="password" class="form-control" id="userPassword" name="password"  pattern=".{8,}" required placeholder="Password">
-  </div>
-  <input type="hidden" name="_csrf" value="{{_csrfToken}}">
- 
-  <input type="hidden" name="timezone" id="timezone">
-  <button type="submit" class="btn btn-default">Sign in</button>  <a href="/user/signup">Signup</a>
-</form>
-<br>
-
 {{/if}}
-<br>
-<h1>Welcome to DCIT</h1>
-<p>Data Center Information Tracking is a one stop data center information repository. Facilities, Power, Equipment and Systems all in one place.</p>  
-
-<p>This site has only been tested in Chrome. It uses HTML5 extensively and many features are still not available in other browsers. Sorry, I just don't have time to test more than one at this time.</p>
-
+  <div class="col-md-4 pre-scrollable">
+    {{> whatsnew}}
+  </div>
+</div>
 

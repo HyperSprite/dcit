@@ -960,7 +960,7 @@ exports.dcRackElevationPage = function(req,res,next){
     } else { 
     // little regex to get the contains rack location
     var re = new RegExp(req.params.datacenter, 'i');
-    Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:-1}).exec(function(err, eqs){
+    Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:1}).exec(function(err, eqs){
         if(err) return next(err);
         if(!eqs) return next();
        //logger.info('eqs'+eqs);
@@ -998,10 +998,8 @@ exports.dcRackElevationPage = function(req,res,next){
                 }
                 var fullRack;
                 if(eq.equipType === 'Full Rack'){
-                    fullRack = 0.1;
+                    fullRack = 0.8;
                     logger.info('fullRack 1 '+ fullRack);
-                 }else{
-                    logger.info('fullRack 2 '+ eq.equipType);
                  }
                   return {
                             fullRack : fullRack,

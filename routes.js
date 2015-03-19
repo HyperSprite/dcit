@@ -32,7 +32,7 @@ module.exports = function(app){
     }));
 
    app.post('/user/login', passport.authenticate('local-login', {
-        successRedirect : '/location/datacenter/list', 
+        successRedirect : '/', 
         failureRedirect : '/', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));

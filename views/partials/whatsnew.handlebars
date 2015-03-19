@@ -1,0 +1,45 @@
+<h4>What’s new</h4>
+<ul>
+<li>v0.1.07</li>
+<ul>
+<li>Full racks are now shown in Rack Elevation diagram.</li>
+<li>Links to Elevation and Details for racks can now be found on the left column of the Datacenter Rack list as E and D</li>
+</ul>
+<li>v0.1.06</li>
+<ul>
+<li>Changed default form action. Now Equipment SN, Location and MAC address do not auto submit with the bar code reader. 
+MAC addresses are automatically parsed to include “:” and can be inserted or searched as 0123456789Ab, 01-23-45-67-89-Ab or 01:23:45:67:89:AB. Upper and lower case are supported but on save, all letters will be saved as uppercase.</li>
+<li>Fixed the Port Configs so they no longer have a leading 0 for ports below 10.
+For an example see <a href="endpoint/con-dc02-c01-1">con-dc02-c01-1</a></li>
+</ul>
+<li>v0.1.05</li>
+<ul>
+<li>Added ILOM config for Oracle x4-2 Equipment. To make this work:
+<ol>
+<li>You need to pick NetMgmt as the port type.</li>
+<li>Use “ilom” for the port name so it appends it to the host name in the config</li>
+</ol>
+<li>Here is an example of a System with a ilom config <a href=”/system/jms100-sp1”>jms100-sp1</a></li>
+</li>
+</ul>
+<li>v0.1.04</li>
+<ul>
+<li>Added console ports on the endpoint page. This is similar to the previous Google App Script Report but much faster. See example here <a href="endpoint/con-dc02-a11-1">con-dc02-a11-1</a></li>
+<li>Fixed the system-e0 mac address in the port config on the system page</li>
+</ul>
+<li>v0.1.03</li>
+<ul>
+<li>Added AJAX lookup of EndPoint Systems, Rack Locations and Equipment SN on System edit page. This improved loading time dramatically over previous lookups.<li> 
+</ul>
+<li>v0.1.02</li>
+<ul>
+<li>DCIT goes live for the first time at Oracle Responsys</li>
+</ul>
+{{!--
+<li>v</li>
+<ul>
+<li></li>
+<li></li>
+</ul>
+--}}
+</ul>
