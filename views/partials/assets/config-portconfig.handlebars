@@ -1,61 +1,67 @@
-<div>
-        <h5>{{systemName}} port config</h5>
-        <div class="span9" style="border: 2px solid grey">
-        <p>
-        {{systemName}}<br>
-        Location: {{equipLocation}}<br>
-        SN: {{systemEquipSN}} - {{equipMake}} {{equipModel}} {{equipSubModel}} {{#if equipRUHieght}} {{equipRUHieght}}U {{/if}}{{equipType}}<br>
+<div class"row">
+<h5>{{systemName}} port config</h5>
+
+</div>
+    <div  style="border: 2px solid grey">
+        <ul class="list-unstyled">
+        <li><strong>{{systemName}}</strong></li>
+        <li>Location: <strong>{{equipLocation}}</strong></li>
+        <li>SN: <strong>{{systemEquipSN}}</strong> - {{equipMake}} {{equipModel}} {{equipSubModel}} {{#if equipRUHieght}} {{equipRUHieght}}U {{/if}}{{equipType}}</li>
         <br>
         {{#each equipPorts}}
-        {{#if equipPortsAddr}}
-        {{../../systemName}}-{{equipPortName}} : {{equipPortsAddr}}<br>
-        {{/if}}
+                {{#if equipPortsAddr}}
+                <li>{{../../systemName}}-{{equipPortName}} : <strong>{{equipPortsAddr}}</strong></li>
+                {{/if}}
         {{/each}}
         <br>
-        Power, Console and SAN______________________________<br>
+        <li>Power, Console and SAN______________________________</li>
         {{#each systemPorts}}
-        {{#if sysPortisConsole}}
-        Console: {{sysPortEndPoint}}/{{sysPortEndPointPortClean}} Cisco rj45 Pinout Option:{{sysPortOptions}} Cable Path:{{sysPortCablePath}}<br>
-        {{/if}}
-        {{/each}}
-        {{#each systemPorts}}
-        {{#if sysPortisPower}}
-        Power: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
-        {{/if}}
-        {{/each}}
-        {{#each systemPorts}}
-        {{#if sysPortisSAN}}
-        SAN: {{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}} {{#if sysPortCablePath}} Cable Path:{{sysPortCablePath}}{{/if}}<br>
-        {{/if}}
+                {{#if sysPortisConsole}}
+                <li>Console: <strong>{{sysPortEndPoint}}/{{sysPortEndPointPort}}</strong></li>
+                <li> Cisco rj45 Pinout Option: <strong>{{sysPortOptions}}</strong></li>
+                <li> Cable Path: <strong>{{sysPortCablePath}}</strong></li>
+                {{/if}}
         {{/each}}
         <br>
-        Network ___________________________________________<br>
         {{#each systemPorts}}
-        {{#if sysPortisEthernet}}
-        Port Label: {{../../systemName}}-{{sysPortName}}<br>
-        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}}
-        <br> Vlan: {{sysPortVlan}}
-        <br> Options: {{sysPortOptions}} 
-        <br> Cable Path:{{sysPortCablePath}}
-        {{#if sysPortAddress}}<br> IP: {{sysPortAddress}}{{/if}}
-        {{#if sysPortURL}}<br> FQDN: {{sysPortURL}}{{/if}}
-        <br><br>     
-        {{/if}}
+                {{#if sysPortisPower}}
+                <li>Power: <strong>{{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
+                {{#if sysPortCablePath}}<li> Cable Path: <strong>{{sysPortCablePath}}</strong></li>{{/if}}
+                {{/if}}
+        {{/each}}
+        <br>
+        {{#each systemPorts}}
+                {{#if sysPortisSAN}}
+                <li>SAN: <strong>{{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
+                <li> Cable Path: <strong>{{sysPortCablePath}}</strong></li>
+                {{/if}}
+        {{/each}}
+        <br>
+        <li>Network ___________________________________________</li>
+        {{#each systemPorts}}
+                {{#if sysPortisEthernet}}
+                <li>Port Label: <strong>{{../../systemName}}-{{sysPortName}}</strong></li>
+                Device/Port: <strong>{{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
+                <li> Vlan: <strong>{{sysPortVlan}}</strong></li>
+                <li> Options: <strong>{{sysPortOptions}}</strong> </li>
+                <li>Cable Path: <strong>{{sysPortCablePath}}</strong></li>
+                {{#if sysPortAddress}}<li> IP: <strong>{{sysPortAddress}}</strong></li>{{/if}}
+                {{#if sysPortURL}}<li> FQDN: <strong>{{sysPortURL}}</strong></li>{{/if}}
+                <br>     
+                {{/if}}
         {{/each}}
         {{#each systemPorts}}
-        {{#if sysPortisNetMgmt}}
-        Port Label: {{../../systemName}}-{{sysPortName}}<br>
-        Device/Port: {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPortClean}}
-        <br> Vlan: {{sysPortVlan}}
-        <br> Options: {{sysPortOptions}} 
-        <br> Cable Path:{{sysPortCablePath}}
-        {{#if sysPortAddress}}<br> IP: <a href='https://{{sysPortAddress}}'>{{sysPortAddress}}</a>{{/if}}
-        {{#if sysPortURL}}<br> FQDN: <a href='https://{{sysPortURL}}'>{{sysPortURL}}</a>{{/if}}
-        <br><br>
-
-        {{/if}}
+                {{#if sysPortisNetMgmt}}
+                <li>Port Label: <strong>{{../../systemName}}-{{sysPortName}}</strong></li>
+                <li>Device/Port: <strong>{{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
+                <li> Vlan: <strong>{{sysPortVlan}}</strong></li>
+                <li> Options: <strong>{{sysPortOptions}}</strong> </li>
+                <li> Cable Path: <strong>{{sysPortCablePath}}</strong> </li>
+                {{#if sysPortAddress}}<li> IP: <a href='https://{{sysPortAddress}}'><strong>{{sysPortAddress}}</strong></a></li>{{/if}}
+                {{#if sysPortURL}}<li> FQDN: <a href='https://{{sysPortURL}}'></strong>{{sysPortURL}}</strong></a></li>{{/if}}
+                {{/if}}
         {{/each}}
-        __________________________________________________<br>
-        </p>
-        </div>
-        </div>
+        <li>__________________________________________________</li>
+        </ul>
+    </div>
+</div>

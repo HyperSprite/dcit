@@ -210,7 +210,7 @@ logger.warn('dcSystemPages'+err);
             var hasIlom,makeMod;
             if(thisEquip !== false){
             makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
-            logger.info('makeMod >'+makeMod);
+            //logger.info('makeMod >'+makeMod);
                 if(makeMod.indexOf ('oracle') !=-1 && makeMod.indexOf ('x') !=-1){
                     hasIlom = 1;
                     //logger.info('hasIlom >'+hasIlom);
@@ -880,8 +880,8 @@ exports.findEndpoints = function(req,res,next){
                         sysPortCablePath: sysPort.sysPortCablePath,
                         sysPortEndPoint: sysPort.sysPortEndPoint,
                         sysPortEndPointPre: sysPort.sysPortEndPointPre,
-                        sysPortEndPointPort: strTgs.pad(sysPort.sysPortEndPointPort),
-                        sysPortEndPointPortClean: sysPort.sysPortEndPointPort,
+                        sysPortEndPointPortPad: strTgs.pad(sysPort.sysPortEndPointPort),
+                        sysPortEndPointPort: sysPort.sysPortEndPointPort,
                         sysPortVlan: sysPort.sysPortVlan,
                         sysPortOptions: sysPort.sysPortOptions,
                         sysPortAddress: sysPort.sysPortAddress,
