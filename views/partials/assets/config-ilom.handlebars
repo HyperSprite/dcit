@@ -5,12 +5,12 @@
       <h5>Ilom Config</h5>
         <div class="span9" style="border: 2px solid grey">
           <p>
-          set /SP hostname={{../../systemName}}-{{sysPortName}}<br>
+          set /SP hostname=<strong>{{../../systemName}}-{{sysPortName}}</strong><br>
           cd /SP/network<br>
           set pendingipdiscovery=static<br>
-          set pendingipaddress={{sysPortAddress}}<br>
-          set pendingipnetmask={{netMask}}<br>
-          set pendingipgateway={{dcNet.dcNetGateway}}<br>
+          set pendingipaddress=<strong>{{sysPortAddress}}</strong><br>
+          set pendingipnetmask=<strong>{{netMask}}</strong><br>
+          set pendingipgateway=<strong>{{dcNet.dcNetGateway}}</strong><br>
           set commitpending=true<br>
           set /SP/services/ssh state=enabled<br>
           set /SP/services/https servicestate=enabled port=443<br>

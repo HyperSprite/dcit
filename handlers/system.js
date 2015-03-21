@@ -936,7 +936,7 @@ exports.dcSystemPost = function(req,res){
             sysPortType: strTgs.sTrim(bd.sysPortType[i]),
             sysPortName: strTgs.sTrim(bd.sysPortName[i]),
             sysPortAddress: strTgs.sTrim(bd.sysPortAddress[i]),
-            sysPortCablePath: strTgs.stTrim(bd.sysPortCablePath[i]),
+            sysPortCablePath: strTgs.clTrim(bd.sysPortCablePath[i]),
             sysPortEndPoint: strTgs.clTrim(bd.sysPortEndPoint[i]),
             sysPortEndPointPre: strTgs.clTrim(bd.sysPortEndPointPre[i]),
             sysPortEndPointPort: strTgs.clTrim(bd.sysPortEndPointPort[i]),
@@ -956,7 +956,7 @@ exports.dcSystemPost = function(req,res){
         systemEnviron: strTgs.sTrim(bd.systemEnviron),
         systemRole: strTgs.uTrim(bd.systemRole),
         systemInventoryStatus: bd.systemInventoryStatus,
-        systemTicket: strTgs.sTrim(bd.systemTicket),
+        systemTicket: strTgs.clTrim(bd.systemTicket),
         systemStatus: bd.systemStatus,
         systemOwner: strTgs.uTrim(bd.systemOwner),
     //    systemImpact: bd.systemImpact,
@@ -1033,7 +1033,7 @@ exports.dcSystemPost = function(req,res){
                 sysPortType: strTgs.sTrim(bd.sysPortType[i]),
                 sysPortName: strTgs.sTrim(bd.sysPortName[i]),
                 sysPortAddress: strTgs.sTrim(bd.sysPortAddress[i]),
-                sysPortCablePath: strTgs.stTrim(bd.sysPortCablePath[i]),
+                sysPortCablePath: strTgs.clTrim(bd.sysPortCablePath[i]),
                 sysPortEndPoint: strTgs.clTrim(bd.sysPortEndPoint[i]),
                 sysPortEndPointPre: strTgs.clTrim(bd.sysPortEndPointPre[i]),
                 sysPortEndPointPort: strTgs.clTrim(bd.sysPortEndPointPort[i]),
@@ -1063,7 +1063,7 @@ exports.dcSystemPost = function(req,res){
             thisDoc.systemEnviron= strTgs.sTrim(bd.systemEnviron);
             thisDoc.systemRole= strTgs.uTrim(bd.systemRole);
             thisDoc.systemInventoryStatus= bd.systemInventoryStatus;
-            thisDoc.systemTicket= strTgs.sTrim(bd.systemTicket);
+            thisDoc.systemTicket= strTgs.clTrim(bd.systemTicket);
             thisDoc.systemStatus= bd.systemStatus;
             thisDoc.systemOwner= strTgs.uTrim(bd.systemOwner);
         //    thisDoc.systemImpact= bd.systemImpact;

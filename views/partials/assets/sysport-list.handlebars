@@ -1,6 +1,6 @@
-<dive>    
+<div>    
 <h4>System Ports</h4>
-    <div id="dvData">
+    <div id="dvData" class="table-responsive">
     <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
         <thead>
             <tr>
@@ -23,7 +23,7 @@
                 <td class="sysPortType">{{sysPortType}}</td>
                 <td class="sysPortName">{{sysPortName}}</td>
                 <td class="sysPortCablePath">{{sysPortCablePath}}</td>
-                <td class="sysPortEndPoint"><a href="/system/{{sysPortEndPoint}}">{{sysPortEndPoint}}</a>{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</td>
+                <td class="sysPortEndPoint"><a href="/system/{{sysPortEndPoint}}">{{sysPortEndPoint}}</a>{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}{{#if sysPortEndPointPort}}/{{sysPortEndPointPort}}{{/if}}</td>
                 <td class="sysPortVlan">{{sysPortVlan}}</td>
                 <td class="sysPortOptions">{{sysPortOptions}}</td>
                 <td class="sysPortAddress">{{sysPortAddress}}</td>

@@ -20,31 +20,31 @@
                 <li>Console: <strong>{{sysPortEndPoint}}/{{sysPortEndPointPort}}</strong></li>
                 <li> Cisco rj45 Pinout Option: <strong>{{sysPortOptions}}</strong></li>
                 <li> Cable Path: <strong>{{sysPortCablePath}}</strong></li>
+                <br>
                 {{/if}}
         {{/each}}
-        <br>
         {{#each systemPorts}}
                 {{#if sysPortisPower}}
                 <li>Power: <strong>{{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
                 {{#if sysPortCablePath}}<li> Cable Path: <strong>{{sysPortCablePath}}</strong></li>{{/if}}
+                <br>
                 {{/if}}
         {{/each}}
-        <br>
         {{#each systemPorts}}
                 {{#if sysPortisSAN}}
                 <li>SAN: <strong>{{sysPortName}} {{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
                 <li> Cable Path: <strong>{{sysPortCablePath}}</strong></li>
+                <br>
                 {{/if}}
         {{/each}}
-        <br>
         <li>Network ___________________________________________</li>
         {{#each systemPorts}}
                 {{#if sysPortisEthernet}}
                 <li>Port Label: <strong>{{../../systemName}}-{{sysPortName}}</strong></li>
                 Device/Port: <strong>{{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
-                <li> Vlan: <strong>{{sysPortVlan}}</strong></li>
-                <li> Options: <strong>{{sysPortOptions}}</strong> </li>
-                <li>Cable Path: <strong>{{sysPortCablePath}}</strong></li>
+                {{#if sysPortVlan}}<li> Vlan: <strong>{{sysPortVlan}}</strong></li>{{/if}}
+                {{#if sysPortVlan}}<li> Options: <strong>{{sysPortOptions}}</strong> </li>{{/if}}
+                {{#if sysPortCablePath}}<li>Cable Path: <strong>{{sysPortCablePath}}</strong></li>{{/if}}
                 {{#if sysPortAddress}}<li> IP: <strong>{{sysPortAddress}}</strong></li>{{/if}}
                 {{#if sysPortURL}}<li> FQDN: <strong>{{sysPortURL}}</strong></li>{{/if}}
                 <br>     
@@ -54,9 +54,9 @@
                 {{#if sysPortisNetMgmt}}
                 <li>Port Label: <strong>{{../../systemName}}-{{sysPortName}}</strong></li>
                 <li>Device/Port: <strong>{{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
-                <li> Vlan: <strong>{{sysPortVlan}}</strong></li>
-                <li> Options: <strong>{{sysPortOptions}}</strong> </li>
-                <li> Cable Path: <strong>{{sysPortCablePath}}</strong> </li>
+                {{#if sysPortVlan}}<li> Vlan: <strong>{{sysPortVlan}}</strong></li>{{/if}}
+                {{#if sysPortOptions}}<li> Options: <strong>{{sysPortOptions}}</strong> </li>{{/if}}
+                {{#if sysPortCablePath}}<li> Cable Path: <strong>{{sysPortCablePath}}</strong> </li>{{/if}}
                 {{#if sysPortAddress}}<li> IP: <a href='https://{{sysPortAddress}}'><strong>{{sysPortAddress}}</strong></a></li>{{/if}}
                 {{#if sysPortURL}}<li> FQDN: <a href='https://{{sysPortURL}}'></strong>{{sysPortURL}}</strong></a></li>{{/if}}
                 {{/if}}

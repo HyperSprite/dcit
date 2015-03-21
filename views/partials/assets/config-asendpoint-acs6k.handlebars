@@ -4,8 +4,8 @@
        {{#each systemPorts}}
         {{#if sysPortisConsole}}
         <p>cd /ports/serial_ports<br>
-           set_cas <mark>{{sysPortEndPointPort}}</mark><br>
-           set enable_cisco_rj45_pin-out=<mark>{{sysPortOptions}}</mark><br>
+           {{#if sysPortEndPointPort}}set_cas <strong>{{sysPortEndPointPort}}</strong>{{else}}}<mark>set_cas ??</mark>{{/if}}<br>
+           {{#if sysPortOptions}}set enable_cisco_rj45_pin-out=<strong>{{sysPortOptions}}</strong>{{else}}<mark>set enable_cisco_rj45_pin-out= ??</mark>{{/if}}<br>
            set status=enabled<br>
            set speed=9600<br>
            set parity=none<br>
@@ -13,7 +13,7 @@
            set stop_bits=1<br>
            set flow_control=none<br>
            cd cas<br>
-           set port_name=<mark>{{systemName}}</mark><br>
+           set port_name=<strong>{{systemName}}</strong><br>
            set enable_auto_discovery=no<br>
            set protocol=ssh<br>
            set authentication_type=ldap|local<br>

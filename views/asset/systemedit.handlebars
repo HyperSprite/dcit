@@ -226,7 +226,7 @@
         
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' formaction='{{#if systemName}}/system/{{systemName}}{{else}}{{ses.lastPage}}{{/if}}'>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' formaction='{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}'>
         </div>
         <hr>
         <ul id="eachUl"class="list-unstyled">    
@@ -334,7 +334,7 @@
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
                 {{/if}}
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                <input form="formCancel" type="submit" class="btn btn-default btn-xs" formmethod="get" novalidate value='Cancel' formaction="{{#if systemName}}/system/{{systemName}}{{else}}{{ses.lastPage}}{{/if}}">
+                <input form="formCancel" type="submit" class="btn btn-default btn-xs" formmethod="get" novalidate value='Cancel' formaction="{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}">
                 {{#if access.delete}}
                 <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>
                 {{/if}}
