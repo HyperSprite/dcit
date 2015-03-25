@@ -3,7 +3,7 @@
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  {{user.local.email}}<b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="/">Home</a></li>
             {{#if access.read}}
@@ -102,6 +102,30 @@
            {{/if}}
              
      </ul>
+
+     {{#if user}}
+     <div class="navbar-right">
+     {{user.local.email}}
+     {{#if ses.access.root}} - {{ses.timezone}}</p>
+        {{session.user.local.email}}- access:root={{ses.access.root}},delete={{ses.access.delete}}{{/if}}
+     </div>   
+        {{else}}
+            <div class="navbar-right">
+            <form class="form-inline" action="/user/login" method="post">
+                <div class="form-group">
+                  <label class="sr-only" for="userEmail">Email address</label>
+                  <input type="email" class="form-control" id="userEmail" name="email" pattern=".{10,}" required placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                  <label class="sr-only" for="userPassword">Password</label>
+                  <input type="password" class="form-control" id="userPassword" name="password"  pattern=".{8,}" required placeholder="Password">
+                </div>
+                <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                <input type="hidden" name="timezone" id="timezone">
+                <button type="submit" class="btn btn-default">Sign in</button>  <a href="/user/signup">Signup</a>
+              </form>
+            </div>
+            {{/if}}
     </nav>
   </div>
 </div>
