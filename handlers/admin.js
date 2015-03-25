@@ -11,7 +11,8 @@ var     logger = require('../lib/logger.js'),
  equipmentCrud = require('../crud/equipment.js'),
   systemdbCrud = require('../crud/system.js'),
       ObjectId = require('mongoose').Types.ObjectId,
-     logconfig = require('./../logconfig.js');
+     accConfig = require('../config/access'),
+     logConfig = require('../config/log');
 
 // Models
 var Datacenter = require('../models/datacenter.js'),
@@ -25,7 +26,7 @@ var Datacenter = require('../models/datacenter.js'),
     
 exports.home = function(req, res){
     //logger.info('exports.home >'+req.params.datacenter);
-    if (!req.user || req.user.access < 5){
+    if (accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
                 type: 'danger',
                 intro: 'Ooops!',
@@ -36,7 +37,7 @@ exports.home = function(req, res){
     if(!req.params.datacenter){
         context = {
             lastPage : '/admin',
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             titleNow: 'Admin Home',
             };
@@ -51,7 +52,7 @@ exports.home = function(req, res){
         if (!opts){
         	context = {
                 lastPage : '/admin/options',
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'Admin Options',
                 optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
@@ -62,7 +63,7 @@ exports.home = function(req, res){
         if (err) return next (err);
         context ={
                 lastPage : '/admin/options',
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 menu1: 'Admin',
                 menuLink1: '/admin',
@@ -91,7 +92,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'upload'){
         context = {
             lastPage : '/admin/upload',
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             titleNow: 'Admin Upload',
             };
@@ -102,7 +103,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'dbinsert'){
         context = {
             lastPage : '/admin/dbinsert',
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             titleNow: 'Admin DB Insert',
             };
@@ -118,7 +119,7 @@ exports.home = function(req, res){
             }else{
             context = {
                 lastPage : '/admin/useradmin',
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'Admin User Manager',
                 usr: usr.map(function(ur){
@@ -142,14 +143,14 @@ exports.home = function(req, res){
 
     }else if(req.params.datacenter === 'logs'){
 
-    fs.readdir(logconfig.logDir, function (err, files) {
+    fs.readdir(logConfig.logDir, function (err, files) {
       if (err) throw err;
       //logger.info('files'+files);
 
 
         context = {
             lastPage : '/admin/logs',
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             titleNow: 'Admin Logs',
             files: files.map(function(name) {
@@ -170,7 +171,7 @@ exports.home = function(req, res){
         filename = req.params.datacenter.substring (start);
             //logger.info('|filename    >'+filename);
 
-        fs.readFile(logconfig.logDir+filename, function (err, datas) {
+        fs.readFile(logConfig.logDir+filename, function (err, datas) {
           if (err) throw err;
           //logger.log(data);
            datas = datas.toString();
@@ -179,7 +180,7 @@ exports.home = function(req, res){
 
             context = {
             lastPage : '/admin/logs',
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             filename : filename,
             titleNow: 'Admin Logs',
@@ -210,7 +211,7 @@ exports.home = function(req, res){
         //logger.info('file-list'+fil);
             var context = {
                     lastPage : '/admin/filemanager',
-                    access : strTgs.accessCheck(req.user),
+                    access : accConfig.accessCheck(req.user),
                     user : req.user,
                     titleNow: 'Admin Upload',
                     optModels: strTgs.findThisInThatOpt('optModels',opt),
@@ -245,7 +246,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'joins'){
             context = {
                 lastPage : '/admin/joins',
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'Admin Joins',
             };
@@ -259,7 +260,7 @@ exports.home = function(req, res){
     }else if(req.params.datacenter === 'models'){
             context = {
                 lastPage : '/admin/models',
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'Admin Models',
             };
@@ -269,7 +270,7 @@ exports.home = function(req, res){
     //logger.info('datacenter >'+req.params.datacenter);
             context = {
                 lastPage : '/admin/'+req.params.datacenter,
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'Admin',
             };
@@ -279,7 +280,7 @@ exports.home = function(req, res){
 };
 
 exports.userEdit = function (req, res) {
-    if (!req.user || req.user.access < 5){
+    if (accConfig.accessCheck(req.user).root !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -294,7 +295,7 @@ exports.userEdit = function (req, res) {
         //logger.info('ur '+ur);
         context = {
                 lastPage : '/admin/useradmin',
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: ur.local.name,
                 id : ur._id,
@@ -313,7 +314,7 @@ exports.userEdit = function (req, res) {
 var VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
 exports.userEditPost = function (req, res) {
-    if (!req.user || req.user.access < 5){
+    if (accConfig.accessCheck(req.user).root !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -362,7 +363,7 @@ exports.userEditPost = function (req, res) {
 };
 
 exports.optionsEdit = function(req, res){
-    if (!req.user || req.user.access < 5){
+    if (accConfig.accessCheck(req.user).root !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -376,7 +377,7 @@ exports.optionsEdit = function(req, res){
         if (dcInfo ==='new'){
             context={
                 lastPage : '/admin/optionsedit',
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'Admin Options Edit',
                 stat: 'isNew',
@@ -388,7 +389,7 @@ exports.optionsEdit = function(req, res){
             if(err)return next(err);
                 context={
                     lastPage : '/admin/optionsedit',
-                    access : strTgs.accessCheck(req.user),
+                    access : accConfig.accessCheck(req.user),
                     user : req.user,
                     menu1: 'Admin',
                     menuLink1: '/admin',
@@ -405,7 +406,7 @@ exports.optionsEdit = function(req, res){
 
 exports.optionsEditPost = function(req,res,err){
     //logger.info('optionsEditPost >'+ req.body.id);
-        if (!req.user || req.user.access < 5){
+        if (accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
                 type: 'danger',
                 intro: 'Ooops!',
@@ -480,7 +481,7 @@ exports.uploadPost = function(req,res){
     //logger.info('date >'+Date.now());
     var userEmail = req.user.local.email;
     var form = new formidable.IncomingForm();
-    form.uploadDir = logconfig.uploadDir;
+    form.uploadDir = logConfig.uploadDir;
     form.keepExtensions = true;
     form.parse(req, function(err,fields,files){
     //logger.info('files >'+files);
@@ -541,7 +542,7 @@ exports.uploadPost = function(req,res){
 // Upload Delete File POST
 //
 exports.uploadDeletePost = function(req,res){
-        if (!req.user || req.user.access < 5){
+        if (accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
                 type: 'danger',
                 intro: 'Ooops!',
@@ -597,7 +598,7 @@ if (req.body.id){
 //  //  Delte log file -----------------------------------------
 //  ////////////////////////////////////////
 exports.logdelete = function(req,res){
-        if (!req.user || req.user.access < 5){
+        if (accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
                 type: 'danger',
                 intro: 'Ooops!',
@@ -606,7 +607,7 @@ exports.logdelete = function(req,res){
             return res.redirect(303, '/');
     }else{ 
     if (req.body.name){
-        var fileName = logconfig.logDir+req.body.name;
+        var fileName = logConfig.logDir+req.body.name;
         
             fs.unlink(fileName, function(err){
                     if(err){
@@ -715,7 +716,7 @@ exports.csvToDBPost = function(req,res){
 ------------------------------------------------------------------------
 */
 exports.userDelete = function(req,res){
-    if (!req.user || req.user.access < 5){
+    if (accConfig.accessCheck(req.user).root !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -761,7 +762,7 @@ if (req.body.id){
 
 // These drop the whole DB, not just one
 exports.dropDatacenterGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -776,7 +777,7 @@ exports.dropDatacenterGet = function(req,res){
 };
 
 exports.dropRackGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -791,7 +792,7 @@ exports.dropRackGet = function(req,res){
 };
 
 exports.dropOptionsdbGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -806,7 +807,7 @@ exports.dropOptionsdbGet = function(req,res){
 };
 
 exports.dropEquipmentGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -821,7 +822,7 @@ exports.dropEquipmentGet = function(req,res){
 };
 
 exports.dropSystemGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -837,7 +838,7 @@ exports.dropSystemGet = function(req,res){
 
 
 exports.seedDatacetnerGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -852,7 +853,7 @@ exports.seedDatacetnerGet = function(req,res){
 };
 
 exports.seedOptionsdbGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -867,7 +868,7 @@ exports.seedOptionsdbGet = function(req,res){
 };
 
 exports.seedEquipmentGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',
@@ -881,7 +882,7 @@ exports.seedEquipmentGet = function(req,res){
     }
 };
 exports.seedSystemGet = function(req,res){
-    if(!req.user || req.user.access < 5){
+    if(accConfig.accessCheck(req.user).root !== 1){
         req.session.flash = {
         type: 'danger',
         intro: 'Not Authorized!',

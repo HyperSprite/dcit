@@ -145,9 +145,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(require('express-session')({ 
                 key: 'session',
+                maxAge: new Date(Date.now() + 80000000),
                 cookie:{
                    maxAge: 80000000
-
                 },
                 secret: credentials.cookieSecret,
                 store: require('mongoose-session')(mongoose),

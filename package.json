@@ -1,6 +1,6 @@
 {
   "name": "dcit",
-  "version": "0.1.07",
+  "version": "0.1.09",
   "description": "DCIT is for saving Data Center Informantion Transcript.",
   "main": "dcit.js",
   "scripts": {

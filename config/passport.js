@@ -1,5 +1,6 @@
-var logconfig = require('./../logconfig.js'),
+var logconfig = require('../config/log.js'),
        strTgs = require('../lib/stringThings.js'),
+    accConfig = require('../config/access'),
     Optionsdb = require('../models/options.js');
 
 // load all the things we need
@@ -15,16 +16,19 @@ var logger = new (winston.Logger)({
   exitOnError: true
 });
 
-exports.accessCheck = function (check){
+/*
+exports.accessCheck = function(check){
 var access = new Object();
-if(!check){access.noAccess=1;}else{
+// adjust this to change default action. 1 for everyone to login, even to read. 2 to allow for read only for anyone.
+if(!check){check.access=2;}
 if(check.access > 4){access.root = 1;}
 if(check.access > 3){access.delete = 1;}
 if(check.access > 2){access.edit = 1;}
 if(check.access > 1){access.read = 1;}
-}
+if(check.access === 1){access.noAccess = 1;}
 return access;
 };
+*/
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -157,7 +161,7 @@ module.exports = function(passport) {
            
             req.session.ses = {
                 timezone : req.body.timezone,
-                access : exports.accessCheck(user),
+                access : accConfig.accessCheck(user),
             };
             return done(null, user);
         

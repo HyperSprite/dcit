@@ -1,6 +1,7 @@
 
 var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
+     accConfig = require('../config/access'),
          dates = require('../lib/dates.js'),
         moment = require('moment'),
       ObjectId = require('mongoose').Types.ObjectId;
@@ -31,7 +32,7 @@ var start  = '',
 this is the Equip List block. Looks for 'List' in the URL and returns list of Equipment.
 */
 exports.dcSystemPages = function(req,res,next){
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -49,7 +50,7 @@ logger.warn('dcSystemPages'+err);
         }else{
         //logger.info('system-list'+sys);
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 sys: sys.map(function(sy){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -109,7 +110,7 @@ logger.warn('dcSystemPages'+err);
         }
       
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: 'New System',
                 sysNameList: sysUni,
@@ -227,7 +228,7 @@ logger.warn('dcSystemPages'+err);
                 thisEquipPortsMaped = '';
             }
         context = {
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             titleNow: sy.systemName,
             menu1: sy.systemName+' as Endpoint',
@@ -360,7 +361,7 @@ logger.warn('dcSystemPages'+err);
             }; 
         } else { // Copy
             context = {
-                    access : strTgs.accessCheck(req.user),
+                    access : accConfig.accessCheck(req.user),
                     user : req.user,
                     equipSNList: eqUni,
                     optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
@@ -406,7 +407,7 @@ logger.warn('dcSystemPages'+err);
 //  ////////////////////////////////////////////////////////////////////////
 
 exports.dcSystemPortPages = function(req,res,next){
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -422,7 +423,7 @@ exports.dcSystemPortPages = function(req,res,next){
         }else{
         //logger.info('system-list'+sys);
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 sys: sys.map(function(sy){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -575,7 +576,7 @@ exports.dcSystemPortPages = function(req,res,next){
 // -------------------------------------------------------------
         
 exports.dcSystembyEnvRole = function(req,res,next){
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -657,7 +658,7 @@ logger.warn(asc+' '+err);
          
         //logger.info('system-list'+sys);
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: '.. '+searchFor,
                 equipsys: 'true',
@@ -716,7 +717,7 @@ logger.warn(asc+' '+err);
          
         //logger.info('system-list'+sys);
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: '.. '+searchFor,
                 equipsys: 'true',
@@ -764,7 +765,7 @@ logger.warn(asc+' '+err);
 
     }else{
         var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: searchFor,
                 reportType: req.body.systemEnviron,
@@ -806,7 +807,7 @@ exports.dcSystemCountbyEnv  = function(req,res,next){
 };
 
 exports.findEndpoints = function(req,res,next){
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -825,7 +826,7 @@ exports.findEndpoints = function(req,res,next){
         if(err) return next(err);
         //logger.info('sys > '+sys);
         context = {
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
                 titleNow:fEndPoint,
                 sysPortEndPoint:fEndPoint,
@@ -910,7 +911,7 @@ exports.findEndpoints = function(req,res,next){
 ------------------------------------------------------------------------
 */
 exports.dcSystemPost = function(req,res){
-    if (!req.user || req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -919,6 +920,7 @@ exports.dcSystemPost = function(req,res){
         return res.redirect(303, '/');
     }else{ 
     var bd = req.body;
+    var backURL=req.header('Referer') || '/';
     // this makes the abbreviation available for the URL
     res.abbreviation = strTgs.clTrim(bd.systemName);
  //   logger.info('dcRackPost abbreviation>'+strTgs.clTrim(bd.systemName));
@@ -982,29 +984,29 @@ exports.dcSystemPost = function(req,res){
                 req.session.flash = {
 	                type: 'danger',
 	                intro: 'Duplicate!',
-	                message: 'Looks like there is already a Equipment SN like that.',
+	                message: 'Looks like there is already a System by that name.',
 	            };
                 
                 } else { 
 	            req.session.flash = {
 	                type: 'danger',
 	                intro: 'Ooops!',
-	                message: 'There was an error processing your request.',
+	                message: 'There was an error processing your request. \n '+err.message,
 	            };}
-                return res.redirect(303, '/systems');
+                return res.redirect(303, backURL);
 	        }
             if (!req.body.wasCopy){
 	        req.session.flash = {
 	            type: 'success',
-	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
+	            intro: 'Saved!',
+	            message: '<a href="/system/'+res.abbreviation+'">'+res.abbreviation+'</a> has been created.',
                 };
 	        return res.redirect(303, '/system/'+ res.abbreviation);
             } else { 
             req.session.flash = {
 	            type: 'success',
-	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
+	            intro: 'Saved!',
+	            message: '<a href="/system/'+res.abbreviation+'">'+res.abbreviation+'</a> has been created.',
                 };
 	        return res.redirect(303, '/system/copy~edit-'+ res.abbreviation);
 
@@ -1121,7 +1123,7 @@ exports.dcSystemPost = function(req,res){
 ------------------------------------------------------------------------
 */
 exports.dcsystemDelete = function(req,res){
-    if (!req.user || req.user.access < 4){
+    if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -1169,7 +1171,7 @@ if (req.body.systemName){
 
 exports.dcsystemSubDelete = function(req,res){
     logger.info('portSubDelete');
-        if (!req.user || req.user.access < 4){
+        if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',

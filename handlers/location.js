@@ -1,5 +1,6 @@
     
 var         strTgs = require('../lib/stringThings.js'),
+         accConfig = require('../config/access'),
       seedDataLoad = require('../seedDataLoad.js'),
               dcit = require('../dcit.js'),
           ObjectId = require('mongoose').Types.ObjectId,
@@ -44,7 +45,7 @@ Datacenter List
 this is the DC List block. Looks for "List" in the URL and returns list of datacenters with city and country from Main contact.
 */
 exports.datacenterPages = function(req,res,next){
-        if (!req.user || req.user.access < 2){
+        if (accConfig.accessCheck(req.user).read !== 1){
             req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -57,7 +58,7 @@ exports.datacenterPages = function(req,res,next){
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
          Datacenter.find(function(err, datacenters){
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 ses: req.session.ses,
                 datacenters: datacenters.map(function(dc){
@@ -105,7 +106,7 @@ Edit Contact
         var context;
         if (dcSubId === 'new'){
             context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 ses: req.session.ses,
                 id:dc._id,
@@ -124,7 +125,7 @@ Edit Contact
         if(!datacenter) return next();
 //logger.info(datacenter);
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 ses: req.session.ses,
                 id:dc._id,
@@ -200,7 +201,7 @@ If "New" is in the URL, it does New, otherwise it goes to existing
         //logger.info(datacenter);
             var dc = datacenter;
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 ses: req.session.ses,
                 id:dc._id,
@@ -232,7 +233,7 @@ this takes the abbreviation and displays the matching datacenter details
         Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err,racks){
         //logger.info ('Rack - id to matching rack to datacenter'+ dc._id); 
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 ses: req.session.ses,
                 menu1: dc.abbreviation,
@@ -365,7 +366,7 @@ uCleanUp = function(old,current){
 New Datacenter working
 */
 exports.datacenterPost = function(req,res){
-    if (!req.user || req.user.access < 4){
+    if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -442,7 +443,7 @@ exports.datacenterPost = function(req,res){
 };
   
 exports.datacenterContactPost = function(req,res){
-    if (!req.user || req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -539,7 +540,7 @@ exports.datacenterContactPost = function(req,res){
 // datacenter delete
 
 exports.datacenterDelete = function(req,res){
-    if (!req.user || req.user.access < 5){
+    if (accConfig.accessCheck(req.user).root !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -585,7 +586,7 @@ Working - Done
 this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects to a form to edit the Datacenter.
 */  
 exports.datacenterCagePages = function(req,res,next){
-    if (!req.user || req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -610,7 +611,7 @@ exports.datacenterCagePages = function(req,res,next){
             var dc = datacenter;
             logger.info ('dc>'+dc);
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
@@ -648,7 +649,7 @@ this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects 
 */  
 
 exports.datacenterCagePost = function(req,res){
-    if (!req.user || req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -741,7 +742,7 @@ Working - Done
 this is the DC Power edit block. Looks for "cage/edit-" in the URL and redirects to a form to edit the Datacenter.
 */  
 exports.datacenterPowerPages = function(req,res,next){
-    if (!req.user || req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -766,7 +767,7 @@ exports.datacenterPowerPages = function(req,res,next){
             var dc = datacenter;
             //logger.info ('dc   >'+dc);
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
@@ -786,7 +787,7 @@ exports.datacenterPowerPages = function(req,res,next){
 };
 
 exports.datacenterPowerPost = function(req,res){
-    if (!req.user || req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -845,7 +846,7 @@ exports.datacenterPowerPost = function(req,res){
 
 
 exports.datacenterNetworkPages = function(req,res,next){
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -878,7 +879,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         var nk;
         if (dcSubId === 'new'){
             context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
@@ -892,7 +893,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         } else if (copy === true){ // copy
             nk = dc.networks.id(dcSubId);
             context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
@@ -916,7 +917,7 @@ exports.datacenterNetworkPages = function(req,res,next){
         } else { // edit
             nk = dc.networks.id(dcSubId);
             context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 id:dc._id,
                 titleNow: dc.abbreviation,
@@ -950,7 +951,7 @@ exports.datacenterNetworkPages = function(req,res,next){
 };
 
 exports.datacenterNetworkPost = function(req,res,next){
-    if (!req.user || req.user.access < 4){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -1044,7 +1045,7 @@ exports.datacenterNetworkPost = function(req,res,next){
 // contact and cage Delete
 
 exports.datacenterSubDelete = function(req,res){
-if (!req.user || req.user.access < 4){
+if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',

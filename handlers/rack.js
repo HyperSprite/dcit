@@ -1,5 +1,6 @@
 
 var     logger = require('../lib/logger.js'),
+     accConfig = require('../config/access'),
         strTgs = require('../lib/stringThings.js'),
       ObjectId = require('mongoose').Types.ObjectId;
 
@@ -25,7 +26,7 @@ var start  = '',
 this is the Rack List block. Looks for 'List' in the URL and returns list of datacenters with city and country from Main contact.
 */
 exports.dcRackPages = function(req,res,next){
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -46,7 +47,7 @@ logger.info(err);
 logger.info(err);
         }else{
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 racks: racks.map(function(rack){
                 var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);
@@ -122,7 +123,7 @@ logger.info(err);
         var context;
         if (dcSubId === 'new'){
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 menu1: uber.abbreviation,
                 menuLink1: '/location/datacenter/'+uber.abbreviation,
@@ -185,7 +186,7 @@ logger.info(err);
 // Edit Rack Power 
 //logger.info(rk);
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 titleNow: thisSubDoc.rackPowUnique,
                 optEquipStatus: opt.optListArray,
@@ -254,7 +255,7 @@ link to this looks
         if(err) return next(err);
 //logger.info('datacener= '+datacenter);
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 optRackStatus: opt.optListArray,
                 id:dc._id,
@@ -314,7 +315,7 @@ link to this looks
             var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);            
         if(editLoad < 4){
              context = {    
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                             optRackStatus: opt.optListArray,
                             titleNow: rack.rackUnique,
@@ -375,7 +376,7 @@ link to this looks
                         }; 
         } else {   
            context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                             titleNow: 'Copy '+rack.rackUnique,
                             optRackStatus: opt.optListArray,
@@ -417,7 +418,7 @@ link to this looks
 ------------------------------------------------------------------------
 */
 exports.dcRackPost = function(req,res){
-    if (req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -551,7 +552,7 @@ exports.dcRackPost = function(req,res){
 ------------------------------------------------------------------------
 */
 exports.rackDelete = function(req,res){
-    if (req.user.access < 4){
+    if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -597,7 +598,7 @@ if (req.body.rackUnique){
 */
 
 exports.dcRackPowPost = function(req,res){
-    if (req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -686,7 +687,7 @@ exports.dcRackPowPost = function(req,res){
 */
 
 exports.rackSubDelete = function(req,res){
-    if (req.user.access < 4){
+    if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',

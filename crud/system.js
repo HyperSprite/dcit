@@ -1,11 +1,11 @@
-var logconfig = require('./../logconfig.js');
+var logConfig = require('../config/log.js');
 var Systemdb = require('../models/system.js'),
       strTgs = require('../lib/stringThings.js'),
        dates = require('../lib/dates.js');
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.fileName.uploadLog, json: false}),
+    new winston.transports.DailyRotateFile({filename: logConfig.logDir+logConfig.fileName.uploadLog, json: false}),
     ],
   exitOnError: true
 });

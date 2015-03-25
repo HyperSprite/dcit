@@ -24,7 +24,7 @@ exports.get = function(req, res, next){
 };
 exports.allSystemNames = function(req,res){
 //    logger.info('req.query '+req.query.query);
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -53,7 +53,7 @@ exports.allSystemNames = function(req,res){
 
 exports.allEquipSN = function(req,res){
 //    logger.info('req.query '+req.query.query);
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -82,7 +82,7 @@ exports.allEquipSN = function(req,res){
 
 exports.allLocationRack = function(req,res){
 //    logger.info('req.query '+req.query.query);
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',

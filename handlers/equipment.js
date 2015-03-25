@@ -1,6 +1,7 @@
 
 var     logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
+     accConfig = require('../config/access'),
       ObjectId = require('mongoose').Types.ObjectId;
 
 // Models
@@ -28,7 +29,7 @@ this is the Equip List block. Looks for 'List' in the URL and returns list of Eq
 */
 exports.dcEquipPages = function(req,res,next){
     //logger.info('***********exports.dcEquipPages First >' +req.params.datacenter);
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -44,7 +45,7 @@ exports.dcEquipPages = function(req,res,next){
         logger.info(err);
         }else{
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 eqs: eqs.map(function(eq){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -104,7 +105,7 @@ exports.dcEquipPages = function(req,res,next){
         var context;
         if (dcSubId === 'new'){
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
@@ -132,7 +133,7 @@ exports.dcEquipPages = function(req,res,next){
         if (req.params.datacenter.indexOf ('copy') !=-1){
            //logger.info(rk);
                 context ={
-                    access : strTgs.accessCheck(req.user),
+                    access : accConfig.accessCheck(req.user),
                     user : req.user,
                     rackParentDC: rk.rackParentDC,
                     fullName: uber.fullName,
@@ -158,7 +159,7 @@ exports.dcEquipPages = function(req,res,next){
         
        //logger.info(rk);
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
@@ -227,7 +228,7 @@ exports.dcEquipPages = function(req,res,next){
         return tempRu; 
         };
             context ={
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
@@ -307,7 +308,7 @@ exports.dcEquipPages = function(req,res,next){
             tempSys = strTgs.findThisInThat(eq.equipSN,sys);
 
              context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user, 
                                 menu1: eq.equipSN,
                                 menuLink1: '#',
@@ -410,7 +411,7 @@ exports.dcEquipPages = function(req,res,next){
         
         } else {
            context = {
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user, 
                                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
@@ -485,7 +486,7 @@ exports.dcEquipPages = function(req,res,next){
 */
 exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
-    if (!req.user || req.user.access < 3){
+    if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -574,12 +575,12 @@ exports.dcEquipmentPost = function(req,res){
             modifiedOn: Date.now(),
                     },function(err){
 	        if(err) {
-	        	console.error(err.stack);
+	        	logger.warn(err.stack);
                 if(err.stack.indexOf ('matching')!=-1){
                 req.session.flash = {
 	                type: 'danger',
 	                intro: 'Duplicate!',
-	                message: 'Looks like there is already a Equipment SN like that.',
+	                message: 'Looks like there is already a Equipment SN by that name.',
 	            };
                 
                 } else { 
@@ -594,14 +595,14 @@ exports.dcEquipmentPost = function(req,res){
 	        req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
+	            message: '<a href="/equipment/'+res.abbreviation+'">'+res.abbreviation+'</a> was created.',
                 };
 	        return res.redirect(303, '/equipment/'+ res.abbreviation);
             } else { 
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
+	            message: '<a href="/equipment/'+res.abbreviation+'">'+res.abbreviation+'</a> was created.',
                 };
 	        return res.redirect(303, '/equipment/copy~edit-'+ res.abbreviation);
 
@@ -728,7 +729,7 @@ exports.dcEquipPortPostAJAX = function(req,res){
 // ---------------------------------------------------------------------
 
 exports.dcEquipSysPages = function(req,res,next){
-    if (!req.user || req.user.access < 2){
+    if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -751,7 +752,7 @@ exports.dcEquipSysPages = function(req,res,next){
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
@@ -815,7 +816,7 @@ exports.dcEquipSysPages = function(req,res,next){
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                         rackView: req.params.datacenter,
                         menu1: req.params.datacenter,
@@ -881,7 +882,7 @@ exports.dcEquipSysPages = function(req,res,next){
 // ---------------------------------------------------------------------
 
 exports.dcRackElevationPage = function(req,res,next){
-        if (!req.user || req.user.access < 2){
+        if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -904,7 +905,7 @@ exports.dcRackElevationPage = function(req,res,next){
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
@@ -973,7 +974,7 @@ exports.dcRackElevationPage = function(req,res,next){
         //logger.info('rk >>>>>>>>>>>'+rk);
         //logger.info('rk.rackUnique>'+rk.rackUnique);
             var context = {
-                access : strTgs.accessCheck(req.user),
+                access : accConfig.accessCheck(req.user),
                 user : req.user,
                 rackView: req.params.datacenter,
                 rackUnique: rk.rackUnique,
@@ -1059,7 +1060,7 @@ exports.dcRackElevationPage = function(req,res,next){
 ------------------------------------------------------------------------
 */
 exports.dcEquipDelete = function(req,res){
-    if (!req.user || req.user.access < 4){
+    if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
@@ -1107,7 +1108,7 @@ if (req.body.equipSN){
 */
 
 exports.equipSubDelete = function(req,res){
-if (!req.user || req.user.access < 4){
+if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',

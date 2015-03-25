@@ -1,5 +1,6 @@
 
     // this updates EndPoints when the system name changes
+    // not yet working
             if (thisDoc.systemName !== strTgs.clTrim(bd.systemName)){
                 Systemdb.find({'systemPorts.sysPortEndPoint': thisDoc.systemName},'systemName systemPorts.sysPortName systemPorts.sysPortEndPoint',function(err,sys){
                     sys.map(function(sy){

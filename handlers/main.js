@@ -1,12 +1,13 @@
 
-var     strTgs = require('../lib/stringThings.js'),
+var     strTgs = require('../lib/stringThings'),
+     accConfig = require('../config/access'),
       ObjectId = require('mongoose').Types.ObjectId;
-var     logger = require('../lib/logger.js');
+var     logger = require('../lib/logger');
  
 exports.home = function(req, res){
     //logger.info('exports.home');
         context = {
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             };
 	res.render('home', context);
@@ -14,14 +15,8 @@ exports.home = function(req, res){
 
 exports.about = function(req, res){
         context = {
-            access : strTgs.accessCheck(req.user),
+            access : accConfig.accessCheck(req.user),
             user : req.user,
             };
 	res.render('about', context);
 };
-
-
-
-
-
-
