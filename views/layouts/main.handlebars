@@ -75,7 +75,8 @@
       <div> <!-- footer-->
 			<hr>
 			<footer>
-                <p>&copy; HyperSprite 2014 <a href="/about">About</a>
+                <p>&copy; HyperSprite 2014 <a href="/about">About</a>{{#if ses.access.edit}} - {{ses.timezone}} access=edit{{/if}}{{#if ses.access.delete}},delete{{/if}}{{#if ses.access.root}},root{{/if}}</p>
+        {{session.user.local.email}}- ,delete={{ses.access.delete}}
 			</footer>
       </div> <!-- /footer-->
 

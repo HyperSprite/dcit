@@ -18,6 +18,9 @@ return access;
 
 
 /*
+In var of handlers
+accConfig = require('../config/access'),
+
 Root Level
 if (accConfig.accessCheck(req.user).root !== 1){
 

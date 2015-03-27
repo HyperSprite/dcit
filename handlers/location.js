@@ -298,6 +298,7 @@ this takes the abbreviation and displays the matching datacenter details
                 iPRange = IpSubnetCalculator.calculateSubnetMask(nk.dcNetNetwork,nk.dcNetMask);     
                     }
                     return {
+                                id:dc._id,
                                 dcNetId: nk._id,
                                 dcNetUnique: nk.dcNetUnique,
                                 dcNetType: nk.dcNetType,
