@@ -244,7 +244,7 @@
         </div>
         <div class="form-group">
             <label for="field-systemRole" class="col-sm-2 control-label" >Role</label>
-            <div class="col-sm-4">
+            <div class="col-sm-4 ui-widget">
                 <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" placeholder="Apache,Launch,Reporting">
             </div>
         </div>
@@ -392,18 +392,21 @@ function addField(area,field,limit) {
 </script> 
 
 <script>
-    $("[id^='sysPortEndPoint']").autocomplete({
-        serviceUrl: "/autocomplete/allSystemNames",
-        minChars: 3,
-        autoFocus:true,
-    });              
-</script>
-
-<script>
-    $('#systemEquipSN').autocomplete({
-        serviceUrl: '/autocomplete/allEquipSN',
-        minChars: 3,
-        autoFocus:true,
+    $(document).ready(function(){
+        $("[id^='sysPortEndPoint']").autocomplete({
+            serviceUrl: "/autocomplete/allSystemNames",
+            minChars: 3,
+            autoFocus:true,
+        });              
+        $('#systemEquipSN').autocomplete({
+            serviceUrl: '/autocomplete/allEquipSN',
+            minChars: 3,
+            autoFocus:true,
+        });
+        $('#systemRole').autocomplete({
+            serviceUrl: '/autocomplete/allSystemRole',
+            minChars: 2,
+            autoFocus:true,
+        });
     });
 </script>
-

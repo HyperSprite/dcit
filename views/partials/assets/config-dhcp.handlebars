@@ -1,0 +1,23 @@
+<div class"row">
+<h5>{{systemName}} dhcp config</h5>
+    <div  style="border: 2px solid grey">
+        <ul class="list-unstyled">
+        {{#each systemPorts}}
+                {{#if sysPortisEthernet}}
+                <li>host {{../../systemName}} {</li>
+                <li>hardware ethernet {{!-- put mac address here --}};</li>
+                <li>fixed-address {{sysPortAddress}};</li>
+                <li>}</li>
+                {{/if}}
+        {{/each}}
+        {{#each systemPorts}}
+                {{#if sysPortisNetMgmt}}
+                <li>host {{../../systemName}}-{{sysPortName}}</li>
+                <li>hardware ethernet {{!--put mac address here --}};</li>
+                <li>fixed-address {{sysPortAddress}};</li>
+                <li>}</li>
+                {{/if}}
+        {{/each}}
+        </ul>
+    </div>
+</div>

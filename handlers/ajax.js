@@ -52,6 +52,33 @@ exports.allSystemNames = function(req,res){
     }
 };
 
+exports.allSystemRole = function(req,res){
+        if (accConfig.accessCheck(req.user).read !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+    var query = Systemdb.find({ 'systemRole': { '$regex': req.query.query, '$options': 'i' } },{'systemRole':1,'_id':0});
+        query.sort({'systemRole': 'asc'}).exec(function(err, result){
+        if(err) return next(err);
+        if(!result) return next();
+        var a=[];
+        for(i=0;i<result.length;i++){
+        a[i] = result[i].systemRole;
+        }
+        var context = {
+            "query": "Unit",
+            "suggestions" : strTgs.arrayUnique(a),
+        };
+        res.json(context);
+    });
+    }
+};
+
+
 exports.allEquipSN = function(req,res){
 //    logger.info('req.query '+req.query.query);
     if (accConfig.accessCheck(req.user).read !== 1){
@@ -77,6 +104,60 @@ exports.allEquipSN = function(req,res){
         
 //        logger.info('allEquipSN');
        res.json(context);
+    });
+    }
+};
+
+
+
+exports.allEquipMake = function(req,res){
+        if (accConfig.accessCheck(req.user).read !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+    var query = Equipment.find({ 'equipMake': { '$regex': req.query.query, '$options': 'i' } },{'equipMake':1,'_id':0});
+        query.sort({'equipMake': 'asc'}).exec(function(err, result){
+        if(err) return next(err);
+        if(!result) return next();
+        var aMake=[];
+        for(i=0;i<result.length;i++){
+        aMake[i] = result[i].equipMake;
+        }
+        var context = {
+            "query": "Unit",
+            "suggestions" : strTgs.arrayUnique(aMake),
+        };
+        res.json(context);
+    });
+    }
+};
+
+exports.allEquipModel = function(req,res){
+        if (accConfig.accessCheck(req.user).read !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+    var query = Equipment.find({ 'equipModel': { '$regex': req.query.query, '$options': 'i' } },{'equipModel':1,'_id':0});
+        query.sort({'equipModel': 'asc'}).exec(function(err, result){
+        if(err) return next(err);
+        if(!result) return next();
+        var aEquipModel=[];
+        for(i=0;i<result.length;i++){
+        aEquipModel[i] = result[i].equipModel;
+        }
+        var context = {
+            "query": "Unit",
+            "suggestions" : strTgs.arrayUnique(aEquipModel),
+        };
+        res.json(context);
     });
     }
 };
