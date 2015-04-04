@@ -108,10 +108,12 @@ module.exports = function(app){
         app.get('/go/input', ajax.get);
         app.get('/autocomplete/allSystemNames', ajax.allSystemNames);
         app.get('/autocomplete/allSystemRole', ajax.allSystemRole);
+        app.get('/autocomplete/allSystemEnviron', ajax.allSystemEnviron);        
         app.get('/autocomplete/allEquipSN', ajax.allEquipSN);
         app.get('/autocomplete/allEquipMake', ajax.allEquipMake);
         app.get('/autocomplete/allEquipModel', ajax.allEquipModel);
         app.get('/autocomplete/allLocationRack', ajax.allLocationRack);
+
 };
 
 // route middleware to make sure a user is logged in

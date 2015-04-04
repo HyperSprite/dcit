@@ -473,23 +473,3 @@ function addField(area,field,limit) {
 }
 //-->
 </script>         
-
-<script>
-    $(document).ready(function(){
-        $('#equipMake').autocomplete({
-            serviceUrl: '/autocomplete/allEquipMake',
-            minChars: 3,
-            autoFocus:true,
-        });
-        $('#equipModel').autocomplete({
-            serviceUrl: '/autocomplete/allEquipModel',
-            minChars: 3,
-            autoFocus:true,
-        });
-        $('#equipLocationRack').autocomplete({
-            serviceUrl: '/autocomplete/allLocationRack',
-            minChars: 3,
-            autoFocus:true,
-        });
-    });
-</script>

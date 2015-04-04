@@ -78,6 +78,31 @@ exports.allSystemRole = function(req,res){
     }
 };
 
+exports.allSystemEnviron = function(req,res){
+        if (accConfig.accessCheck(req.user).read !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+    var query = Systemdb.find({ 'systemEnviron': { '$regex': req.query.query, '$options': 'i' } },{'systemEnviron':1,'_id':0});
+        query.sort({'systemEnviron': 'asc'}).exec(function(err, result){
+        if(err) return next(err);
+        if(!result) return next();
+        var a=[];
+        for(i=0;i<result.length;i++){
+        a[i] = result[i].systemEnviron;
+        }
+        var context = {
+            "query": "Unit",
+            "suggestions" : strTgs.arrayUnique(a),
+        };
+        res.json(context);
+    });
+    }
+};
 
 exports.allEquipSN = function(req,res){
 //    logger.info('req.query '+req.query.query);

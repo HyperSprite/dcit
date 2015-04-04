@@ -20,3 +20,7 @@ svg {
 .rackcol {
     float:left;
 }
+.autocomplete-suggestions {
+        background-color: #F5F5F7;
+        overflow: hidden;
+}

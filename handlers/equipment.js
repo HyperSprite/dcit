@@ -526,7 +526,7 @@ exports.dcEquipmentPost = function(req,res){
             equipLocation: strTgs.locComb(data.equipLocationRack,data.equipLocationRu),
             equipSN: strTgs.cTrim(data.equipSN),
             equipAssetTag: strTgs.sTrim(data.equipAssetTag),
-            equipTicketNumber: strTgs.cTrim(data.equipTicketNumber),
+            equipTicketNumber: strTgs.clTrim(data.equipTicketNumber),
             equipInventoryStatus: data.equipInventoryStatus,
             equipStatus: strTgs.uTrim(data.equipStatus),
             equipIsVirtual: data.equipIsVirtual,
@@ -648,7 +648,7 @@ exports.dcEquipmentPost = function(req,res){
 
                         thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);
                         thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,data.equipAssetTag);
-                        thisDoc.equipTicketNumber = strTgs.cCleanUp(thisDoc.equipTicketNumber,data.equipTicketNumber);
+                        thisDoc.equipTicketNumber = strTgs.clCleanUp(thisDoc.equipTicketNumber,data.equipTicketNumber);
                         thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus,data.equipInventoryStatus);
                         thisDoc.equipStatus = strTgs.uCleanUp(thisDoc.equipStatus,data.equipStatus);
                         thisDoc.equipIsVirtual = strTgs.uCleanUp(thisDoc.equipIsVirtual,data.equipIsVirtual);
@@ -1093,7 +1093,7 @@ if (req.body.equipSN){
                     intro: 'Done!',
                     message: 'Equipment '+ res.abbreviation +' has been deleted. Good luck with that one',
                 };
-                return res.redirect(303, '/equipment-systems/'+res.newpage);
+                return (res.newpage ==='')? res.redirect(303,'/') :  res.redirect(303, '/equipment-systems/'+res.newpage);
                 }
             });
         }

@@ -482,7 +482,7 @@ exports.dcSystemPortPages = function(req,res,next){
         case 8: // multi SystemDB
             switch (searchIn){
                 case 'systemName':
-                    findThis = strTgs.clTrim(findThis);
+                    findThis = strTgs.csTrim(findThis);
                     query = Systemdb.find({ 'systemName': { '$regex': findThis, '$options': 'i' } });
                 break;
                 case 'systemTicket':
@@ -605,7 +605,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
             
         } else if(req.params.datacenter.indexOf ('system') !=-1){
             editLoad = 4;        
-                searchFor = strTgs.clTrim(req.query.systemName);
+                searchFor = strTgs.csTrim(req.query.systemName);
 
         }else if(req.params.datacenter.indexOf ('equipment') !=-1){
             editLoad = 10;
@@ -922,7 +922,7 @@ exports.dcSystemPost = function(req,res){
     var bd = req.body;
     var backURL=req.header('Referer') || '/';
     // this makes the abbreviation available for the URL
-    res.abbreviation = strTgs.clTrim(bd.systemName);
+    res.abbreviation = strTgs.csTrim(bd.systemName);
  //   logger.info('dcRackPost abbreviation>'+strTgs.clTrim(bd.systemName));
 
     //logger.info('rUs expanded >'+ strTgs.compUs(req.body.rUs));
@@ -936,7 +936,7 @@ exports.dcSystemPost = function(req,res){
     //    logger.info('sysPortName.length '+bd.sysPortName.length);
         Ports[i]=({
             sysPortType: strTgs.sTrim(bd.sysPortType[i]),
-            sysPortName: strTgs.sTrim(bd.sysPortName[i]),
+            sysPortName: strTgs.clTrim(bd.sysPortName[i]),
             sysPortAddress: strTgs.sTrim(bd.sysPortAddress[i]),
             sysPortCablePath: strTgs.clTrim(bd.sysPortCablePath[i]),
             sysPortEndPoint: strTgs.clTrim(bd.sysPortEndPoint[i]),
@@ -953,7 +953,7 @@ exports.dcSystemPost = function(req,res){
     
     Systemdb.create({
         systemPorts: varPortsNew(bd),
-        systemName: strTgs.clTrim(bd.systemName),
+        systemName: strTgs.csTrim(bd.systemName),
         systemEquipSN: strTgs.sTrim(bd.systemEquipSN),
         systemEnviron: strTgs.sTrim(bd.systemEnviron),
         systemRole: strTgs.uTrim(bd.systemRole),
@@ -1033,7 +1033,7 @@ exports.dcSystemPost = function(req,res){
     //        logger.info('new port >'+bd.sysPortId[i]);
             sys.systemPorts.push({
                 sysPortType: strTgs.sTrim(bd.sysPortType[i]),
-                sysPortName: strTgs.sTrim(bd.sysPortName[i]),
+                sysPortName: strTgs.clTrim(bd.sysPortName[i]),
                 sysPortAddress: strTgs.sTrim(bd.sysPortAddress[i]),
                 sysPortCablePath: strTgs.clTrim(bd.sysPortCablePath[i]),
                 sysPortEndPoint: strTgs.clTrim(bd.sysPortEndPoint[i]),
@@ -1060,7 +1060,7 @@ exports.dcSystemPost = function(req,res){
     /*            thisSubDoc.sysPortCrossover= strTgs.doCheckbox(bd.sysPortCrossover[i]);  future*/
         }
     }
-            thisDoc.systemName= strTgs.clTrim(bd.systemName);
+            thisDoc.systemName= strTgs.csTrim(bd.systemName);
             thisDoc.systemEquipSN= strTgs.sTrim(bd.systemEquipSN);
             thisDoc.systemEnviron= strTgs.sTrim(bd.systemEnviron);
             thisDoc.systemRole= strTgs.uTrim(bd.systemRole);
@@ -1155,7 +1155,7 @@ if (req.body.systemName){
                     intro: 'Done!',
                     message: 'System '+ res.abbreviation +' has been deleted.',
                 };
-                return res.redirect(303, '/equipment-systems/'+res.newpage);
+                return (res.newpage ==='')? res.redirect(303,'/') : res.redirect(303, '/equipment-systems/'+res.newpage);
                 }
             });
         }

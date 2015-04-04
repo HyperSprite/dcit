@@ -12,12 +12,12 @@ var logger = new (winston.Logger)({
 
     
 exports.systemdbCreate = function (data,req) {
-    Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
+    Systemdb.findOne({systemName: strTgs.csTrim(data.systemName)},function(err,sys){
         // checking for existing system
         if(!sys){
 
 Systemdb.create({
-                    systemName: strTgs.clTrim(data.systemName),
+                    systemName: strTgs.csTrim(data.systemName),
                     systemEquipSN: strTgs.cTrim(data.systemEquipSN),
                     systemEnviron: strTgs.clTrim(data.systemEnviron),
                     systemRole: strTgs.clTrim(data.systemRole),
@@ -27,7 +27,7 @@ Systemdb.create({
                     systemOwner: strTgs.uTrim(data.systemOwner),
                     systemImpact: data.systemImpact,
                     systemIsVirtual: data.systemIsVirtual,
-                    systemParentId: strTgs.clTrim(data.systemParentId),
+                    systemParentId: strTgs.csTrim(data.systemParentId),
                     systemOSType: strTgs.uTrim(data.systemOSType),
                     systemOSVersion: strTgs.uTrim(data.systemOSVersion),
                     systemApplications: strTgs.uTrim(data.systemApplications),
@@ -101,7 +101,7 @@ Systemdb.create({
         sys.save(function(err){
             if(err){
                 logger.warn(err);
-                logger.warn('sysUpdate Failed Unknown,'+data.index+','+strTgs.clTrim(data.systemName));
+                logger.warn('sysUpdate Failed Unknown,'+data.index+','+strTgs.csTrim(data.systemName));
             }else{
             logger.info('sysUpdate Sucessful write,'+data.index+','+data.systemName);
             return ('done');
@@ -109,14 +109,14 @@ Systemdb.create({
         });
 
         }else{
-            logger.warn('sysUpdate Failed modifiedOn is older than existing,'+data.index+','+strTgs.clTrim(data.systemName));
+            logger.warn('sysUpdate Failed modifiedOn is older than existing,'+data.index+','+strTgs.csTrim(data.systemName));
         }
     }
     });
 };
 exports.systemdbPortsCreate = function (data,req) {
 // Lookup system
-Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
+Systemdb.findOne({systemName: strTgs.csTrim(data.systemName)},function(err,sys){
     if (err) {
         logger.warn('sysPortCreate,'+data.index+','+data.systemName+err);
     }else if(!sys){
@@ -134,7 +134,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 sysPortName: strTgs.sTrim(data.sysPortName),
                 sysPortAddress: strTgs.sTrim(data.sysPortAddress),
                 sysPortCablePath: strTgs.stTrim(data.sysPortCablePath),
-                sysPortEndPoint: strTgs.clTrim(data.sysPortEndPoint),
+                sysPortEndPoint: strTgs.csTrim(data.sysPortEndPoint),
                 sysPortEndPointPre: strTgs.clTrim(data.sysPortEndPointPre),
                 sysPortEndPointPort: strTgs.clTrim(data.sysPortEndPointPort),
                 sysPortVlan: strTgs.sTrim(data.sysPortVlan),
@@ -166,7 +166,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 if(data.sysPortCablePath){
                 thisDoc.sysPortCablePath= strTgs.stTrim(data.sysPortCablePath);}
                 if(data.sysPortEndPoint){
-                thisDoc.sysPortEndPoint= strTgs.clTrim(data.sysPortEndPoint);}
+                thisDoc.sysPortEndPoint= strTgs.csTrim(data.sysPortEndPoint);}
                 if(data.sysPortEndPointPre){
                 thisDoc.sysPortEndPointPre= strTgs.clTrim(data.sysPortEndPointPre);}
                 if(data.sysPortEndPointPort){
@@ -181,7 +181,7 @@ Systemdb.findOne({systemName: strTgs.clTrim(data.systemName)},function(err,sys){
                 thisDoc.modifiedOn= strTgs.compareDates(data.modifiedOn,req.session.ses.timezone); 
             sys.save(function(err){
             if(err){
-                logger.warn('sysPortUpdate Failed,'+data.index+','+strTgs.clTrim(data.systemName)+','+err);
+                logger.warn('sysPortUpdate Failed,'+data.index+','+strTgs.csTrim(data.systemName)+','+err);
             }else{
                 logger.info('sysPortUpdate Sucessful Update write,'+data.index+','+data.systemName+','+data.sysPortName);
             return ('done');
