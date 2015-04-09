@@ -21,6 +21,36 @@ svg {
     float:left;
 }
 .autocomplete-suggestions {
-        background-color: #F5F5F7;
-        overflow: hidden;
+    background-color: #F5F5F7;
+    overflow: hidden;
+}
+.autocomplete-selected { 
+    background: #FCBBBB; 
+}
+.autocomplete-suggestions strong { 
+    font-weight: bold;
+    color: #800000; 
+}
+.autocomplete-group { 
+    padding: 2px 5px; 
+}
+.autocomplete-group strong { 
+    display: block; 
+    border-bottom: 1px solid #000; 
+}
+.autocomplete-nofound {
+    font-size: 120%;
+    font-weight: bold;
+    color: #800000;
+    font-family: 'Roboto';
+}
+.glyphicon-ok {
+    font-size: 120%;
+    font-weight: bold;
+    color: #008000;
+}
+.glyphicon-remove {
+    font-size: 120%;
+    font-weight: bold;
+    color: #BA0000;
 }

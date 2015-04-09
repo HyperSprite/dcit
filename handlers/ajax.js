@@ -126,7 +126,6 @@ exports.allEquipSN = function(req,res){
             "query": "Unit",
             "suggestions": aSN,
         };
-        
 //        logger.info('allEquipSN');
        res.json(context);
     });

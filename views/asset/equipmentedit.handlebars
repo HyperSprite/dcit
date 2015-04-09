@@ -18,12 +18,13 @@
         </div>
         {{else}}
         {{#if wasCopy}} <input type="hidden" name="wasCopy" value="{{wasCopy}}"> {{/if}}
-        <div class="form-group">
+        <div class="form-group equipSNVal has-feedback ui-widget">
             <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
-            <div class="col-sm-4">
-                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" required>
+            <div class="col-sm-4 ">
+                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" required aria-describedby="equipSNStatus">
             </div>
         </div>
+        <p id="empty-message"></p>
         {{/if}}
                 <div class="form-group">
             <label for="field-Status" class="col-sm-2 control-label" >Status</label>
