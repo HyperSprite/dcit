@@ -15,6 +15,7 @@
     <input type="hidden" name="systemId" value="new">
     {{/if}} 
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="equipLocation" value="{{equipLocation}}">
         <p class="form-control-static"></p>
 
         <div class="form-group">
@@ -53,7 +54,7 @@
         <div class="form-group">
             <label for="systemEquipSN" class="col-sm-2 control-label" >Equipment SN</label>
             <div class="col-sm-4">
-                <input type="text" id="systemEquipSN" class="form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" >
+                <input type="text" id="systemEquipSN" class="noEnterSubmit form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" >
             </div>
         </div> 
         {{#if equipLocation}}<div class="form-group">

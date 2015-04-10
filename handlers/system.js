@@ -923,6 +923,7 @@ exports.dcSystemPost = function(req,res){
     var backURL=req.header('Referer') || '/';
     // this makes the abbreviation available for the URL
     res.abbreviation = strTgs.csTrim(bd.systemName);
+    res.equipLocation = bd.equipLocation;
  //   logger.info('dcRackPost abbreviation>'+strTgs.clTrim(bd.systemName));
 
     //logger.info('rUs expanded >'+ strTgs.compUs(req.body.rUs));
