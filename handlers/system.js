@@ -79,7 +79,7 @@ logger.warn('dcSystemPages'+err);
 */
 
 
-    } else if (req.params.datacenter.indexOf ('new') !=-1){
+    } else if (req.params.datacenter.indexOf ('+new+') !=-1){
         //logger.info('else if (req.params.datacenter.indexOf ("newSys")');
         //logger.info('datacenter '+req.params.datacenter);
         start = req.params.datacenter.indexOf ('-')+1;
@@ -387,6 +387,15 @@ logger.warn('dcSystemPages'+err);
                     systemInstall: strTgs.dateMod(sy.systemInstall),
                     systemStart: strTgs.dateMod(sy.systemStart),
                     systemEnd: strTgs.dateMod(sy.systemEnd),
+                        systemPorts: sy.systemPorts.map(function(sp){
+                            return {
+                            sysPortType: sp.sysPortType,
+                            sysPortName: sp.sysPortName,
+                            sysPortAddress: sp.sysPortAddress,
+                            sysPortVlan: sp.sysPortVlan,
+                            sysPortOptions: sp.sysPortOptions,
+                        };
+                    }),
             };     
         }                    
  
