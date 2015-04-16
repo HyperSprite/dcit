@@ -391,7 +391,6 @@ logger.warn('dcSystemPages'+err);
                             return {
                             sysPortType: sp.sysPortType,
                             sysPortName: sp.sysPortName,
-                            sysPortAddress: sp.sysPortAddress,
                             sysPortVlan: sp.sysPortVlan,
                             sysPortOptions: sp.sysPortOptions,
                         };
