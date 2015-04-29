@@ -443,7 +443,7 @@ exports.dcRackPost = function(req,res){
                     	rackParentDC:req.body.id,
                         rackParentCage:req.body.cageId,
                         rackNickname: strTgs.cTrim(req.body.rackNickname),
-                        rackName:strTgs.cTrim(req.body.rackName),
+                        rackName:strTgs.stTrim(req.body.rackName),
                         rackUnique:(req.body.abbreviation+'_'+req.body.cageAbbreviation+'_'+strTgs.clTrim(req.body.rackNickname)),
                         rackDescription:strTgs.uTrim(req.body.rackDescription),
                         rackSN: strTgs.cTrim(req.body.rackSN),
@@ -508,7 +508,7 @@ exports.dcRackPost = function(req,res){
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
 
-                        thisDoc.rackName = strTgs.uCleanUp(thisDoc.rackName,req.body.rackName);
+                        thisDoc.rackName = strTgs.stCleanUp(thisDoc.rackName,req.body.rackName);
                         thisDoc.rackDescription = strTgs.uCleanUp(thisDoc.rackDescription,req.body.rackDescription);
                         thisDoc.rackSN = strTgs.uCleanUp(thisDoc.rackSN,req.body.rackSN);
                         thisDoc.rackHeight = strTgs.uCleanUp(thisDoc.rackHeight,req.body.rackHeight);
