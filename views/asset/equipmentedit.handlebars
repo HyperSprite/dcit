@@ -74,7 +74,11 @@
                 <input type="checkbox" name="equipIsVirtual" value="true" {{equipIsVirtualChecked}}>
             </div>
         </div>
-
+        <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
+                <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
+                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='{{ses.lastPage}}'{{/if}} >
+        </div>
         <table id="portsTable" class="table table-condensed">
             <thead>
                 <tr>
@@ -149,9 +153,6 @@
         </table>
         <div class="form-group">
         <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('tbody1','tr',10);">+ 1</button>
-                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='{{ses.lastPage}}'{{/if}} >
         </div>
         <hr>
         <ul id="eachUl"class="list-unstyled">    
