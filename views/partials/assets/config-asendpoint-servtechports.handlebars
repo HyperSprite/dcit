@@ -1,0 +1,16 @@
+{{!-- Example 
+set outlet name .AA1 TowerA_InfeedA_Outlet1
+--}}
+    <div>
+        <h5>Server Tech Port Config {{sysPortEndPoint}}</h5>
+        <ul class="list-unstyled">
+        {{#each sys}}
+            {{#each systemPorts}}
+                {{#if sysPortisPower}}
+                <code>
+                    <li>set outlet name .<strong>{{Need Something here}}{{sysPortEndPointPre}}{{sysPortEndPointPort}}</strong></li>
+                </code>
+                {{/if}}
+            {{/each}}
+        {{/each}}
+    </div>

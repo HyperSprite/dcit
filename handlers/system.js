@@ -208,13 +208,23 @@ logger.warn('dcSystemPages'+err);
             //logger.info('thisDC > '+thisDC);
 
 
-            var hasIlom,makeMod;
+            var hasIlom,makeMod,isACS6000,isServTechPDU,sTHostName,sTHostAB;
             if(thisEquip !== false){
             makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
             //logger.info('makeMod >'+makeMod);
                 if(makeMod.indexOf ('oracle') !=-1 && makeMod.indexOf ('x') !=-1){
                     hasIlom = 1;
                     //logger.info('hasIlom >'+hasIlom);
+                } else if(makeMod.indexOf ('avocent') !=-1 && makeMod.indexOf ('60') !=-1){
+                    isACS6000 = 1;
+                } else if(makeMod.indexOf ('server technology') !=-1){
+                    // removes the A and B from the end of the PDU name
+                    sTHostName = sy.systemName.substring(0,sy.systemName.length -1);
+                    // A or B from end of PDU name
+                    sTHostAB = sy.systemName.substring(sy.systemName.length -1);
+                    if (sTHostAB === 'a'){
+                        isServTechPDU = 1;
+                    }
                 }
             thisEquipPortsMaped = thisEquip.equipPorts.map(function(tep){
                 return {
@@ -234,6 +244,10 @@ logger.warn('dcSystemPages'+err);
             menu1: sy.systemName+' as Endpoint',
             menuLink1: '/endpoint/'+sy.systemName,
             ilom: hasIlom,
+            isACS6000: isACS6000,
+            isServTechPDU: isServTechPDU,
+            sTHostName: sTHostName,
+            sTHostAB: sTHostAB,
             sysNameList: sysUni,
             equipSNList: eqUni,
             optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),

@@ -1,10 +1,10 @@
-{{#if ilom}}
+
   <div>
     {{#each systemPorts}}
       {{#if sysPortisNetMgmt}}
       <h5>Ilom Config</h5>
-        <div class="span9" style="border: 2px solid grey">
-          <p>
+        <div class="col-xs-12 col-sm-6 col-md-6" style="border: 2px solid grey">
+          <p><code>
           set /SP hostname=<strong>{{../../systemName}}-{{sysPortName}}</strong><br>
           cd /SP/network<br>
           set pendingipdiscovery=static<br>
@@ -14,9 +14,10 @@
           set commitpending=true<br>
           set /SP/services/ssh state=enabled<br>
           set /SP/services/https servicestate=enabled port=443<br>
+          </code>
           </p>
-        </div>   
+        </div>
+        <div class="col-xs-6 col-md-6"></div>  
       {{/if}}
     {{/each}}
   </div>
-{{/if}}

@@ -1,0 +1,122 @@
+{{!--Need to fix topwer and system names
+    Need to add servtech for if in Systems.js
+example:
+set dhcp disabled
+set dns1 10.230.16.100
+set dns2 10.220.161.100
+set subnet 255.255.255.0
+set gateway 10.231.231.1
+set telnet disabled
+set ssh enabled
+set ssh authmethod password enabled
+set ssh authmethod kbint enabled
+set http enabled
+set ssl enabled
+set ssl access required
+set sntp primary tick.dc1.responsys.com
+set sntp secondary tock.dc1.responsys.com
+set sntp gmtoffset -8
+set tower name Towera pdu-dc01-103-1a
+set tower name Towerb pdu-dc01-103-1b
+set location pdu-dc01-103-1
+set ipaddress 10.231.231.221
+restart
+
+ --}}
+
+  <div class="row">
+    {{#each systemPorts}}
+      {{#if sysPortisNetMgmt}}
+      <h5>Server Tech NetMgmt Config</h5>
+        <div class="col-xs-6 " style="border: 2px solid grey">
+          <ol>
+          <li>Log into the PDU via console and configure networking.
+            <ul class="list-unstyled">
+            <br><code>
+              <li>set dhcp disabled</li>
+              <li>set dns1 <strong>{{dcNet.dcNetDns1}}</strong></li>
+              <li>set dns2 <strong>{{dcNet.dcNetDns2}}</strong></li>
+              <li>set subnet <strong>{{netMask}}</strong></li>
+              <li>set gateway <strong>{{dcNet.dcNetGateway}}</strong></li>
+              <li>set telnet disabled</li>
+              <li>set ssh enabled</li>
+              <li>set ssh authmethod password enabled</li>
+              <li>set ssh authmethod kbint enabled</li>
+              <li>set http enabled</li>
+              <li>set ssl enabled</li>
+              <li>set ssl access required</li>
+              <li>set sntp primary <strong>{{dcNet.dcNetNTP1}}</strong></li>
+              <li>set sntp secondary <strong>{{dcNet.dcNetNTP2}}</strong></li>
+              <li>set sntp gmtoffset -8</li>
+              <li>set tower name Towera <strong>{{../../sTHostName}}a</strong></li>
+              <li>set tower name Towerb <strong>{{../../sTHostName}}b</strong></li>
+              <li>set location <strong>{{../../sTHostName}}</strong></li>
+              <li>set ipaddress <strong>{{sysPortAddress}}</strong></li>
+              <li>restart</li>
+              <li></li>
+              </code>
+            </ul><br></li>
+          <li>Once it reboots, setup the user accounts.
+            <ul class="list-unstyled">
+            <br><code>
+              <li>create user root</li>
+              <li><mark>* replace with root password</mark></li>
+              <li><mark>* replace with root password</mark></li>
+              <li>set user access</li>
+              <li>admin</li>
+              <li>root</li>
+              <li>create user admin</li>
+              <li><mark>* replace with kickstart password</mark></li>
+              <li><mark>* replace with kickstart password</mark></li>
+              <li>set user access</li>
+              <li>poweruser</li>
+              <li>admin</li>
+              <li>set user password</li>
+              <li>admn</li>
+              <li><mark>* replace with root password</mark></li>
+              <li><mark>* replace with root password</mark></li>
+              <li>set option tempscale fahrenheit</li>
+              <li>set snmp setcomm cyclade-servtech</li>
+              <li>Set FTP Server DISABLED</li>
+              <li>set FTP Host ftp.servertech.com</li>
+              <li>set FTP Filename swcdu-auto.bin</li>
+              <li>set FTP Directory Pub/firmware/Sentry3/AutoUpdate/</li>
+              <li>set FTP Username anonymous</li>
+              <li>set FTP Password f@responsys.com</li>
+              <li>restart ftpload</li>
+              </code>
+            </ul><br></li>
+          <li>Verify the latest firmware and check accounts.</li>
+          <li>Watch it reboot and make sure you are configuring the correct PDU.  All the port lights should go off and come back on (this does not affect power to those ports, just the lights).</li>
+          <li>After it updates the firmware and reboots, log off of the console and login using SSH with root.</li>
+          <li>If it checks out, you are ready to start adding server port configurations.</li>
+          <li>If you need to reset outlets names default, use the following list for the affected ports. For multi branch PDUs you will need to customize this list with the branch names, e.g. set outlet name .BA1 TowerB_InfeedA_Outlet1. 
+            <ul class="list-unstyled">
+            <code>
+            <br>
+              <li>set outlet name .A1 TowerA_Outlet1</li>
+              <li>set outlet name .A2 TowerA_Outlet2</li>
+              <li>set outlet name .A3 TowerA_Outlet3</li>
+              <li>set outlet name .A4 TowerA_Outlet4</li>
+              <li>set outlet name .A5 TowerA_Outlet5</li>
+              <li>set outlet name .A6 TowerA_Outlet6</li>
+              <li>set outlet name .A7 TowerA_Outlet7</li>
+              <li>set outlet name .A8 TowerA_Outlet8</li>
+              <li>set outlet name .B1 TowerB_Outlet1</li>
+              <li>set outlet name .B2 TowerB_Outlet2</li>
+              <li>set outlet name .B3 TowerB_Outlet3</li>
+              <li>set outlet name .B4 TowerB_Outlet4</li>
+              <li>set outlet name .B5 TowerB_Outlet5</li>
+              <li>set outlet name .B6 TowerB_Outlet6</li>
+              <li>set outlet name .B7 TowerB_Outlet7</li>
+              <li>set outlet name .B8 TowerB_Outlet8</li>
+              </code>
+            </ul><br></li>
+            <li>Use the System as Endpoint for specific port configurations.</li>
+            </ol>
+          </p>
+        </div>
+        <div class="col-xs-6"></div>
+      {{/if}}
+    {{/each}}
+  </div>

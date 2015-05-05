@@ -81,6 +81,8 @@
  
         {{> assets/config-acs6k}}
 
-        {{> assets/config-ilom}} 
+        {{#if ilom}}          {{> assets/config-ilom}} {{/if}}
+
+        {{#if isServTechPDU}} {{> assets/config-servtechpdu}} {{/if}}
 </div>
 

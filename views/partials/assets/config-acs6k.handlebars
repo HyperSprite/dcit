@@ -1,26 +1,30 @@
-  <div>
+  <div class="row">
         {{#each systemPorts}}
         {{#if sysPortisConsole}}
         <h5>Avocent Console Config</h5> {{sysPortEndPoint}}<br>
-      <div class="span9" style="border: 2px solid grey">
-        <p>cd /ports/serial_ports<br>
-           {{#if sysPortEndPointPort}}set_cas <strong>{{sysPortEndPointPort}}</strong>{{else}}<mark>set_cas ??</mark>{{/if}}<br>
-           {{#if sysPortOptions}}set enable_cisco_rj45_pin-out=<strong>{{sysPortOptions}}</strong>{{else}}<mark>set enable_cisco_rj45_pin-out=??</mark>{{/if}}<br>
-           set status=enabled<br>
-           set speed=9600<br>
-           set parity=none<br>
-           set data_bits=8<br>
-           set stop_bits=1<br>
-           set flow_control=none<br>
-           cd cas<br>
-           set port_name=<strong>{{../../systemName}}</strong><br>
-           set enable_auto_discovery=no<br>
-           set protocol=ssh<br>
-           set authentication_type=ldap|local<br>
-           save --cancelOnError<br>
-           echo on<br>
-           commit</p>
-        </div>   
+      <div class="col-xs-6 " style="border: 2px solid grey">
+        <code>
+        <ul class="list-unstyled">
+          <li>cd /ports/serial_ports</li>
+          <li>{{#if sysPortEndPointPort}}set_cas <strong>{{sysPortEndPointPort}}</strong>{{else}}<mark>set_cas ??</mark>{{/if}}</li>
+          <li>{{#if sysPortOptions}}set enable_cisco_rj45_pin-out=<strong>{{sysPortOptions}}</strong>{{else}}<mark>set enable_cisco_rj45_pin-out=??</mark>{{/if}}</li>
+          <li>set status=enabled</li>
+          <li>set speed=9600</li>
+          <li>set parity=none</li>
+          <li>set data_bits=8</li>
+          <li>set stop_bits=1</li>
+          <li>set flow_control=none</li>
+          <li>cd cas</li>
+          <li>set port_name=<strong>{{../../systemName}}</strong></li>
+          <li>set enable_auto_discovery=no</li>
+          <li>set protocol=ssh</li>
+          <li>set authentication_type=ldap|local</li>
+          <li>save --cancelOnError</li>
+          <li>echo on</li>
+          <li>commit</li></p>
+           </code>
+        </div>
+        <div class="col-xs-6"></div> 
         {{/if}}
         {{/each}}
     </div>
