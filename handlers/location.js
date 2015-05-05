@@ -314,7 +314,9 @@ this takes the abbreviation and displays the matching datacenter details
                                 dcNetNTP2: nk.dcNetNTP2,
                                 dcNetLdap1: nk.dcNetLdap1,
                                 dcNetLdap2: nk.dcNetLdap2,
+                                dcNetLdapString: nk.dcNetLdapString,
                                 dcNetTftpHost: nk.dcNetTftpHost,
+                                dcNetACSFilePath: nk.dcNetACSFilePath,
                                 ipLowStr: iPRange.ipLowStr,
                                 ipHighStr: iPRange.ipHighStr,
                                 prefixMaskStr: iPRange.prefixMaskStr
@@ -911,7 +913,9 @@ exports.datacenterNetworkPages = function(req,res,next){
                 dcNetNTP2: nk.dcNetNTP2,
                 dcNetLdap1: nk.dcNetLdap1,
                 dcNetLdap2: nk.dcNetLdap2,
+                dcNetLdapString: nk.dcNetLdapString,
                 dcNetTftpHost: nk.dcNetTftpHost,
+                dcNetACSFilePath: nk.dcNetACSFilePath,
                 optMask: strTgs.findThisInThatOpt('optMask',opt),
                 };
             res.render('location/networkedit', context);
@@ -941,7 +945,9 @@ exports.datacenterNetworkPages = function(req,res,next){
                 dcNetNTP2: nk.dcNetNTP2,
                 dcNetLdap1: nk.dcNetLdap1,
                 dcNetLdap2: nk.dcNetLdap2,
+                dcNetLdapString: nk.dcNetLdapString,
                 dcNetTftpHost: nk.dcNetTftpHost,
+                dcNetACSFilePath: nk.dcNetACSFilePath,
                 optMask: strTgs.findThisInThatOpt('optMask',opt),
                 };
             res.render('location/networkedit', context);
@@ -990,7 +996,9 @@ exports.datacenterNetworkPost = function(req,res,next){
             dcNetNTP2: strTgs.clTrim(data.dcNetNTP2),
             dcNetLdap1: strTgs.clTrim(data.dcNetLdap1),
             dcNetLdap2: strTgs.clTrim(data.dcNetLdap2),
+            dcNetLdapString: strTgs.clTrim(data.dcNetLdapString),
             dcNetTftpHost: strTgs.clTrim(data.dcNetTftpHost),
+            dcNetACSFilePath: strTgs.clTrim(data.dcNetACSFilePath),
             createdBy: req.user.local.email,
             createdOn: Date.now(),
             modifiedBy: req.user.local.email,
@@ -1012,7 +1020,9 @@ exports.datacenterNetworkPost = function(req,res,next){
             thisSubDoc.dcNetNTP2= strTgs.clCleanUp(thisSubDoc.dcNetNTP2,data.dcNetNTP2);
             thisSubDoc.dcNetLdap1= strTgs.clCleanUp(thisSubDoc.dcNetLdap1,data.dcNetLdap1);
             thisSubDoc.dcNetLdap2= strTgs.clCleanUp(thisSubDoc.dcNetLdap2,data.dcNetLdap2);
+            thisSubDoc.dcNetLdapString= strTgs.clCleanUp(thisSubDoc.dcNetLdapString,data.dcNetLdapString);
             thisSubDoc.dcNetTftpHost= strTgs.clCleanUp(thisSubDoc.dcNetTftpHost,data.dcNetTftpHost);
+            thisSubDoc.dcNetACSFilePath= strTgs.clCleanUp(thisSubDoc.dcNetACSFilePath,data.dcNetACSFilePath);
             thisSubDoc.modifiedOn = Date.now();
             thisSubDoc.modifiedBy = req.user.local.email;
 

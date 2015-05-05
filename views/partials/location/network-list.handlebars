@@ -11,8 +11,6 @@
                 <th class="table-sort" data-sort="dcNetGateway">Gateway</th>
                 <th class="table-sort" data-sort="dcNetDomain">Domain</th>
                 <th class="table-sort" data-sort="dcNetSettings">Settings</th>
-
-                
             </tr>
         </thead>
         <tbody class="list">
@@ -42,7 +40,10 @@
                         {{#if dcNetNTP2}}Secondary NTP: {{dcNetNTP2}}<br>{{/if}}
                         {{#if dcNetLdap1}}Primary LDAP: {{dcNetLdap1}}<br>{{/if}}
                         {{#if dcNetLdap2}}Secondary LDAP:{{dcNetLdap2}}<br>{{/if}}
+                        {{#if dcNetLdapString}}Secondary LDAP:{{dcNetLdapString}}<br>{{/if}}
                         {{#if dcNetTftpHost}}TFTP Host: {{dcNetTftpHost}}<br>{{/if}}
+                        {{#if dcNetACSFilePath}}ACS TFTP File Path: {{dcNetACSFilePath}}<br>{{/if}}
+                        
                     </td>
                 </tr>  
             {{/each}}

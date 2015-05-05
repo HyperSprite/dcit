@@ -78,11 +78,9 @@
     </ul>
     <hr>
         {{> assets/config-portconfig}}  
- 
         {{> assets/config-acs6k}}
-
-        {{#if ilom}}          {{> assets/config-ilom}} {{/if}}
-
+        {{#if ilom}}          {{> assets/config-ilom}}        {{/if}}
         {{#if isServTechPDU}} {{> assets/config-servtechpdu}} {{/if}}
+        {{#if isACS6000}}     {{> assets/config-bareACS6k}}   {{/if}}
 </div>
 

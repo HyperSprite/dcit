@@ -6,8 +6,11 @@ textarea.form-fixer {
     padding: 1px;
     height: 28px;
 }
-div.marginRow{
+div.marginRow {
    margin-bottom:0px !important; 
+}
+code {
+white-space: normal;
 }
 /* this is for Rack Elevations */
 svg {

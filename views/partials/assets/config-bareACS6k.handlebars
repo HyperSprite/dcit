@@ -1,1 +1,124 @@
-config-bareACS6k.handlebars
+
+<div class="row">
+{{#each systemPorts}}
+{{#if sysPortisNetMgmt}}
+<h5>Avocent ACS6000 from bare metal</h5>
+<div class="col-xs-6" style="border: 2px solid grey">
+<ol>
+<li>Update the firmware and reset to factory settings by connecting to the console port and running the following. This will remove any previouse settings.
+    <code>
+        <ul class="list-unstyled"> 
+            <li>setenv ipaddr <strong>{{sysPortAddress}}</strong>;setenv subnetmask <strong>{{netMask}}</strong>;setenv gateway <strong>{{dcNet.dcNetGateway}}</strong>;setenv bootfile <strong>{{dcNet.dcNetACSFilePath}}</strong>;setenv serverip <strong>{{dcNet.dcNetTftpHost}}</strong>;setenv bootcmd net_boot;printenv</li>
+            <li>net_boot factory_default</li>
+        </ul>
+    </code>
+</li>
+<li>Cyclades Network Config:</li>
+<li>After the upgrade, configure the netorking:
+    <code>
+        <ul class="list-unstyled"> 
+        <li>cli</li>
+        <li>cd /network/settings</li>
+        <li>set search=<strong>{{dcNet.dcNetDomain}}</strong> domain=<strong>{{dcNet.dcNetDomain}}</strong></li>
+        <li>set hostname=<strong>{{../../systemName}}</strong></li>
+        <li>set primary_dns=<strong>{{dcNet.dcNetDns1}}</strong></li>
+        <li>set secondary_dns=<strong>{{dcNet.dcNetDns2}}</strong></li>
+        <li>cd /network/devices/eth0</li>
+        <li>set status=enabled</li>
+        <li>set ipv4_method=static</li>
+        <li>set ipv4_address=<strong>{{sysPortAddress}}</strong></li>
+        <li>set ipv4_mask=<strong>{{netMask}}</strong></li>
+        <li>set ipv4_gateway=<strong>{{dcNet.dcNetGateway}}</strong></li>
+        <li>set ipv6_method=ipv6_address_unconfigured</li>
+        <li>set mode=auto</li>
+        <li>commit</li>
+        <li>reboot</li>
+        </ul>
+    </code>
+</li>
+<li>Customizations</li>
+<li>Once it comes back, run in the following config.</li>
+<li>If the Console server has less than 48 ports, edit the set cas line below first.</li>
+    <code>
+        <ul class="list-unstyled">
+            <li>echo off</li>
+            <li>cd /system/security/security_profile</li>
+            <li>batch_mode</li>
+            <li>set idle_timeout=3600</li>
+            <li>set rpc=no</li>
+            <li>set port_access_per_user_group_authorization=no</li>
+            <li>set bootp_enabled=no</li>
+            <li>set enable_live_configuration_retrieval_(any_time_dhcp_renews)=no</li>
+            <li>set security_profile=custom</li>
+            <li>set enable_telnet_service=no</li>
+            <li>set enable_ftp_service=no</li>
+            <li>set enable_snmp_service=no</li>
+            <li>set enable_ipsec=no</li>
+            <li>set answer_icmp_message=yes</li>
+            <li>set ssh_version=2</li>
+            <li>set ssh_tcp_port=22</li>
+            <li>set ssh_allow_root_access=yes</li>
+            <li>set enable_http_session=yes</li>
+            <li>set http_port=80</li>
+            <li>set enable_https_session=yes</li>
+            <li>set https_ssl_version=2|3</li>
+            <li>set https_minimum_cipher_suite_level=medium</li>
+            <li>set https_port=443</li>
+            <li>set redirect_http|https=yes</li>
+            <li>submit</li>
+            <li>cd /system/security/dsview</li>
+            <li>batch_mode</li>
+            <li>set allow_appliance_to_be_managed_by_dsview.=no</li>
+            <li>submit</li>
+            <li>cd /system/date_and_time/date_and_time</li>
+            <li>batch_mode</li>
+            <li>set settings=enable_network_time_protocol</li>
+            <li>set server=<strong>{{dcNet.dcNetNTP1}}</strong></li>
+            <li>submit</li>
+            <li>cd /system/date_and_time/time_zone</li>
+            <li>batch_mode</li>
+            <li>set time_zone=predefined</li>
+            <li>set zone=us|pacific</li>
+            <li>submit</li>
+            <li>echo off</li>
+            <li>cd /authentication/appliance_authentication</li>
+            <li>batch_mode</li>
+            <li>set authentication_type=ldap|local</li>
+            <li>set enable_single_sign-on=yes</li>
+            <li>set single_sign-on_authentication_type=ldap|local</li>
+            <li>submit</li>
+            <li>cd /authentication/authentication_servers/ldap(s)|ad</li>
+            <li>batch_mode</li>
+            <li>set server=<strong>{{dcNet.dcNetLdap1}}</strong></li>
+            <li>set base="<strong>{{dcNet.dcNetLdapString}}</strong>"</li>
+            <li>set secure=off</li>
+            <li>submit</li>
+            <li>commit</li>
+            <li>cd /ports/serial_ports</li>
+            <li>echo off</li>
+            <li>set_cas -</li>
+            <li>set enable_cisco_rj45_pin-out=no</li>
+            <li>set speed=9600</li>
+            <li>set parity=none</li>
+            <li>set data_bits=8</li>
+            <li>set stop_bits=1</li>
+            <li>set flow_control=none</li>
+            <li>cd cas</li>
+            <li>set enable_auto_discovery=no</li>
+            <li>set protocol=ssh</li>
+            <li>set authentication_type=ldap|local</li>
+            <li>save --cancelOnError</li>
+            <li>echo on</li>
+            <li>commit</li>
+            <li>show</li>
+            <li>reboot</li>
+            <li>yes</li>
+        </ul>
+    </code>
+</li>
+</ol>
+</div>
+<div class="col-xs-6"></div>
+{{/if}}
+{{/each}}
+</div> 
