@@ -1,8 +1,10 @@
   <div class="row">
-        {{#each systemPorts}}
-        {{#if sysPortisConsole}}
-        <h5>Avocent Console Config</h5> {{sysPortEndPoint}}<br>
-      <div class="col-xs-6 " style="border: 2px solid grey">
+    {{#each systemPorts}}
+    {{#if sysPortisConsole}}
+    <h5>Avocent Console Config</h5> {{sysPortEndPoint}}<br>
+    <div class="col-xs-6 " style="border: 2px solid grey">
+      <ol>
+        <li>SSH to the console server listed above as a privileged user. From the cli-> prompt, paste the following commands.
         <code>
         <ul class="list-unstyled">
           <li>cd /ports/serial_ports</li>
@@ -21,10 +23,14 @@
           <li>set authentication_type=ldap|local</li>
           <li>save --cancelOnError</li>
           <li>echo on</li>
-          <li>commit</li></p>
-           </code>
-        </div>
-        <div class="col-xs-6"></div> 
-        {{/if}}
-        {{/each}}
+          <li>commit</li>
+          <li></li>
+        </ul>
+        </code>
+        </li>
+      </ol>
     </div>
+    <div class="col-xs-6"></div> 
+    {{/if}}
+    {{/each}}
+  </div>

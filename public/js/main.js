@@ -65,7 +65,9 @@ $(document).ready(function(){
             autoFocus:true,
             showNoSuggestionNotice: true,
             noSuggestionNotice: '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>'            
-        }); 
+        });
+
+
     $(document).on('focus','.sysPortEndPointPlusOne',function(){
             $("[id^='sysPortEndPoint']").autocomplete({
             serviceUrl: "/autocomplete/allSystemNames",

@@ -211,13 +211,13 @@ logger.warn('dcSystemPages'+err);
             var hasIlom,makeMod,isACS6000,isServTechPDU,sTHostName,sTHostAB;
             if(thisEquip !== false){
             makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
-            logger.info('makeMod >'+makeMod);
+            //logger.info('makeMod >'+makeMod);
                 if(makeMod.indexOf ('oracle') !=-1 && makeMod.indexOf ('x') !=-1){
                     hasIlom = 1;
                     //logger.info('hasIlom >'+hasIlom);
                 } else if(makeMod.indexOf ('avocent') !=-1 && makeMod.indexOf ('60') !=-1){
                     isACS6000 = 1;
-                    logger.info('isACS6k >'+isACS6000);
+                    //logger.info('isACS6k >'+isACS6000);
                 } else if(makeMod.indexOf ('server technology') !=-1){
                     // removes the A and B from the end of the PDU name
                     sTHostName = sy.systemName.substring(0,sy.systemName.length -1);

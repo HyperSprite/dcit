@@ -998,7 +998,7 @@ exports.datacenterNetworkPost = function(req,res,next){
             dcNetLdap2: strTgs.clTrim(data.dcNetLdap2),
             dcNetLdapString: strTgs.clTrim(data.dcNetLdapString),
             dcNetTftpHost: strTgs.clTrim(data.dcNetTftpHost),
-            dcNetACSFilePath: strTgs.clTrim(data.dcNetACSFilePath),
+            dcNetACSFilePath: strTgs.uTrim(data.dcNetACSFilePath),
             createdBy: req.user.local.email,
             createdOn: Date.now(),
             modifiedBy: req.user.local.email,
@@ -1022,7 +1022,7 @@ exports.datacenterNetworkPost = function(req,res,next){
             thisSubDoc.dcNetLdap2= strTgs.clCleanUp(thisSubDoc.dcNetLdap2,data.dcNetLdap2);
             thisSubDoc.dcNetLdapString= strTgs.clCleanUp(thisSubDoc.dcNetLdapString,data.dcNetLdapString);
             thisSubDoc.dcNetTftpHost= strTgs.clCleanUp(thisSubDoc.dcNetTftpHost,data.dcNetTftpHost);
-            thisSubDoc.dcNetACSFilePath= strTgs.clCleanUp(thisSubDoc.dcNetACSFilePath,data.dcNetACSFilePath);
+            thisSubDoc.dcNetACSFilePath= strTgs.uCleanUp(thisSubDoc.dcNetACSFilePath,data.dcNetACSFilePath);
             thisSubDoc.modifiedOn = Date.now();
             thisSubDoc.modifiedBy = req.user.local.email;
 

@@ -5,7 +5,26 @@
 <h5>Avocent ACS6000 from bare metal</h5>
 <div class="col-xs-6" style="border: 2px solid grey">
 <ol>
-<li>Update the firmware and reset to factory settings by connecting to the console port and running the following. This will remove any previouse settings.
+<li>Update the firmware and reset to factory settings by connecting to the console port and running the following. This will remove any previous settings.</li>
+<li>To determine the current version, run the following from the cli-> prompt:
+    <code>
+        <ul class="list-unstyled"> 
+        <li>show system/information</li>
+        </ul>
+    </code>
+    <ul class="list-unstyled">
+    <li>Note: If the unit is pre v3, you must first update to version v2.5.0.11.FL0585-032.bin and then update to v3.</li>
+    <li>Note: Avocent have a nasty habit of switching boot images unexpectedly on reboots. You can see the boot image during boot up just after the 5 second pause as "Booting from image #1 ...". If you miss it, run the following commands from the cli-> prompt to check that it is running on "image = image_1" and change the boot image back to image_1:
+    <code>
+    <li>show system/boot_configuration/</li>
+    <li>cd system/boot_configuration</li>
+    <li>set image=image_1</li>
+    <li>commit</li>
+    <li>reboot</li>
+    </code>
+    </ul>
+</li>
+<li>Run this code to update to latest version:
     <code>
         <ul class="list-unstyled"> 
             <li>setenv ipaddr <strong>{{sysPortAddress}}</strong>;setenv subnetmask <strong>{{netMask}}</strong>;setenv gateway <strong>{{dcNet.dcNetGateway}}</strong>;setenv bootfile <strong>{{dcNet.dcNetACSFilePath}}</strong>;setenv serverip <strong>{{dcNet.dcNetTftpHost}}</strong>;setenv bootcmd net_boot;printenv</li>
@@ -13,22 +32,21 @@
         </ul>
     </code>
 </li>
-<li>Cyclades Network Config:</li>
-<li>After the upgrade, configure the netorking:
+<li>After the upgrade, log in with the default root/linux and configure the networking:
     <code>
         <ul class="list-unstyled"> 
         <li>cli</li>
         <li>cd /network/settings</li>
-        <li>set search=<strong>{{dcNet.dcNetDomain}}</strong> domain=<strong>{{dcNet.dcNetDomain}}</strong></li>
+        <li>set search={{#if dcNet.dcNetDomain}}<strong>{{dcNet.dcNetDomain}}</strong> domain=<strong>{{dcNet.dcNetDomain}}</strong>{{else}}<mark>Check Datacenter Network Domain</mark>{{/if}}</li>
         <li>set hostname=<strong>{{../../systemName}}</strong></li>
-        <li>set primary_dns=<strong>{{dcNet.dcNetDns1}}</strong></li>
-        <li>set secondary_dns=<strong>{{dcNet.dcNetDns2}}</strong></li>
+        <li>set primary_dns={{#if dcNet.dcNetDns1}}<strong>{{dcNet.dcNetDns1}}</strong>{{else}}<mark>Check Datacenter Network DNS</mark>{{/if}}</li>
+        <li>set secondary_dns={{#if dcNet.dcNetDns2}}<strong>{{dcNet.dcNetDns2}}</strong>{{else}}<mark>Check Datacenter Network DNS</mark>{{/if}}</li>
         <li>cd /network/devices/eth0</li>
         <li>set status=enabled</li>
         <li>set ipv4_method=static</li>
-        <li>set ipv4_address=<strong>{{sysPortAddress}}</strong></li>
-        <li>set ipv4_mask=<strong>{{netMask}}</strong></li>
-        <li>set ipv4_gateway=<strong>{{dcNet.dcNetGateway}}</strong></li>
+        <li>set ipv4_address={{#if sysPortAddress}}<strong>{{sysPortAddress}}</strong>{{else}}<mark>NetMgmt port has IP address</mark>{{/if}}</li>
+        <li>set ipv4_mask={{#if netMask}}<strong>{{netMask}}</strong>{{else}}<mark>Check Datacenter Network config</mark>{{/if}}</li>
+        <li>set ipv4_gateway={{#if dcNet.dcNetGateway}}<strong>{{dcNet.dcNetGateway}}</strong>{{else}}<mark>Check Datacenter Network config</mark>{{/if}}</li>
         <li>set ipv6_method=ipv6_address_unconfigured</li>
         <li>set mode=auto</li>
         <li>commit</li>
@@ -36,9 +54,7 @@
         </ul>
     </code>
 </li>
-<li>Customizations</li>
-<li>Once it comes back, run in the following config.</li>
-<li>If the Console server has less than 48 ports, edit the set cas line below first.</li>
+<li>Once it comes back, run in the following to configure the customizations like LDAP and CAS configs:
     <code>
         <ul class="list-unstyled">
             <li>echo off</li>
@@ -48,7 +64,6 @@
             <li>set rpc=no</li>
             <li>set port_access_per_user_group_authorization=no</li>
             <li>set bootp_enabled=no</li>
-            <li>set enable_live_configuration_retrieval_(any_time_dhcp_renews)=no</li>
             <li>set security_profile=custom</li>
             <li>set enable_telnet_service=no</li>
             <li>set enable_ftp_service=no</li>
@@ -73,7 +88,7 @@
             <li>cd /system/date_and_time/date_and_time</li>
             <li>batch_mode</li>
             <li>set settings=enable_network_time_protocol</li>
-            <li>set server=<strong>{{dcNet.dcNetNTP1}}</strong></li>
+            <li>set server={{#if dcNet.dcNetNTP1}}<strong>{{dcNet.dcNetNTP1}}</strong>{{else}}<mark>Check Datacenter Network config</mark>{{/if}}</li>
             <li>submit</li>
             <li>cd /system/date_and_time/time_zone</li>
             <li>batch_mode</li>
@@ -89,8 +104,8 @@
             <li>submit</li>
             <li>cd /authentication/authentication_servers/ldap(s)|ad</li>
             <li>batch_mode</li>
-            <li>set server=<strong>{{dcNet.dcNetLdap1}}</strong></li>
-            <li>set base="<strong>{{dcNet.dcNetLdapString}}</strong>"</li>
+            <li>set server={{#if dcNet.dcNetLdap1}}<strong>{{dcNet.dcNetLdap1}}</strong>{{else}}<mark>Check Datacenter Network config</mark>{{/if}}</li>
+            <li>set base={{#if dcNet.dcNetLdapString}}<strong>"{{dcNet.dcNetLdapString}}"</strong>{{else}}<mark>Check Datacenter Network config</mark>{{/if}}</li>
             <li>set secure=off</li>
             <li>submit</li>
             <li>commit</li>
@@ -116,9 +131,27 @@
         </ul>
     </code>
 </li>
+<li>Configure the user names and passwords</li>
+    <ul class="list-unstyled">
+    <code>
+        <li>cd /users/local_accounts/user_names</li>
+        <li>edit admin</li>
+        <li>set password=<mark><strong>(* replace with root password)</strong></mark></li>
+        <li>set confirm_password=<mark><strong>(* replace with root password)</strong></mark></li>
+        <li>save</li>
+        <li>commit</li>
+        <li>cd /users/local_accounts/user_names</li>
+        <li>edit root</li>
+        <li>set password=<mark><strong>(* replace with root password)</strong></mark></li>
+        <li>set confirm_password=<mark><strong>(* replace with root password)</strong></mark></li>
+        <li>save</li>
+        <li>commit</li>
+    </code>
+    </ul>
+<li>Use <a href="/endpoint/{{../../systemName}}"><strong>{{../../systemName}}</strong> as Endpoint</a> to configure the ports.</li>
 </ol>
 </div>
 <div class="col-xs-6"></div>
 {{/if}}
 {{/each}}
-</div> 
+</div>
