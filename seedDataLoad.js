@@ -4,7 +4,7 @@ exports.seedOptionsDataBase = (function(Optionsdb){
 new Optionsdb({
     optListName: 'Equipment Status',
     optListKey: 'optEquipStatus',
-    optListArray:['Not yet ordered','Ordered','In transit','Received','Spare','Ready','In Service','In Service with issues','Spare with issues','Out for RMA','Damaged','Decommissioned','End of Life - Recycled','End of Life - RMA','Missing'],
+    optListArray:['Not yet ordered','Ordered','In transit','Received','Build in Progress','Spare','Ready','In Service','In Service with issues','Spare with issues','Out for RMA','Damaged','Decommissioned','End of Life - Recycled','End of Life - RMA','Missing'],
     }).save();
 new Optionsdb({
     optListName: 'Equipment Type',

@@ -508,7 +508,7 @@ exports.dcRackPost = function(req,res){
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
 
-                        thisDoc.rackName = strTgs.stCleanUp(thisDoc.rackName,req.body.rackName);
+                        thisDoc.rackName = strTgs.stCleanup(thisDoc.rackName,req.body.rackName);
                         thisDoc.rackDescription = strTgs.uCleanUp(thisDoc.rackDescription,req.body.rackDescription);
                         thisDoc.rackSN = strTgs.uCleanUp(thisDoc.rackSN,req.body.rackSN);
                         thisDoc.rackHeight = strTgs.uCleanUp(thisDoc.rackHeight,req.body.rackHeight);
