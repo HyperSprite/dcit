@@ -69,7 +69,7 @@
         <div class="form-group">
             <label for="field-systemInventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
             <div class="col-sm-4">
-                <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} title="This page complete">
+                <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} title="Check this box if this page is complete">
             </div>
         </div>  
         <div class="form-group">
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="col-sm-2 form-group">
-                <button type="submit" input accesskey="x" title="Press Alt x to Save"class="btn btn-primary btn-xs" value='Save'>S</button>
+                <button type="submit" input accesskey="x" title="Press Alt x to Save" class="btn btn-primary btn-xs" value='Save'>S</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
                 <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' formaction='{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}'>
         </div>
