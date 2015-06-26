@@ -131,14 +131,14 @@ Systemdb.findOne({systemName: strTgs.csTrim(data.systemName)},function(err,sys){
         if(portPosition === -1){
             sys.systemPorts.push({
                 sysPortType: strTgs.sTrim(data.sysPortType),
-                sysPortName: strTgs.sTrim(data.sysPortName),
+                sysPortName: strTgs.clTrim(data.sysPortName),
                 sysPortAddress: strTgs.sTrim(data.sysPortAddress),
-                sysPortCablePath: strTgs.stTrim(data.sysPortCablePath),
-                sysPortEndPoint: strTgs.csTrim(data.sysPortEndPoint),
+                sysPortCablePath: strTgs.clTrim(data.sysPortCablePath),
+                sysPortEndPoint: strTgs.clTrim(data.sysPortEndPoint),
                 sysPortEndPointPre: strTgs.clTrim(data.sysPortEndPointPre),
                 sysPortEndPointPort: strTgs.clTrim(data.sysPortEndPointPort),
                 sysPortVlan: strTgs.sTrim(data.sysPortVlan),
-                sysPortOptions: strTgs.stcTrim(data.sysPortOptions),
+                sysPortOptions: strTgs.clTrim(data.sysPortOptions),
                 sysPortURL: strTgs.clTrim(data.sysPortURL),
                 modifiedBy: req.user.local.email,
                 modifiedOn: strTgs.compareDates(data.modifiedOn,req.session.ses.timezone), 
@@ -164,9 +164,9 @@ Systemdb.findOne({systemName: strTgs.csTrim(data.systemName)},function(err,sys){
                 if(data.sysPortAddress){
                 thisDoc.sysPortAddress= strTgs.sTrim(data.sysPortAddress);}
                 if(data.sysPortCablePath){
-                thisDoc.sysPortCablePath= strTgs.stTrim(data.sysPortCablePath);}
+                thisDoc.sysPortCablePath= strTgs.clTrim(data.sysPortCablePath);}
                 if(data.sysPortEndPoint){
-                thisDoc.sysPortEndPoint= strTgs.csTrim(data.sysPortEndPoint);}
+                thisDoc.sysPortEndPoint= strTgs.clTrim(data.sysPortEndPoint);}
                 if(data.sysPortEndPointPre){
                 thisDoc.sysPortEndPointPre= strTgs.clTrim(data.sysPortEndPointPre);}
                 if(data.sysPortEndPointPort){

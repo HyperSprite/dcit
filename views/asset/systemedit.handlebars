@@ -69,17 +69,17 @@
         <div class="form-group">
             <label for="field-systemInventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
             <div class="col-sm-4">
-                <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}}>
+                <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} title="This page complete">
             </div>
         </div>  
         <div class="form-group">
             <label for="field-systemIsVirtual" class="col-sm-2 control-label"  >Is Virtual</label>
             <div class="col-sm-4">
-                <input type="checkbox" name="systemIsVirtual" value="true" {{systemIsVirtualChecked}}>
+                <input type="checkbox" name="systemIsVirtual" value="true" {{systemIsVirtualChecked}} title="Is this system a VM?">
             </div>
         </div>
         <div class="col-sm-2 form-group">
-                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
+                <button type="submit" input accesskey="x" title="Press Alt x to Save"class="btn btn-primary btn-xs" value='Save'>S</button>
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
                 <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' formaction='{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}'>
         </div>
@@ -238,13 +238,13 @@
          <div class="form-group">
             <label for="systemEnviron" class="col-sm-2 control-label" >Environment</label>
             <div class="col-sm-4">
-                <input type="text" id="systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" value="{{systemEnviron}}" >
+                <input type="text" id="systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" required title="Autofill" value="{{systemEnviron}}" >
             </div>
         </div>
         <div class="form-group">
             <label for="systemRole" class="col-sm-2 control-label" >Role</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" placeholder="Apache,Launch,Reporting">
+                <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" required title="Autofill" placeholder="Apache,Launch,Reporting">
             </div>
         </div>
         <div class="form-group">
@@ -331,7 +331,7 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
-                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
+                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Save</button>
                 {{/if}}
                 <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
                 <input form="formCancel" type="submit" class="btn btn-default btn-xs" formmethod="get" novalidate value='Cancel' formaction="{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}">
