@@ -58,7 +58,7 @@ Systemdb.create({
             logger.warn('sysCreate CSV no modifiedOn or overwite,'+data.index+','+data.systemName);
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
             if(data.systemEquipSN){   
-            thisDoc.systemEquipSN= strTgs.sTrim(data.systemEquipSN);}
+            thisDoc.systemEquipSN= strTgs.cTrim(data.systemEquipSN);}
             if(data.systemEnviron){
             thisDoc.systemEnviron= strTgs.sTrim(data.systemEnviron);}
             if(data.systemRole){

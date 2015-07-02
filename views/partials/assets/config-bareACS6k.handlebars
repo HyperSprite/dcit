@@ -20,7 +20,7 @@
     <li>cd system/boot_configuration</li>
     <li>set image=image_1</li>
     <li>commit</li>
-    <li>reboot</li>
+    <li>reboot</li><br>
     </code>
     </ul>
 </li>
@@ -30,8 +30,8 @@
 <strong>Cation: this will reset the ACS to factory defaults:</strong>
     <code>
         <ul class="list-unstyled"> 
-            <li>setenv ipaddr <strong>{{sysPortAddress}}</strong>;setenv subnetmask <strong>{{netMask}}</strong>;setenv gateway <strong>{{dcNet.dcNetGateway}}</strong>;setenv bootfile <strong>{{dcNet.dcNetACSFilePath}}</strong>;setenv serverip <strong>{{dcNet.dcNetTftpHost}}</strong>;setenv bootcmd net_boot;printenv</li>
-            <li>net_boot factory_default</li>
+            <li>setenv ipaddr <strong>{{sysPortAddress}}</strong>;setenv subnetmask <strong>{{netMask}}</strong>;setenv gateway <strong>{{dcNet.dcNetGateway}}</strong>;setenv bootfile <strong>{{dcNet.dcNetACSFilePath}}</strong>;setenv serverip <strong>{{dcNet.dcNetTftpHost}}</strong>;setenv bootcmd net_boot;printenv</li><br>
+            <li>net_boot factory_default</li><br>
         </ul>
     </code>
 </li>
@@ -45,9 +45,9 @@
         <li>show /system/boot_configuration</li>
         
         <li>exit</li>
-        <li>tftp <strong>{{dcNet.dcNetTftpHost}}</strong> -g -r <strong>{{dcNet.dcNetACSFilePath}}</strong> -l /tmp/update.bin</li>
-        <li>flashImage /tmp/update.bin</li>
-        <li>reboot</li>
+        <li>tftp <strong>{{dcNet.dcNetTftpHost}}</strong> -g -r <strong>{{dcNet.dcNetACSFilePath}}</strong> -l /tmp/update.bin</li><br>
+        <li>flashImage /tmp/update.bin</li><br>
+        <li>reboot</li><br>
         </ul>
     </code>
     </ul>
@@ -73,7 +73,7 @@
         <li>set ipv6_method=ipv6_address_unconfigured</li>
         <li>set mode=auto</li>
         <li>commit</li>
-        <li>reboot</li>
+        <li>reboot</li><br>
         </ul>
     </code>
 </li>
@@ -150,7 +150,7 @@
             <li>commit</li>
             <li>show</li>
             <li>reboot</li>
-            <li>yes</li>
+            <li>yes</li><br>
         </ul>
     </code>
 </li>
@@ -168,7 +168,7 @@
         <li>set password=<mark><strong>(* replace with root password)</strong></mark></li>
         <li>set confirm_password=<mark><strong>(* replace with root password)</strong></mark></li>
         <li>save</li>
-        <li>commit</li>
+        <li>commit</li><br>
     </code>
     </ul>
 <li>Use <a href="/endpoint/{{../../systemName}}"><strong>{{../../systemName}}</strong> as Endpoint</a> to configure the ports.</li>
