@@ -978,8 +978,8 @@ exports.dcSystemPost = function(req,res){
     Systemdb.create({
         systemPorts: varPortsNew(bd),
         systemName: strTgs.csTrim(bd.systemName),
-        systemEquipSN: strTgs.sTrim(bd.systemEquipSN),
-        systemEnviron: strTgs.sTrim(bd.systemEnviron),
+        systemEquipSN: strTgs.cTrim(bd.systemEquipSN),
+        systemEnviron: strTgs.clTrim(bd.systemEnviron),
         systemRole: strTgs.uTrim(bd.systemRole),
         systemInventoryStatus: bd.systemInventoryStatus,
         systemTicket: strTgs.clTrim(bd.systemTicket),
@@ -987,7 +987,7 @@ exports.dcSystemPost = function(req,res){
         systemOwner: strTgs.uTrim(bd.systemOwner),
     //    systemImpact: bd.systemImpact,
         systemIsVirtual: bd.systemIsVirtual,
-        systemParentId: strTgs.sTrim(bd.systemParentId),
+        systemParentId: strTgs.csTrim(bd.systemParentId),
         systemOSType: strTgs.uTrim(bd.systemOSType),
         systemOSVersion: strTgs.uTrim(bd.systemOSVersion),
         systemApplications: strTgs.uTrim(bd.systemApplications),
@@ -1085,8 +1085,8 @@ exports.dcSystemPost = function(req,res){
         }
     }
             thisDoc.systemName= strTgs.csTrim(bd.systemName);
-            thisDoc.systemEquipSN= strTgs.sTrim(bd.systemEquipSN);
-            thisDoc.systemEnviron= strTgs.sTrim(bd.systemEnviron);
+            thisDoc.systemEquipSN= strTgs.cTrim(bd.systemEquipSN);
+            thisDoc.systemEnviron= strTgs.clTrim(bd.systemEnviron);
             thisDoc.systemRole= strTgs.uTrim(bd.systemRole);
             thisDoc.systemInventoryStatus= bd.systemInventoryStatus;
             thisDoc.systemTicket= strTgs.clTrim(bd.systemTicket);
@@ -1094,7 +1094,7 @@ exports.dcSystemPost = function(req,res){
             thisDoc.systemOwner= strTgs.uTrim(bd.systemOwner);
         //    thisDoc.systemImpact= bd.systemImpact;
             thisDoc.systemIsVirtual= bd.systemIsVirtual;
-            thisDoc.systemParentId= strTgs.sTrim(bd.systemParentId);
+            thisDoc.systemParentId= strTgs.csTrim(bd.systemParentId);
             thisDoc.systemOSType= strTgs.uTrim(bd.systemOSType);
             thisDoc.systemOSVersion= strTgs.uTrim(bd.systemOSVersion);
             thisDoc.systemApplications= strTgs.uTrim(bd.systemApplications);
