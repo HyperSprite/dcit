@@ -212,7 +212,7 @@ logger.warn('dcSystemPages'+err);
             if(thisEquip !== false){
             makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
             //logger.info('makeMod >'+makeMod);
-                if(makeMod.indexOf ('oracle') !=-1 && makeMod.indexOf ('x') !=-1){
+                if(makeMod.indexOf ('oracle') !=-1){
                     hasIlom = 1;
                     //logger.info('hasIlom >'+hasIlom);
                 } else if(makeMod.indexOf ('avocent') !=-1 && makeMod.indexOf ('60') !=-1){
@@ -242,7 +242,7 @@ logger.warn('dcSystemPages'+err);
             access : accConfig.accessCheck(req.user),
             user : req.user,
             titleNow: sy.systemName,
-            menu1: sy.systemName+' as Endpoint',
+            menu1: 'Show connected ports',
             menuLink1: '/endpoint/'+sy.systemName,
             ilom: hasIlom,
             isACS6000: isACS6000,
@@ -853,7 +853,7 @@ exports.findEndpoints = function(req,res,next){
             user : req.user,
                 titleNow:fEndPoint,
                 sysPortEndPoint:fEndPoint,
-                menu1:fEndPoint,
+                menu1: 'Show '+fEndPoint+' details',
                 menuLink1: '/system/'+fEndPoint,
                 sys: sys.map(function(sy){
                     return {

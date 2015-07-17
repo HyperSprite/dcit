@@ -7,16 +7,11 @@ File: db.10.220.100
     <div  style="border: 2px solid grey">
         <ul class="list-unstyled">
         {{#each systemPorts}}
-                {{#if sysPortisEthernet}}
+                {{#if sysPorthasIPAddress}}
                 <li>File: db.{{sysPortAdd3oct}}</li> {{!--  should show IP first 3 octets e.g. "db.10.220.100" --}}
                 <li>{{sysPortAdd4thoct}}{{tab}}{{tab}}IN PTR{{../../systemName}}{{domain from network info}}.</li>
                 {{/if}}
         {{/each}}
-        {{#each systemPorts}}
-                {{#if sysPortisNetMgmt}}
-                <li>File: db.{{sysPortAdd3oct}}</li> {{!--  should show IP first 3 octets e.g. "db.10.220.100" --}}
-                <li>{{sysPortAdd4thoct}}{{tab}}{{tab}}IN PTR{{../../systemName}}{{domain from network info}}.</li>
-                {{/if}}
         {{/each}}
         </ul>
     </div>
