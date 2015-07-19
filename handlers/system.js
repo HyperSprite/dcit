@@ -523,7 +523,11 @@ exports.dcSystemPortPages = function(req,res,next){
                 case 'sysPortEndPoint':
                     findThis = strTgs.stTrim(findThis);
                     query = Systemdb.find({ 'systemPorts.sysPortEndPoint': { '$regex': findThis, '$options': 'i' } });
-                break;   
+                break;
+                case 'sysPortAddress':
+                    findThis = strTgs.stTrim(findThis);
+                    query = Systemdb.find({ 'systemPorts.sysPortAddress': { '$regex': findThis, '$options': 'i' } });
+                break;  
                 default:
     //                logger.info('no opt for queryString');
                 break;
@@ -607,8 +611,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
             };
         return res.redirect(303, '/');
     }else{ 
-//    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
-    var editLoad,
+    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
+    var lastSearch,
+        editLoad,
         searchDb,
         searchIn,
         searchFor;
@@ -617,7 +622,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
             editLoad = 1;
 //            logger.info('none slected');
         }else{
-        
+        lastSearch = searchIn; //.substring (req.params.datacenter.indexOf('~')+1);
         start = req.params.datacenter.indexOf ('-');
         searchFor = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ('env') !=-1){
@@ -647,10 +652,12 @@ exports.dcSystembyEnvRole = function(req,res,next){
             editLoad = 14;
 
         }else if(req.params.datacenter.indexOf ('multi') !=-1){
+            lastSearch = req.query.searchIn;
             searchIn = req.query.searchIn.substring (req.query.searchIn.indexOf('~')+1);
-//            logger.info('searchIn '+searchIn);
+            
+            logger.info('searchIn '+searchIn);
             searchFor = req.query.searchFor;
-//            logger.info('searchFor '+searchFor);
+            logger.info('searchFor '+searchFor);
             if (req.query.searchIn.indexOf ('system') !=-1){
                 editLoad = 8;
             }else if (req.query.searchIn.indexOf ('equipment') !=-1){
@@ -695,6 +702,7 @@ logger.warn(asc+' '+err);
                 drop3:'Make',
                 drop3url:'/env-role-report/make-',
                 drop3each: make.sort(),
+                lastSearch: lastSearch,
 
             
                 eqs: sys.map(function(sy){
@@ -754,6 +762,7 @@ logger.warn(asc+' '+err);
                 drop3:'Make',
                 drop3url:'/env-role-report/make-',
                 drop3each: make.sort(),
+                lastSearch: lastSearch,
 
                 eqs: eqs.map(function(eq){
                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);

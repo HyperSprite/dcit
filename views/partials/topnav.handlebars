@@ -41,19 +41,20 @@
             <div class="form-group">
               <label class="sr-only" for="field-multiCat">Search in</label> 
               <select id="field-multiCat" class="form-control" name="searchIn" >
-              <option value="system~systemName" >System Names</option>
-              <option value="system~systemTicket" >System Ticket</option>
-              <option value="system~modifiedBy" >System Modified By</option>
-              <option value="system~sysPortEndPoint">System EndPoint</option>
-              <option value="system~sysPortCablePath" >System Cable Number</option>
-              <option value="equipment~equipSN" >Equipment SN</option>
-              <option value="equipment~equipAssetTag" >Equipment Asset Tag</option>
-              <option value="equipment~equipTicketNumber" >Equipment Ticket</option>
-              <option value="equipment~equipPONum" >Equipment PO Number</option>
-              <option value="equipment~equipInvoice" >Equipment Invoice</option>
-              <option value="equipment~equipProjectNum" >Equipment Project</option>
-              <option value="equipment~modifiedBy" >Equipment Modified By</option>
-              <option value="equipment~equipPortsAddr" >Equipment MAC Address</option>
+              <option {{{selOption 'system~systemName' lastSearch}}}>System Names</option>
+              <option {{{selOption 'system~systemTicket' lastSearch}}}>System Ticket</option>
+              <option {{{selOption 'system~modifiedBy' lastSearch}}}>System Modified By</option>
+              <option {{{selOption 'system~sysPortEndPoint' lastSearch}}}>System EndPoint</option>
+              <option {{{selOption 'system~sysPortAddress' lastSearch}}}>System IP Address</option>
+              <option {{{selOption 'system~sysPortCablePath' lastSearch}}} >System Cable Number</option>
+              <option {{{selOption 'equipment~equipSN' lastSearch}}}>Equipment SN</option>
+              <option {{{selOption 'equipment~equipAssetTag' lastSearch}}}>Equipment Asset Tag</option>
+              <option {{{selOption 'equipment~equipTicketNumber' lastSearch}}}>Equipment Ticket</option>
+              <option {{{selOption 'equipment~equipPONum' lastSearch}}}>Equipment PO Number</option>
+              <option {{{selOption 'equipment~equipInvoice' lastSearch}}}>Equipment Invoice</option>
+              <option {{{selOption 'equipment~equipProjectNum' lastSearch}}}>Equipment Project</option>
+              <option {{{selOption 'equipment~modifiedBy' lastSearch}}}>Equipment Modified By</option>
+              <option {{{selOption 'equipment~equipPortsAddr' lastSearch}}}>Equipment MAC Address</option>
               <select>
               </div>
               <div class="form-group">
