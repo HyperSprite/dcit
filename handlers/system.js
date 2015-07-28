@@ -227,7 +227,7 @@ logger.warn('dcSystemPages'+err);
                         isServTechPDU = 1;
                     }
                 }
-            thisEquipPortsMaped = thisEquip.equipPorts.map(function(tep){
+            thisEquipPortsMapped = thisEquip.equipPorts.map(function(tep){
                 return {
                     equipPortType: tep.equipPortType,
                     equipPortsAddr: tep.equipPortsAddr,
@@ -236,7 +236,7 @@ logger.warn('dcSystemPages'+err);
                 };
                 });
             }else{
-                thisEquipPortsMaped = '';
+                thisEquipPortsMapped = '';
             }
         context = {
             access : accConfig.accessCheck(req.user),
@@ -371,7 +371,7 @@ logger.warn('dcSystemPages'+err);
             equipModel: thisEquip.equipModel,
             equipSubModel: thisEquip.equipSubModel,
             equipRUHieght: thisEquip.equipRUHieght,           
-            equipPorts: thisEquipPortsMaped,
+            equipPorts: thisEquipPortsMapped,
             
             }; 
         } else { // Copy

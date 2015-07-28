@@ -66,7 +66,10 @@ $(document).ready(function(){
             showNoSuggestionNotice: true,
             noSuggestionNotice: '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>'            
         });
-
+        $('.popup').click(function(event) {
+            event.preventDefault();
+            window.open($(this).attr("href"), "popupWindow", "width=300,height=300,scrollbars=yes");
+        });
 
     $(document).on('focus','.sysPortEndPointPlusOne',function(){
             $("[id^='sysPortEndPoint']").autocomplete({
