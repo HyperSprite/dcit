@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Result</title>
-        <link rel='stylesheet' type='text/css' href='stylesheet.css'/>
+        <title>MAC Adder</title>
+        <link rel="stylesheet" type='text/css'href="../vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type='text/css'href="../vendor/bootstrap/css/bootstrap-theme.min.css">
         <script src="../vendor/js/jquery-2.1.4.min.js"></script>
         <script src='script.js'></script>
     </head>
     <body>
-        <form>
-        Enter your MAC address:<br> <input type="text" name="message">
-        </form>
-        <button>Add!</button><br/>
-        <div id="messages">This tool is a temporary case study on MAC address manipulation until the features are integrated directly. It is designed for sun x4-2 and x5-2 but just returns the next 4 sequentially so may have utility for other systems as well.</div>
+        <div class="container-fluid">
+            <form>
+            Enter the e0 MAC address:<br> <input type="text" name="message">
+            </form>
+            <button  class='btn btn-danger btn-xs' >Submit</button><br/>
+            <div id="messages">This MAC Address sequence tool is experimental. It was designed with Oracle Sun x4-2 and x5-2 x86 servers in mind but will work on other servers with sequential MAC addresses. Enter the e0 MAC and it will return e0 through e3 and ilom MACs.</div>
+        </div>
     </body>
 </html>
