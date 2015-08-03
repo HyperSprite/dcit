@@ -1,8 +1,10 @@
 
-var     logger = require('../lib/logger.js'),
+var      async = require('async'),
+        logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
      accConfig = require('../config/access'),
       ObjectId = require('mongoose').Types.ObjectId;
+
 
 // Models
 var Datacenter = require('../models/datacenter.js'),
@@ -1054,6 +1056,195 @@ exports.dcRackElevationPage = function(req,res,next){
 }
 };
 
+/*---------------------------------------------------------------------
+---------------------------- Equipment SN Change ----------------------
+-----------------------------------------------------------------------
+*/
+
+exports.dcEquipSNChange =  function(req,res){
+    if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+//    logger.info('req.params.datacenter >>>>>> '+req.params.datacenter);
+    Equipment.findOne({equipSN: req.params.datacenter},function(err,eq){
+        if(err) return next(err);
+        if(!eq) return next(err);
+    Systemdb.find({}, 'systemEquipSN systemName',function(err, sys){
+        tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+
+             context = {
+                access : accConfig.accessCheck(req.user),
+                user : req.user, 
+                    menu1: eq.equipSN,
+                    menuLink1: '#',
+                    titleNow:eq.equipSN,
+                    equipId: eq._id,
+                    oldEquipSN: eq.equipSN,
+                    systemName: tempSys.systemName,
+                    }; 
+        res.render('asset/equipmentsnchange', context);
+});});
+}
+};
+
+
+
+exports.dcEquipSNChangePost =  function(req,res){
+
+//logger.info('got this far');
+    if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+        res.oldEquipSN = req.body.oldEquipSN;
+        res.equipSN = req.body.equipSN;
+//logger.info('res. stuff'+res.oldEquipSN+' and '+res.equipSN+' for '+req.body.equipId);
+        if (req.body.oldEquipSN){
+
+        async.waterfall([
+            function (callback) {
+                Equipment.findOne({equipSN: res.oldEquipSN},function(err,equipSNtoChange){
+                if(err){ 
+                    //logger.info(err);
+                    callback(null);
+                }else{
+                    equipSNtoChange.equipSN = strTgs.cTrim(res.equipSN);
+                    equipSNtoChange.save(function(err){
+                    if (err){
+                        //logger.log('validation error');
+                        //logger.error(err.stack);
+                        return callback(err, 'validation error');
+                    }else{
+                        //logger.info('SN Updated');
+                        callback(null,'EquipSN Updated');
+                    }});}});},
+            function (arg1,callback) {
+                Systemdb.update ({systemEquipSN: res.oldEquipSN}, {systemEquipSN: res.equipSN}, {multi: true}, function(err){
+                        if (err){
+                        //logger.error(err.stack);
+                        callback(null,arg1,'sysEquipSN Failed');
+                    }
+                        //logger.info('Some sysEquipSN Updated');
+                        callback(null,'EquipSN Updated');
+                    });
+                }
+            ], function (err,result){
+                if(err) {
+                logger.error(err.stack);
+                req.session.flash = {
+                    type: 'danger',
+                    intro: 'Ooops!',
+                    message: 'There was an error processing your request.',
+                };
+                return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.oldEquipSN));
+            }
+            req.session.flash = {
+                type: 'success',
+                intro: 'Thank you!',
+                message: 'The SN has been changed.',
+            };
+            return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.equipSN));
+});
+}
+}};
+
+
+/*- saved works
+exports.dcEquipSNChangePost =  function(req,res){
+
+logger.info('got this far');
+    if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+        res.oldEquipSN = req.body.oldEquipSN;
+        res.equipSN = req.body.equipSN;
+logger.info('res. stuff'+res.oldEquipSN+" and "+res.equipSN+" for "+req.body.equipId);
+        if (req.body.oldEquipSN){
+
+            Equipment.findOne({equipSN: res.oldEquipSN},function(err,equipSNtoChange){
+            if(err){
+            //logger.info(err);
+            //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+            }else{
+                equipSNtoChange.equipSN = strTgs.cTrim(res.equipSN);
+
+        equipSNtoChange.save(function(err){
+            if(err) {
+                logger.error(err.stack);
+                req.session.flash = {
+                    type: 'danger',
+                    intro: 'Ooops!',
+                    message: 'There was an error processing your request.',
+                };
+                return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.oldEquipSN));
+            }
+            req.session.flash = {
+                type: 'success',
+                intro: 'Thank you!',
+                message: 'The SN has been changed.',
+            };
+            return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.equipSN));
+        });
+
+}
+});
+}}
+};
+
+*/
+
+/* works great but no validation (skips mongoose)
+
+exports.dcEquipSNChangePost =  function(req,res){
+
+logger.info('got this far');
+    if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+        res.oldEquipSN = req.body.oldEquipSN;
+        res.equipSN = req.body.equipSN;
+logger.info('res. stuff'+res.oldEquipSN+' and '+res.equipSN+' for '+req.body.equipId);
+        if (req.body.oldEquipSN){
+            Equipment.update({equipSN: res.oldEquipSN}, {equipSN: res.equipSN}, function(err){
+            if(err) {
+                logger.error(err.stack);
+                req.session.flash = {
+                    type: 'danger',
+                    intro: 'Ooops!',
+                    message: 'There was an error processing your request.',
+                };
+                return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.oldEquipSN));
+            }
+            req.session.flash = {
+                type: 'success',
+                intro: 'Thank you!',
+                message: 'The SN has been changed.',
+            };
+            return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.equipSN));
+        });
+
+}}
+};
+*/
 
 /*---------------------------------------------------------------------
 ---------------------------- Equipment Delete ------------------------------

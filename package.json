@@ -1,6 +1,6 @@
 {
   "name": "dcit",
-  "version": "0.1.09",
+  "version": "0.1.20",
   "description": "DCIT is for saving Data Center Informantion Transcript.",
   "main": "dcit.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "C. Dunavan chris-git@hypersprite.com",
   "license": "GPL, MIT",
   "dependencies": {
+    "async": "1.4.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.12.0",
     "chai": "^1.9.1",

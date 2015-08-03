@@ -1,0 +1,34 @@
+
+<hr>
+
+    <h4>Change Equipment Serial Number for {{oldEquipSN}}</h4>
+    
+    {{#if access.delete}}
+    <div>
+        <form id="datacenterForm" class="form-horizontal" role="form" action="/equipment-snchange/update" method="POST">
+                <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                <input type="hidden" name="oldEquipSN" value="{{oldEquipSN}}">
+                <input type="hidden" name="id" value="{{equipId}}">
+            <div class="form-group">
+                <label for="field-equipSN" class="col-sm-2 control-label">Serial Number</label>
+                <div class="col-sm-4">   
+                    <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" value="{{oldEquipSN}}" placeholder="*Required" required aria-describedby="equipSNStatus">
+                </div>
+            </div>      
+            
+        {{#if systemName}}
+            <div class="form-group">
+                <label for="field-systemName" class="col-sm-2 control-label" >System</label>
+                <div class="col-sm-4">  
+                    <p class="form-control-static">{{systemName}}</p>
+                </div>
+            </div>                     
+            
+        {{/if}}   
+                    <button type="submit" class="btn btn-danger btn-xs" input accesskey="x" title="Press Alt x to Update Serial Number" value="Submit">Update Serial Number</button>
+                    <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                    <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value="Cancel" formaction="/equipment/{{oldEquipSN}}">
+        </form><form id="formCancel"></form>
+    </div>    
+    
+    {{/if}}

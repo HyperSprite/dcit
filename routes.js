@@ -67,6 +67,8 @@ module.exports = function(app){
         app.get('/equipment-systems', equipment.dcEquipSysPages);
         app.get('/equipment-systems/:datacenter', equipment.dcEquipSysPages);
         app.get('/elevation/:datacenter', equipment.dcRackElevationPage);
+        app.get('/equipment-snchange/:datacenter', equipment.dcEquipSNChange);
+        app.post('/equipment-snchange/:datacenter', isLoggedIn, equipment.dcEquipSNChangePost);
         app.post('/equipment/:datacenter', isLoggedIn, equipment.dcEquipmentPost);
         app.post('/equipmentdelete/:datacenter', isLoggedIn, equipment.dcEquipDelete);
         app.post('/equipmentportdelete/:datacenter', isLoggedIn, equipment.equipSubDelete);
