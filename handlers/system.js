@@ -552,6 +552,10 @@ exports.dcSystemPortPages = function(req,res,next){
             query = Equipment.find({'equipStatus':{$in:['End of Life','Missing','End of Life - Recycled','End of Life - RMA']}});
     //        logger.info('query13'+query);
             break;
+        case 15: // Spares
+            query = Equipment.find({'equipStatus':{$in:['Spare']}});
+    //        logger.info('query13'+query);
+            break;
         case 18: // multi Equipment
             switch (searchIn){
                 case 'equipSN':
@@ -650,6 +654,9 @@ exports.dcSystembyEnvRole = function(req,res,next){
 
         }else if(req.params.datacenter.indexOf ('eol') !=-1){
             editLoad = 14;
+
+        }else if(req.params.datacenter.indexOf ('spares') !=-1){
+            editLoad = 15;    
 
         }else if(req.params.datacenter.indexOf ('multi') !=-1){
             lastSearch = req.query.searchIn;
