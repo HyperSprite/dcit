@@ -1,0 +1,25 @@
+
+<hr>
+
+    <h4>Change System Name for {{oldSystemName}}</h4>
+    
+    {{#if access.delete}}
+    <div>
+        <form id="datacenterForm" class="form-horizontal" role="form" action="/system-namechange/update" method="POST">
+                <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                <input type="hidden" name="oldSystemName" value="{{oldSystemName}}">
+                <input type="hidden" name="id" value="{{systemId}}">
+            <div class="form-group">
+                <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
+                <div class="col-sm-4">   
+                    <input type="text" class="noEnterSubmit form-control" id="systemName" name="systemName" value="{{oldSystemName}}" placeholder="*Required" required aria-describedby="systemNameStatus">
+                </div>
+            </div>      
+          
+                    <button type="submit" class="btn btn-danger btn-xs" input accesskey="x" title="Press Alt x to Update Serial Number" value="Submit">Update System Name</button>
+                    <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
+                    <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value="Cancel" formaction="/system/{{oldSystemName}}">
+        </form><form id="formCancel"></form>
+    </div>    
+    
+    {{/if}}

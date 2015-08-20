@@ -77,6 +77,8 @@ module.exports = function(app){
         app.get('/system/:datacenter', system.dcSystemPages);
         app.get('/endpoint/:datacenter', system.findEndpoints);
         app.get('/systemports-list', system.dcSystemPortPages);
+        app.get('/system-namechange/:datacenter', system.dcSystemNameChange);
+        app.post('/system-namechange/:datacenter', isLoggedIn, system.dcSystemNameChangePost);
         app.post('/system/:datacenter', isLoggedIn, system.dcSystemPost);
         app.post('/systemdelete/:datacenter', isLoggedIn, system.dcsystemDelete);
         app.post('/systemportdelete/:datacenter', isLoggedIn, system.dcsystemSubDelete);

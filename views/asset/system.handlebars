@@ -1,7 +1,11 @@
 
 <hr>
 <div class="racks">
-    <h4>{{systemName}}</h4>
+    <h4>{{systemName}}
+        {{#if access.delete}}
+                <input type='submit' class='btn btn-default btn-xs' formaction='/system-namechange/{{systemName}}' form="formSystemNameChange" formmethod="get" value='Change System Name'><form id=formSystemNameChange></form>
+        {{/if}}
+    </h4>
     <ul id="eachUl"class="list-unstyled"> 
         <li>
         <div class="row">

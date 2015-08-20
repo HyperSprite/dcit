@@ -1,5 +1,6 @@
 
-var     logger = require('../lib/logger.js'),
+var      async = require('async'),
+        logger = require('../lib/logger.js'),
         strTgs = require('../lib/stringThings.js'),
      accConfig = require('../config/access'),
          dates = require('../lib/dates.js'),
@@ -11,7 +12,7 @@ var Datacenter = require('../models/datacenter.js'),
           Rack = require('../models/rack.js'),
      Optionsdb = require('../models/options.js'),
      Equipment = require('../models/equipment.js'),
-      Systemdb = require('../models/system.js');
+      Systemdb = require('../models/system.js'),
 MrSystemEnviron= require('../models/mrsystemenviron.js');
 var IpSubnetCalculator = require( 'ip-subnet-calculator' );
 
@@ -1135,7 +1136,7 @@ exports.dcSystemPost = function(req,res){
 	            };
 	            return res.redirect(303, '/system/'+ res.abbreviation);
 	        }
-    // this updates EndPoints when the system name changes
+//          this updates EndPoints when the system name changes
             if (thisDoc.systemName !== strTgs.clTrim(bd.systemName)){
                 Systemdb.find({'systemPorts.sysPortEndPoint': thisDoc.systemName},'systemName systemPorts.sysPortName systemPorts.sysPortEndPoint',function(err,sys){
                     sys.map(function(sy){
@@ -1158,6 +1159,186 @@ exports.dcSystemPost = function(req,res){
 }
 }
 };
+
+
+/*---------------------------------------------------------------------
+---------------------------- System Name Change ----------------------
+-----------------------------------------------------------------------
+*/
+
+exports.dcSystemNameChange =  function(req,res){
+    if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+//    logger.info('req.params.datacenter >>>>>> '+req.params.datacenter);
+    Systemdb.findOne({systemName: req.params.datacenter},function(err,sys){
+        if(err){
+            logger.info(err.stack); 
+            return res.redirect(303, '/');
+        }else if(!sys){
+            logger.info('dcSystemNameChange = no sys');
+            return res.redirect(303, '/');
+        }else{
+ 
+              context = {
+                access : accConfig.accessCheck(req.user),
+                user : req.user, 
+                    menu1: sys.systemName,
+                    menuLink1: '#',
+                    titleNow:sys.systemName,
+                    systemId: sys._id,
+                    oldSystemName: sys.systemName,
+                    }; 
+        res.render('asset/systemnamechange', context);
+        }
+});
+}
+};
+/*
+function updateEndPoints(oldSystemName,systemName){
+                logger.info('updateEndPoints start '+oldSystemName+' '+systemName);
+                    Systemdb.update({'systemPorts.sysPortEndPoint': oldSystemName},{'systemPorts.$.sysPortEndPoint': systemName}, {multi: true},function(err, numAffected){
+                    if (err){
+                        logger.error(err.stack);
+                        return(err);
+                    }
+                        logger.info(numAffected+ ' sysPortEndPoint Updated');
+                        return numAffected;
+                    });
+}
+*/
+
+function updateEndPoints(oldSystemName,systemName,callback){
+    logger.info('updateEndPoints start '+oldSystemName+' '+systemName);
+        Systemdb.findOne({systemName: sysList.systemName[i]},function(err,sys){
+            if (err) {
+                logger.warn('sysPortEndPoint change,'+sysList.index+','+sysList.systemName+err);
+                return (err);
+            }else if(!sys){
+                logger.warn('sysPortCreate Failed lookup,'+sysList.index+','+sysList.systemName);
+                return true;
+            } else {
+                var portArray = [];
+                for(var j = sys.systemPorts.length - 1; j >= 0; j--) {
+                    logger.info('sys.systemPorts['+j+'] ='+sys.systemPorts[j].sysPortEndPoint);
+                    logger.info('sys.systemPorts['+j+'] ='+sys.systemPorts[j].sysPortEndPoint);
+                    if(sys.systemPorts[j].sysPortEndPoint === oldSystemName){
+                        sys.systemPorts[j].sysPortEndPoint = systemName;}
+                } 
+                sys.modifiedBy= req.user.local.email;
+                sys.modifiedOn= strTgs.compareDates(data.modifiedOn,req.session.ses.timezone); 
+                sys.save(function(err){
+                    if(err){
+                        logger.warn('sysPortUpdate Failed,'+data.index+','+strTgs.csTrim(data.systemName)+','+err);
+                        return (err);
+                    }else{
+                        logger.info('sysPortUpdate Sucessful Update write,'+data.index+','+data.systemName+','+data.sysPortName);
+                        return true;
+                    }
+                });
+            }   
+        });
+}
+
+
+
+function countPortEndPoint(oldSystemName,systemName){
+    logger.log('oldSystemName:'+oldSystemName+'  systemName:'+systemName);
+    Systemdb.find({'systemPorts.sysPortEndPoint': oldSystemName},function(err,sysList){
+        if (err) { logger.info (err.stack);
+            return (err);
+        }else if (!sysList) { logger.info('model not found');
+            return;
+        }else{
+        logger.info('Found Ports 0'+sysList.length /*+ sysList*/);
+        return sysList;
+        }
+    });     
+}
+
+
+exports.dcSystemNameChangePost =  function(req,res){
+    if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+        var oldSystemName = strTgs.csTrim(req.body.oldSystemName);
+        var systemName = strTgs.csTrim(req.body.systemName);
+        var numAffected;
+        if (oldSystemName){
+            Systemdb.findOne({systemName: oldSystemName},function(err,sysNametoChange){
+            if(err){
+                logger.info(err.stack);
+                callback(null);
+            }else{
+                sysNametoChange.systemName = systemName;
+                sysNametoChange.save(function(err){
+                if (err){
+                    logger.log('validation error');
+                    logger.error(err.stack);
+            req.session.flash = {
+                type: 'danger',
+                intro: 'Ooops!',
+                message: 'There was an error processing your request.',
+            };
+            return res.redirect(303, '/system/'+ oldSystemName);
+            }else{
+            var sysCount = 1;
+            async.whilst(
+                function() {return sysCount > 0;},
+                function(wcallback){
+                    Systemdb.find({'systemPorts.sysPortEndPoint': oldSystemName},function(err,sys){
+                        if (err) { 
+                            logger.error(err.stack);
+                            return wcallback(err);
+                        } else if (!sys) {
+                            sysCount = 0;
+                            return wcallback(null);
+                        } else {
+                        //logger.info('Found Ports '+sys.length);
+                        sysCount = sys.length;
+                        }
+                        Systemdb.update({'systemPorts.sysPortEndPoint': oldSystemName},{'systemPorts.$.sysPortEndPoint': systemName}, {multi: true},function(err, numAffected){
+                        if (err){
+                                logger.log('validation error');
+                                logger.error(err.stack);
+                        req.session.flash = {
+                            type: 'danger',
+                            intro: 'Ooops!',
+                            message: 'There was an error updating EndPoints.',
+                        };
+                        return res.redirect(303, '/system/'+ oldSystemName);
+                            }
+                            //logger.info(numAffected+ ' sysPortEndPoint Updated');
+                            wcallback(null,numAffected);
+                        });
+                    });
+                });
+            logger.info(oldSystemName+' System Name Updated to '+systemName);
+            req.session.flash = {
+                type: 'success',
+                intro: 'Thank you!',
+                message: oldSystemName+' system name changed to '+systemName+' and related EndPoints updated.',
+            };
+            return res.redirect(303, '/system/'+ systemName);
+            }
+        });
+    }
+    });
+        }
+    }
+};
+
+
 /*---------------------------------------------------------------------
 ---------------------------- System Delete ------------------------------
 ------------------------------------------------------------------------
