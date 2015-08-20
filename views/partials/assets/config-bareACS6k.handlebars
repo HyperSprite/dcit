@@ -34,6 +34,19 @@
             <li>net_boot factory_default</li><br>
         </ul>
     </code>
+    The ACS will download the firmware and boot from it. When it comes back, log in with the default username/password (root/linux) and enter the following:<br>
+    <code>
+        <ul class="list-unstyled">
+            <li>recover-flash.sh --doformat --factory_default</li>
+            <li>reboot</li>
+        </ul>
+    </code>
+    If the device was unrecoverable and new SSH keys are generated, you will need to remove the old key from your SSH known host file. Use the following command:<br>
+    <code>
+        <ul>
+        ssh-keygen -R <strong>{{../../systemName}}</strong>.{{#if dcNet.dcNetDomain}}<strong>{{dcNet.dcNetDomain}}</strong>{{else}}<mark>Check Datacenter Network Domain</mark>{{/if}}
+        </ul>
+    </code>
 </li>
 <li>Run this code to update a <strong>configured</strong> ACS to update to latest version:<br>
 <ul  class="list-unstyled">

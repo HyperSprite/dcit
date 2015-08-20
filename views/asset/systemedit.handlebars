@@ -21,11 +21,10 @@
         <div class="form-group">
             <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required" 
-                {{#if access.delete}}
-                > <p>Caution: Changing an endpoint device name is currently not automated, this change will need to be made manually to all of the ports. If you are unsure about this change, contact the application admin. This is being tracked for a fix in v2</p>
+                {{#if systemName}}
+                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required" disabled>
                 {{else}}
-                 disabled>
+                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required">
                 {{/if}}
             </div>
         </div>

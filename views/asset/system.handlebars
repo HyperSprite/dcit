@@ -2,14 +2,13 @@
 <hr>
 <div class="racks">
     <h4>{{systemName}}
-        {{#if access.delete}}
-                <input type='submit' class='btn btn-default btn-xs' formaction='/system-namechange/{{systemName}}' form="formSystemNameChange" formmethod="get" value='Change System Name'><form id=formSystemNameChange></form>
-        {{/if}}
+        
     </h4>
+    {{> assets/system-e-c}}
     <ul id="eachUl"class="list-unstyled"> 
         <li>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
             <strong>System Details</strong><br>
             
             Status: {{{systemStatusLit}}}<br>
@@ -21,13 +20,13 @@
             {{#if systemIsVirtual}}Is Virtual: {{systemIsVirtual}}<br>{{/if}}
             {{#if systemParentId}}Parent: {{systemParentId}}<br>{{/if}}
             Ticket: {{{systemTicketLit}}}<br>
-            {{> assets/system-e-c}}
+            
             
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
             
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
             {{#if systemEquipSN}}
             <strong>Hardware Details</strong><br>
             Equipment SN: <strong><a href="/equipment/{{systemEquipSN}}">{{systemEquipSN}}</a></strong><br>
