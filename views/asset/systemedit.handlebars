@@ -22,7 +22,8 @@
             <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
             <div class="col-sm-4">
                 {{#if systemName}}
-                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required" disabled>
+                <input type="hidden" name="systemName" value="{{systemName}}">
+                <p><strong>{{systemName}}</strong></p>
                 {{else}}
                 <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required">
                 {{/if}}
