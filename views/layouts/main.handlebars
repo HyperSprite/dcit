@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="{{static '/vendor/tablesort/css/tablesort.css'}}">
         <link rel="stylesheet" href="{{static '/vendor/tablesort/css/styles.css'}}">
 		<link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap.min.css'}}">
+        <link rel="stylesheet" href="{{static '/vendor/bootstrap-table/dist/bootstrap-table.css'}}">
         <link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap-theme.min.css'}}">
         <link rel="stylesheet" href="{{static '/css/jquery-ui.css'}}">
         <link rel="stylesheet" href="{{static '/css/custom.css'}}">
@@ -41,10 +42,13 @@
         <script src="{{static '/vendor/js/jquery-2.1.4.min.js'}}"></script>
         <script src="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.js'}}"></script>
         <script src="{{static '/vendor/js/jquery.autocomplete.min.js'}}"></script>
+        <script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
+        <script src="{{static '/vendor/bootstrap-table/dist/bootstrap-table.min.js'}}"></script>
+    {{!--    <script src="{{static '/vendor/bootstrap-table/dist/locale/bootstrap-table-en-US.min.js'}}"></script>  --}}
 		<script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
         <script src="{{static '/vendor/js/d3.v3.js'}}"></script>
         <script src='{{static '/js/main.js'}}'></script>
-{{!-- jstz is for timezone work --}}
+        {{!-- jstz is for timezone work --}}
   
     </head>
     <body>
@@ -55,23 +59,23 @@
 
 
 		</header>
-         <div class="navbar" >
-          <div >
+         <div class="navbar" > <!-- main.1 -->
+          <div > <!-- main.1.1 -->
            {{> topnav}}
-          </div>
-        </div>
+          </div> <!-- /main.1.1 -->
+        </div> <!-- /main.1 -->
         
-	    <div class="container-fluid">
+	    <div class="container-fluid"> <!-- main.2 -->
 			{{#if flash}}
-				<div class="alert alert-dismissible alert-{{flash.type}}">
+				<div class="alert alert-dismissible alert-{{flash.type}}"> <!-- alert -->
 					<button type="button" class="close" 
 						data-dismiss="alert" aria-hidden="true">&times;</button>
 					<strong>{{flash.intro}}</strong> {{{flash.message}}}
-				</div>
+				</div> <!-- /alert -->
 			{{/if}}
 
 		    {{{body}}}
-      </div> <!-- /container --> 
+      </div> <!-- /main.2 --> 
 
       <div> <!-- footer-->
 			<hr>
@@ -96,7 +100,9 @@
 			<script>mocha.run();</script>
 		{{/if}}
 
-		<script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
+
+        <script src="{{static '/vendor/tableexport/tableexport.min.js'}}"></script>
+        <script src="{{static '/vendor/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js'}}"></script>
         <script src="{{static '/vendor/tablesort/tablesort.js'}}"></script>
 		<script src="{{static '/js/main.js'}}"></script>
         <script src="{{static '/js/tocsvpartial.js'}}"></script>
@@ -108,7 +114,7 @@
                 $('table.table-sort').tablesort();
                 // http://www.jqueryscript.net/table/jQuery-Plugin-For-Sortable-Searchable-Tables-Tablesort.html
             });
-        </script>
+        </script> 
         <script> 
             $('input#timezone').val( jstz.determine().name() );
             $('.noEnterSubmit').keypress(function(e){

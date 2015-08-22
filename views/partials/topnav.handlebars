@@ -1,5 +1,5 @@
-<div class="navbar" >
-  <div >
+<div class="navbar" > <!-- topnav.navbar -->
+  <div > <!-- topnav.navbar.next -->
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -40,31 +40,31 @@
             {{#if access.read}}
            <li>
             <form id="multiForm" class="form-inline" role="form" autocomplete="off" action="/env-role-report/multi-" method="get">
-            <div class="form-group">
-              <label class="sr-only" for="field-multiCat">Search in</label> 
-              <select id="field-multiCat" class="form-control" name="searchIn" >
-              <option {{{selOption 'system~systemName' lastSearch}}}>System Names</option>
-              <option {{{selOption 'system~systemTicket' lastSearch}}}>System Ticket</option>
-              <option {{{selOption 'system~modifiedBy' lastSearch}}}>System Modified By</option>
-              <option {{{selOption 'system~sysPortEndPoint' lastSearch}}}>System EndPoint</option>
-              <option {{{selOption 'system~sysPortAddress' lastSearch}}}>System IP Address</option>
-              <option {{{selOption 'system~sysPortCablePath' lastSearch}}} >System Cable Number</option>
-              <option {{{selOption 'equipment~equipSN' lastSearch}}}>Equipment SN</option>
-              <option {{{selOption 'equipment~equipAssetTag' lastSearch}}}>Equipment Asset Tag</option>
-              <option {{{selOption 'equipment~equipTicketNumber' lastSearch}}}>Equipment Ticket</option>
-              <option {{{selOption 'equipment~equipPONum' lastSearch}}}>Equipment PO Number</option>
-              <option {{{selOption 'equipment~equipInvoice' lastSearch}}}>Equipment Invoice</option>
-              <option {{{selOption 'equipment~equipProjectNum' lastSearch}}}>Equipment Project</option>
-              <option {{{selOption 'equipment~modifiedBy' lastSearch}}}>Equipment Modified By</option>
-              <option {{{selOption 'equipment~equipPortsAddr' lastSearch}}}>Equipment MAC Address</option>
-              <select>
-              </div>
-              <div class="form-group">
-              <label class="sr-only" for="field-multiText">Search for</label> 
-              <input id="field-multiText" type="text" class="form-control" pattern=".{3,}" required name="searchFor" placeholder="? (3 char min)">
-              </div>
+                <div class="form-group"> <!-- topnav.formgroup1 -->
+                  <label class="sr-only" for="field-multiCat">Search in</label> 
+                  <select id="field-multiCat" class="form-control" name="searchIn" >
+                  <option {{{selOption 'system~systemName' lastSearch}}}>System Names</option>
+                  <option {{{selOption 'system~systemTicket' lastSearch}}}>System Ticket</option>
+                  <option {{{selOption 'system~modifiedBy' lastSearch}}}>System Modified By</option>
+                  <option {{{selOption 'system~sysPortEndPoint' lastSearch}}}>System EndPoint</option>
+                  <option {{{selOption 'system~sysPortAddress' lastSearch}}}>System IP Address</option>
+                  <option {{{selOption 'system~sysPortCablePath' lastSearch}}} >System Cable Number</option>
+                  <option {{{selOption 'equipment~equipSN' lastSearch}}}>Equipment SN</option>
+                  <option {{{selOption 'equipment~equipAssetTag' lastSearch}}}>Equipment Asset Tag</option>
+                  <option {{{selOption 'equipment~equipTicketNumber' lastSearch}}}>Equipment Ticket</option>
+                  <option {{{selOption 'equipment~equipPONum' lastSearch}}}>Equipment PO Number</option>
+                  <option {{{selOption 'equipment~equipInvoice' lastSearch}}}>Equipment Invoice</option>
+                  <option {{{selOption 'equipment~equipProjectNum' lastSearch}}}>Equipment Project</option>
+                  <option {{{selOption 'equipment~modifiedBy' lastSearch}}}>Equipment Modified By</option>
+                  <option {{{selOption 'equipment~equipPortsAddr' lastSearch}}}>Equipment MAC Address</option>
+                  </select>
+                </div> <!-- /topnav.formgroup1 -->
+                <div class="form-group"> <!-- topnav.formgroup2 -->
+                  <label class="sr-only" for="field-multiText">Search for</label> 
+                  <input id="field-multiText" type="text" class="form-control" pattern=".{3,}" required name="searchFor" placeholder="? (3 char min)">
+                </div> <!-- /topnav.formgroup2 -->
               <button type="submit" class="sr-only btn btn-primary" value='Submit'>Submit</button>
-              </form>
+            </form>
            </li>
       {{#if drop1}} <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop1}}<b class="caret"></b></a>
@@ -105,25 +105,25 @@
            {{/if}}
              
      </ul>
-     <div class="navbar-right">
+     <div class="navbar-right"> <!-- topnav.navbar-right -->
      {{#if user}}
         {{user.local.email}}
      {{else}}
         <form class="form-inline" action="/user/login" method="post">
-            <div class="form-group">
+            <div class="form-group">  <!-- topnav.formgroup3 -->
               <label class="sr-only" for="userEmail">Email address</label>
               <input type="email" class="form-control" id="userEmail" name="email" pattern=".{10,}" required placeholder="Enter email">
-            </div>
-            <div class="form-group">
+            </div>  <!-- /topnav.formgroup3 -->
+            <div class="form-group">  <!-- /topnav.formgroup4 -->
               <label class="sr-only" for="userPassword">Password</label>
               <input type="password" class="form-control" id="userPassword" name="password"  pattern=".{8,}" required placeholder="Password">
-            </div>
+            </div>  <!-- /topnav.formgroup4 -->
             <input type="hidden" name="_csrf" value="{{_csrfToken}}">
             <input type="hidden" name="timezone" id="timezone">
             <button type="submit" class="btn btn-default">Sign in</button>  <a href="/user/signup">Signup</a>
           </form>
       {{/if}}
-     </div> 
+     </div>  <!-- /topnav.navebar-right -->
     </nav>
-  </div>
-</div>
+  </div> <!-- /topnav.navbar.next -->
+</div> <!-- /topnav.navbar -->

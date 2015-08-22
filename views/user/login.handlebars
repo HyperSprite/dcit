@@ -1,19 +1,19 @@
-<div class="container">
+<div class="container"> <!-- login.1 -->
 
-<div class="col-sm-6 col-sm-offset-3">
+<div class="col-sm-6 col-sm-offset-3"> <!-- login.1.1 -->
 
     <h1><span class="fa fa-sign-in"></span> Login</h1>
 
     <!-- LOGIN FORM -->
     <form action="/user/login" method="post">
-        <div class="form-group">
+        <div class="form-group"> <!-- login.1.1.1 -->
             <label>Email</label>
             <input type="text" class="form-control" name="email">
-        </div>
-        <div class="form-group">
+        </div> <!-- /login.1.1.1 -->
+        <div class="form-group"> <!-- login.1.1.2 -->
             <label>Password</label>
             <input type="password" class="form-control" name="password">
-        </div>
+        </div> <!-- /login.1.1.2 -->
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <button type="submit" class="btn btn-warning btn-lg">Login</button>
     </form>
@@ -22,5 +22,5 @@
 
     <p>Need an account? <a href="/user/signup">Signup</a></p>
     <p>Or go <a href="/">home</a>.</p>
-</div>
-</div>
+</div> <!-- /login.1.1 -->
+</div> <!-- login.1 -->

@@ -692,7 +692,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
 logger.warn(asc+' '+err);
         }else{
 //        logger.info('2-9 >'+searchFor);
-        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo',function(err,eqs){
+        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes modifiedOn',function(err,eqs){
          
         //logger.info('system-list'+sys);
             var context = {
@@ -726,6 +726,8 @@ logger.warn(asc+' '+err);
                             systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus,sy.systemTicket),
                             systemStatus: strTgs.trueFalseIcon(sy.systemStatus,sy.systemStatus),
                             sysmodifiedOn: strTgs.dateMod(sy.modifiedOn),
+                            systemTicket: sy.systemTicket,
+                            systemNotes: sy.systemNotes,
                             equipLocation: tempSys.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(tempSys.equipLocation),
                             equipSN: tempSys.equipSN,
@@ -736,6 +738,11 @@ logger.warn(asc+' '+err);
                             equipSubModel: tempSys.equipSubModel,
                             equipAcquisition: strTgs.dateMod(tempSys.equipAcquisition),
                             equipWarrantyMo: strTgs.addAndCompDates(tempSys.equipAcquisition, tempSys.equipWarrantyMo),
+                            equipPONum: tempSys.equipPONum,
+                            equipInvoice: tempSys.equipInvoice,
+                            equipProjectNum: tempSys.equipProjectNum,
+                            equipNotes: tempSys.equipNotes,
+                            equipmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                     };
                 }),
             };
@@ -785,6 +792,8 @@ logger.warn(asc+' '+err);
                             systemTicketLit: strTgs.trueFalseIcon(tempSys.systemInventoryStatus,tempSys.systemTicket),
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
+                            systemTicket: tempSys.systemTicket,
+                            systemNotes: tempSys.systemNotes,
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,
@@ -795,6 +804,11 @@ logger.warn(asc+' '+err);
                             equipSubModel: eq.equipSubModel,
                             equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
                             equipWarrantyMo: strTgs.addAndCompDates(eq.equipAcquisition, eq.equipWarrantyMo),
+                            equipPONum: eq.equipPONum,
+                            equipInvoice: eq.equipInvoice,
+                            equipProjectNum: eq.equipProjectNum,
+                            equipNotes: eq.equipNotes,
+                            equipmodifiedOn: strTgs.dateMod(eq.modifiedOn),
                     };
                 }),
             };
