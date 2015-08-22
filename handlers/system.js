@@ -692,7 +692,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
 logger.warn(asc+' '+err);
         }else{
 //        logger.info('2-9 >'+searchFor);
-        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes modifiedOn',function(err,eqs){
+        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes',function(err,eqs){
          
         //logger.info('system-list'+sys);
             var context = {
@@ -759,7 +759,7 @@ logger.warn(asc+' '+err);
 logger.warn(asc+' '+err);
         }else{
         //logger.info('>9 >'+searchFor);
-        Systemdb.find({},'systemName systemEquipSN systemEnviron systemRole systemTicket systemInventoryStatus systemTicket systemStatus modifiedOn',function(err,sys){
+        Systemdb.find({},'systemName systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn',function(err,sys){
          
         //logger.info('system-list'+sys);
             var context = {
