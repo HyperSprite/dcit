@@ -798,7 +798,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             systemRole: tempSys.systemRole,
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
                             systemTicket: tempSys.systemTicket,
-                            systemTicket: tempSys.systemNotes,
+                            systemNotes: tempSys.systemNotes,
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                             
                     };
@@ -872,7 +872,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             systemRole: tempSys.systemRole,
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
                             systemTicket: tempSys.systemTicket,
-                            systemTicket: tempSyd.systemNotes,
+                            systemNotes: tempSyd.systemNotes,
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                     };
                 })
