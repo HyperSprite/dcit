@@ -1213,19 +1213,6 @@ exports.dcSystemNameChange =  function(req,res){
 });
 }
 };
-/*
-function updateEndPoints(oldSystemName,systemName){
-                logger.info('updateEndPoints start '+oldSystemName+' '+systemName);
-                    Systemdb.update({'systemPorts.sysPortEndPoint': oldSystemName},{'systemPorts.$.sysPortEndPoint': systemName}, {multi: true},function(err, numAffected){
-                    if (err){
-                        logger.error(err.stack);
-                        return(err);
-                    }
-                        logger.info(numAffected+ ' sysPortEndPoint Updated');
-                        return numAffected;
-                    });
-}
-*/
 
 function updateEndPoints(oldSystemName,systemName,callback){
     logger.info('updateEndPoints start '+oldSystemName+' '+systemName);

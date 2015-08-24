@@ -747,7 +747,7 @@ exports.dcEquipSysPages = function(req,res,next){
         if(err) return next(err);
         if(!eqs) return next();
         //logger.info(eqs);
-        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
+        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus systemTicket systemNotes modifiedOn',function(err, sys){
         
         if(err) return next(err);
         if(!sys) return next();
@@ -773,7 +773,10 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipSubModel: eq.equipSubModel,
                             equipRecieved: strTgs.dateMod(eq.equipRecieved),
                             equipPONum: eq.equipPONum,
+                            equipInvoice: eq.equipInvoice,
                             equipProjectNum: eq.equipProjectNum,
+                            equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
+                            equipNotes: equipNotes,
                             createdOn: strTgs.dateMod(eq.createdOn),
                             modifiedOn: strTgs.dateMod(eq.modifiedOn),
                             equipPorts: eq.equipPorts.map(function(ep){
@@ -794,6 +797,8 @@ exports.dcEquipSysPages = function(req,res,next){
                             systemEnviron: tempSys.systemEnviron,
                             systemRole: tempSys.systemRole,
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
+                            systemTicket: tempSys.systemTicket,
+                            systemTicket: tempSyd.systemNotes,
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                             
                     };
@@ -811,7 +816,7 @@ exports.dcEquipSysPages = function(req,res,next){
         if(err) return next(err);
         if(!eqs) return next();
        //logger.info('eqs'+eqs);
-        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
+        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus systemTicket systemNotes modifiedOn',function(err, sys){
         
         if(err) return next(err);
         if(!sys) return next();
@@ -843,7 +848,10 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipSubModel: eq.equipSubModel,
                             equipRecieved: strTgs.dateMod(eq.equipRecieved),
                             equipPONum: eq.equipPONum,
+                            equipInvoice: eq.equipInvoice,
                             equipProjectNum: eq.equipProjectNum,
+                            equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
+                            equipNotes: equipNotes,
                             createdOn: strTgs.dateMod(eq.createdOn),
                             modifiedOn: strTgs.dateMod(eq.modifiedOn),
                             equipPorts: eq.equipPorts.map(function(ep){
@@ -863,6 +871,8 @@ exports.dcEquipSysPages = function(req,res,next){
                             systemEnviron: tempSys.systemEnviron,
                             systemRole: tempSys.systemRole,
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
+                            systemTicket: tempSys.systemTicket,
+                            systemTicket: tempSyd.systemNotes,
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                     };
                 })
