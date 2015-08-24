@@ -776,7 +776,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipInvoice: eq.equipInvoice,
                             equipProjectNum: eq.equipProjectNum,
                             equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
-                            equipNotes: equipNotes,
+                            equipNotes: eq.equipNotes,
                             createdOn: strTgs.dateMod(eq.createdOn),
                             modifiedOn: strTgs.dateMod(eq.modifiedOn),
                             equipPorts: eq.equipPorts.map(function(ep){
@@ -798,7 +798,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             systemRole: tempSys.systemRole,
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
                             systemTicket: tempSys.systemTicket,
-                            systemTicket: tempSyd.systemNotes,
+                            systemTicket: tempSys.systemNotes,
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                             
                     };
@@ -851,7 +851,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipInvoice: eq.equipInvoice,
                             equipProjectNum: eq.equipProjectNum,
                             equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
-                            equipNotes: equipNotes,
+                            equipNotes: eq.equipNotes,
                             createdOn: strTgs.dateMod(eq.createdOn),
                             modifiedOn: strTgs.dateMod(eq.modifiedOn),
                             equipPorts: eq.equipPorts.map(function(ep){
