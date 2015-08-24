@@ -39,6 +39,7 @@
                 <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
                 <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
                 <th data-sortable="true" data-field="equipStatus">Status</th>
+                <th data-sortable="true" data-field="equipType" data-visible="false">Type</th>
                 <th data-sortable="true" data-field="makeModel">Make - Model</th>
                 <th data-sortable="true" data-field="equipAcquisition">Acquisition</th>
                 <th data-sortable="true" data-field="equipPONum" data-visible="false">PO Number</th>
@@ -63,6 +64,7 @@
                 <td>{{sysmodifiedOn}}</td>
                 <td><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
                 <td>{{{equipStatusLight}}}</td>
+                <td>{{equipType}}</td>
                 <td>{{equipMake}} {{equipModel}} {{equipSubModel}}</td>
                 <td>{{#if equipWarrantyMo}}<mark>{{equipAcquisition}}</mark>{{else}}{{equipAcquisition}}{{/if}}</td>
                 <td>{{equipPONum}}</td>
