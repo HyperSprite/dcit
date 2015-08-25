@@ -44,7 +44,7 @@
     If the device was unrecoverable and new SSH keys are generated, you will need to remove the old key from your SSH known host file. Use the following command:<br>
     <code>
         <ul>
-        ssh-keygen -R <strong>{{../../systemName}}</strong>.{{#if dcNet.dcNetDomain}}<strong>{{dcNet.dcNetDomain}}</strong>{{else}}<mark>Check Datacenter Network Domain</mark>{{/if}}
+        <li>ssh-keygen -R <strong>{{../../systemName}}</strong>.{{#if dcNet.dcNetDomain}}<strong>{{dcNet.dcNetDomain}}</strong>{{else}}<mark>Check Datacenter Network Domain</mark>{{/if}}</li>
         </ul>
     </code>
 </li>
