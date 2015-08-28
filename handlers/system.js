@@ -284,7 +284,7 @@ logger.warn('dcSystemPages'+err);
             createdBy: sy.createdBy,
             createdOn: strTgs.dateMod(sy.createdOn),
             modifiedBy: sy.modifiedBy,
-            modifiedOn: sy.modifiedOn, 
+            modifiedOn: strTgs.dateMod(sy.modifiedOn), 
                 systemPorts: sy.systemPorts.map(function(sp){
                     var isConsole,
                         isEthernet,

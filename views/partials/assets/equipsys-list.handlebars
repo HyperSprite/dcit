@@ -31,6 +31,7 @@
                 <th data-sortable="true" data-field="index">Index</th>
                 <th data-sortable="true" data-field="equipLocation" data-order="asc">DC_Cage_Rack_RU</th>
                 <th data-sortable="true" data-field="systemName">System Name</th>
+                {{#if access.edit}}  <th data-sortable="false" data-field="sysEdit">Edit</th>    {{/if}}                
                 <th data-sortable="true" data-field="systemStatus" data-visible="false">Status</th>
                 <th data-sortable="true" data-field="systemEnviron">Env</th>
                 <th data-sortable="true" data-field="systemRole">Role</th>                
@@ -38,6 +39,7 @@
                 <th data-sortable="true" data-field="systemNotes" data-visible="false">System Notes</th>
                 <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
                 <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
+                {{#if access.edit}}  <th data-sortable="false" data-field="equipEdit">Edit</th>    {{/if}}
                 <th data-sortable="true" data-field="equipStatus">Status</th>
                 <th data-sortable="true" data-field="equipType" data-visible="false">Type</th>
                 <th data-sortable="true" data-field="makeModel">Make - Model</th>
@@ -55,7 +57,14 @@
                 
                 <td>{{@index}}</td>
                 <td><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></td>
-                <td><a href="/system/{{systemName}}" target="_blank">{{systemName}}</a></td>
+                <td><a href="/system/{{systemName}}" target="_blank"> {{systemName}}</a></td>
+                {{#if ../access.edit}}                
+                <td>
+                    <input title="Edit" input type='submit' class='btn btn-warning btn-xs' formaction='/system/edit-{{systemName}}' form="formEdit{{index}}" formmethod="get" value='E'>
+                    <form id=formEdit{{index}} class="form-inline" target="_blank"></form>
+                </td>
+                {{/if}}        
+                
                 <td>{{{systemStatus}}}</td>
                 <td>{{systemEnviron}}</td>
                 <td>{{systemRole}}</td>
@@ -63,6 +72,13 @@
                 <td>{{systemNotes}}</td>
                 <td>{{sysmodifiedOn}}</td>
                 <td><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
+                {{#if ../access.edit}}                
+                <td>
+                    <input title="Edit" input type='submit' class='btn btn-warning btn-xs' formaction='/equipment/edit-{{equipSN}}' form="formEdit{{index}}" formmethod="get" value='E'>
+                    <form id=formEdit{{index}} class="form-inline" target="_blank"></form>
+                </td>
+                {{/if}}                 
+                
                 <td>{{{equipStatusLight}}}</td>
                 <td>{{equipType}}</td>
                 <td>{{equipMake}} {{equipModel}} {{equipSubModel}}</td>
@@ -79,3 +95,9 @@
     </table>
    </div> <!-- /equipsys-list.part2 -->
 </div> <!-- /equipsys-list.part1 --> 
+
+
+{{#if access.edit}}
+    <input title="Edit" input type='submit' class='btn btn-warning btn-xs' formaction='/system/edit-{{systemName}}' form="formEdit{{index}}" formmethod="get" value='E'>
+    <form id=formEdit{{index}} class="form-inline"></form>
+{{/if}}
