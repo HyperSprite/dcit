@@ -139,22 +139,8 @@ switch(app.get('env')){
         throw new Error('Unknown execution environment: ' + app.get('env'));
 }
 app.use(express.static(__dirname + '/public'));
-//app.use(require('cookie-parser')(credentials.cookieSecret));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-/*
-app.use(require('express-session')({ 
-                key: 'session',
-                maxAge: new Date(Date.now() + 80000000),
-                cookie:{
-                   maxAge: 80000000
-                },
-                secret: credentials.cookieSecret,
-                store: require('mongoose-session')(mongoose),
-                saveUninitialized: true,
-                resave: true,
-                }));
-*/
 app.use(require('express-session')({ 
                 key: 'session',
                 //maxAge: new Date(Date.now() + 80000000),
