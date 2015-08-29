@@ -38,7 +38,13 @@
 				</select>
                 
             </div>
-        </div> 
+        </div>
+        <div class="form-group">
+            <label for="field-equipTicketNumber" class="col-sm-2 control-label" >Ticket Number</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipTicketNumber" name="equipTicketNumber"  value="{{equipTicketNumber}}" placeholder="Internal">
+            </div>
+        </div>
         <div class="form-group">
             <label for="equipLocationRack" class="col-sm-2 control-label" >Location</label>
             <div class="col-xs-3 ui-widget">
@@ -183,12 +189,7 @@
                 <input type="text" class="form-control" id="equipAssetTag" name="equipAssetTag"  value="{{equipAssetTag}}" placeholder="If availible">
             </div>
         </div>
-        <div class="form-group">
-            <label for="field-equipTicketNumber" class="col-sm-2 control-label" >Ticket Number</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipTicketNumber" name="equipTicketNumber"  value="{{equipTicketNumber}}" placeholder="Internal">
-            </div>
-        </div>
+
         <h4>Hardware</h4>
         <div class="form-group">
             <label for="field-equipMake" class="col-sm-2 control-label" >Make *</label>
@@ -208,7 +209,13 @@
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="equipSubModel" name="equipSubModel"  value="{{equipSubModel}}" placeholder="v3, Type 10">
             </div>
-        </div>        
+        </div>
+        <div class="form-group">
+            <label for="field-equipAddOns" class="col-sm-2 control-label" >Add Ons</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="equipAddOns" name="equipAddOns"  value="{{equipAddOns}}" placeholder="1.2gb FusionIO">
+            </div>
+        </div>         
         <div class="form-group">
             <label for="field-equipRUHieght" class="col-sm-2 control-label" >Height in RU *</label>
             <div class="col-sm-4">
@@ -314,12 +321,7 @@
                 <input type="number" class="form-control" id="equipPSUDraw" name="equipPSUDraw"  value="{{equipPSUDraw}}" placeholder="200 in Watts">
             </div>
         </div>   
-        <div class="form-group">
-            <label for="field-equipAddOns" class="col-sm-2 control-label" >Add Ons</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipAddOns" name="equipAddOns"  value="{{equipAddOns}}" placeholder="1.2gb FusionIO">
-            </div>
-        </div>   
+  
         <div class="form-group">
             <label for="field-equipRecieved" class="col-sm-2 control-label" >Date Received</label>
             <div class="col-sm-4">
