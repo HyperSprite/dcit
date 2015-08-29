@@ -18,7 +18,10 @@ var
        Systemdb = require('./models/system.js'),
       Optionsdb = require('./models/options.js'),
 MrSystemEnviron = require('./models/mrsystemenviron.js'),
-   seedDataLoad = require('./seedDataLoad.js');
+   seedDataLoad = require('./seedDataLoad.js'),
+        session = require('express-session'),
+     MongoStore = require('connect-mongo')(session);
+        
 
 var          winston = require('winston'),
               logger = require('./lib/logger.js');
@@ -141,6 +144,17 @@ switch(app.get('env')){
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// adding connect-mongo
+app.use(session({
+    secret: credentials.cookieSecret,
+    store: new MongoStore({ mongooseConnection: mongoose.connection, }),
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+}));
+
+/*
 app.use(require('express-session')({ 
                 key: 'session',
                 //maxAge: new Date(Date.now() + 80000000),
@@ -150,6 +164,7 @@ app.use(require('express-session')({
                 saveUninitialized: true,
                 resave: false,
                 }));
+*/
 app.use(passport.initialize());
 app.use(passport.session());
 

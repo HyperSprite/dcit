@@ -1,7 +1,7 @@
 
 
 <div>   <!-- equipsys-list.part1 --> 
-<h4>{{#if rackView}}Rack <a href="/location/rack/{{rackView}}">{{rackView}}</a> - {{/if}}Equipment and Systems </h4>
+<h4>{{#if rackView}}Rack <a href="/location/rack/{{rackView}}">{{rackView}}</a> - {{else}}{{titleNow}}{{/if}} Report</h4>
 
 <div> <!-- equipsys-list.part2 --> 
    
@@ -28,10 +28,10 @@
         >
         <thead>
             <tr>
-                <th data-sortable="true" data-field="index">Index</th>
+                <th data-sortable="true" data-field="index" data-visible="false">Index</th>
                 <th data-sortable="true" data-field="equipLocation" data-order="asc">DC_Cage_Rack_RU</th>
                 <th data-sortable="true" data-field="systemName">System Name</th>
-                {{#if access.edit}}  <th data-sortable="false" data-field="sysEdit">Edit</th>    {{/if}}                
+                {{#if access.edit}}  <th data-sortable="false" data-field="sysEdit" data-card-visible="false">Edit</th>    {{/if}}                
                 <th data-sortable="true" data-field="systemStatus" data-visible="false">Status</th>
                 <th data-sortable="true" data-field="systemEnviron">Env</th>
                 <th data-sortable="true" data-field="systemRole">Role</th>                
@@ -39,7 +39,7 @@
                 <th data-sortable="true" data-field="systemNotes" data-visible="false">System Notes</th>
                 <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
                 <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
-                {{#if access.edit}}  <th data-sortable="false" data-field="equipEdit">Edit</th>    {{/if}}
+                {{#if access.edit}}  <th data-sortable="false" data-field="equipEdit" data-card-visible="false">Edit</th>    {{/if}}
                 <th data-sortable="true" data-field="equipStatus">Status</th>
                 <th data-sortable="true" data-field="equipType" data-visible="false">Type</th>
                 <th data-sortable="true" data-field="makeModel">Make - Model</th>
@@ -96,8 +96,3 @@
    </div> <!-- /equipsys-list.part2 -->
 </div> <!-- /equipsys-list.part1 --> 
 
-
-{{#if access.edit}}
-    <input title="Edit" input type='submit' class='btn btn-warning btn-xs' formaction='/system/edit-{{systemName}}' form="formEdit{{index}}" formmethod="get" value='E'>
-    <form id=formEdit{{index}} class="form-inline"></form>
-{{/if}}
