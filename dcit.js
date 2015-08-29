@@ -154,17 +154,6 @@ app.use(session({
     cookie: { secure: true },
 }));
 
-/*
-app.use(require('express-session')({ 
-                key: 'session',
-                //maxAge: new Date(Date.now() + 80000000),
-                cookie: { secure: true },
-                secret: credentials.cookieSecret,
-                store: require('mongoose-session')(mongoose),
-                saveUninitialized: true,
-                resave: false,
-                }));
-*/
 app.use(passport.initialize());
 app.use(passport.session());
 

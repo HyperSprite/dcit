@@ -692,7 +692,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
 logger.warn(asc+' '+err);
         }else{
 //        logger.info('2-9 >'+searchFor);
-        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes',function(err,eqs){
+        Equipment.find({},'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes',function(err,eqs){
          
         //logger.info('system-list'+sys);
             var context = {
@@ -736,6 +736,7 @@ logger.warn(asc+' '+err);
                             equipMake: tempSys.equipMake,
                             equipModel: tempSys.equipModel,
                             equipSubModel: tempSys.equipSubModel,
+                            equipAddOns: tempSys.equipAddOns,
                             equipAcquisition: strTgs.dateMod(tempSys.equipAcquisition),
                             equipWarrantyMo: strTgs.addAndCompDates(tempSys.equipAcquisition, tempSys.equipWarrantyMo),
                             equipPONum: tempSys.equipPONum,
@@ -802,6 +803,7 @@ logger.warn(asc+' '+err);
                             equipMake: eq.equipMake,
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
+                            equipAddOns: eq.equipAddOns,
                             equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
                             equipWarrantyMo: strTgs.addAndCompDates(eq.equipAcquisition, eq.equipWarrantyMo),
                             equipPONum: eq.equipPONum,

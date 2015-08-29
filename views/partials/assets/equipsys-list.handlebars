@@ -81,7 +81,7 @@
                 
                 <td>{{{equipStatusLight}}}</td>
                 <td>{{equipType}}</td>
-                <td>{{equipMake}} {{equipModel}} {{equipSubModel}}</td>
+                <td>{{equipMake}} {{equipModel}} {{equipSubModel}}{{#if equipAddOns}} + {{equipAddOns}}{{/if}}</td>
                 <td>{{#if equipWarrantyMo}}<mark>{{equipAcquisition}}</mark>{{else}}{{equipAcquisition}}{{/if}}</td>
                 <td>{{equipPONum}}</td>
                 <td>{{equipInvoice}}</td>

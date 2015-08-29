@@ -771,6 +771,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipMake: eq.equipMake,
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
+                            equipAddOns: eq.equipAddOns,
                             equipRecieved: strTgs.dateMod(eq.equipRecieved),
                             equipPONum: eq.equipPONum,
                             equipInvoice: eq.equipInvoice,
@@ -846,6 +847,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipMake: eq.equipMake,
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
+                            equipAddOns: eq.equipAddOns,
                             equipRecieved: strTgs.dateMod(eq.equipRecieved),
                             equipPONum: eq.equipPONum,
                             equipInvoice: eq.equipInvoice,
@@ -910,7 +912,7 @@ exports.dcRackElevationPage = function(req,res,next){
         if(err) return next(err);
         if(!eqs) return next();
         //logger.info(eqs);
-        Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
+        Systemdb.find({}, 'systemName systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn',function(err, sys){
         
         if(err) return next(err);
         if(!sys) return next();
@@ -937,6 +939,7 @@ exports.dcRackElevationPage = function(req,res,next){
                             equipMake: eq.equipMake,
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
+                            equipAddOns: eq.equipAddOns,
                             equipRecieved: strTgs.dateMod(eq.equipRecieved),
                             equipPONum: eq.equipPONum,
                             equipProjectNum: eq.equipProjectNum,
