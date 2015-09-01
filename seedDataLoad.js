@@ -14,7 +14,7 @@ new Optionsdb({
 new Optionsdb({
     optListName: 'System Status',
     optListKey: 'optSystStatus',
-    optListArray:['Not Started','Work Pending','Waiting on Approval','Waiting on Hardware','In Progress','Ready','Handed Off','In Service','Decommission','Test','Temporary','Canceled'],
+    optListArray:['Production App','Production DB','Production Storage','Production','Non-prod App','Non-prod DB','Non-prod Storage','Non-prod','Decommissioned','Uncategorized'],
     }).save();
 new Optionsdb({
     optListName: 'System Port Type',

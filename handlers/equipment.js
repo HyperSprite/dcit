@@ -376,7 +376,7 @@ exports.dcEquipPages = function(req,res,next){
                                 createdBy: eq.createdBy,
                                 createdOn: strTgs.dateMod(eq.createdOn),
                                 modifiedBy: eq.modifiedBy,
-                                modifiedOn: eq.modifiedOn,
+                                modifiedOn: strTgs.dateMod(eq.modifiedOn),
                             equipPorts: eq.equipPorts.map(function(ep){
                             return {
                                 equipPortId: ep._id,
