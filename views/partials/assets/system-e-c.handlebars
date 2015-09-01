@@ -1,13 +1,19 @@
 {{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
 {{#if access.edit}}
-    <form id="formCopy" class="form-inline"><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
-    <input accesskey="x" title="Press Alt x to Edit" input type='submit' class='btn btn-warning btn-xs' formaction='/system/edit-{{systemName}}' form="formEdit" formmethod="get" value='E'>
-    <input accesskey="c" title="Press Alt c to Copy" input type='submit' class='btn btn-info btn-xs' formaction='/system/edit~copy-{{systemName}}' form="formCopy" formmethod="get" value='C'>
+
+    
+    <a href="/system/edit-{{systemName}}">
+    <span class="glyphicon glyphicon-edit" accesskey="x" icon:warning title="Press Alt x to Edit {{systemName}}"></span></a>
+
+    <a href="/system/edit~copy-{{systemName}}">
+    <span class="glyphicon glyphicon-plus-sign" accesskey="c" title="Press Alt c to Copy {{systemName}}"></span></a>
+    
+    
 {{#if access.delete}}
-    <input type='submit' class='btn btn-default btn-xs' formaction='/system-namechange/{{systemName}}' form="formSystemNameChange" formmethod="get" value='Change System Name'>
+
+    <a href="/system-namechange/{{systemName}}" class="btn btn-default btn-xs" title="Change  System Name">
+          <span class="glyphicon glyphicon-pencil"></span> Name 
+        </a>
 {{/if}}
-    <form id=formEdit class="form-inline"></form>
-{{/if}}
-{{#if access.delete}}
-    <form id=formSystemNameChange  class="form-inline"></form>
+
 {{/if}}
