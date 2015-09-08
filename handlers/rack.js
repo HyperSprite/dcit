@@ -159,7 +159,8 @@ logger.info(err);
         if (req.params.datacenter.indexOf ('copy') !=-1){
 //logger.info(rk);
                 context ={
-
+                    access : accConfig.accessCheck(req.user),
+                    user : req.user,
                     titleNow: 'Copy '+rk.rackUnique,
                     optEquipStatus: opt.optListArray,
                     rackParentDC: rk.rackParentDC,

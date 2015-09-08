@@ -7,12 +7,20 @@
 <div class="formContainer">
     <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/equipment/{{#if equipSN}}{{equipSN}}{{else}}new{{/if}}" method="POST">
 		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <div class="row">       
+        <div class="col-md-10">  
         <p class="form-control-static">{{#if equipSN}}</p>
         <div class="form-group">
             <input type="hidden" name="isEdit" value="{{equipSN}}">
             <label for="field-equipSN" class="col-sm-2 control-label">Serial Number</label>
             <div class="col-sm-4">
-                {{equipSN}}<br>
+                {{equipSN}}
+                {{#if access.delete}}
+                    <a href="/equipment-snchange/{{equipSN}}" 
+                    <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change  System Name"></span>
+                    </a>
+                {{/if}}
+                <br>
                 <input type="hidden" name="equipSN" value="{{equipSN}}">
             </div>
         </div>
@@ -80,10 +88,22 @@
                 <input type="checkbox" name="equipIsVirtual" value="true" {{equipIsVirtualChecked}}>
             </div>
         </div>
+        </div>
+        <div class="col-md-1">  
+
+
         <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>S</button>
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='{{ses.lastPage}}'{{/if}} >
+                <a href="#" onclick="document.getElementById('datacenterForm').submit();return false;" accesskey="x" title="Press Alt x to Save" >
+                    <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
+
+                <a href="#" onclick="document.getElementById('datacenterForm').reset();return false;" title="Reset form">
+                    <span class="glyphicon glyphicon-refresh glyphicon-danger"></span></a>
+
+                <a href="#" onclick="document.getElementById('cancelForm').submit();return false;" title="Cancel edit">
+                    <span class="glyphicon glyphicon-ban-circle glyphicon-danger"></span></a>
+
+        </div>
+        </div>
         </div>
         <table id="portsTable" class="table table-condensed">
             <thead>
@@ -102,7 +122,7 @@
                 <tr class="tr-ports">
                 <input type="hidden" name="equipPortId[{{@index}}]" value="{{equipPortId}}">
                     <td>
-                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button>
+                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}" title="Delete this port"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                     
                     
@@ -417,18 +437,22 @@
     </ul>    
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
-            {{#if access.edit}}
-                <button type="submit" class="btn btn-primary btn-xs" input accesskey="x" title="Press Alt x to Save" value='Submit'>Save</button>
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>{{/if}}
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' 
-                {{#if equipSN}} formaction='/equipment/{{equipSN}}' {{else}}formaction='{{ses.lastPage}}'{{/if}} >
-                {{#if access.delete}}
-                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>{{/if}}
+                {{#if access.edit}}
+                <button type="submit" class="btn btn-danger btn-xs" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
+                {{/if}}
+                <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
+                    <button type="button" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
+                {{#if access.delete}}{{#if equipSN}}
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteForm"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+                {{/if}}{{/if}}
+
             </div>
         </div>
-     </form><form id="formCancel"></form> 
+     </form><form id="cancelForm" role="form" action="{{#if equipSN}}/equipment/{{equipSN}}{{else}}{{ses.lastPage}}{{/if}}" method="GET"></form> 
     {{#if access.delete}}
-     <form id="deleteform" action="/equipmentdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
+     <form id="deleteForm" action="/equipmentdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
         <input type="hidden" name="equipLocationRack" value="{{equipLocationRack}}">
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="equipSN" value="{{equipSN}}">

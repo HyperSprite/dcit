@@ -1,9 +1,16 @@
 <div>
-<h4><a href="/location/rack/circuit~{{rackUnique}}>new">Power</a></h4>
+`{{#if access.edit}}
+    <form id="powerAddForm" role="form" action="/location/rack/circuit~{{rackUnique}}>new" method="GET"></form>
+        <a href="#" onclick="document.getElementById('powerAddForm').submit();return false;">
+                    <button type="button" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-edit"></span> Power</button></a>
+        {{else}}<h4>Power</h4>{{/if}}
+
     <div id="dvData">
     <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
         <thead>
             <tr>
+                {{#if access.edit}}<th class="table-sort" data-sort="rackEdit">Edit</th>{{/if}}
                 <th class="table-sort" data-sort="rackPowUnique">Circuit</th>
                 <th class="table-sort" data-sort="rackPowStatus">Status</th>
                 <th class="table-sort" data-sort="rackPowVolts">Volts</th>
@@ -12,13 +19,18 @@
                 <th class="table-sort" data-sort="rackPowReceptacle ">Receptical</th>
                 <th class="table-sort" data-sort="createdOn">Created On</th> 
                 <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
-                <th class="table-sort" data-sort="rackEdit">Edit<th>
+                
             </tr>
         </thead>
         <tbody class="list">
         {{#each powers}}
             <tr>
-                
+                <td class="rackEdit">
+                    <a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}" >
+                        <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
+                    <a href="/location/rack/circuitcopy~{{../rackUnique}}>{{rackPowId}}">
+                        <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
+                </td>
                 <td class="rackPowUnique"><a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}"  target="_blank">{{rackPowUnique}}</a></td>
                 <td class="rackPowStatus">{{rackPowStatus}}</td>
                 <td class="rackPowVolts">{{rackPowVolts}}</td>
@@ -27,10 +39,7 @@
                 <td class="rackPowReceptacle">{{rackPowReceptacle}}</td>
                 <td class="createdOn">{{createdOn}}</td>
                 <td class="modifiedOn">{{modifiedOn}}</td>
-                <td class="rackEdit"><form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
-                <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
-                <input type='submit' class='btn btn-warning btn-xs' formaction='/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}' form="formEdit" formmethod="get" value='E'>
-                <input type='submit' class='btn btn-info btn-xs' formaction='/location/rack/circuitcopy~{{../rackUnique}}>{{rackPowId}}' form="formCopy" formmethod="get" value='C'></td>
+
             </tr>  
         {{/each}}
   

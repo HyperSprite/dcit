@@ -4,13 +4,11 @@
 
 
 <div class="datacenter"> 
-
-<div class="formContainer">
+    <div class="formContainer">
     <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/datacentercontact/{{abbreviation}}" method="POST">
 		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="id" value="{{id}}">
         <input type="hidden" name="abbreviation" value="{{abbreviation}}">
-   
     <ul id="eachUl"class="list-unstyled">    
         {{!--#each contacts--}}
         <li id="eachLi" class="eachLi">
@@ -30,20 +28,18 @@
                 <input type="text" class="form-control" id="fieldconName" name="conName"  value="{{conName}}" placeholder="Contact Name?" required>
             </div>
         </div>      
-         <div class="form-group">
+        <div class="form-group">
             <label for="fieldconEmail" class="col-sm-2 control-label"  >Email</label>
             <div class="col-sm-4">
                 <input type="email" class="form-control" id="fieldconEmail" name="conEmail" value="{{conEmail}}" placeholder="Email Address?">
             </div>
         </div>        
-         <div class="form-group">
+        <div class="form-group">
             <label for="fieldContact.conURL" class="col-sm-2 control-label" >URL</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="fieldconURL" name="conURL" value="{{conURL}}" placeholder="URL">
             </div>
         </div>
-
-        
         <div class="form-group">
             <label for="fieldAddress1" class="col-sm-2 control-label">Address</label>
             <div class="col-sm-4">
@@ -397,7 +393,6 @@
                 <input type="text" class="form-control" id="fieldZip" name="zip" value="{{zip}}"placeholder="Zip">
             </div>
         </div>
-       
          <div class="form-group">
             <label for="fieldLat" class="col-sm-2 control-label"  >Latitude</label>
             <div class="col-sm-4">
@@ -410,7 +405,6 @@
                 <input type="text" class="form-control" id="fieldLon" name="lon" value="{{lon}}" placeholder="Longitude">
             </div>
         </div>
-
         <div class="form-group">
             <label for="fieldConPho1Typ" class="col-sm-2 control-label"  >Phone Type</label>
             <div class="col-sm-4">
@@ -423,7 +417,6 @@
                 <input type="text" class="form-control" id="fieldconPho1Num" name="conPho1Num"  value="{{conPho1Num}}"placeholder="XXXXXXXXXX" autocomplete="off">
             </div>
         </div>
-
         <div class="form-group">
             <label for="fieldConPho2Typ" class="col-sm-2 control-label"  >Phone Type</label>
             <div class="col-sm-4">
@@ -448,7 +441,6 @@
                 <input type="text" class="form-control" id="fieldconPho3Num" name="conPho3Num"  value="{{conPho3Num}}"placeholder="XXXXXXXXXX" autocomplete="off">
             </div>
         </div>
-
         <div class="form-group">
             <label for="fieldConPho4Typ" class="col-sm-2 control-label"  >Contact Phone Type</label>
             <div class="col-sm-4">
@@ -460,31 +452,33 @@
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="fieldconPho4Num" name="conPho4Num"  value="{{conPho4Num}}"placeholder="XXXXXXXXXX" autocomplete="off">
             </div>
-        </div>
-       
-       
+        </div>  
         <div class="form-group">
             <label for="fieldconNotes" class="col-sm-2 control-label">Notes</label>
             <div class="col-sm-4">
                 <textarea rows="3" class="form-control" id="fieldconNotes" name="conNotes">{{conNotes}}</textarea>
             </div>
         </div>
-    </div>    
+        
     {{!--/each--}} 
     </ul>    
-     <div class="form-group">
+    <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
-                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/location/datacenter/{{abbreviation}}'>
-                {{#if conId}}<button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button>{{/if}}
-            </div>
-        </div>
-     </form>
+                {{#if access.edit}}
+                <button type="submit" class="btn btn-danger btn-xs" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
+                {{/if}}
+                <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
+                    <button type="button" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
+                {{#if access.delete}}{{#if conId}}
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteForm"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+                {{/if}}{{/if}}
+            
+    
+     </form><form id="cancelForm" role="form" action="/location/datacenter/{{abbreviation}}" method="GET"></form> 
      
-            <form id="formCancel"></form> 
-     
-            <form id="deleteform{{@index}}" action="/location/datacentersubdelete/{{abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{conName}}')">
+            <form id="deleteForm" action="/location/datacentersubdelete/{{abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{conName}}')">
             <input type="hidden" name="_csrf" value="{{_csrfToken}}">
             <input type="hidden" name="id" value="{{id}}">
             <input type="hidden" name="abbreviation" value="{{abbreviation}}">
@@ -493,7 +487,6 @@
                         <input type="hidden" name="collectionName" value="datacenter">
             <input type="hidden" name="collectionSub" value="contact">
             </form>
-       
-     
-</div>
-</div>
+        </div>
+    </div>
+<div>

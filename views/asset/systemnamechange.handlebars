@@ -15,11 +15,14 @@
                     <input type="text" class="noEnterSubmit form-control" id="systemName" name="systemName" value="{{oldSystemName}}" placeholder="*Required" required aria-describedby="systemNameStatus">
                 </div>
             </div>      
-          
-                    <button type="submit" class="btn btn-danger btn-xs" input accesskey="x" title="Press Alt x to Update Serial Number" value="Submit">Update System Name</button>
-                    <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                    <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value="Cancel" formaction="/system/{{oldSystemName}}">
-        </form><form id="formCancel"></form>
+          <div class="form-group">
+                    <button type="submit" class="btn btn-danger btn-xs" input accesskey="x" title="Press Alt x to Update Serial Number" value="Submit"><span class="glyphicon glyphicon-save"></span> Update System Name</button>
+                    <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                    <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
+                    <button type="button" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
+          </div>          
+        </form><form id="cancelForm" role="form" action="/system/edit-{{oldSystemName}}" method="GET"></form>
     </div>    
     
     {{/if}}

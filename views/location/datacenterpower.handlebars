@@ -33,11 +33,16 @@ $('form#datacenterForm').serializeJSON();
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                         
-                        <button type="submit" class="btn btn-default btn-xs">Submit</button>
-                        <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                        <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='Cancel' formaction='/location/datacenter/{{abbreviation}}'>
+                        <button type="submit" class="btn btn-danger btn-xs" accesskey="x" title="Press Alt x to Save"><span class="glyphicon glyphicon-save"></span> Save</button>
+                        <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                        
+
+            <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
+                <button type="button" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
+                       
             </div>
         </div>
-     </form><form id="formCancel"></form> 
+    <form id="cancelForm" role="form" action="/location/datacenter/{{abbreviation}}" method="GET"></form> 
 </div>
 </div>

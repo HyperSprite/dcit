@@ -2,22 +2,25 @@
 <hr>
 <div class="racks">
     <h4>Equipment SN: {{equipSN}}
-            {{#if access.delete}}
-                <input type='submit' class='btn btn-default btn-xs' formaction='/equipment-snchange/{{equipSN}}' form="formSNChange" formmethod="get" value='Change SN'><form id=formSNChange></form>
-            {{/if}}</h4>
+</h4>
     <ul id="eachUl"class="list-unstyled"> 
             <li>
             <div class="row">
-              <div class="col-md-8">
-                {{#if systemName}}<h4>System: <a href="/system/{{systemName}}">{{systemName}} </a></h4>
-                System Status: {{{systemStatus}}}<br>{{/if}}
-                Location: <a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a><br>
-                Ticket: {{{equipTicketNumberlit}}}<br>
-                Equipment Status: {{{equipStatuslit}}}<br>
-                {{#if equipAssetTag}}Asset Tag: {{equipAssetTag}}<br>{{/if}}
-                {{> assets/equipment-e-c}}
+              <div class="col-md-4">
+                    Location: <strong><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
+                    Ticket: {{{equipTicketNumberlit}}}<br>
+                    Equipment Status: {{{equipStatuslit}}}<br>
+                    {{#if equipAssetTag}}Asset Tag: {{equipAssetTag}}<br>{{/if}}
                 </div>
-              <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    {{#if systemName}}System: <strong><a href="/system/{{systemName}}">{{systemName}} </a></strong><br>
+                    System Status: {{{systemStatus}}}<br>{{/if}}
+                </div>
+                <div class="col-md-2">
+                </div>
+              <div class="col-md-2">
+                  {{> assets/equipment-e-c}}
+              </div>
             </div>
             <div class="row">
                 <hr>
@@ -25,7 +28,8 @@
                 {{> assets/equipport-list}}
                 
                 <hr>
-                <div class="col-sm-9">
+                <div class="row">
+                <div class="col-md-4">
                 
                 {{#if equipIsVirtual}} Is Virtual {{/if}}
                 {{#if equipMake}}{{equipMake}}<br>{{/if}}
@@ -46,6 +50,8 @@
                 {{#if equipPSUDraw}} Draw: {{equipPSUDraw}}Watts<br>{{/if}}
                 {{#if equipAddOns}}Add On Items: {{equipAddOns}}<br>{{/if}}
                 <br>
+                </div>
+                <div class="col-md-4">
                 <strong>Timing</strong><br>
                 {{#if equipRecieved}}Received: {{equipRecieved}}<br>{{/if}}
                 {{#if equipAcquisition}}Acquisition: {{equipAcquisition}}<br>{{/if}}
@@ -67,13 +73,8 @@
                 {{#if equipNotes}}Notes: {{equipNotes}}<br>{{/if}}
                 {{#if createdBy}}Created By: {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
                 Modified: {{#if modifiedBy}}By: {{modifiedBy}}{{/if}}{{#if modifiedOn}} {{modifiedOn}}<br>{{/if}}
-                
-                
-                {{#if access.edit}}
-                <input type='submit' class='btn btn-warning btn-xs' formaction='/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='Edit'>
-                <input type='submit' class='btn btn-info btn-xs' formaction='/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='Copy'>
-                {{/if}}
-                
+
+                </div>
                 </div>
             </div>
             </li><br>

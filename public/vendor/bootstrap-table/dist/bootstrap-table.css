@@ -236,10 +236,12 @@
 .fixed-table-toolbar .btn-group > .btn-group {
     display: inline-block;
     margin-left: -1px !important;
+
 }
 
 .fixed-table-toolbar .btn-group > .btn-group > .btn {
     border-radius: 0;
+    
 }
 
 .fixed-table-toolbar .btn-group > .btn-group:first-child > .btn {

@@ -612,7 +612,7 @@ exports.datacenterCagePages = function(req,res,next){
         //logger.info("2 ");
 
             var dc = datacenter;
-            logger.info ('dc>'+dc);
+            //logger.info ('dc>'+dc);
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
@@ -662,7 +662,7 @@ exports.datacenterCagePost = function(req,res){
     }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
-    logger.info('@ id '+ req.body.id);
+   // logger.info('@ id '+ req.body.id);
     var i = 1;
     // having the [i]index at the end of the form field collects it properly
     Datacenter.findById(req.body.id, 'cages modifiedOn', function(err, datacenter){

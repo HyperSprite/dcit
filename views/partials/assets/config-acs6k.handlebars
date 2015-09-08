@@ -1,10 +1,14 @@
-  <div class="row">
+  
     {{#each systemPorts}}
     {{#if sysPortisConsole}}
-    <h5>Avocent Console Config</h5> {{sysPortEndPoint}}<br>
-    <div class="col-xs-6 " style="border: 2px solid grey">
+    <h5>Avocent Console Config</h5>
+    <div class="col-md-6 ">
+      
+      <blockquote>
       <ol>
-        <li>SSH to the console server listed above as a privileged user. From the cli-> prompt, paste the following commands.
+        <li>SSH to console server <strong>{{sysPortEndPoint}}</strong> as a privileged user. </li>
+        <li>From the cli-> prompt, paste the following commands.</li>
+      </ol>
         <code>
         <ul class="list-unstyled">
           <li>cd /ports/serial_ports</li>
@@ -27,10 +31,11 @@
           <li></li>
         </ul>
         </code>
-        </li>
-      </ol>
+      
+      </blockquote>  
+      
     </div>
-    <div class="col-xs-6"></div> 
+    
     {{/if}}
     {{/each}}
-  </div>
+  

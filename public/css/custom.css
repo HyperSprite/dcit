@@ -57,3 +57,29 @@ svg {
     font-weight: bold;
     color: #BA0000;
 }
+.glyphicon-danger {
+    color: #BA0000;
+    font-size: 120%;
+    vertical-align: middle;
+}
+.glyphicon-warning {
+    color: #c09853;
+    font-size: 120%;
+    vertical-align: middle;
+}
+.glyphicon-info {
+    color: #3a87ad;
+    font-size: 120%;
+    vertical-align: middle;
+}
+.glyphicon-success {
+    color: #468847;
+    font-size: 120%;
+    vertical-align: middle;
+}
+.glyphicon-primary {
+    color: #324c53;
+    font-size: 120%;
+    vertical-align: middle;
+}
+

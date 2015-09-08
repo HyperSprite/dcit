@@ -1158,14 +1158,14 @@ exports.dcEquipSNChangePost =  function(req,res){
                     intro: 'Ooops!',
                     message: 'There was an error processing your request.',
                 };
-                return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.oldEquipSN));
+                return res.redirect(303, '/equipment/edit-'+ strTgs.cTrim(res.oldEquipSN));
             }
             req.session.flash = {
                 type: 'success',
                 intro: 'Thank you!',
                 message: 'The SN has been changed.',
             };
-            return res.redirect(303, '/equipment/'+ strTgs.cTrim(res.equipSN));
+            return res.redirect(303, '/equipment/edit-'+ strTgs.cTrim(res.equipSN));
 });
 }
 }};

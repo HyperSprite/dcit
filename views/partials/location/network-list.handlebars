@@ -16,14 +16,16 @@
         <tbody class="list">
             {{#each networks}}
                 <tr>
-                    <td class="dcNetEdit">{{#if ../access.edit}}
-                    <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
-                    <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
-
-                    <input type='submit' class='btn btn-warning btn-xs' formaction='/location/network/{{id}}-{{dcNetId}}' form="formEdit" formmethod="get" value='E'>
-
-                    <input type='submit' class='btn btn-info btn-xs' formaction='/location/network/{{id}}-{{dcNetId}}~copy' form="formCopy" formmethod="get" value='C'>
-                     {{@index}}{{/if}}</td>
+                    <td class="dcNetEdit">
+                {{#if ../access.edit}}
+                    <form id="netEditForm" role="form" action="/location/network/{{id}}-{{dcNetId}}" method="GET"></form>
+                    <form id="netCopyForm" role="form" action="/location/network/{{id}}-{{dcNetId}}~copy" method="GET"></form>          
+                <a href="#" onclick="document.getElementById('netEditForm').submit();return false;" title="Edit">
+                    <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
+                
+                <a href="#" onclick="document.getElementById('netCopyForm').submit();return false;" title="Copy">
+                    <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
+                    {{/if}}  {{@index}}</td>
                     <td class="dcNetType">{{dcNetType}}</td>     
                     <td class="dcNetNickname">{{dcNetUnique}}<br><br>Start {{ipLowStr}}<br>End {{ipHighStr}}<br>Mask {{prefixMaskStr}}</td>
                     <td class="dcNetVlan">{{dcNetVlan}}</td>

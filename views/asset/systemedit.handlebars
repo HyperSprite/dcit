@@ -3,7 +3,7 @@
     <h4>{{#if systemName}}System{{else}}New System{{/if}}</h4>
     <div class="datacenter"> 
 
-  <div class="formContainer">
+    <div class="formContainer">
     
     {{#if systemName}}
     <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/system/{{systemName}}" method="POST">
@@ -17,19 +17,28 @@
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="equipLocation" value="{{equipLocation}}">
         <p class="form-control-static"></p>
-
-        <div class="form-group">
+    <div class="row">       
+        <div class="col-md-10">   
+            <div class="form-group">
+        
             <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
-            <div class="col-sm-4">
+                <div class="col-sm-4">
                 {{#if systemName}}
                 <input type="hidden" name="systemName" value="{{systemName}}">
-                <p><strong>{{systemName}}</strong></p>
+                <p><strong>{{systemName}}</strong>
+                {{#if access.delete}}
+
+                     <a href="/system-namechange/{{systemName}}" 
+                    <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change  System Name"></span>
+                    </a>
+                {{/if}}
+                </p>
                 {{else}}
                 <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required">
                 {{/if}}
+                </div>
             </div>
-        </div>
-      
+  
         <div class="form-group">
             <label for="field-systemStatus" class="col-sm-2 control-label" >Status</label>
             <div class="col-sm-4">
@@ -78,12 +87,21 @@
                 <input type="checkbox" name="systemIsVirtual" value="true" {{systemIsVirtualChecked}} title="Is this system a VM?">
             </div>
         </div>
-        <div class="col-sm-2 form-group">
-                <button type="submit" input accesskey="x" title="Press Alt x to Save" class="btn btn-primary btn-xs" value='Save'>S</button>
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">R</button>
-                <input form="formCancel" type='submit' class='btn btn-default btn-xs' formmethod="get" novalidate value='C' formaction='{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}'>
-        </div>
+    </div>
+    <div class="col-md-1>
+        <div form-group">
+                
+                <a href="#" onclick="document.getElementById('datacenterForm').submit();return false;" accesskey="x" title="Press Alt x to Save" >
+                    <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
 
+                <a href="#" onclick="document.getElementById('datacenterForm').reset();return false;" title="Reset form">
+                    <span class="glyphicon glyphicon-refresh glyphicon-danger"></span></a>
+
+                <a href="#" onclick="document.getElementById('cancelForm').submit();return false;" title="Cancel edit">
+                    <span class="glyphicon glyphicon-ban-circle glyphicon-danger"></span></a>
+                
+        </div>
+    </div>
 
         <table id="portsTable" class="table table-condensed">
             <thead>
@@ -101,7 +119,7 @@
                 <tr class="tr-ports">
                 <input type="hidden" name="sysPortId[{{@index}}]" value="{{sysPortId}}">
                     <td>
-                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button>
+                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}" title="Delete this port"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                     
                     
@@ -165,7 +183,7 @@
                 <tr class="tr-ports">
                 <input type="hidden" name="sysPortId[0]" value="new">
                     <td>
-                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform0">D</button>
+                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform0"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                     
                     
@@ -331,26 +349,29 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
-                <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Save</button>
+                <button type="submit" class="btn btn-danger btn-xs" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
                 {{/if}}
-                <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
-                <input form="formCancel" type="submit" class="btn btn-default btn-xs" formmethod="get" novalidate value='Cancel' formaction="{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}">
-                {{#if access.delete}}
-                <button type="submit" class="btn btn-danger btn-xs" form="deleteform">Delete</button>
-                {{/if}}
+                <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+                <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
+                    <button type="button" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
+                {{#if access.delete}}{{#if systemName}}
+                <button type="submit" class="btn btn-danger btn-xs" form="deleteForm"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+                {{/if}}{{/if}}
         </div>
     </div>
-    </form><form id="formCancel"></form> 
+    </form>
+    <form id="cancelForm" role="form" action="{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}" method="GET"></form>  
     {{#if access.delete}}
-     <form id="deleteform" action="/systemdelete/{{systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{systemName}}. This can not be undone!')">
+    <form id="deleteForm" action="/systemdelete/{{systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{systemName}}. This can not be undone!')">
         <input type="hidden" name="equipLocationRack" value="{{equipLocationRack}}">
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="systemName" value="{{systemName}}">
     </form>
-    </div>
-    </div>
+
     {{/if}}
-     
+         </div>
+    </div>
         {{#if access.delete}}
         {{#each systemPorts}}
             <form id="deleteform{{@index}}" action="/systemportdelete/{{../systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this port?')">

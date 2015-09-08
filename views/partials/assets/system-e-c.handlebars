@@ -1,19 +1,6 @@
-{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
-{{#if access.edit}}
-
-    
-    <a href="/system/edit-{{systemName}}">
-    <span class="glyphicon glyphicon-edit" accesskey="x" icon:warning title="Press Alt x to Edit {{systemName}}"></span></a>
-
+{{#if access.edit}}  
+    <a href="/system/edit-{{systemName}}" >
+        <span class="glyphicon glyphicon-edit glyphicon-danger" accesskey="x"  title="Press Alt x to Edit {{systemName}}" ></span></a>
     <a href="/system/edit~copy-{{systemName}}">
-    <span class="glyphicon glyphicon-plus-sign" accesskey="c" title="Press Alt c to Copy {{systemName}}"></span></a>
-    
-    
-{{#if access.delete}}
-
-    <a href="/system-namechange/{{systemName}}" class="btn btn-default btn-xs" title="Change  System Name">
-          <span class="glyphicon glyphicon-pencil"></span> Name 
-        </a>
-{{/if}}
-
+        <span class="glyphicon glyphicon-plus-sign glyphicon-danger" accesskey="c" title="Press Alt c to Copy {{systemName}}"></span></a>
 {{/if}}

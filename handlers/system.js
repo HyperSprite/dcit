@@ -1293,7 +1293,7 @@ exports.dcSystemNameChangePost =  function(req,res){
                 intro: 'Ooops!',
                 message: 'There was an error processing your request.',
             };
-            return res.redirect(303, '/system/'+ oldSystemName);
+            return res.redirect(303, '/system/edit-'+ oldSystemName);
             }else{
             var sysCount = 1;
             async.whilst(
@@ -1319,7 +1319,7 @@ exports.dcSystemNameChangePost =  function(req,res){
                             intro: 'Ooops!',
                             message: 'There was an error updating EndPoints.',
                         };
-                        return res.redirect(303, '/system/'+ oldSystemName);
+                        return res.redirect(303, '/system/edit-'+ oldSystemName);
                             }
                             //logger.info(numAffected+ ' sysPortEndPoint Updated');
                             wcallback(null,numAffected);
@@ -1332,7 +1332,7 @@ exports.dcSystemNameChangePost =  function(req,res){
                 intro: 'Thank you!',
                 message: oldSystemName+' system name changed to '+systemName+' and related EndPoints updated.',
             };
-            return res.redirect(303, '/system/'+ systemName);
+            return res.redirect(303, '/system/edit-'+ systemName);
             }
         });
     }

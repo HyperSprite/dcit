@@ -58,7 +58,7 @@
                 <td><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></td>
                 <td>{{#if ../access.edit}}{{#if systemName}}
                     <a href="/system/edit-{{systemName}}" target="_blank">
-                        <span class="glyphicon glyphicon-edit" title="Edit {{systemName}}"></span></a>
+                        <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
                     {{/if}}{{/if}}
                 <a href="/system/{{systemName}}" target="_blank"> {{systemName}}</a></td>
                 <td>{{{systemStatus}}}</td>
@@ -69,7 +69,7 @@
                 <td>{{sysmodifiedOn}}</td>
                 <td>{{#if ../access.edit}}{{#if equipSN}}
                     <a href="/equipment/edit-{{equipSN}}" target="_blank">
-                        <span class="glyphicon glyphicon-edit"  title="Edit {{equipSN}}"></span></a>
+                        <span class="glyphicon glyphicon-edit glyphicon-danger"  title="Edit {{equipSN}}"></span></a>
                 {{/if}}{{/if}}
                 <a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
                 <td>{{{equipStatusLight}}}</td>

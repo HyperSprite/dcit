@@ -31,8 +31,7 @@
             {{/if}}
                   
             {{#if user}}
-                  <li><a href="/user/profile">User Profile</a></li>
-                  <li><a href="/user/logout">Logout</a><li>
+
             {{/if}}
             
             </ul>
@@ -107,7 +106,22 @@
      </ul>
      <div class="navbar-right"> <!-- topnav.navbar-right -->
      {{#if user}}
-        {{user.local.email}}
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle " data-toggle="dropdown">
+            <span class="glyphicon glyphicon-user glyphicon-danger" title="{{user.local.email}}"></a>
+          <ul class="dropdown-menu">
+          <li><a href="/user/profile"><span class="glyphicon glyphicon-cog glyphicon-danger"></span>  {{user.local.email}}</a></li>
+          <li><a href="/user/logout"><span class="glyphicon glyphicon-log-out glyphicon-danger"></span> Log out</a></li>
+          </ul>
+        </li>
+      </ul>
+
+
+        
+          <ul class="dropdown-menu">
+
+          </ul>
      {{else}}
         <form class="form-inline" action="/user/login" method="post">
             <div class="form-group">  <!-- topnav.formgroup3 -->
@@ -120,10 +134,11 @@
             </div>  <!-- /topnav.formgroup4 -->
             <input type="hidden" name="_csrf" value="{{_csrfToken}}">
             <input type="hidden" name="timezone" id="timezone">
-            <button type="submit" class="btn btn-default">Sign in</button>  <a href="/user/signup">Signup</a>
+            <button type="submit" class="btn btn-default btn-danger" title="Login"><span class="glyphicon glyphicon-log-in"></span></button>  <a href="/user/signup">Signup</a>
           </form>
       {{/if}}
      </div>  <!-- /topnav.navebar-right -->
+     
     </nav>
   </div> <!-- /topnav.navbar.next -->
 </div> <!-- /topnav.navbar -->
