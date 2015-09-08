@@ -210,7 +210,7 @@ logger.warn('dcSystemPages'+err);
 
 
             var hasIlom,makeMod,isACS6000,isServTechPDU,sTHostName,sTHostAB;
-            if(thisEquip !== false){
+            if(thisEquip.equipMake && thisEquip.equipModel !== false){
             makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
             //logger.info('makeMod >'+makeMod);
                 if(makeMod.indexOf ('oracle') !=-1){
