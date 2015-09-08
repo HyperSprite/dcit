@@ -5,26 +5,26 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/">Home</a></li>
+            <li><a href="/"><span class="glyphicon glyphicon-home glyphicon-danger"></span> Home</a></li>
             {{#if access.read}}
-                  <li><a href="/location/datacenter/list">Datacenters</a></li>
-                  <li><a href="/env-role-reports">Reports</a></li>
-                  <li><a href="/macadder/mactest.html" class="popup">MAC Adder</a></li>
-                  <li><a href="/env-role-report/spares-">Equipment Spares</a></li>
+                  <li><a href="/location/datacenter/list"><span class="glyphicon glyphicon-globe glyphicon-danger"></span> Datacenters</a></li>
+                  <li><a href="/env-role-reports"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Reports</a></li>
+                  <li><a href="/env-role-report/spares-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Spares</a></li>
+                  <li><a href="/macadder/mactest.html" class="popup"><span class="glyphicon glyphicon-wrench glyphicon-danger"></span> MAC Adder</a></li>
             {{/if}}
             {{#if access.edit}}
-                  <li><a href="/equipment/new">New Equipment</a></li> 
-                  <li><a href="/system/+new+">New System</a></li>
-                  <li><a href="/location/racks">Racks All</a></li>
-                  <li><a href="/env-role-report/eqnis-">Equipment Not in Service</a></li>
-                  <li><a href="/env-role-report/homeless-">Equipment w/ no Location</a></li>
+                  <li><a href="/equipment/new"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New Equipment</a></li> 
+                  <li><a href="/system/+new+"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New System</a></li>
+                  <li><a href="/location/racks"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Racks All</a></li>
+                  <li><a href="/env-role-report/eqnis-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Not in Service</a></li>
+                  <li><a href="/env-role-report/homeless-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment w/ no Location</a></li>
             {{/if}}
             {{#if access.delete}}
-                  <li><a href="/env-role-report/eol-">Equipment End of Life</a></li>
-                  <li><a href="/equipment">Equipment All</a></li>
-                  <li><a href="/systems">Systems All</a></li>
-                  <li><a href="/systemports-list">Systems Ports All</a></li>
-                  <li><a href="/equipment-systems">Equipment & Systems All</a></li>
+                  <li><a href="/env-role-report/eol-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment End of Life</a></li>
+                  <li><a href="/equipment"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment All</a></li>
+                  <li><a href="/systems"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Systems All</a></li>
+                  <li><a href="/systemports-list"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Systems Ports All</a></li>
+                  <li><a href="/equipment-systems"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment & Systems All</a></li>
             {{/if}}
             {{#if access.root}}
                 {{> admin/adminlinks}}
