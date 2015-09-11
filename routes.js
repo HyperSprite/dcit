@@ -1,4 +1,4 @@
-var    winston = require('winston'),
+var     logger = require('./lib/logger.js'),
          user = require('./handlers/user.js')
           main = require('./handlers/main.js'),
 	   samples = require('./handlers/sample.js'),
@@ -31,11 +31,30 @@ module.exports = function(app){
         failureFlash : true // allow flash messages
     }));
 
-   app.post('/user/login', passport.authenticate('local-login', {
+   /* app.post('/user/login', passport.authenticate('local-login', {
         successRedirect : '/', 
         failureRedirect : '/', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
+*/
+app.post('/user/login', function(req, res, next) {
+  passport.authenticate('local-login', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) {
+                    req.session.flash = {
+                    type: 'danger',
+                    intro: 'Login Failed!',
+                    message: 'Username or password not valid!',
+                    };
+                return res.redirect(303, '/');
+}
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect(303, req.body.requrl);
+    });
+  })(req, res, next);
+});
+
 
     // locations
         // URL is incoming / :datacenter is the req storage (this could have had a better name) 

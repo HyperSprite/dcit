@@ -9,6 +9,7 @@ exports.home = function(req, res){
         context = {
             access : accConfig.accessCheck(req.user),
             user : req.user,
+            requrl : req.url,
             };
 	res.render('home', context);
 };
@@ -17,6 +18,7 @@ exports.about = function(req, res){
         context = {
             access : accConfig.accessCheck(req.user),
             user : req.user,
+            requrl : req.url,
             };
 	res.render('about', context);
 };

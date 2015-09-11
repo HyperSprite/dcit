@@ -53,6 +53,7 @@ logger.warn('dcSystemPages'+err);
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 sys: sys.map(function(sy){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info('sy Map>'+sy);
@@ -113,6 +114,7 @@ logger.warn('dcSystemPages'+err);
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 titleNow: 'New System',
                 sysNameList: sysUni,
                 equipSNList: eqUni,
@@ -135,6 +137,7 @@ logger.warn('dcSystemPages'+err);
     if (req.params.datacenter.indexOf ('edit') !=-1){
     //    logger.info('else if (req.params.datacenter.indexOf ("edit")');
     // this section decides if it is a Copy, Edit or View
+
         start = req.params.datacenter.indexOf ('-');
         syName = req.params.datacenter.substring (start+1);
             if (req.params.datacenter.indexOf ('copy') !=-1){
@@ -242,6 +245,7 @@ logger.warn('dcSystemPages'+err);
         context = {
             access : accConfig.accessCheck(req.user),
             user : req.user,
+            requrl : req.url,
             titleNow: sy.systemName,
             menu1: 'Show connected ports',
             menuLink1: '/endpoint/'+sy.systemName,
@@ -449,6 +453,7 @@ exports.dcSystemPortPages = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 sys: sys.map(function(sy){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info('sy Map>'+sy);
@@ -617,6 +622,7 @@ exports.dcSystembyEnvRole = function(req,res,next){
         return res.redirect(303, '/');
     }else{ 
 //    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
+
     var lastSearch,
         editLoad,
         searchDb,
@@ -698,6 +704,7 @@ logger.warn(asc+' '+err);
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 titleNow: '.. '+searchFor,
                 equipsys: 'true',
                 reportType: req.body.systemEnviron,
@@ -766,6 +773,7 @@ logger.warn(asc+' '+err);
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 titleNow: '.. '+searchFor,
                 equipsys: 'true',
                 reportType: req.body.systemEnviron,
@@ -823,6 +831,7 @@ logger.warn(asc+' '+err);
         var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 titleNow: searchFor,
                 reportType: req.body.systemEnviron,
                 drop1:'Environment',
@@ -884,6 +893,7 @@ exports.findEndpoints = function(req,res,next){
         context = {
             access : accConfig.accessCheck(req.user),
             user : req.user,
+            requrl : req.url,
                 titleNow:fEndPoint,
                 sysPortEndPoint:fEndPoint,
                 menu1: 'Show '+fEndPoint+' details',
@@ -1204,6 +1214,7 @@ exports.dcSystemNameChange =  function(req,res){
               context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user, 
+                requrl : req.url,
                     menu1: sys.systemName,
                     menuLink1: '#',
                     titleNow:sys.systemName,

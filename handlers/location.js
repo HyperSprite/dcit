@@ -60,6 +60,7 @@ exports.datacenterPages = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 ses: req.session.ses,
                 datacenters: datacenters.map(function(dc){
                     //var dc = datacenter;
@@ -108,6 +109,7 @@ Edit Contact
             context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 ses: req.session.ses,
                 id:dc._id,
                 titleNow:dc.abbreviation,
@@ -127,6 +129,7 @@ Edit Contact
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 ses: req.session.ses,
                 id:dc._id,
                 fullName:dc.fullName,
@@ -203,6 +206,7 @@ If "New" is in the URL, it does New, otherwise it goes to existing
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 ses: req.session.ses,
                 id:dc._id,
                 fullName:dc.fullName,
@@ -235,6 +239,7 @@ this takes the abbreviation and displays the matching datacenter details
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 ses: req.session.ses,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
@@ -616,6 +621,7 @@ exports.datacenterCagePages = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
                 titleNow:dc.abbreviation,
@@ -772,6 +778,7 @@ exports.datacenterPowerPages = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 menu1: dc.abbreviation,
                 menuLink1: '/location/datacenter/'+dc.abbreviation,
                 titleNow:dc.abbreviation,
@@ -884,6 +891,7 @@ exports.datacenterNetworkPages = function(req,res,next){
             context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 id:dc._id,
                 titleNow: dc.abbreviation,
                 fullName: dc.fullName,
@@ -898,6 +906,7 @@ exports.datacenterNetworkPages = function(req,res,next){
             context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 id:dc._id,
                 titleNow: dc.abbreviation,
                 fullName:dc.fullName,
@@ -924,6 +933,7 @@ exports.datacenterNetworkPages = function(req,res,next){
             context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 id:dc._id,
                 titleNow: dc.abbreviation,
                 fullName:dc.fullName,

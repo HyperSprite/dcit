@@ -158,10 +158,10 @@ module.exports = function(passport) {
             // all is well, return successful user
            }else{
             logger.info(user.local.email+' in time zone '+req.body.timezone);
-           
             req.session.ses = {
                 timezone : req.body.timezone,
                 access : accConfig.accessCheck(user),
+
             };
             return done(null, user);
         

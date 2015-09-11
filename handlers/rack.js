@@ -49,6 +49,7 @@ logger.info(err);
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 racks: racks.map(function(rack){
                 var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -125,6 +126,7 @@ logger.info(err);
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 menu1: uber.abbreviation,
                 menuLink1: '/location/datacenter/'+uber.abbreviation,
                 menu2: 'Elevation',
@@ -161,6 +163,7 @@ logger.info(err);
                 context ={
                     access : accConfig.accessCheck(req.user),
                     user : req.user,
+                    requrl : req.url,
                     titleNow: 'Copy '+rk.rackUnique,
                     optEquipStatus: opt.optListArray,
                     rackParentDC: rk.rackParentDC,
@@ -189,6 +192,7 @@ logger.info(err);
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 titleNow: thisSubDoc.rackPowUnique,
                 optEquipStatus: opt.optListArray,
                 rackParentDC: rk.rackParentDC,
@@ -258,6 +262,7 @@ link to this looks
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 optRackStatus: opt.optListArray,
                 id:dc._id,
                 fullName:dc.fullName,
@@ -318,6 +323,7 @@ link to this looks
              context = {    
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                             optRackStatus: opt.optListArray,
                             titleNow: rack.rackUnique,
                             menu1: uber.abbreviation,
@@ -379,6 +385,7 @@ link to this looks
            context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                             titleNow: 'Copy '+rack.rackUnique,
                             optRackStatus: opt.optListArray,
                             wasCopy:rack.rackUnique,

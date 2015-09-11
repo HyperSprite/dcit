@@ -49,6 +49,7 @@ exports.dcEquipPages = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 eqs: eqs.map(function(eq){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info(eq);
@@ -109,6 +110,7 @@ exports.dcEquipPages = function(req,res,next){
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
                 abbreviation: uber.abbreviation,
@@ -137,6 +139,7 @@ exports.dcEquipPages = function(req,res,next){
                 context ={
                     access : accConfig.accessCheck(req.user),
                     user : req.user,
+                    requrl : req.url,
                     rackParentDC: rk.rackParentDC,
                     fullName: uber.fullName,
                     abbreviation: uber.abbreviation,
@@ -163,6 +166,7 @@ exports.dcEquipPages = function(req,res,next){
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
                 abbreviation: uber.abbreviation,
@@ -232,6 +236,7 @@ exports.dcEquipPages = function(req,res,next){
             context ={
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
@@ -311,7 +316,8 @@ exports.dcEquipPages = function(req,res,next){
 
              context = {
                 access : accConfig.accessCheck(req.user),
-                user : req.user, 
+                user : req.user,
+                requrl : req.url, 
                                 menu1: eq.equipSN,
                                 menuLink1: '#',
                                 titleNow:eq.equipSN,
@@ -414,7 +420,8 @@ exports.dcEquipPages = function(req,res,next){
         } else {
            context = {
             access : accConfig.accessCheck(req.user),
-            user : req.user, 
+            user : req.user,
+            requrl : req.url, 
                                 optSystPortType: strTgs.findThisInThatOpt('optSystPortType',opt),
                                 optEquipStatus: strTgs.findThisInThatOpt('optEquipStatus',opt),
                                 optEquipType: strTgs.findThisInThatOpt('optEquipType',opt),
@@ -756,6 +763,7 @@ exports.dcEquipSysPages = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
                   return {
@@ -826,6 +834,7 @@ exports.dcEquipSysPages = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                         rackView: req.params.datacenter,
                         menu1: req.params.datacenter,
                         menuLink1: '/location/rack/'+req.params.datacenter,
@@ -921,6 +930,7 @@ exports.dcRackElevationPage = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThat(eq.equipSN,sys);
                  
@@ -991,6 +1001,7 @@ exports.dcRackElevationPage = function(req,res,next){
             var context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
+                requrl : req.url,
                 rackView: req.params.datacenter,
                 rackUnique: rk.rackUnique,
                 rackDescription: rk.rackDescription,
@@ -1092,7 +1103,8 @@ exports.dcEquipSNChange =  function(req,res){
 
              context = {
                 access : accConfig.accessCheck(req.user),
-                user : req.user, 
+                user : req.user,
+                requrl : req.url, 
                     menu1: eq.equipSN,
                     menuLink1: '#',
                     titleNow:eq.equipSN,
