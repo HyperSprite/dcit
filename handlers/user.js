@@ -27,36 +27,41 @@ exports.home = function(req, res){
     }
 };
 
+
 var VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-
-exports.localSignup = function(req, res){
-        if(!req.email.match(VALID_EMAIL_REGEX)) {
-        req.session.flash = {
+exports.localSignup = function(req,res, next){
+        passport.authenticate('local-signup', function(err, user, info) {
+        if (err) {return next(err); 
+        }
+        if (!user) {
+            req.session.flash = {
             type: 'danger',
-            intro: 'Validation error!',
-            message: 'The email address you entered was  not valid.',
-        };
-        return res.redirect(303, 'user/signup');
-    }else{
-
-        if(successRedirect){
-            res.render('admin/profile');
+            intro: 'Signup Failed!',
+            message: 'Your emial address or password are not valid or is a duplicate!',
+            };
+        return res.redirect(303, '/user/signup');
         }
-        if(failureRedirect){
-            res.render('user/signup');
-            req.flash = true;
-        }
-    }
+        req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        return res.redirect(303, '/user/profile');
+    });
+  })(req, res, next);
 };
 
-exports.localLogin = function(req, res){
-
-        if(successRedirect){
-            res.render('/');
-        }
-        if(failureRedirect){
-            res.render('user/signup');
-            req.flash = true;
-        }
+exports.localLogin = function(req, res, next) {
+  passport.authenticate('local-login', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) {
+                    req.session.flash = {
+                    type: 'danger',
+                    intro: 'Login Failed!',
+                    message: 'Username or password not valid!',
+                    };
+                return res.redirect(303, '/');
+}
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect(303, req.body.requrl);
+    });
+  })(req, res, next);
 };
-

@@ -12,51 +12,23 @@ var     logger = require('./lib/logger.js'),
 
 module.exports = function(app){
 
-	// miscellaneous routes
-	app.get('/', main.home);
-    app.get('/about', main.about);
+// miscellaneous routes
+    	app.get('/', main.home);
+        app.get('/about', main.about);
 
-	// testing/sample routes
-	app.get('/jquery-test', samples.jqueryTest);
-	app.get('/epic-fail', samples.epicFail);
+// testing/sample routes
+    	app.get('/jquery-test', samples.jqueryTest);
+    	app.get('/epic-fail', samples.epicFail);
 
 //users
-    app.get('/user', user.home);
-    app.get('/user/:data', user.home);
-    app.get('/user/profile', isLoggedIn, user.home);
-
-    app.post('/user/signup', passport.authenticate('local-signup', {
-        successRedirect : '/user/profile', // redirect to the secure profile section
-        failureRedirect : '/user/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
-
-   /* app.post('/user/login', passport.authenticate('local-login', {
-        successRedirect : '/', 
-        failureRedirect : '/', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
-*/
-app.post('/user/login', function(req, res, next) {
-  passport.authenticate('local-login', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) {
-                    req.session.flash = {
-                    type: 'danger',
-                    intro: 'Login Failed!',
-                    message: 'Username or password not valid!',
-                    };
-                return res.redirect(303, '/');
-}
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.redirect(303, req.body.requrl);
-    });
-  })(req, res, next);
-});
+        app.get('/user', user.home);
+        app.get('/user/:data', user.home);
+        app.get('/user/profile', isLoggedIn, user.home);
+        app.post('/user/signup', user.localSignup);
+        app.post('/user/login', user.localLogin);
 
 
-    // locations
+// locations
         // URL is incoming / :datacenter is the req storage (this could have had a better name) 
         // Next part is the export file.name in handlers dir.
         app.get('/location/datacenters', location.datacenterPages);
@@ -80,7 +52,7 @@ app.post('/user/login', function(req, res, next) {
         app.post('/location/rackdelete/:datacenter', isLoggedIn, rack.rackDelete);
         app.post('/location/rackpower/:datacenter', isLoggedIn, rack.dcRackPowPost);
         app.post('/location/racksubdelete/:datacenter', isLoggedIn, rack.rackSubDelete);
-        
+// Equipment        
         app.get('/equipment', equipment.dcEquipPages);
         app.get('/equipment/:datacenter', equipment.dcEquipPages);
         app.get('/equipment-systems', equipment.dcEquipSysPages);
@@ -91,7 +63,7 @@ app.post('/user/login', function(req, res, next) {
         app.post('/equipment/:datacenter', isLoggedIn, equipment.dcEquipmentPost);
         app.post('/equipmentdelete/:datacenter', isLoggedIn, equipment.dcEquipDelete);
         app.post('/equipmentportdelete/:datacenter', isLoggedIn, equipment.equipSubDelete);
-        
+// Systems        
         app.get('/systems', system.dcSystemPages);
         app.get('/system/:datacenter', system.dcSystemPages);
         app.get('/endpoint/:datacenter', system.findEndpoints);
@@ -106,7 +78,7 @@ app.post('/user/login', function(req, res, next) {
         app.get('/env-role-reports',system.dcSystembyEnvRole);
         app.get('/env-role-report/:datacenter',system.dcSystembyEnvRole);
         
-        // Admin 
+// Admin 
         app.get('/admin', isLoggedIn, admin.home);
         app.get('/admin/:datacenter', isLoggedIn, admin.home);
         app.get('/admin/optionsedit/:datacenter', isLoggedIn, admin.optionsEdit);
@@ -127,7 +99,7 @@ app.post('/user/login', function(req, res, next) {
         app.get('/admin/optionsadmin/seedOptionsdb', isLoggedIn, admin.seedOptionsdbGet);
         app.get('/admin/optionsadmin/seedEquipment', isLoggedIn, admin.seedEquipmentGet);
         app.get('/admin/optionsadmin/seedSystem', isLoggedIn, admin.seedSystemGet);
-
+// AJAX
         app.get('/go/input', ajax.get);
         app.get('/autocomplete/allSystemNames', ajax.allSystemNames);
         app.get('/autocomplete/allSystemRole', ajax.allSystemRole);
@@ -141,11 +113,7 @@ app.post('/user/login', function(req, res, next) {
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on 
     if (req.isAuthenticated())
         return next();
-
-    // if they aren't redirect them to the home page
     res.redirect('/');
 }
