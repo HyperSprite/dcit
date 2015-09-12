@@ -66,10 +66,43 @@ $(document).ready(function(){
             showNoSuggestionNotice: true,
             noSuggestionNotice: '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>'            
         });
-        $('.popup').click(function(event) {
-            event.preventDefault();
+        $('.popup').click(function(e) {
+            e.preventDefault();
             window.open($(this).attr("href"), "popupWindow", "width=300,height=300,scrollbars=yes");
         });
+        $("[id^='singlePortDelForm']").on('submit',function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation(); 
+                if (!confirm($(this).attr('data-confirm'))) {
+                    return false;
+                }
+            console.log($(this).find('input[name="subId"]').val());
+            var subId = $(this).find('input[name="subId"]').val();
+            var $content = $(this).closest("tr");
+            var details = $(this).serialize();
+            $.post('/process/singleportdelete', details, function(data) {
+
+            })
+                .done(function(){
+                    // $(this).closest("tr").remove();
+                    $('#'+subId).fadeOut('slow', function() { 
+                        $(this).remove()});
+                })
+                .fail(function(){
+                    alert( 'Delete Failed' );
+                })
+            return false;    
+        });
+
+
+$('#register').on('submit', function(e) {           // When form is submitted
+  e.preventDefault();                               // Prevent it being sent
+  var details = $('#register').serialize();         // Serialize form data
+  $.post('register.php', details, function(data) {  // Use $.post() to send it
+    $('#register').html(data);                    // Where to display result
+  });
+});
+
 
     $(document).on('focus','.sysPortEndPointPlusOne',function(){
             $("[id^='sysPortEndPoint']").autocomplete({

@@ -31,24 +31,8 @@
                 padding-bottom: 14px;
             }
         </style>
-
-
-		{{!--
-        {{#each _bundles.css}}
-			<link rel="stylesheet" href="{{static .}}">
-		{{/each}}
-        --}}
-
-        <script src="{{static '/vendor/js/jquery-2.1.4.min.js'}}"></script>
-        <script src="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.js'}}"></script>
-        <script src="{{static '/vendor/js/jquery.autocomplete.min.js'}}"></script>
-        <script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
-        <script src="{{static '/vendor/bootstrap-table/dist/bootstrap-table.min.js'}}"></script>
-        {{!--    <script src="{{static '/vendor/bootstrap-table/dist/locale/bootstrap-table-en-US.min.js'}}"></script>  --}}
-		<script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
         <script src="{{static '/vendor/js/d3.v3.js'}}"></script>
-        <script src='{{static '/js/main.js'}}'></script>
-        {{!-- jstz is for timezone work --}}
+
   
     </head>
     <body>
@@ -99,8 +83,14 @@
 			{{/if}}
 			<script>mocha.run();</script>
 		{{/if}}
-
-
+        <script src="{{static '/vendor/js/jquery-2.1.4.min.js'}}"></script>
+        <script src="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.js'}}"></script>
+        <script src="{{static '/vendor/js/jquery.autocomplete.min.js'}}"></script>
+        <script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
+        <script src="{{static '/vendor/bootstrap-table/dist/bootstrap-table.min.js'}}"></script>
+        
+        <script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
+        <script src='{{static '/js/main.js'}}'></script>
         <script src="{{static '/vendor/tableexport/tableexport.min.js'}}"></script>
         <script src="{{static '/vendor/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js'}}"></script>
         <script src="{{static '/vendor/tablesort/tablesort.js'}}"></script>

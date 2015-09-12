@@ -215,173 +215,163 @@ exports.allLocationRack = function(req,res){
     }
 };
 
-/*
+///////////////////////////////////////////////////////
+//
+//   singlePortDelete
+//
+///////////////////////////////////////////////////////
 
-exports.allSystemNames = function(req,res){
-
-
-
-    Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
-        if(err) return next(err);
-        if(!sysName) return next();
-        var aSN=[];
-        for(i=0;i<sysName.length;i++){
-        aSN[i] = sysName[i].systemName;
-        }
-        var context = {
-            "query": "Unit",
-            "suggestions": aSN,
-        };
-        
-        logger.info('allSystemNames');
-       res.json(context);
-    });
-};
-
-
-
-exports.allSystemNames = function(req,res){
-    Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
-        if(err) return next(err);
-        if(!sysName) return next();
-        var context = {
-            "query": "Unit",
-            "suggestions": sysName,
-        }
-       res.json(context);
-    });
-};*/
-/*
-exports.allSystemNames = function(req,res){
-    Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
-        if(err) return next(err);
-        if(!sysName) return next();
-        var aSN=[];
-        for(i=0;i<sysName.length;i++){
-        aSN[i] = sysName[i].systemName;
-        }
-        var context = {
-            "query": "Unit",
-            "suggestions": '['+aSN+']',
-        }
-       res.json(context);
-    });
-};
-*/
-    
-exports.options = function(req, res){
-    console.log('called admin.options');     
-        Optionsdb.find(function(err,opts){
-        console.log(opts);
-        if (!opts){
-        	context = {
-                optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
+exports.singlePortDelete = function(req,res){
+    logger.info('singlePortDelete');
+    logger.info('>>'+req.body.id +' '+req.body.subId);
+        if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
             };
-         
-            res.render('admin/options', context );
-        }else{   
-        if (err) return next (err);
-        context ={
-            optList: opts.map(function(opt){
-            return{
-                optListName: opt.optListName,
-                optListKey: opt.optListKey,
-                optListArray: opt.optListArray,
-                };
-                }),
-        };
-
-	res.render('admin/options', context );
-    }});
-};
-
-exports.optionsEdit = function(req, res, next){
-    console.log("starting optionsedit");
-    if (req.params.datacenter.indexOf("edit")!=-1){
-        start = req.params.datacenter.indexOf ("-")+1;
-        dcInfo = req.params.datacenter.substring (start);
-            console.log("|dcInfo  >"+dcInfo);
-        
-        if (dcInfo ==="new"){
-            context={
-                stat: "isNew",
-            };
-        
-            res.render('admin/optionsedit', context);
-            } else {
-            Optionsdb.findOne({optListKey: dcInfo},function(err,opt){
-            if(err)return next(err);
-                context={
-                    id: opt._id,
-                    optListName: opt.optListName,
-                    optListKey: opt.optListKey,
-                    optListArray: opt.optListArray,
-                };
-            res.render('admin/optionsedit', context);
-            });
-
-    }
-}
-
-};
-
-exports.optionsEditPost = function(req,res,err){
-    console.log("optionsEditPost >"+ req.body.id);
-    var thisDoc;
-     if (!req.body.id){
-        Optionsdb.create({
-                    optListName: strTgs.csvCleanup(req.body.optListName),
-                    optListKey: strTgs.csvCleanup(req.body.optListKey),
-                    optListArray: strTgs.csvCleanup(req.body.optListArray),
-                    createdOn: Date.now(),
-                    createdBy:'Admin',
-                    },function(err){
-                     	    
-	        if(err) {
-	        	console.error(err.stack);
-	            req.session.flash = {
-	                type: 'danger',
-	                intro: 'Ooops!',
-	                message: 'There was an error processing your request.',
-	            };
-	            return res.redirect(303, '/admin/options');
-	        }
-	        req.session.flash = {
-	            type: 'success',
-	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
-	        };
-	        return res.redirect(303, '/admin/options');
-	    });            
-                    
-    } else {
-        Optionsdb.findById(req.body.id,function(err,opt){
-        if (err) {
-            console.log(err);
-            }else{
-                    console.log(opt);
-                    opt.optListArray = strTgs.csvCleanup(req.body.optListArray);
+        return res.redirect(303, '/');
+    }else{
+        if (req.body.id && req.body.subId){
+            if(req.body.collectionName === 'Systemdb'){
+                Systemdb.findById(req.body.id,req.body.subDoc,function (err, sys){
+                    if(err){
+                    logger.warn('singlePortDelete'+err);
+                    //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+                    }else{
+                        sys.systemPorts.id(req.body.subId).remove();
+                        sys.save(function(err){
+                            if(err){
+                            logger.warn('singlePortDelete'+err);
+                            req.session.flash = {
+                                    type: 'danger',
+                                    intro: 'Ooops!',
+                                    message: 'Something went wrong',
+                                };
+                                return res.redirect(303, '/system/edit-'+ res.abbreviation);
+                            } else {
+                            res.send({success : true});
+                            }
+                        });
                     }
-        
-	    opt.save(function(err){
-	        if(err) {
-	        	console.error(err.stack);
-	            req.session.flash = {
-	                type: 'danger',
-	                intro: 'Ooops!',
-	                message: 'There was an error processing your request.',
-	            };
-	            return res.redirect(303, '/admin/options');
-	        }
-	        req.session.flash = {
-	            type: 'success',
-	            intro: 'Thank you!',
-	            message: 'Your update has been made.',
-	        };
-	        return res.redirect(303, '/admin/options');
-	    });
-    });    
+                });
+            } else if(req.body.collectionName === 'equipment'){
+                Equipment.findById(req.body.id,req.body.subDoc,function (err, eq){
+                    if(err){
+                    logger.warn('singlePortDelete'+err);
+                    //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+                    }else{
+                        eq.equipPorts.id(req.body.subId).remove();
+                        eq.save(function(err){
+                            if(err){
+                            logger.warn('singlePortDelete'+err);
+                            req.session.flash = {
+                                    type: 'danger',
+                                    intro: 'Ooops!',
+                                    message: 'Something went wrong',
+                                };
+                                return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
+                            } else {
+                            res.send({success : true});
+                            }
+                        });
+                    }
+                });
+            }
+            } else {
+                logger.warn('singlePortDelete could not find matching IDs');
+                req.session.flash = {
+                        type: 'danger',
+                        intro: 'Ooops!',
+                        message: 'Systems and Ports dont match',
+                    };
+                    return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
+            } 
+        }
 }
 };
 
+///////////////////////////////////////////////////////
+//
+//   
+//
+///////////////////////////////////////////////////////
 
+exports.singlePortDeleteWorking = function(req,res){
+    logger.info('singlePortDelete');
+    logger.info('>>'+req.body.id +' '+req.body.subId);
+        if (accConfig.accessCheck(req.user).delete !== 1){
+    req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'Not Authorized!',
+            };
+        return res.redirect(303, '/');
+    }else{
+        if(req.body.collectionName === 'Systemdb'){
+            if (req.body.id && req.body.subId){
+                Systemdb.findById(req.body.id,req.body.subDoc,function (err, sys){
+                    if(err){
+            logger.warn('singlePortDelete'+err);
+                    //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+                    }else{
+                        sys.systemPorts.id(req.body.subId).remove();
+                        sys.save(function(err){
+                            if(err){
+            logger.warn('singlePortDelete'+err);
+                            req.session.flash = {
+                                    type: 'danger',
+                                    intro: 'Ooops!',
+                                    message: 'Something went wrong',
+                                };
+                                return res.redirect(303, '/system/edit-'+ res.abbreviation);
+                            } else {
+                            res.send({success : true});
+                            }
+                        });
+                    }
+                });
+            } else {
+                logger.warn('singlePortDelete could not find body.id && body.subId');
+                req.session.flash = {
+                                    type: 'danger',
+                                    intro: 'Ooops!',
+                                    message: 'Systems and Ports dont match',
+                                };
+                                return res.redirect(303, '/system/edit-'+ res.abbreviation);
+            }
+        } else if(req.body.collectionName === 'equipment'){
+            if (req.body.id && req.body.subId){
+                Equipment.findById(req.body.id,req.body.subDoc,function (err, eq){
+                    if(err){
+            logger.warn('singlePortDelete'+err);
+                    //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+                    }else{
+                        eq.equipPorts.id(req.body.subId).remove();
+                        eq.save(function(err){
+                            if(err){
+            logger.warn('singlePortDelete'+err);
+                            req.session.flash = {
+                                    type: 'danger',
+                                    intro: 'Ooops!',
+                                    message: 'Something went wrong',
+                                };
+                                return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
+                            } else {
+                            res.send({success : true});
+                            }
+                        });
+                    }
+                });
+            } else {
+                logger.warn('singlePortDelete could not find body.id && body.subId');
+                req.session.flash = {
+                                    type: 'danger',
+                                    intro: 'Ooops!',
+                                    message: 'Systems and Ports dont match',
+                                };
+                                return res.redirect(303, '/equipment/edit-'+ res.abbreviation);
+            } 
+        }
+}
+};

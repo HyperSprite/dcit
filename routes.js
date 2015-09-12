@@ -108,7 +108,7 @@ module.exports = function(app){
         app.get('/autocomplete/allEquipMake', ajax.allEquipMake);
         app.get('/autocomplete/allEquipModel', ajax.allEquipModel);
         app.get('/autocomplete/allLocationRack', ajax.allLocationRack);
-
+        app.post('/process/singleportdelete', isLoggedIn, ajax.singlePortDelete);
 };
 
 // route middleware to make sure a user is logged in

@@ -119,10 +119,10 @@
                 
                 {{#if equipPorts}}
                 {{#each equipPorts}}
-                <tr class="tr-ports">
+                <tr id="{{equipPortId}}" class="tr-ports">
                 <input type="hidden" name="equipPortId[{{@index}}]" value="{{equipPortId}}">
                     <td>
-                        <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}" title="Delete this port"><span class="glyphicon glyphicon-trash"></span></button>
+                        <button type="submit" class="btn btn-danger btn-xs" form="singlePortDelForm{{@index}}" title="Delete this port"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                     
                     
@@ -461,7 +461,7 @@
     {{#if access.edit}}
         {{#if equipPorts}}
         {{#each equipPorts}}
-            <form id="deleteform{{@index}}" action="/equipmentportdelete/{{../equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this port?')">
+            <form id="singlePortDelForm{{@index}}" action="/equipmentportdelete1/{{../equipSN}}" data-confirm="Are you sure you want to delete this port?" method="POST">
             <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
             <input type="hidden" name="id" value="{{../equipId}}">
             <input type="hidden" name="abbreviation" value="{{../equipSN}}">
