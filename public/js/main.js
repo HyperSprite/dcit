@@ -78,10 +78,8 @@ $(document).ready(function(){
                 }
             console.log($(this).find('input[name="subId"]').val());
             var subId = $(this).find('input[name="subId"]').val();
-            var $content = $(this).closest("tr");
             var details = $(this).serialize();
             $.post('/process/singleportdelete', details, function(data) {
-
             })
                 .done(function(){
                     // $(this).closest("tr").remove();
@@ -93,16 +91,6 @@ $(document).ready(function(){
                 })
             return false;    
         });
-
-
-$('#register').on('submit', function(e) {           // When form is submitted
-  e.preventDefault();                               // Prevent it being sent
-  var details = $('#register').serialize();         // Serialize form data
-  $.post('register.php', details, function(data) {  // Use $.post() to send it
-    $('#register').html(data);                    // Where to display result
-  });
-});
-
 
     $(document).on('focus','.sysPortEndPointPlusOne',function(){
             $("[id^='sysPortEndPoint']").autocomplete({
