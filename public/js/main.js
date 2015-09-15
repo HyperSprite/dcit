@@ -82,7 +82,6 @@ $(document).ready(function(){
             $.post('/process/singleportdelete', details, function(data) {
             })
                 .done(function(){
-                    // $(this).closest("tr").remove();
                     $('#'+subId).fadeOut('slow', function() { 
                         $(this).remove()});
                 })

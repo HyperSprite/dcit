@@ -353,6 +353,7 @@ logger.warn('dcSystemPages'+err);
                     netMask: netMask,
 
                     sysPortId: sp._id,
+                    systemName: sy.systemName,
                     sysPortType: sp.sysPortType,
                     sysPortName: sp.sysPortName,
                     sysPortAddress: sp.sysPortAddress,
