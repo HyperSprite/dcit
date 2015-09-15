@@ -23,7 +23,12 @@
         {{#each sys}}
         {{#each systemPorts}}
             <tr>
-                <td class="systemName"><a href="/system/{{systemName}}">{{systemName}}</td>
+                <td class="systemName">
+                    {{#if ../../access.edit}}{{#if systemName}}
+                        <a href="/system/edit-{{systemName}}" target="_blank">
+                        <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
+                    {{/if}}{{/if}}
+                <a href="/system/{{systemName}}">{{systemName}}</td>
                 <td class="sysPortName">{{sysPortName}}</td>
                 <td class="sysPortCablePath">{{sysPortCablePath}}</td>
                 <td class="sysPortEndPointPre">{{sysPortEndPointPre}}</td>
