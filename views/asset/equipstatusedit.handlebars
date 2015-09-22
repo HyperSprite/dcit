@@ -1,0 +1,23 @@
+        <div class="form-group">
+            <form id="equipstatusedit">
+            <label for="field-Status" class="col-sm-2 control-label" >Status</label>
+            <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+            <input type="hidden" name="abbreviation" value="{{equipSN}}">
+            <div class="col-xs-3">
+                <select id="equipStatus" name="equipStatus" class="form-control">
+                    <option "" ></option>
+                    {{#each optEquipStatus}}
+                    <option {{{selOption this equipStatus}}} >{{this}}</option>
+                    {{/each}}
+                </select>
+                 <a href="#" onclick="document.getElementById('equipstatusedit').submit();return false;" accesskey="x" title="Press Alt x to Save" >
+                    <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
+
+                <a href="#" onclick="document.getElementById('equipstatusedit').reset();return false;" title="Reset form">
+                    <span class="glyphicon glyphicon-refresh glyphicon-danger"></span></a>
+
+                <a href="#" onclick="document.getElementById('equipstatusedit').cancel();return false;" title="Cancel edit">
+                    <span class="glyphicon glyphicon-ban-circle glyphicon-danger"></span></a>
+            </div>
+            </form>
+        </div>

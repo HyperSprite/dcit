@@ -8,6 +8,7 @@ var     logger = require('./lib/logger.js'),
         system = require('./handlers/system.js'),
          admin = require('./handlers/admin.js'),
           ajax = require('./handlers/ajax.js'),
+        report = require('./handlers/report.js'),
       passport = require('passport');
 
 module.exports = function(app){
@@ -74,7 +75,9 @@ module.exports = function(app){
         app.post('/systemdelete/:datacenter', isLoggedIn, system.dcsystemDelete);
         app.post('/systemportdelete/:datacenter', isLoggedIn, system.dcsystemSubDelete);
         
-        app.get('/reports', system.dcSystemCountbyEnv);
+        // app.get('/reports', system.dcSystemCountbyEnv);
+        app.get('/report',report.dcSystembyEnvRole);
+        app.get('/report/:datacenter',report.dcSystembyEnvRole);        
         app.get('/env-role-reports',system.dcSystembyEnvRole);
         app.get('/env-role-report/:datacenter',system.dcSystembyEnvRole);
         

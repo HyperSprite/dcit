@@ -1,6 +1,26 @@
-    
+{{#if access.root}}
+    <p><a href="/report/env-lab">lab</a></p>
+    <ul>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report Type<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="/distinctlist/find=env" class="reportType">Environment</a></li>
+                <li><a href="/distinctList/find=role" class="reportType">Role</a></li>
+                <li><a href="/distinctList/find=make" class="reportType">Make</a></li>
+            </ul>
+        </li>
+    </ul>
+
+<div id="pickareport">
+
+</div>
+
+{{/if}}
+
+<div id="reportEqSys">     
     {{#if equipsys}}
     {{!--<div> <!-- env-role-report.1 --> --}}
              {{> assets/equipsys-list}}
     {{!-- </div> <!-- /env-role-report.1 --> --}}
     {{/if}}
+</div>

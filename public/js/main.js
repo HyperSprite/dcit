@@ -90,6 +90,24 @@ $(document).ready(function(){
                 })
             return false;    
         });
+        $("a [id^='equipStatusEdit']").click(function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            // replace table cell with form
+            // get /asset/equipstatusedit html ajax
+        });
+    /*    $("a [id^='equipStatusUpdate']").on('submit', function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            // post update to server
+            // replace form with chosen option
+            
+        }); */
+    /*    $(.reportType).click(function(e){
+            e.preventDefault();
+
+
+        }); */
 
     $(document).on('focus','.sysPortEndPointPlusOne',function(){
             $("[id^='sysPortEndPoint']").autocomplete({

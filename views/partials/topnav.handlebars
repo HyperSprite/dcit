@@ -1,7 +1,7 @@
 <div class="navbar" > <!-- topnav.navbar -->
   <div > <!-- topnav.navbar.next -->
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" role="menu" aria-labelledby="dLabel">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle " data-toggle="dropdown">DCIT  <b class="caret"></b></a>
           <ul class="dropdown-menu">
@@ -13,6 +13,7 @@
                   <li><a href="/macadder/mactest.html" class="popup"><span class="glyphicon glyphicon-star glyphicon-danger"></span> MAC Adder</a></li>
             {{/if}}
             {{#if access.edit}}
+                  <li class="divider"></li>
                   <li><a href="/equipment/new"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New Equipment</a></li> 
                   <li><a href="/system/+new+"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New System</a></li>
                   <li><a href="/location/racks"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Racks All</a></li>
@@ -20,6 +21,7 @@
                   <li><a href="/env-role-report/homeless-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment w/ no Location</a></li>
             {{/if}}
             {{#if access.delete}}
+                  <li class="divider"></li>
                   <li><a href="/env-role-report/eol-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment End of Life</a></li>
                   <li><a href="/equipment"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment All</a></li>
                   <li><a href="/systems"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Systems All</a></li>

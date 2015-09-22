@@ -289,3 +289,56 @@ exports.singlePortDelete = function(req,res){
             } 
         }
 };
+
+
+///////////////////////////////////////////////////////
+//
+//   Equipment Status Edit
+//
+///////////////////////////////////////////////////////
+
+
+/*
+First part:
+Need to get equipment SN into ajax request
+
+    FindOne equipment with the SN
+
+    Get options db options
+
+    Return equipstauedit form into div
+    */
+exports.equipStatusEdit = function(req,res){
+    logger.info('equipStatusEdit');
+    logger.info('>>'+req.body.equipSN);
+    if (accConfig.accessCheck(req.user).edit !== 1){
+    var eSN = equipSN;
+        return res.status(404).end();
+    }else{
+        Equipment.findOne({equipSN: eSN},function(err,eq){ 
+            if(err) return next(err);
+            if(!eq) return next();
+        Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
+            if(err)return next(err);
+        context = {
+            eq : eq,
+            opt : opt
+        }; //context
+        res.render('asset/equipstatusedit', {layout : null , context : context}); 
+        }); //opt
+        }); // eq
+    }
+};
+
+/*
+Second part
+
+    Submit form
+
+    Replace with update 
+
+*/
+
+
+
+

@@ -216,7 +216,7 @@ logger.warn('dcSystemPages'+err);
             if(thisEquip.equipMake && thisEquip.equipModel !== false){
             makeMod = thisEquip.equipMake.toLowerCase()+thisEquip.equipModel.toLowerCase();
             //logger.info('makeMod >'+makeMod);
-                if(makeMod.indexOf ('oracle') !=-1){
+                if(makeMod.indexOf ('oracle') !=-1 || makeMod.indexOf ('sun') !=-1){
                     hasIlom = 1;
                     //logger.info('hasIlom >'+hasIlom);
                 } else if(makeMod.indexOf ('avocent') !=-1 && makeMod.indexOf ('60') !=-1){
