@@ -49,7 +49,8 @@
                   <option {{{selOption 'system~modifiedBy' lastSearch}}}>System Modified By</option>
                   <option {{{selOption 'system~sysPortEndPoint' lastSearch}}}>System EndPoint</option>
                   <option {{{selOption 'system~sysPortAddress' lastSearch}}}>System IP Address</option>
-                  <option {{{selOption 'system~sysPortCablePath' lastSearch}}} >System Cable Number</option>
+                  <option {{{selOption 'system~sysPortCablePath' lastSearch}}}>System Cable Number</option>
+{{#if access.edit}}    <option {{{selOption 'equipment~equipLocation' lastSearch}}}>Location</option> {{/if}}
                   <option {{{selOption 'equipment~equipSN' lastSearch}}}>Equipment SN</option>
                   <option {{{selOption 'equipment~equipAssetTag' lastSearch}}}>Equipment Asset Tag</option>
                   <option {{{selOption 'equipment~equipTicketNumber' lastSearch}}}>Equipment Ticket</option>
@@ -113,8 +114,8 @@
           <a href="#" class="dropdown-toggle " data-toggle="dropdown">
             <span class="glyphicon glyphicon-user glyphicon-danger" title="{{user.local.email}}"></a>
           <ul class="dropdown-menu">
-          <li><a href="/user/profile"><span class="glyphicon glyphicon-cog glyphicon-danger"></span>  {{user.local.email}}</a></li>
-          <li><a href="/user/logout"><span class="glyphicon glyphicon-log-out glyphicon-danger"></span> Log out</a></li>
+          <li class="text-right"><a href="/user/profile">{{user.local.email}}  <span class="glyphicon glyphicon-cog glyphicon-danger"></span></a></li>
+          <li class="text-right"><a href="/user/logout">Log out  <span class="glyphicon glyphicon-log-out glyphicon-danger"></span></a></li>
           </ul>
         </li>
       </ul>

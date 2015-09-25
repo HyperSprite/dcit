@@ -595,7 +595,13 @@ exports.dcSystemPortPages = function(req,res,next){
                 case 'equipPortsAddr':
                     findThis = strTgs.mTrim(findThis);
                     query = Equipment.find({ 'equipPorts.equipPortsAddr': { '$regex': findThis, '$options': 'i' } });
-                break; 
+                break;
+                case 'equipLocation':
+                    findThis = strTgs.sTrim(findThis);
+                    query = Equipment.find({ 'equipLocation': { '$regex': findThis, '$options': 'i' } });
+                break;
+
+                
                 default:
                     //logger.info('no opt for queryString');
                 break;
