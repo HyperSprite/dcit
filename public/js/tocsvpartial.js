@@ -1,6 +1,5 @@
         $(document).ready(function () {
 
-            console.log("HELLO")
             function exportTableToCSV($table, filename) {
                 var $headers = $table.find('tr:has(th)')
                     ,$rows = $table.find('tr:has(td)')

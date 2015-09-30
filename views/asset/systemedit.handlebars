@@ -6,11 +6,11 @@
     <div class="formContainer">
     
     {{#if systemName}}
-    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/system/{{systemName}}" method="POST">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" name="assetEdit" role="form" action="/system/{{systemName}}" method="POST">
     <input type="hidden" name="isEdit" value="{{systemName}}">
     <input type="hidden" name="systemId" value="{{systemId}}">
     {{else}}
-    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/system/new" method="POST">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" name="assetEdit" role="form" action="/system/new" method="POST">
     <input type="hidden" name="wasCopy" value="{{wasCopy}}">
     <input type="hidden" name="systemId" value="new">
     {{/if}} 
@@ -34,7 +34,7 @@
                 {{/if}}
                 </p>
                 {{else}}
-                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required placeholder="*Required">
+                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required data-msg="System Name is required, should be all lowercase and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." placeholder="*Required">
                 {{/if}}
                 </div>
             </div>
@@ -42,8 +42,8 @@
         <div class="form-group">
             <label for="field-systemStatus" class="col-sm-2 control-label" >Status</label>
             <div class="col-sm-4">
-                <select id="systemStatus" name="systemStatus" class="form-control" >
-                    <option "">Select one</option>
+                <select id="systemStatus" name="systemStatus" class="form-control" required data-msg="System Status is the General Classification this system belongs to. If unsure, check other systems of the same type for their Status.">
+                    <option ""></option>
                     {{#each optSystStatus}}
                     <option {{{selOption this ../systemStatus}}} >{{this}}</option>
                     {{/each}}
@@ -91,7 +91,7 @@
     <div class="col-md-1>
         <div form-group">
                 
-                <a href="#" onclick="document.getElementById('datacenterForm').submit();return false;" accesskey="x" title="Press Alt x to Save" >
+                <a href="#" class="assetFormSubmit" accesskey="x" title="Press Alt x to Save" >
                     <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
 
                 <a href="#" onclick="document.getElementById('datacenterForm').reset();return false;" title="Reset form">
@@ -256,13 +256,13 @@
          <div class="form-group">
             <label for="systemEnviron" class="col-sm-2 control-label" >Environment</label>
             <div class="col-sm-4">
-                <input type="text" id="systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" required title="Autofill" value="{{systemEnviron}}" >
+                <input type="text" id="systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" required data-msg="Environment is required, this field will autofill, pick the most appropriate selection. Environments not on the list should be considered carefully." value="{{systemEnviron}}" >
             </div>
         </div>
         <div class="form-group">
             <label for="systemRole" class="col-sm-2 control-label" >Role</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" required title="Autofill" placeholder="Apache,Launch,Reporting">
+                <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" required data-msg="Role is required, this field will autofill, pick the most appropriate selection. Roles not on the list should be considered carefully." title="Autofill" placeholder="Apache,Launch,Reporting">
             </div>
         </div>
         <div class="form-group">
@@ -349,7 +349,7 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
-                <button type="submit" class="btn btn-danger btn-xs" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
+                <button type="submit" class="btn btn-danger btn-xs submitForm assetFormSubmit" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
                 {{/if}}
                 <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
                 <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">

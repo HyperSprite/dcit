@@ -29,7 +29,7 @@
         <div class="form-group equipSNVal has-feedback ui-widget">
             <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
             <div class="col-sm-4 ">
-                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" required aria-describedby="equipSNStatus">
+                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" required data-msg="Equipment Serial Number is required, should be all upper case and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." aria-describedby="equipSNStatus">
             </div>
         </div>
         <p id="empty-message"></p>
@@ -37,7 +37,7 @@
             <div class="form-group">
             <label for="field-Status" class="col-sm-2 control-label" >Status</label>
             <div class="col-sm-4">
-                <select id="equipStatus" name="equipStatus" class="form-control"  >
+                <select id="equipStatus" name="equipStatus" class="form-control" required data-msg="Equipment Status is required. Pick the most appropriate selection.">
                     <option "" ></option>
                     {{#each optEquipStatus}}
                     <option {{{selOption this ../equipStatus}}} >{{this}}</option>
@@ -93,7 +93,7 @@
 
 
         <div class="form-group">
-                <a href="#" onclick="document.getElementById('datacenterForm').submit();return false;" accesskey="x" title="Press Alt x to Save" >
+                <a href="#"  class="assetFormSubmit" accesskey="x" title="Press Alt x to Save" >
                     <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
 
                 <a href="#" onclick="document.getElementById('datacenterForm').reset();return false;" title="Reset form">
@@ -189,9 +189,9 @@
  
         
                 <div class="form-group">
-            <label for="field-equipType" class="col-sm-2 control-label" >Type</label>
+            <label for="field-equipType" class="col-sm-2 control-label" >Type *</label>
             <div class="col-sm-4">
-               <select id="field-equipType" name="equipType" class="form-control" > 
+               <select id="field-equipType" name="equipType" class="form-control" required data-msg="Type is required. Pick the most appropriate selection."> 
                 <!--     <option {{{selOption "" equipType}}}  >Current Status</option>-->
                     <option ""></option>
                     {{#each optEquipType}}
@@ -214,14 +214,14 @@
         <div class="form-group">
             <label for="field-equipMake" class="col-sm-2 control-label" >Make *</label>
             <div class="col-sm-4 ui-widget">
-                <input type="text" class="form-control" id="equipMake" name="equipMake"  value="{{equipMake}}" placeholder="Oracle, Dell, HP" required title="Has Autofill">
+                <input type="text" class="form-control" id="equipMake" name="equipMake"  value="{{equipMake}}" placeholder="Oracle, Dell, HP" required data-msg="Make is required, this field will autofill, pick the most appropriate selection. Makes not on the list should be considered carefully before adding them." title="Has Autofill">
             </div>
         </div>
 
         <div class="form-group">
             <label for="field-equipModel" class="col-sm-2 control-label" >Model *</label>
             <div class="col-sm-4 ui-widget">
-                <input type="text" class="form-control" id="equipModel" name="equipModel"  value="{{equipModel}}" placeholder="Sun x4-2, DL360 G6" required title="Has Autofill">
+                <input type="text" class="form-control" id="equipModel" name="equipModel"  value="{{equipModel}}" placeholder="Sun x4-2, DL360 G6" required data-msg="Model is required, this field will autofill, pick the most appropriate selection. Models not on the list should be considered carefully before adding them." title="Has Autofill">
             </div>
         </div>        
         <div class="form-group">
@@ -239,7 +239,7 @@
         <div class="form-group">
             <label for="field-equipRUHieght" class="col-sm-2 control-label" >Height in RU *</label>
             <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1" required>
+                <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1" required data-msg="RU is required and is the height is the height in RUs. ">
             </div>
         </div>        
         <div class="form-group">
@@ -351,7 +351,7 @@
         <div class="form-group">
             <label for="field-equipAcquisition" class="col-sm-2 control-label" >Date Acquired</label>
             <div class="col-sm-4">
-                <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" required title="Arrival date">
+                <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" required data-msg="Acquisition Date is required. This is usually the date the equipment arrived on site." title="Arrival date">
             </div>
         </div>   
                 <div class="form-group">
@@ -438,7 +438,7 @@
      <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
-                <button type="submit" class="btn btn-danger btn-xs" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
+                <button type="submit" class="btn btn-danger btn-xs  assetFormSubmit" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
                 {{/if}}
                 <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
                 <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
