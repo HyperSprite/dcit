@@ -29,12 +29,12 @@
                 {{#if access.delete}}
 
                      <a href="/system-namechange/{{systemName}}" 
-                    <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change  System Name"></span>
+                    <span class="glyphicon glyphicon-pencil glyphicon-danger" data-toggle="tooltip" title="Click to edit the system name."></span>
                     </a>
                 {{/if}}
                 </p>
                 {{else}}
-                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" required data-msg="System Name is required, should be all lowercase and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." placeholder="*Required">
+                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" data-toggle="tooltip" required title="System Name is required, should be all lowercase and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." placeholder="*Required">
                 {{/if}}
                 </div>
             </div>
@@ -42,7 +42,7 @@
         <div class="form-group">
             <label for="field-systemStatus" class="col-sm-2 control-label" >Status</label>
             <div class="col-sm-4">
-                <select id="systemStatus" name="systemStatus" class="form-control" required data-msg="System Status is the General Classification this system belongs to. If unsure, check other systems of the same type for their Status.">
+                <select id="systemStatus" name="systemStatus" class="form-control" data-toggle="tooltip" required title="System Status is the General Classification this system belongs to. If unsure, check other systems of the same type for their Status.">
                     <option ""></option>
                     {{#each optSystStatus}}
                     <option {{{selOption this ../systemStatus}}} >{{this}}</option>
@@ -56,18 +56,18 @@
         <div class="form-group">
             <label for="field-systemTicket" class="col-sm-2 control-label" >Ticket</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemTicket" name="systemTicket"  value="{{systemTicket}}" placeholder="Case requesting this System?">
+                <input type="text" class="form-control" id="systemTicket" name="systemTicket"  value="{{systemTicket}}" placeholder="Case requesting this System?" data-toggle="tooltip" title="Ticket is any case number associated with this system. multiple cases can be added using comma separation.">
             </div>
         </div>  
         
         <div class="form-group">
             <label for="systemEquipSN" class="col-sm-2 control-label" >Equipment SN</label>
             <div class="col-sm-4">
-                <input type="text" id="systemEquipSN" class="noEnterSubmit form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" >
+                <input type="text" id="systemEquipSN" class="noEnterSubmit form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" data-toggle="tooltip" title="Autofill will present matching Equipment Serial Numbers as you type.">
             </div>
         </div> 
         {{#if equipLocation}}<div class="form-group">
-            <label for="field-equipLocation" class="col-sm-2 control-label"  >Location</label>
+            <label for="field-equipLocation" class="col-sm-2 control-label">Location</label>
             <div class="col-sm-4">
                 {{equipLocation}}
             </div>
@@ -78,20 +78,20 @@
         <div class="form-group">
             <label for="field-systemInventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
             <div class="col-sm-4">
-                <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} title="Check this box if this page is complete">
+                <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} data-toggle="tooltip" title="Check this box if this page is complete">
             </div>
         </div>  
         <div class="form-group">
             <label for="field-systemIsVirtual" class="col-sm-2 control-label"  >Is Virtual</label>
             <div class="col-sm-4">
-                <input type="checkbox" name="systemIsVirtual" value="true" {{systemIsVirtualChecked}} title="Is this system a VM?">
+                <input type="checkbox" name="systemIsVirtual" value="true" {{systemIsVirtualChecked}} data-toggle="tooltip" title="Is this system a VM?">
             </div>
         </div>
     </div>
     <div class="col-md-1>
         <div form-group">
                 
-                <a href="#" class="assetFormSubmit" accesskey="x" title="Press Alt x to Save" >
+                <a href="#" class="assetFormSubmit" accesskey="x" data-toggle="tooltip" title="Press Alt x to Save" >
                     <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
 
                 <a href="#" onclick="document.getElementById('datacenterForm').reset();return false;" title="Reset form">
@@ -126,7 +126,7 @@
                     <td>
                         <div class="form-group row marginRow">
                             <div class="col-sm-2">
-                            <input list="sysPortType{{@index}}" id="form-sysPortType{{@index}}" class="form-control form-fixer" name="sysPortType[{{@index}}]" value="{{sysPortType}}" autocomplete="off"> 
+                            <input list="sysPortType{{@index}}" id="form-sysPortType{{@index}}" class="form-control form-fixer" name="sysPortType[{{@index}}]" value="{{sysPortType}}" autocomplete="off" data-toggle="tooltip" title="Select the Port Type. The field affects various reports at the bottom of the page."> 
                             <datalist id="sysPortType{{@index}}">
                                 {{#each ../optSystPortType}}
                                     <option {{{this}}}>{{this}}</option>
@@ -134,36 +134,36 @@
                             </datalist>
                             </div>    
                             <div class="col-sm-2 ">
-                                <input type="text"  id="sysPortName{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortName[{{@index}}]"value="{{sysPortName}}" placeholder="e0, con, netmgmt">
+                                <input type="text"  id="sysPortName{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortName[{{@index}}]"value="{{sysPortName}}" placeholder="e0, con, netmgmt" data-toggle="tooltip" title="Port Name (or label) 'e0' 'e1' 'con' 'netmgmt' 'ilom' 'drac' 'p0' 'p1' etc.">
                             </div>    
                             <div class="col-sm-2">
-                                <input type="text" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console">
+                                <input type="text" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
                                 
                             </div>    
                             <div class="col-sm-1">
-                                <input type="text"   id="sysPortEndPointPre{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[{{@index}}]"value="{{sysPortEndPointPre}}" placeholder="Blade">
+                                <input type="text"   id="sysPortEndPointPre{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[{{@index}}]"value="{{sysPortEndPointPre}}" placeholder="Blade" data-toggle="tooltip" title="Port Endpoint Pre Port is for modules, blades or branches of larger units.">
                             </div>    
                             <div class="col-sm-1">
-                                <input type="text"   id="sysPortEndPointPort{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[{{@index}}]"value="{{sysPortEndPointPort}}" placeholder="1-48ish">
+                                <input type="text"   id="sysPortEndPointPort{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[{{@index}}]"value="{{sysPortEndPointPort}}" placeholder="1-48ish" data-toggle="tooltip" title="Port Endpoint Port is the port number or label.">
                              </div>    
                             <div class="col-sm-1">   
-                                <input type="text"  id="sysPortVlan{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortVlan[{{@index}}]"value="{{sysPortVlan}}" placeholder="vlan #">
+                                <input type="text"  id="sysPortVlan{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortVlan[{{@index}}]"value="{{sysPortVlan}}" placeholder="vlan #" data-toggle="tooltip" title="Port Vlan number. Required for some reports">
                             </div>
                             <div class="col-sm-3">
-                            <input type="text" class="form-control col-sm-3"  id="sysPortOptions{{@index}}" name="sysPortOptions[{{@index}}]"value="{{sysPortOptions}}" placeholder="Options {{@index}}">
+                            <input type="text" class="form-control col-sm-3"  id="sysPortOptions{{@index}}" name="sysPortOptions[{{@index}}]"value="{{sysPortOptions}}" placeholder="Options {{@index}}" data-toggle="tooltip" title="Port Options, such as ‘duplex auto, speed auto’ for network and yes or no for avocent cisco option">
                         </div>
                         </div>
                         <div class="form-group row marginRow">
                         <div class="col-sm-4">
-                            <textarea rows="1" class="form-control col-sm-4" id="sysPortCablePath{{@index}}" name="sysPortCablePath[{{@index}}]" placeholder="cable_number cablenumber~patch~cablenumber">{{sysPortCablePath}}</textarea>
+                            <textarea rows="1" class="form-control col-sm-4" id="sysPortCablePath{{@index}}" name="sysPortCablePath[{{@index}}]" placeholder="cable_number cablenumber~patch~cablenumber" data-toggle="tooltip" title="Port Cable Serial Number. Connect multiple cables and patch panels with ‘~’ ">{{sysPortCablePath}}</textarea>
                         </div>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress{{@index}}" name="sysPortAddress[{{@index}}]"value="{{sysPortAddress}}" placeholder="10.10.10.10">
+                            <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress{{@index}}" name="sysPortAddress[{{@index}}]"value="{{sysPortAddress}}" placeholder="10.10.10.10" data-toggle="tooltip" title="Port Address is the IP address. Required for some reports">
                         </div>
                         
                         
                         <div class="col-sm-3">
-                            <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL{{@index}}" name="sysPortURL[{{@index}}]"value="{{sysPortURL}}" placeholder="http://">
+                            <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL{{@index}}" name="sysPortURL[{{@index}}]"value="{{sysPortURL}}" placeholder="http://" data-toggle="tooltip" title="Port URL is for future features.">
                         </div>
                         
                         <div class="checkbox col-sm-2">
@@ -191,42 +191,42 @@
                         <div class="form-group row marginRow">
                             <div class="col-sm-2">
                             <input list="sysPortType0" id="form-sysPortType0" class="form-control form-fixer" name="sysPortType[0]" autocomplete="off"> 
-                            <datalist id="sysPortType0">
+                            <datalist id="sysPortType0" data-toggle="tooltip" title="Port Name (or label) 'e0','e1','con','netmgmt','ilom','drac','p0','p1' etc.">
                                 {{#each ../optSystPortType}}
                                     <option {{{this}}}>{{this}}</option>
                                 {{/each}}
                             </datalist>
                             </div>    
                             <div class="col-sm-2 ">
-                                <input type="text"  id="sysPortName0" class="form-control col-sm-2 form-fixer" name="sysPortName[0]" placeholder="e0, con, netmgmt">
+                                <input type="text"  id="sysPortName0" class="form-control col-sm-2 form-fixer" name="sysPortName[0]" placeholder="e0, con, netmgmt" data-toggle="tooltip" title="Port Name (or label) 'e0' 'e1' 'con' 'netmgmt' 'ilom' 'drac' 'p0' 'p1' etc.">
                             </div>    
                             <div class="col-sm-2">
-                                <input type="text" id="sysPortEndPoint0" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[0]" placeholder="Pick a Switch, PDU, Console">
+                                <input type="text" id="sysPortEndPoint0" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[0]" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
                             </div>   
                             <div class="col-sm-1">
-                                <input type="text"   id="sysPortEndPointPre0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[0]" placeholder="Blade">
+                                <input type="text"   id="sysPortEndPointPre0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[0]" placeholder="Blade" data-toggle="tooltip" title="Port Endpoint Pre Port is for modules, blades or branches of larger units.">
                             </div>    
                             <div class="col-sm-1">
-                                <input type="text"   id="sysPortEndPointPort0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[0]"value="{{sysPortEndPointPort}}" placeholder="1-48ish">
+                                <input type="text"   id="sysPortEndPointPort0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[0]"value="{{sysPortEndPointPort}}" placeholder="1-48ish" data-toggle="tooltip" title="Port Endpoint Port is the port number or label.">
                              </div>    
                             <div class="col-sm-1">   
-                                <input type="text"  id="sysPortVlan0" class="form-control col-sm-1 form-fixer" name="sysPortVlan[0]"value="{{sysPortVlan}}" placeholder="vlan #">
+                                <input type="text"  id="sysPortVlan0" class="form-control col-sm-1 form-fixer" name="sysPortVlan[0]"value="{{sysPortVlan}}" placeholder="vlan #" data-toggle="tooltip" title="Port Vlan number. Required for some reports">
                             </div>
                             <div class="col-sm-3">
-                            <input type="text" class="form-control col-sm-3"  id="sysPortOptions0" name="sysPortOptions[0]" placeholder="Options 0">
+                            <input type="text" class="form-control col-sm-3"  id="sysPortOptions0" name="sysPortOptions[0]" placeholder="Options 0" data-toggle="tooltip" title="Port Options, such as ‘duplex auto, speed auto’ for network and yes or no for avocent cisco option">
                         </div>
                         </div>
                         <div class="form-group row marginRow">
                         <div class="col-sm-4">
-                            <textarea rows="1" class="form-control col-sm-4" id="sysPortCablePath0" name="sysPortCablePath[0]" placeholder="cable_number cablenumber~patch~cablenumber">{{sysPortCablePath}}</textarea>
+                            <textarea rows="1" class="form-control col-sm-4" id="sysPortCablePath0" name="sysPortCablePath[0]" placeholder="cable_number cablenumber~patch~cablenumber" data-toggle="tooltip" title="Port Cable Serial Number. Connect multiple cables and patch panels with ‘~’ ">{{sysPortCablePath}}</textarea>
                         </div>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress0" name="sysPortAddress[0]"value="{{sysPortAddress}}" placeholder="10.10.10.10">
+                            <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress0" name="sysPortAddress[0]"value="{{sysPortAddress}}" placeholder="10.10.10.10" data-toggle="tooltip" title="Port Address is the IP address. Required for some reports">
                         </div>
                         
                         
                         <div class="col-sm-3">
-                            <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL0" name="sysPortURL[0]"value="{{sysPortURL}}" placeholder="http://">
+                            <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL0" name="sysPortURL[0]"value="{{sysPortURL}}" placeholder="http://" data-toggle="tooltip" title="Port URL is for future features.">
                         </div>
                         
                         <div class="checkbox col-sm-2">
@@ -256,19 +256,19 @@
          <div class="form-group">
             <label for="systemEnviron" class="col-sm-2 control-label" >Environment</label>
             <div class="col-sm-4">
-                <input type="text" id="systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" required data-msg="Environment is required, this field will autofill, pick the most appropriate selection. Environments not on the list should be considered carefully." value="{{systemEnviron}}" >
+                <input type="text" id="systemEnviron" class="form-control form-group-sm col-xs-3" name="systemEnviron" data-toggle="tooltip" required title="Environment is required. This field will autofill, pick the most appropriate selection. Environments not on the list should be considered carefully." value="{{systemEnviron}}" >
             </div>
         </div>
         <div class="form-group">
             <label for="systemRole" class="col-sm-2 control-label" >Role</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" required data-msg="Role is required, this field will autofill, pick the most appropriate selection. Roles not on the list should be considered carefully." title="Autofill" placeholder="Apache,Launch,Reporting">
+                <input type="text" class="form-control" id="systemRole" name="systemRole"  value="{{systemRole}}" data-toggle="tooltip" required title="Role is required, this field will autofill, pick the most appropriate selection. Roles not on the list should be considered carefully." placeholder="Apache,Launch,Reporting">
             </div>
         </div>
         <div class="form-group">
             <label for="systemOwner" class="col-sm-2 control-label" >Owner</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemOwner" name="systemOwner"  value="{{systemOwner}}" placeholder="If availible">
+                <input type="text" class="form-control" id="systemOwner" name="systemOwner"  value="{{systemOwner}}" placeholder="If availible" data-toggle="tooltip" title="Group responsible for this system when it is in production">
             </div>
         </div>
     {{!--    <div class="form-group">
@@ -287,55 +287,56 @@
         <div class="form-group">
             <label for="field-systemParentId" class="col-sm-2 control-label" >System Parent</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemParentId" name="systemParentId"  value="{{systemParentId}}" placeholder="ED Rack,ZFS Rack">
+                <input type="text" class="form-control" id="systemParentId" name="systemParentId"  value="{{systemParentId}}" data-toggle="tooltip" title="System Parent is for future features">
             </div>
         </div>
         <div class="form-group">
             <label for="field-systemOSType" class="col-sm-2 control-label" >OS</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemOSType" name="systemOSType"  value="{{systemOSType}}" placeholder="CentOS, OEK, Windows">
+                <input type="text" class="form-control" id="systemOSType" name="systemOSType"  value="{{systemOSType}}" placeholder="CentOS, OEL, Windows" data-toggle="tooltip" title="OS type examples are ‘REL’ ‘OEL’ ‘Windows Server’ ‘Solaris’">
             </div>
         </div>
         <div class="form-group">
             <label for="field-systemOSVersion" class="col-sm-2 control-label" >OS Version</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemOSVersion" name="systemOSVersion"  value="{{systemOSVersion}}" placeholder="5u8,6u5,2008 R2">
+                <input type="text" class="form-control" id="systemOSVersion" name="systemOSVersion"  value="{{systemOSVersion}}" placeholder="5u8,6u5,2008 R2" data-toggle="tooltip" title="OS Versions like ‘6u5’ ‘2008 R2’">
             </div>
         </div>        
+    {{!-- Software section not yet implemented and may be moved to its own collection, removing it or now.
         <div class="form-group">
             <label for="field-systemApplications" class="col-sm-2 control-label" >Software</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemApplications" name="systemApplications"  value="{{systemApplications}}" placeholder="Paid software">
+                <input type="text" class="form-control" id="systemApplications" name="systemApplications"  value="{{systemApplications}}" placeholder="Paid software" data-toggle="tooltip" title="Software is that which requires purchase or license. Can be coma separated">
             </div>
         </div>        
         <div class="form-group">
             <label for="field-systemSupLic" class="col-sm-2 control-label" >Support License</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemSupLic" name="systemSupLic"  value="{{systemSupLic}}" placeholder="Contract Numbers">
+                <input type="text" class="form-control" id="systemSupLic" name="systemSupLic"  value="{{systemSupLic}}" placeholder="Contract Numbers" data-toggle="tooltip" title="Software Contract or License numbers">
             </div>
         </div>        
         <div class="form-group">
             <label for="field-systemSupEndDate" class="col-sm-2 control-label" >Software Support End Date</label>
             <div class="col-sm-4">
-                <input type="date" class="form-control" id="systemSupEndDate" name="systemSupEndDate"  value="{{systemSupEndDate}}" >
+                <input type="date" class="form-control" id="systemSupEndDate" name="systemSupEndDate"  value="{{systemSupEndDate}}" data-toggle="tooltip" title="Software Support End Date is for future feature to have reminders about support expiration. Not yet implemented">
             </div>
-        </div>        
+        </div>       --}} 
         <div class="form-group">
             <label for="field-systemInstall" class="col-sm-2 control-label" >System Install Date</label>
             <div class="col-sm-4">
-                <input type="date" class="form-control" id="systemInstall" name="systemInstall"  value="{{systemInstall}}">
+                <input type="date" class="form-control" id="systemInstall" name="systemInstall"  value="{{systemInstall}}" data-toggle="tooltip" title="System Install Date is the day it is ready for OS install.">
             </div>
         </div>        
         <div class="form-group">
             <label for="field-systemStart" class="col-sm-2 control-label" >System Start Date</label>
             <div class="col-sm-4">
-                <input type="date" class="form-control" id="systemStart" name="systemStart"  value="{{systemStart}}">
+                <input type="date" class="form-control" id="systemStart" name="systemStart"  value="{{systemStart}}" data-toggle="tooltip" title="System Start Date is the day it is ready for production.">
             </div>
         </div>
         <div class="form-group">
             <label for="field-systemEnd" class="col-sm-2 control-label" >End Date</label>
             <div class="col-sm-4">
-                <input type="date" class="form-control" id="systemEnd" name="systemEnd"  value="{{systemEnd}}">
+                <input type="date" class="form-control" id="systemEnd" name="systemEnd"  value="{{systemEnd}}" data-toggle="tooltip" title="System End Date is the day it is ready to be retired.">
             </div>
         </div>
         <div class="form-group">

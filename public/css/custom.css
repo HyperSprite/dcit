@@ -83,3 +83,28 @@ svg {
     vertical-align: middle;
 }
 
+/* Form validation display block */
+#datacenterForm .error {
+    font-weight: bold;
+    color: #BA0000;
+    background: #FFD6D6;
+    padding: 3px 5px;
+    line-height: 1.7;
+    border-radius: 3px;
+    border-color: #b94a48;
+    
+}
+
+.tooltip.top .tooltip.bottom .tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-top-color: #BA0000;
+  border-bottom-color: #BA0000;
+  border-width: 5px 5px 0;
+}
+.tooltip-inner {
+  color: #000;
+  background: #fff;
+  border: solid 1px #BA0000;
+}

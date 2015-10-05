@@ -118,22 +118,24 @@ $(document).ready(function(){
             noSuggestionNotice: '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>'            
         });  
     });
+
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
 // form validation 
+//
+// for this to work you need jquery-validate
+// on the button or link you need a class = assetFormSubmit
+// on the form you need a id = datacenterForm
+//
+// There is also some CSS for .error that makes it look good
+//
+
     $(".assetFormSubmit").click(function(){
         if ($("#datacenterForm").valid()){
             $("#datacenterForm").submit();
             return false; // prevent normal form posting
         }
     });
-    
- /*   $("#datacenterForm").validate({
-        debug: true,
-        submitHandler: function(form) {
-        // do other things for a valid form
-        form.submit();
-  }
-    });
- */       
-
 });        
 

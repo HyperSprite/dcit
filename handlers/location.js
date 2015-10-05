@@ -193,8 +193,13 @@ If "New" is in the URL, it does New, otherwise it goes to existing
         dcabbr = req.params.datacenter.substring (start+1);
         
         if (dcabbr ==='new'){
-                   
-        res.render('location/datacenteredit');
+            var context = {
+                access : accConfig.accessCheck(req.user),
+                user : req.user,
+                requrl : req.url,
+                ses: req.session.ses,
+                };                   
+        res.render('location/datacenteredit', context);
         } else {
         
         //logger.info('edit called' + dcabbr);

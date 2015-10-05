@@ -24,7 +24,7 @@ $('form#datacenterForm').serializeJSON();
             <div class="form-group">
                 <label for="fieldcageNickname" class="col-sm-2 control-label">Nickname</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageNickname{{@index}}" name="cageNickname[{{@index}}]"  value="{{cageNickname}}" placeholder="What do you call it?" required>
+                    <input type="text" class="form-control" id="fieldcageNickname{{@index}}" name="cageNickname[{{@index}}]"  value="{{cageNickname}}" placeholder="What do you call it?" data-toggle="tooltip" required title="A Nicknamd is required. What is this cage typically called?">
                 </div>
             </div>     
             {{#if cageAbbreviation}}
@@ -39,14 +39,14 @@ $('form#datacenterForm').serializeJSON();
             <div class="form-group">
                 <label for="fieldcageAbbreviation" class="col-sm-2 control-label">Code</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control"  id="fieldcageAbbreviation{{@index}}" name="cageAbbreviation[{{@index}}]"value="{{cageAbbreviation}}" placeholder="Shrot name like, 01" required>
+                    <input type="text" class="form-control"  id="fieldcageAbbreviation{{@index}}" name="cageAbbreviation[{{@index}}]"value="{{cageAbbreviation}}" placeholder="Shrot name like, 01" data-toggle="tooltip" required title="A Code is required and is used as part of the location code. Example “01” or A.">
                 </div>
             </div>
             {{/if}}
             <div class="form-group">
                 <label for="fieldcageName" class="col-sm-2 control-label">Facility ID</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control"  id="fieldcageName{{@index}}" name="cageName[{{@index}}]"value="{{cageName}}" placeholder="What does the facility call it?" required>
+                    <input type="text" class="form-control"  id="fieldcageName{{@index}}" name="cageName[{{@index}}]"value="{{cageName}}" placeholder="What does the facility call it?" data-toggle="tooltip" required title="A Facility ID is required. It is what the facility calls this cage.">
                 </div>
             </div>
             <div class="form-group">
@@ -74,7 +74,9 @@ $('form#datacenterForm').serializeJSON();
                 </div>
             </div>
             {{#if ../access.delete}}
-            {{#if cageNickname}}<button type="submit" class="btn btn-danger btn-xs" form="deleteForm{{@index}}"><span class="glyphicon glyphicon-trash"></span></button>{{/if}}
+                {{#if cageNickname}}
+                    <button type="submit" class="btn btn-danger btn-xs" form="deleteForm{{@index}}"><span class="glyphicon glyphicon-trash"></span></button>
+                {{/if}}
             {{/if}}
             {{/each}}
             {{else}}
@@ -84,17 +86,17 @@ $('form#datacenterForm').serializeJSON();
             <input type="hidden" name="index[0]" value=0><hr>            
             <div class="form-group"><label for="fieldcageNickname" class="col-sm-2 control-label">Nickname</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageNickname0" name="cageNickname[0]" value="" placeholder="Known As 01 ">
+                    <input type="text" class="form-control" id="fieldcageNickname0" name="cageNickname[0]" value="" data-toggle="tooltip" required title="A Nicknamd is required. What is this cage typically called?" placeholder="Known As 01 ">
                 </div>
             </div>            
             <div class="form-group"><label for="fieldcageAbbreviation" class="col-sm-2 control-label">Code</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageAbbreviation0" name="cageAbbreviation[0]" value="" placeholder="Shrot name like, 01 ">
+                    <input type="text" class="form-control" id="fieldcageAbbreviation0" name="cageAbbreviation[0]" value="" data-toggle="tooltip" required title="A Code is required and is used as part of the location code. Example “01” or A." placeholder="Shrot name like, 01 ">
                 </div>
             </div>          
             <div class="form-group"><label for="fieldcageName" class="col-sm-2 control-label">Facility ID</label>
                 <div class="col-sm-4"> 
-                    <input type="text" class="form-control"  id="fieldcageName0" name="cageName[0]" value=""placeholder="Facility ID *Required">
+                    <input type="text" class="form-control"  id="fieldcageName0" name="cageName[0]" value="" data-toggle="tooltip" required title="A Facility ID is required. It is what the facility calls this cage." placeholder="Facility ID *Required">
                 </div>
             </div>         
             <div class="form-group"><label for="cageInMeters" class="col-sm-2 control-label">Cage size in Meters</label>
@@ -125,14 +127,15 @@ $('form#datacenterForm').serializeJSON();
              
          <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-4">
-                            <button type="submit" class="btn btn-danger  btn-xs" accesskey="x" title="Press Alt x to Save" ><span class="glyphicon glyphicon-save"></span> Save</button>
+                            <button type="submit" class="btn btn-danger btn-xs assetFormSubmit" accesskey="x" title="Press Alt x to Save" ><span class="glyphicon glyphicon-save"></span> Save</button>
                             <button type="button" class="btn btn-danger btn-xs" value="Add Another" onclick="addField('eachUl','eachLi-',10);"><span class="glyphicon glyphicon-plus"></span></button>
-                            <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button><a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
-                            <button type="button" class="btn btn-danger btn-xs">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>                       
+                            <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+
+                            <a href="{{menuLink1}}">
+                            <button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>                       
                 </div>
             </div>
-     </form><form id="cancelForm"></form> 
+     </form> 
         {{#if access.delete}}    
         {{#if cages}}
         {{#each cages}}

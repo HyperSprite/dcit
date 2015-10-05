@@ -14,7 +14,7 @@
         <div class="form-group">
             <label for="field-dcNetType" class="col-sm-2 control-label" >ipV</label>
             <div class="col-sm-4">
-                <select id="field-dcNetType" class="form-control"  name="dcNetType" >
+                <select id="field-dcNetType" class="form-control"  name="dcNetType" data-toggle="tooltip" required title="IP version type is required." >
                     <option {{{selOption "" dcNetType}}}  >Select Type</option>
                     <option {{{selOption 4 dcNetType}}} >4</option>
                     <option {{{selOption 6 dcNetType}}} >6</option>
@@ -24,13 +24,13 @@
          <div class="form-group">
             <label for="field-dcNetNetwork" class="col-sm-2 control-label"  >Network</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="field-dcNetNetwork" name="dcNetNetwork"  value="{{dcNetNetwork}}" placeholder="10.10.100.002" required>
+                <input type="text" class="form-control" id="field-dcNetNetwork" name="dcNetNetwork"  value="{{dcNetNetwork}}" placeholder="10.10.100.1" data-toggle="tooltip" required title="Network is required. Please enter the first IP address in the range.">
             </div>
         </div>
         <div class="form-group">
             <label for="field-dcNetMask" class="col-sm-2 control-label" >Mask</label>
             <div class="col-sm-4">
-                <select id="dcNetMask"  name="dcNetMask"  class="form-control">
+                <select id="dcNetMask"  name="dcNetMask"  class="form-control" required data-msg"A mask is required. Please choose the appropriate mask for your network.">
                     <option {{{selOption "" dcNetMask}}}  >Select Mask</option>
                     
                     {{#each optMask}}
@@ -49,13 +49,13 @@
         <div class="form-group">
             <label for="field-dcNetVlan" class="col-sm-2 control-label"  >vLan</label>
             <div class="col-sm-4">
-                <input type="number" max="4096" class="form-control" id="field-dcNetVlan" name="dcNetVlan"  value="{{dcNetVlan}}" placeholder="1-4096" required>
+                <input type="number" max="4096" class="form-control" id="field-dcNetVlan" name="dcNetVlan"  value="{{dcNetVlan}}" placeholder="1-4096" required data=msg="A vlan is required.">
             </div>
         </div>
          <div class="form-group">
             <label for="field-dcNetDesc" class="col-sm-2 control-label" >Description</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="field-dcNetDesc" name="dcNetDesc" value="{{dcNetDesc}}" placeholder="Production App">
+                <input type="text" class="form-control" id="field-dcNetDesc" name="dcNetDesc" value="{{dcNetDesc}}" placeholder="Production App" data-toggle="tooltip" required title="A network description is required.">
             </div>
         </div> 
         <div class="form-group">
@@ -122,7 +122,7 @@
     </ul>    
     <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
-             <button type="submit" class="btn btn-danger btn-xs" accesskey="x" title="Press Alt x to Save">
+             <button type="submit" class="btn btn-danger btn-xs assetFormSubmit" accesskey="x" title="Press Alt x to Save">
                 <span class="glyphicon glyphicon-save"></span> Save</button>
             <button type="reset" class="btn btn-danger btn-xs"value="Reset">
                 <span class="glyphicon glyphicon-refresh"></span> Reset</button>

@@ -46,21 +46,21 @@
         <div class="form-group">
             <label for="fieldNickname" class="col-sm-2 control-label"  >Nickname</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldNickname" name="rackNickname"  value="{{rackNickname}}" placeholder="Rack Nickname?" required>
+                <input type="text" class="form-control" id="fieldNickname" name="rackNickname"  value="{{rackNickname}}" placeholder="Rack Nickname?" data-toggle="tooltip" required title="Rack Nickname is required. Keep this short and unique, normally a rack number. May be 'a-z' and '1-0'. '-' and '_' are not permitted.">
             </div>
         </div>
         {{/if}}
          <div class="form-group">
             <label for="fieldrackName" class="col-sm-2 control-label"  >Name</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldrackName" name="rackName"  value="{{rackName}}" placeholder="Facility Rack Name?" required>
+                <input type="text" class="form-control" id="fieldrackName" name="rackName"  value="{{rackName}}" placeholder="Facility Rack Name?" data-toggle="tooltip" required title="Facility Rack Name is required. This is what the facility calls this rack. It may or maynot be the same as the nickname.">
             </div>
         </div>
 
          <div class="form-group">
-            <label for="fieldrUs" class="col-sm-2 control-label" >Rack Us</label>
+            <label for="fieldrUs" class="col-sm-2 control-label" >Total Rack U Count</label>
             <div class="col-sm-4">
-                <input type="number" max="99" class="form-control" id="fieldrUs" name="rUs" value="{{rUs}}" placeholder="Total Rack RUs">
+                <input type="number" max="99" class="form-control" id="fieldrUs" name="rUs" value="{{rUs}}" placeholder="Total Rack Us" data-toggle="tooltip" required title="Total Rack U count is required. This is the count of usable RU positions in the rack.">
             </div>
         </div> 
      
@@ -149,7 +149,7 @@
     <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
-                <button type="submit" accesskey="x" class="btn btn-danger btn-xs" value='Submit' title="Press Alt x to Save" ><span class="glyphicon glyphicon-save"></span> Save</button>
+                <button type="submit" accesskey="x" class="btn btn-danger btn-xs assetFormSubmit" value='Submit' title="Press Alt x to Save" ><span class="glyphicon glyphicon-save"></span> Save</button>
                 <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
                 <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
                     <button type="button" class="btn btn-danger btn-xs">

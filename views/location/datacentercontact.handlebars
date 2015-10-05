@@ -19,17 +19,17 @@
         <div class="form-group">
             <label for="fieldconType" class="col-sm-2 control-label"  >Type</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldconType" name="conType"  value="{{conType}}" placeholder="Contact Type?" required>
+                <input type="text" class="form-control" id="fieldconType" name="conType"  value="{{conType}}" placeholder="Contact Type?" data-toggle="tooltip" required title="Contact Type is required. <strong>Main</strong> must be used for the actual datacenter location. Other options are <strong>Security</strong>, <strong>Facility Tech</strong>, <strong>Access</strong>, <strong>Account Manager</strong>, <strong>Facility Manager</strong>, <strong>Local Hotel</strong>. This field intentinally left flexible.">
             </div>
         </div>
          <div class="form-group">
             <label for="fieldconName" class="col-sm-2 control-label"  >Name</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldconName" name="conName"  value="{{conName}}" placeholder="Contact Name?" required>
+                <input type="text" class="form-control" id="fieldconName" name="conName"  value="{{conName}}" placeholder="Contact Name?" data-toggle="tooltip" required title="Contact Name is required. This can be a person, group, department or whatever seems most appropriate.">
             </div>
         </div>      
         <div class="form-group">
-            <label for="fieldconEmail" class="col-sm-2 control-label"  >Email</label>
+            <label for="fieldconEmail" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-4">
                 <input type="email" class="form-control" id="fieldconEmail" name="conEmail" value="{{conEmail}}" placeholder="Email Address?">
             </div>
@@ -465,7 +465,7 @@
     <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
-                <button type="submit" class="btn btn-danger btn-xs" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
+                <button type="submit" class="btn btn-danger btn-xs assetFormSubmit"  value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
                 {{/if}}
                 <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
                 <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">

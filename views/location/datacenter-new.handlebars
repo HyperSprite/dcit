@@ -6,19 +6,19 @@
         <div class="form-group">
             <label for="fieldFullName" class="col-sm-2 control-label">Full Name</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldFullName" name="FullName">
+                <input type="text" class="form-control" data-toggle="tooltip" required title="Full Name of the data center is required" id="fieldFullName" name="FullName">
             </div>
         </div>
         <div class="form-group">
             <label for="fieldAbbreviation" class="col-sm-2 control-label">Abbreviation</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldAbbreviation" name="Abbreviation">
+                <input type="text" class="form-control" data-toggle="tooltip" required title="An abbreviation is required. It should be short, unique and as descriptive as possible.  " id="fieldAbbreviation" name="Abbreviation">
             </div>
         </div>
         <div class="form-group">
             <label for="fieldAddress1" class="col-sm-2 control-label">Address</label>
             <div class="col-sm-4">
-				<input type="text" class="form-control" required id="fieldAddress1" name="address1"><br>
+				<input type="text" class="form-control" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located." id="fieldAddress1" name="address1"><br>
                 <input type="text" class="form-control" id="fieldAddress2" name="address2">
             </div>
 			<br>
@@ -26,13 +26,13 @@
         <div class="form-group">
             <label for="fieldCity" class="col-sm-2 control-label">City</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldCity" name="city">
+                <input type="text" class="form-control" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located." id="fieldCity" name="city">
             </div>
         </div>
         <div class="form-group">
             <label for="fieldState" class="col-sm-2 control-label">State</label>
             <div class="col-sm-4">
-				<select id="fieldState" name="state">
+				<select id="fieldState" name="state" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located.">
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
 					<option value="AZ">Arizona</option>
@@ -90,7 +90,7 @@
          <div class="form-group">
            <label for="fieldCountry" class="col-sm-2 control-label">Country</label>
             <div class="col-sm-4">
-				<select id="fieldCountry" name="country">
+				<select id="fieldCountry" name="country" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located.">
                     <option value="US">United States</option>
                     <option value="AF">Afghanistan</option>
                     <option value="AL">Albania</option>
@@ -361,84 +361,78 @@
         <div class="form-group">
             <label for="fieldZip" class="col-sm-2 control-label">Postal Code</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldZip" name="zip">
+                <input type="text" class="form-control" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located." id="fieldZip" name="zip">
             </div>
         </div>
         <div class="form-group">
             <label for="fieldPhone" class="col-sm-2 control-label">Phone</label>
             <div class="col-sm-4">
-                <input type="phone" class="form-control" required id="fieldPhone" name="phone">
+                <input type="phone" class="form-control" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located." id="fieldPhone" name="phone">
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default assetFormSubmit">Submit</button>
             </div>
         </div>
          <div class="form-group">
             <label for="fieldLat" class="col-sm-2 control-label">Latitude</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldLat" name="lat">
+                <input type="text" class="form-control" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located." id="fieldLat" name="lat">
             </div>
         </div>
          <div class="form-group">
             <label for="fieldLon" class="col-sm-2 control-label">Longitude</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldLon" name="lon">
-            </div>
-        </div>
-         <div class="form-group">
-            <label for="fieldLat" class="col-sm-2 control-label">Latitude</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldLat" name="lat">
+                <input type="text" class="form-control" data-toggle="tooltip" required title="An Address is required. It is the actual address where the data center is located." id="fieldLon" name="lon">
             </div>
         </div>
          <div class="form-group">
             <label for="fieldContact.conType" class="col-sm-2 control-label">Contact Type</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldContact.conType" name="contact.conType">
+                <input type="text" class="form-control" id="fieldContact.conType" name="contact.conType">
             </div>
         </div>
          <div class="form-group">
             <label for="fieldContact.conName" class="col-sm-2 control-label">Contact Name</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldContact.conName" name="contact.conName">
+                <input type="text" class="form-control" id="fieldContact.conName" name="contact.conName">
             </div>
         </div>      
          <div class="form-group">
             <label for="fieldContact.conEmail" class="col-sm-2 control-label">Contact Email</label>
             <div class="col-sm-4">
-                <input type="email" class="form-control" required id="fieldContact.conEmail" name="contact.conEmail">
+                <input type="email" class="form-control" id="fieldContact.conEmail" name="contact.conEmail">
             </div>
         </div>        
          <div class="form-group">
             <label for="fieldContact.conURL" class="col-sm-2 control-label">Contact URL</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldContact.conURL" name="contact.conURL">
+                <input type="text" class="form-control" id="fieldContact.conURL" name="contact.conURL">
             </div>
         </div>
         <div class="form-group">
             <label for="fieldContact.conPhone.conPhoNumber" class="col-sm-2 control-label">Contact Phone Number</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldContact.conPhone.conPhoNumber" name="contact.conPhone.conPhoNumber">
+                <input type="text" class="form-control" id="fieldContact.conPhone.conPhoNumber" name="contact.conPhone.conPhoNumber">
             </div>
         </div>
         <div class="form-group">
             <label for="fieldContact.conPhone.conPhoType" class="col-sm-2 control-label">Contact Phone Type</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldContact.conPhone.conPhoNumber" name="contact.conPhone.conPhoNumber">
+                <input type="text" class="form-control" id="fieldContact.conPhone.conPhoNumber" name="contact.conPhone.conPhoNumber">
             </div>
         </div>      
         <div class="form-group">
             <label for="fieldContact.conNotes.noteDate" class="col-sm-2 control-label">Note Date</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldContact.conNotes.noteDate" name="contact.conPhone.conPhoNumber">
+                <input type="text" class="form-control" id="fieldContact.conNotes.noteDate" name="contact.conPhone.conPhoNumber">
             </div>
         </div>         
         <div class="form-group">
             <label for="fieldContact.conNotes.noteNote" class="col-sm-2 control-label">Notes</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" required id="fieldContact.conNotes.noteNote" name="contact.conNotes.noteNote">
+                <input type="text" class="form-control" id="fieldContact.conNotes.noteNote" name="contact.conNotes.noteNote">
             </div>
         </div>             
      </form>

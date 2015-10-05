@@ -1,4 +1,11 @@
-<h2>{{fullName}} -{{#if access.edit}} <a href="/location/datacenter/edit-{{abbreviation}}">{{abbreviation}}</a>{{else}}{{abbreviation}}{{/if}}</h2>
+<h2>{{fullName}} - {{abbreviation}}</h2>
+
+{{#if access.delete}}
+        <a href="/location/datacenter/edit-{{abbreviation}}" 
+            <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change Data Center Name or Company"></span>
+        </a>
+        {{/if}}
+
 {{#if foundingCompany}}{{foundingCompany}}{{/if}}
 <br>
 <hr>

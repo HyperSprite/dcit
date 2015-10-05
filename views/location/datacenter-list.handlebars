@@ -1,4 +1,11 @@
-<h4><a href=/location/datacenter/edit-new>Datacenters</a></h4>
+{{#if access.delete}}
+            <form id="datacenterAddForm" role="form" action="/location/datacenter/edit-new" method="GET"></form>
+                <a href="#" onclick="document.getElementById('datacenterAddForm').submit();return false;">
+                    <button type="button" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-plus"></span> Datacenters</button></a>
+        {{else}}<h4>Datacenters</h4>{{/if}}
+
+
 <div id="datacenter">
     <table class="table-sort table-sort-search ">
         <thead>

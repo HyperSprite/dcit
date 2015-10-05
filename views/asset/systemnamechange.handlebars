@@ -12,11 +12,11 @@
             <div class="form-group">
                 <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
                 <div class="col-sm-4">   
-                    <input type="text" class="noEnterSubmit form-control" id="systemName" name="systemName" value="{{oldSystemName}}" placeholder="*Required" required aria-describedby="systemNameStatus">
+                    <input type="text" class="noEnterSubmit form-control" id="systemName" name="systemName" value="{{oldSystemName}}" placeholder="*Required" data-toggle="tooltip" required title="System Name is required, should be all lowercase and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only.  " aria-describedby="systemNameStatus">
                 </div>
             </div>      
           <div class="form-group">
-                    <button type="submit" class="btn btn-danger btn-xs" input accesskey="x" title="Press Alt x to Update Serial Number" value="Submit"><span class="glyphicon glyphicon-save"></span> Update System Name</button>
+                    <button type="submit" class="btn btn-danger btn-xs assetFormSubmit" input accesskey="x" data-toggle="tooltip" title="Press Alt x to Update Serial Number" value="Submit"><span class="glyphicon glyphicon-save"></span> Update System Name</button>
                     <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
                     <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
                     <button type="button" class="btn btn-danger btn-xs">
