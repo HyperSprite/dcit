@@ -21,13 +21,8 @@
             {{#each racks}}
                 <tr>
                     <td class="rackEdit">{{#if ../access.edit}}
-                    <form id="rackEditForm" role="form" action="/location/rack/edit-{{rackUnique}}" method="GET">
-                    </form><form id="rackCopyForm" role="form" action="/location/rack/edit~copy-{{rackUnique}}" method="GET"></form>          
-                <a href="#" onclick="document.getElementById('rackEditForm').submit();return false;" title="Edit">
-                    <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
-                
-                <a href="#" onclick="document.getElementById('rackCopyForm').submit();return false;" title="Copy">
-                    <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
+                    <a href="/location/rack/edit-{{rackUnique}}" target="_blank"><span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
+                    <a href="/location/rack/edit~copy-{{rackUnique}}" target="_blank"><span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
                     {{/if}} {{@index}}</td>
                     <td class="elevationdetail"><a href="/elevation/{{rackUnique}}" target="_blank" title="View Rack Elevation"><span class="glyphicon glyphicon-align-justify glyphicon-danger"></span></a> <a href="/equipment-systems/{{rackUnique}}" target="_blank" title="View Rack Details"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span></a></td> 
                     <td class="rackNickname">{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}" target="_blank">{{rackUnique}}</a>{{else}}{{rackUnique}}{{/if}}</td>
