@@ -162,11 +162,12 @@ logger.warn('dcSystemPages'+err);
 
 
     
-    Systemdb.find({},{'systemName':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
+    Systemdb.find({},{'systemName':1,'systemAlias':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
         if(err) return next(err);
         if(!sysName) return next();
         var sysUni=[];
-        for(i=0;i<sysName.length;i++){
+        var sysNameLen = sysName.length;
+        for(i=0;i<sysNameLen;i++){
         sysUni[i] = sysName[i].systemName;
         }
 
@@ -306,6 +307,7 @@ logger.warn('dcSystemPages'+err);
                         break;
                         case 'Ethernet':
                         isEthernet = 'isEthernet';
+                        
                         break;
                         case 'Infiniband':
                         isInfiniband = 'isInfiniband';
