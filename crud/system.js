@@ -19,6 +19,7 @@ exports.systemdbCreate = function (data,req) {
 Systemdb.create({
                     systemName: strTgs.csTrim(data.systemName),
                     systemEquipSN: strTgs.cTrim(data.systemEquipSN),
+                    systemAlias: strTgs.clTrim(data.systemAlias),
                     systemEnviron: strTgs.clTrim(data.systemEnviron),
                     systemRole: strTgs.uTrim(data.systemRole),
                     systemInventoryStatus: data.systemInventoryStatus,
@@ -59,6 +60,8 @@ Systemdb.create({
         } else if (data.overwrite==='yes' || dates.compare(data.modifiedOn,thisDoc.modifiedOn)===1){
             if(data.systemEquipSN){   
             thisDoc.systemEquipSN= strTgs.cTrim(data.systemEquipSN);}
+            if(data,systemAlias){
+                thisDoc.systemAlias= strTgs.clTrim(data.systemAlias);}
             if(data.systemEnviron){
             thisDoc.systemEnviron= strTgs.sTrim(data.systemEnviron);}
             if(data.systemRole){

@@ -180,7 +180,7 @@ logger.warn('dcSystemPages'+err);
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
         
-    Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'equipPorts':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
+    Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'equipPorts':1,'equipAddOns':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
     var dcabbr,thisEquip;
     if(editLoad < 4){
         thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
@@ -263,6 +263,7 @@ logger.warn('dcSystemPages'+err);
             systemId: sy._id,
             systemName: sy.systemName,
             systemEquipSN: sy.systemEquipSN,
+            systemAlias: sy.systemAlias,
             systemEnviron: sy.systemEnviron,
             systemRole: sy.systemRole,
             systemInventoryStatus: sy.systemInventoryStatus,
@@ -354,6 +355,7 @@ logger.warn('dcSystemPages'+err);
 
                     sysPortId: sp._id,
                     systemName: sy.systemName,
+                    systemAlias: sy.systemAlias,
                     sysPortType: sp.sysPortType,
                     sysPortName: sp.sysPortName,
                     sysPortAddress: sp.sysPortAddress,
@@ -376,7 +378,8 @@ logger.warn('dcSystemPages'+err);
             equipMake: thisEquip.equipMake,
             equipModel: thisEquip.equipModel,
             equipSubModel: thisEquip.equipSubModel,
-            equipRUHieght: thisEquip.equipRUHieght,           
+            equipRUHieght: thisEquip.equipRUHieght,
+            equipAddOns: thisEquip.equipAddOns,        
             equipPorts: thisEquipPortsMapped,
             
             }; 
@@ -515,6 +518,10 @@ exports.dcSystemPortPages = function(req,res,next){
                     findThis = strTgs.csTrim(findThis);
                     query = Systemdb.find({ 'systemName': { '$regex': findThis, '$options': 'i' } });
                 break;
+                case 'systemAlias':
+                    findThis = strTgs.cTrim(findThis);
+                    query = Systemdb.find({ 'systemAlias': { '$regex': findThis, '$options': 'i' } });
+                break;
                 case 'systemTicket':
                     findThis = strTgs.cTrim(findThis);
                     query = Systemdb.find({ 'systemTicket': { '$regex': findThis, '$options': 'i' } });
@@ -534,7 +541,7 @@ exports.dcSystemPortPages = function(req,res,next){
                 case 'sysPortAddress':
                     findThis = strTgs.stTrim(findThis);
                     query = Systemdb.find({ 'systemPorts.sysPortAddress': { '$regex': findThis, '$options': 'i' } });
-                break;  
+                break; 
                 default:
     //                logger.info('no opt for queryString');
                 break;
@@ -1029,6 +1036,7 @@ exports.dcSystemPost = function(req,res){
         systemPorts: varPortsNew(bd),
         systemName: strTgs.csTrim(bd.systemName),
         systemEquipSN: strTgs.cTrim(bd.systemEquipSN),
+        systemAlias: strTgs.clTrim(bd.systemAlias),
         systemEnviron: strTgs.clTrim(bd.systemEnviron),
         systemRole: strTgs.uTrim(bd.systemRole),
         systemInventoryStatus: bd.systemInventoryStatus,
@@ -1136,6 +1144,7 @@ exports.dcSystemPost = function(req,res){
     }
             thisDoc.systemName= strTgs.csTrim(bd.systemName);
             thisDoc.systemEquipSN= strTgs.cTrim(bd.systemEquipSN);
+            thisDoc.systemAlias= strTgs.clTrim(bd.systemAlias),
             thisDoc.systemEnviron= strTgs.clTrim(bd.systemEnviron);
             thisDoc.systemRole= strTgs.uTrim(bd.systemRole);
             thisDoc.systemInventoryStatus= bd.systemInventoryStatus;

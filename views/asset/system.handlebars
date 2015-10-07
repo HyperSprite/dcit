@@ -10,15 +10,15 @@
             <div class="col-md-4">
 
             <strong>System Details</strong> <br>
-            
+            {{#if systemAlias}}Alias: <strong>{{systemAlias}}</strong><br>{{/if}}
             Status: {{{systemStatusLit}}}<br>
             
-            {{#if systemEnviron}}Environment: {{systemEnviron}}<br>{{/if}}
-            {{#if systemRole}}Role: {{systemRole}}<br>{{/if}}
-            {{#if systemOwner}}Owner: {{systemOwner}}<br>{{/if}}
+            {{#if systemEnviron}}Environment: <strong>{{systemEnviron}}</strong><br>{{/if}}
+            {{#if systemRole}}Role: <strong>{{systemRole}}</strong><br>{{/if}}
+            {{#if systemOwner}}Owner: <strong>{{systemOwner}}</strong><br>{{/if}}
         {{!--    {{#if systemImpact}}Impact: {{systemImpact}}<br>{{/if}}  --}}
-            {{#if systemIsVirtual}}Is Virtual: {{systemIsVirtual}}<br>{{/if}}
-            {{#if systemParentId}}Parent: {{systemParentId}}<br>{{/if}}
+            {{#if systemIsVirtual}}Is Virtual: <strong>{{systemIsVirtual}}</strong><br>{{/if}}
+            {{#if systemParentId}}Parent: <strong>{{systemParentId}}</strong><br>{{/if}}
             Ticket: {{{systemTicketLit}}}<br>
             
             
@@ -30,7 +30,7 @@
             Equipment SN: <strong><a href="/equipment/{{systemEquipSN}}">{{systemEquipSN}}</a></strong><br>
             Location: <strong><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
             Equipment Status: <strong>{{equipStatus}}</strong><br>
-            {{#if equipMake}}{{equipMake}}{{#if equipModel}} {{equipModel}}{{/if}}{{#if equipSubModel}} - {{equipSubModel}}{{/if}}<br>{{/if}}
+            {{#if equipMake}}Make/Model: <strong>{{equipMake}}</strong>{{#if equipModel}} <strong>{{equipModel}}</strong>{{/if}}{{#if equipSubModel}} <strong>- {{equipSubModel}}</strong>{{/if}}{{#if equipAddOns}} <strong> with {{equipAddOns}}</strong>{{/if}}<br>{{/if}}
             
             {{#if equipType}}{{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
             {{/if}}
@@ -54,21 +54,21 @@
             {{#if systemIsVirual}} Is Virtual <br>{{/if}}
 
             <strong>OS and Software</strong><br>
-            {{#if systemOSType}}OS: {{systemOSType}}<br>{{/if}}
-            {{#if systemOSVersion}}OS Version: {{systemOSVersion}}<br>{{/if}}
-            {{#if systemApplications}}Aplications: {{systemApplications}}<br>{{/if}}
-            {{#if systemSupLic}}Support License: {{systemSupLic}}<br>{{/if}}
-            {{#if systemSupEndDate}}Support End Date: {{systemSupEndDate}}<br>{{/if}}
+            {{#if systemOSType}}OS: <strong>{{systemOSType}}</strong><br>{{/if}}
+            {{#if systemOSVersion}}OS Version: <strong>{{systemOSVersion}}</strong><br>{{/if}}
+            {{#if systemApplications}}Aplications: <strong>{{systemApplications}}</strong><br>{{/if}}
+            {{#if systemSupLic}}Support License: <strong>{{systemSupLic}}</strong><br>{{/if}}
+            {{#if systemSupEndDate}}Support End Date: <strong>{{systemSupEndDate}}</strong><br>{{/if}}
             <br>
             </div>
 
             <div class="col-md-4">         
             <strong>Timing</strong><br>
-            {{#if systemInstall}}Install Date: {{systemInstall}}<br>{{/if}}
-            {{#if systemStart}}Start Date: {{systemStart}}<br>{{/if}}
-            {{#if systemEnd}}End Date: {{systemEnd}}<br>{{/if}}
+            {{#if systemInstall}}Install Date: <strong>{{systemInstall}}</strong><br>{{/if}}
+            {{#if systemStart}}Start Date: <strong>{{systemStart}}</strong><br>{{/if}}
+            {{#if systemEnd}}End Date: <strong>{{systemEnd}}</strong><br>{{/if}}
             <br>
-            {{#if systemNotes}}Notes: {{systemNotes}}<br>{{/if}}
+            {{#if systemNotes}}Notes: <strong>{{systemNotes}}</strong><br>{{/if}}
             {{#if createdBy}}Created By: {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
             Modified {{#if modifiedBy}}By: {{modifiedBy}}{{/if}}{{#if modifiedOn}}: {{modifiedOn}}<br>{{/if}}
             </div>
