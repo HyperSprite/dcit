@@ -38,7 +38,12 @@
                 {{/if}}
                 </div>
             </div>
- 
+        <div class="form-group">
+            <label for="field-systemParentId" class="col-sm-2 control-label" >System Parent</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control autofillSystemName" id="systemParentId" name="systemParentId"  value="{{systemParentId}}" data-toggle="tooltip" title="Autofill will preset System Names. System Parent is for Systems that are slaves to another System, such as a Cisco FEX">
+            </div>
+        </div>
         <div class="form-group">
             <label for="field-systemAlias" class="col-sm-2 control-label" >Alias</label>
             <div class="col-sm-4">
@@ -144,7 +149,7 @@
                                 <input type="text"  id="sysPortName{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortName[{{@index}}]"value="{{sysPortName}}" placeholder="e0, con, netmgmt" data-toggle="tooltip" title="Port Name (or label) 'e0' 'e1' 'con' 'netmgmt' 'ilom' 'drac' 'p0' 'p1' etc.">
                             </div>    
                             <div class="col-sm-2">
-                                <input type="text" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
+                                <input type="text" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2  form-fixer autofillSystemName" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
                                 
                             </div>    
                             <div class="col-sm-1">
@@ -208,7 +213,7 @@
                                 <input type="text"  id="sysPortName0" class="form-control col-sm-2 form-fixer" name="sysPortName[0]" placeholder="e0, con, netmgmt" data-toggle="tooltip" title="Port Name (or label) 'e0' 'e1' 'con' 'netmgmt' 'ilom' 'drac' 'p0' 'p1' etc.">
                             </div>    
                             <div class="col-sm-2">
-                                <input type="text" id="sysPortEndPoint0" class="form-control col-sm-2  form-fixer" name="sysPortEndPoint[0]" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
+                                <input type="text" id="sysPortEndPoint0" class="form-control col-sm-2  form-fixer autofillSystemName" name="sysPortEndPoint[0]" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
                             </div>   
                             <div class="col-sm-1">
                                 <input type="text"   id="sysPortEndPointPre0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[0]" placeholder="Blade" data-toggle="tooltip" title="Port Endpoint Pre Port is for modules, blades or branches of larger units.">
@@ -291,12 +296,7 @@
                 
             </div>
         </div> --}}
-        <div class="form-group">
-            <label for="field-systemParentId" class="col-sm-2 control-label" >System Parent</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="systemParentId" name="systemParentId"  value="{{systemParentId}}" data-toggle="tooltip" title="System Parent is for future features">
-            </div>
-        </div>
+        
         <hr>
         <div class="form-group">
             <label for="field-systemOSType" class="col-sm-2 control-label" >OS</label>

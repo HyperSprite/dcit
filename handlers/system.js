@@ -96,7 +96,8 @@ logger.warn('dcSystemPages'+err);
         if(err) return next(err);
         if(!sysName) return next();
         var sysUni=[];
-        for(i=0;i<sysName.length;i++){
+        var sysNameLen = sysName.length;
+        for(i=0;i<sysNameLen;i++){
         sysUni[i] = sysName[i].systemName;
         }
 
@@ -106,7 +107,8 @@ logger.warn('dcSystemPages'+err);
         if(!eq) return next();
         //logger.info('rk'+rk);
         var eqUni=[];
-        for(i=0;i<eq.length;i++){
+        var eqLen = eq.length;
+        for(i=0;i<eqLen;i++){
         eqUni[i] = eq[i].equipSN;
         //logger.info('rackUni >'+rackUni[i]);
         }
@@ -162,7 +164,7 @@ logger.warn('dcSystemPages'+err);
 
 
     
-    Systemdb.find({},{'systemName':1,'systemAlias':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
+    Systemdb.find({},{'systemName':1,'systemAlias':1,'systemParentId':1,'_id':0},{sort:{systemName:1}},function(err,sysName){
         if(err) return next(err);
         if(!sysName) return next();
         var sysUni=[];
@@ -197,7 +199,8 @@ logger.warn('dcSystemPages'+err);
         if(!eq) return next();
         //logger.info('rk'+rk);
         var eqUni=[];
-        for(i=0;i<eq.length;i++){
+        var eqLen = eq.length;
+        for(i=0;i<eqLen;i++){
         eqUni[i] = eq[i].equipSN;
         }
 
@@ -300,14 +303,17 @@ logger.warn('dcSystemPages'+err);
                         isPower,
                         isSAN,
                         dcNet,
-                        netMask;
+                        netMask,
+                        endpointAlias;
                     switch(sp.sysPortType){
                         case 'Console':
                         isConsole = 'isConsole';
                         break;
                         case 'Ethernet':
                         isEthernet = 'isEthernet';
-                        
+
+                        endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
+ 
                         break;
                         case 'Infiniband':
                         isInfiniband = 'isInfiniband';
@@ -354,6 +360,8 @@ logger.warn('dcSystemPages'+err);
 
                     dcNet: dcNet,
                     netMask: netMask,
+                    endPointAlias: endPointAlias.systemAlias,
+                    endPointParent: endPointAlias.systemParentId,
 
                     sysPortId: sp._id,
                     systemName: sy.systemName,
@@ -1015,7 +1023,8 @@ exports.dcSystemPost = function(req,res){
     varPortsNew = function(bd){
     if(!bd.sysPortName[i] !== ''){
     var Ports = [];
-    for(i=0;i<bd.sysPortName.length;i++){
+    var bdSysPortNameLen = bd.sysPortName.length;
+    for(i=0;i<bdSysPortNameLen;i++){
     //    logger.info('sysPortName.length '+bd.sysPortName.length);
         Ports[i]=({
             sysPortType: strTgs.sTrim(bd.sysPortType[i]),
@@ -1108,8 +1117,8 @@ exports.dcSystemPost = function(req,res){
             logger.warn(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
-    
-    for(i=0;i<bd.sysPortType.length;i++){
+    var bdSysPortTypeLen = bd.sysPortType.length;
+    for(i=0;i<bdSysPortTypeLen;i++){
     //    logger.info('equip \n Portname >'+bd.sysPortName[i] +' - path >'+ bd.sysPortCablePath[i] +' - endpoint >'+ bd.sysPortEndPoint[i] +' - Opt >'+ bd.sysPortOptions[i]/*+'crossover'+strTgs.doCheckbox(bd.sysPortCrossover[i]  future*/);
         if(!bd.sysPortType[i]){
     //        logger.info('No new port');
@@ -1256,7 +1265,8 @@ function updateEndPoints(oldSystemName,systemName,callback){
                 return true;
             } else {
                 var portArray = [];
-                for(var j = sys.systemPorts.length - 1; j >= 0; j--) {
+                var sysSystemPortsLen = sys.systemPorts.length;
+                for(var j = sysSystemPortsLen - 1; j >= 0; j--) {
                     logger.info('sys.systemPorts['+j+'] ='+sys.systemPorts[j].sysPortEndPoint);
                     logger.info('sys.systemPorts['+j+'] ='+sys.systemPorts[j].sysPortEndPoint);
                     if(sys.systemPorts[j].sysPortEndPoint === oldSystemName){

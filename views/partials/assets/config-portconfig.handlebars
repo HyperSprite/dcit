@@ -41,7 +41,8 @@
         {{#each systemPorts}}
                 {{#if sysPortisEthernet}}
                 <li>Port Label: <strong>{{../../systemName}}-{{sysPortName}}</strong></li>
-                Device/Port: <strong>{{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
+                <li>Device/Port: <strong>{{sysPortEndPoint}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>
+                {{#if endPointAlias}}<li>AKA: <strong>{{endPointParent}}# int Eth{{endPointAlias}}{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}/{{sysPortEndPointPort}}</strong></li>{{/if}}
                 {{#if sysPortVlan}}<li> Vlan: <strong>{{sysPortVlan}}</strong></li>{{/if}}
                 {{#if sysPortVlan}}<li> Options: <strong>{{sysPortOptions}}</strong> </li>{{/if}}
                 {{#if sysPortCablePath}}<li>Cable Path: <strong>{{sysPortCablePath}}</strong></li>{{/if}}

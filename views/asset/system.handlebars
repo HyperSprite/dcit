@@ -10,6 +10,7 @@
             <div class="col-md-4">
 
             <strong>System Details</strong> <br>
+            {{#if systemParentId}}Parent: <strong>{{systemParentId}}</strong><br>{{/if}}
             {{#if systemAlias}}Alias: <strong>{{systemAlias}}</strong><br>{{/if}}
             Status: {{{systemStatusLit}}}<br>
             
@@ -18,7 +19,7 @@
             {{#if systemOwner}}Owner: <strong>{{systemOwner}}</strong><br>{{/if}}
         {{!--    {{#if systemImpact}}Impact: {{systemImpact}}<br>{{/if}}  --}}
             {{#if systemIsVirtual}}Is Virtual: <strong>{{systemIsVirtual}}</strong><br>{{/if}}
-            {{#if systemParentId}}Parent: <strong>{{systemParentId}}</strong><br>{{/if}}
+            
             Ticket: {{{systemTicketLit}}}<br>
             
             
