@@ -311,9 +311,12 @@ logger.warn('dcSystemPages'+err);
                         break;
                         case 'Ethernet':
                         isEthernet = 'isEthernet';
-                        var endPointAlias;
-                        endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
- 
+
+                        if(!sp.sysPortEndPoint){
+                            endPointAlias = false;
+                            }else{
+                            endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
+                            }
                         break;
                         case 'Infiniband':
                         isInfiniband = 'isInfiniband';
@@ -360,8 +363,7 @@ logger.warn('dcSystemPages'+err);
 
                     dcNet: dcNet,
                     netMask: netMask,
-                    endPointAlias: endPointAlias.systemAlias,
-                    endPointParent: endPointAlias.systemParentId,
+                    endPointAlias: endPointAlias,
 
                     sysPortId: sp._id,
                     systemName: sy.systemName,
