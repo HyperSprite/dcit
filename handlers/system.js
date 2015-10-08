@@ -311,7 +311,7 @@ logger.warn('dcSystemPages'+err);
                         break;
                         case 'Ethernet':
                         isEthernet = 'isEthernet';
-
+                        var endPointAlias;
                         endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
  
                         break;
