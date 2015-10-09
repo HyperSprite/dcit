@@ -304,7 +304,7 @@ logger.warn('dcSystemPages'+err);
                         isSAN,
                         dcNet,
                         netMask,
-                        endpointAlias;
+                        endPointAlias;
                     switch(sp.sysPortType){
                         case 'Console':
                         isConsole = 'isConsole';
@@ -312,11 +312,8 @@ logger.warn('dcSystemPages'+err);
                         case 'Ethernet':
                         isEthernet = 'isEthernet';
 
-                        if(!sp.sysPortEndPoint){
-                            endPointAlias = false;
-                            }else{
                             endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
-                            }
+                            
                         break;
                         case 'Infiniband':
                         isInfiniband = 'isInfiniband';
@@ -339,6 +336,8 @@ logger.warn('dcSystemPages'+err);
                             netMask = netMask.prefixMaskStr;
                             }
                         }
+                            endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
+
                         //dcNet = strTgs.findThisInThatNetwork(sp.sysPortVlan,dc);
                         //logger.info('system.dcNetwork >>>'+ dcNet);
                         break;
