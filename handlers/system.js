@@ -26,6 +26,7 @@ var start  = '',
 
     var query;
 
+
 //---------------------------------------------------------------------     
 //----------------------   System List  ----------------------------
 //--------------------------------------------------------------------- 
@@ -533,6 +534,10 @@ exports.dcSystemPortPages = function(req,res,next){
                     findThis = strTgs.cTrim(findThis);
                     query = Systemdb.find({ 'systemAlias': { '$regex': findThis, '$options': 'i' } });
                 break;
+                case 'systemParentId':
+                    findThis = strTgs.cTrim(findThis);
+                    query = Systemdb.find({ 'systemParentId': { '$regex': findThis, '$options': 'i' } });
+                break;
                 case 'systemTicket':
                     findThis = strTgs.cTrim(findThis);
                     query = Systemdb.find({ 'systemTicket': { '$regex': findThis, '$options': 'i' } });
@@ -751,6 +756,8 @@ logger.warn(asc+' '+err);
                     //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                     return {
                             systemName: sy.systemName,
+                            systemAlias: sy.systemAlias,
+                            systemParentId: sy.systemParentId,
                             systemEquipSN: sy.systemEquipSN,
                             systemEnviron: sy.systemEnviron,
                             systemRole: sy.systemRole,
@@ -792,7 +799,7 @@ logger.warn(asc+' '+err);
 logger.warn(asc+' '+err);
         }else{
         //logger.info('>9 >'+searchFor);
-        Systemdb.find({},'systemName systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn',function(err,sys){
+        Systemdb.find({},'systemName systemAlias systemParentId systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn',function(err,sys){
          
         //logger.info('system-list'+sys);
             var context = {
@@ -819,6 +826,8 @@ logger.warn(asc+' '+err);
                     //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                     return {
                             systemName: tempSys.systemName,
+                            systemAlias: tempSys.systemAlias,
+                            systemParentId: tempSys.systemParentId,
                             systemEquipSN: tempSys.systemEquipSN,
                             systemEnviron: tempSys.systemEnviron,
                             systemRole: tempSys.systemRole,
@@ -1057,7 +1066,7 @@ exports.dcSystemPost = function(req,res){
         systemOwner: strTgs.uTrim(bd.systemOwner),
     //    systemImpact: bd.systemImpact,
         systemIsVirtual: bd.systemIsVirtual,
-        systemParentId: strTgs.csTrim(bd.systemParentId),
+        systemParentId: strTgs.multiTrim(bd.systemParentId,2),
         systemOSType: strTgs.uTrim(bd.systemOSType),
         systemOSVersion: strTgs.uTrim(bd.systemOSVersion),
         systemApplications: strTgs.uTrim(bd.systemApplications),
@@ -1165,7 +1174,7 @@ exports.dcSystemPost = function(req,res){
             thisDoc.systemOwner= strTgs.uTrim(bd.systemOwner);
         //    thisDoc.systemImpact= bd.systemImpact;
             thisDoc.systemIsVirtual= bd.systemIsVirtual;
-            thisDoc.systemParentId= strTgs.csTrim(bd.systemParentId);
+            thisDoc.systemParentId= strTgs.multiTrim(bd.systemParentId,2);
             thisDoc.systemOSType= strTgs.uTrim(bd.systemOSType);
             thisDoc.systemOSVersion= strTgs.uTrim(bd.systemOSVersion);
             thisDoc.systemApplications= strTgs.uTrim(bd.systemApplications);
