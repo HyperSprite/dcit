@@ -46,21 +46,21 @@
         <div class="form-group">
             <label for="fieldNickname" class="col-sm-2 control-label"  >Nickname</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldNickname" name="rackNickname"  value="{{rackNickname}}" placeholder="Rack Nickname?" data-toggle="tooltip" required title="Rack Nickname is required. Keep this short and unique, normally a rack number. May be 'a-z' and '1-0'. '-' and '_' are not permitted.">
+                <input type="text" class="form-control" id="fieldNickname" name="rackNickname"  value="{{rackNickname}}" placeholder="Rack Nickname?" data-toggle="tooltip" data-delay='{"show":1500}' required title="Rack Nickname is required. Keep this short and unique, normally a rack number. May be 'a-z' and '1-0'. '-' and '_' are not permitted.">
             </div>
         </div>
         {{/if}}
          <div class="form-group">
             <label for="fieldrackName" class="col-sm-2 control-label"  >Name</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldrackName" name="rackName"  value="{{rackName}}" placeholder="Facility Rack Name?" data-toggle="tooltip" required title="Facility Rack Name is required. This is what the facility calls this rack. It may or maynot be the same as the nickname.">
+                <input type="text" class="form-control" id="fieldrackName" name="rackName"  value="{{rackName}}" placeholder="Facility Rack Name?" data-toggle="tooltip" data-delay='{"show":1500}' required title="Facility Rack Name is required. This is what the facility calls this rack. It may or maynot be the same as the nickname.">
             </div>
         </div>
 
          <div class="form-group">
             <label for="fieldrUs" class="col-sm-2 control-label" >Total Rack U Count</label>
             <div class="col-sm-4">
-                <input type="number" max="99" class="form-control" id="fieldrUs" name="rUs" value="{{rUs}}" placeholder="Total Rack Us" data-toggle="tooltip" required title="Total Rack U count is required. This is the count of usable RU positions in the rack.">
+                <input type="number" max="99" class="form-control" id="fieldrUs" name="rUs" value="{{rUs}}" placeholder="Total Rack Us" data-toggle="tooltip" data-delay='{"show":1500}' required title="Total Rack U count is required. This is the count of usable RU positions in the rack.">
             </div>
         </div> 
      

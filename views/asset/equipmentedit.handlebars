@@ -29,7 +29,7 @@
         <div class="form-group equipSNVal has-feedback ui-widget">
             <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
             <div class="col-sm-4 ">
-                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" data-toggle="tooltip" required title="Equipment Serial Number is required. It should be all upper case and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." aria-describedby="equipSNStatus">
+                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Equipment Serial Number is required. It should be all upper case and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." aria-describedby="equipSNStatus">
             </div>
         </div>
         <p id="empty-message"></p>
@@ -37,7 +37,7 @@
             <div class="form-group">
             <label for="field-Status" class="col-sm-2 control-label" >Status</label>
             <div class="col-sm-4">
-                <select id="equipStatus" name="equipStatus" class="form-control" data-toggle="tooltip" required title="Equipment Status is required. Pick the most appropriate selection.">
+                <select id="equipStatus" name="equipStatus" class="form-control" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Equipment Status is required. Pick the most appropriate selection.">
                     <option "" ></option>
                     {{#each optEquipStatus}}
                     <option {{{selOption this ../equipStatus}}} >{{this}}</option>
@@ -56,7 +56,7 @@
         <div class="form-group">
             <label for="equipLocationRack" class="col-sm-2 control-label" >Location</label>
             <div class="col-xs-3 ui-widget">
-                <input type="text" id="equipLocationRack" class="noEnterSubmit form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" data-toggle="tooltip" title="format DC_Cage_Rack. Rack Location will Autofill. The quickest way is to type the rack number and select it from the list"> 
+                <input type="text" id="equipLocationRack" class="noEnterSubmit form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' title="format DC_Cage_Rack. Rack Location will Autofill. The quickest way is to type the rack number and select it from the list"> 
             </div>
             <div class="col-xs-2">
                 <input list="equipLocationRu" id="field-equipLocationRu" class="noEnterSubmit form-control  form-group-sm col-xs-3" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" maxlength="2" tite"1.75 or 3 hole Units counted from bottom of rack"> 
@@ -191,7 +191,7 @@
                 <div class="form-group">
             <label for="field-equipType" class="col-sm-2 control-label" >Type *</label>
             <div class="col-sm-4">
-               <select id="field-equipType" name="equipType" class="form-control" data-toggle="tooltip" required title="Type is required. Pick the most appropriate selection."> 
+               <select id="field-equipType" name="equipType" class="form-control" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Type is required. Pick the most appropriate selection."> 
                 <!--     <option {{{selOption "" equipType}}}  >Current Status</option>-->
                     <option ""></option>
                     {{#each optEquipType}}
@@ -214,14 +214,14 @@
         <div class="form-group">
             <label for="field-equipMake" class="col-sm-2 control-label" >Make *</label>
             <div class="col-sm-4 ui-widget">
-                <input type="text" class="form-control" id="equipMake" name="equipMake"  value="{{equipMake}}" placeholder="Oracle, Dell, HP" data-toggle="tooltip" required title="Make is required. This field will autofill, pick the most appropriate selection. Makes not on the list should be considered carefully before adding them.">
+                <input type="text" class="form-control" id="equipMake" name="equipMake"  value="{{equipMake}}" placeholder="Oracle, Dell, HP" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Make is required. This field will autofill, pick the most appropriate selection. Makes not on the list should be considered carefully before adding them.">
             </div>
         </div>
 
         <div class="form-group">
             <label for="field-equipModel" class="col-sm-2 control-label" >Model *</label>
             <div class="col-sm-4 ui-widget">
-                <input type="text" class="form-control" id="equipModel" name="equipModel"  value="{{equipModel}}" placeholder="Sun x4-2, DL360 G6" data-toggle="tooltip" required title="Model is required. This field will Autofill, pick the most appropriate selection. Models not on the list should be considered carefully before adding them.">
+                <input type="text" class="form-control" id="equipModel" name="equipModel"  value="{{equipModel}}" placeholder="Sun x4-2, DL360 G6" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Model is required. This field will Autofill, pick the most appropriate selection. Models not on the list should be considered carefully before adding them.">
             </div>
         </div>        
         <div class="form-group">
@@ -239,7 +239,7 @@
         <div class="form-group">
             <label for="field-equipRUHieght" class="col-sm-2 control-label" >Height in RU *</label>
             <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1" data-toggle="tooltip" required title="RU is required.">
+                <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="RU is required.">
             </div>
         </div>        
         <div class="form-group">
@@ -351,7 +351,7 @@
         <div class="form-group">
             <label for="field-equipAcquisition" class="col-sm-2 control-label" >Date Acquired</label>
             <div class="col-sm-4">
-                <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" data-toggle="tooltip" required title="Acquisition Date is required. This is usually the date the equipment arrived on site." title="Arrival date">
+                <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Acquisition Date is required. This is usually the date the equipment arrived on site." title="Arrival date">
             </div>
         </div>   
                 <div class="form-group">

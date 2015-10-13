@@ -14,7 +14,7 @@
         <div class="form-group">
             <label for="field-dcNetType" class="col-sm-2 control-label" >ipV</label>
             <div class="col-sm-4">
-                <select id="field-dcNetType" class="form-control"  name="dcNetType" data-toggle="tooltip" required title="IP version type is required." >
+                <select id="field-dcNetType" class="form-control"  name="dcNetType" data-toggle="tooltip" data-delay='{"show":1500}' required title="IP version type is required." >
                     <option {{{selOption "" dcNetType}}}  >Select Type</option>
                     <option {{{selOption 4 dcNetType}}} >4</option>
                     <option {{{selOption 6 dcNetType}}} >6</option>
@@ -24,7 +24,7 @@
          <div class="form-group">
             <label for="field-dcNetNetwork" class="col-sm-2 control-label"  >Network</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="field-dcNetNetwork" name="dcNetNetwork"  value="{{dcNetNetwork}}" placeholder="10.10.100.1" data-toggle="tooltip" required title="Network is required. Please enter the first IP address in the range.">
+                <input type="text" class="form-control" id="field-dcNetNetwork" name="dcNetNetwork"  value="{{dcNetNetwork}}" placeholder="10.10.100.1" data-toggle="tooltip" data-delay='{"show":1500}' required title="Network is required. Please enter the first IP address in the range.">
             </div>
         </div>
         <div class="form-group">
@@ -55,7 +55,7 @@
          <div class="form-group">
             <label for="field-dcNetDesc" class="col-sm-2 control-label" >Description</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="field-dcNetDesc" name="dcNetDesc" value="{{dcNetDesc}}" placeholder="Production App" data-toggle="tooltip" required title="A network description is required.">
+                <input type="text" class="form-control" id="field-dcNetDesc" name="dcNetDesc" value="{{dcNetDesc}}" placeholder="Production App" data-toggle="tooltip" data-delay='{"show":1500}' required title="A network description is required.">
             </div>
         </div> 
         <div class="form-group">

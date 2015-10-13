@@ -12,7 +12,7 @@
         <div class="form-group">
             <label for="fieldFullName" class="col-sm-2 control-label">Full Name *</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldFullName" name="fullName" value="{{fullName}}" placeholder="Name (required!)" data-toggle="tooltip" required title="Full Name of the Data Center is required. This is normally the name given by the facility operator.">
+                <input type="text" class="form-control" id="fieldFullName" name="fullName" value="{{fullName}}" placeholder="Name (required!)" data-toggle="tooltip" data-delay='{"show":1500}' required title="Full Name of the Data Center is required. This is normally the name given by the facility operator.">
             </div>
         </div>
         {{#if abbreviation}}
@@ -27,14 +27,14 @@
         <div class="form-group">
             <label for="fieldAbbreviation" class="col-sm-2 control-label">Code</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldAbbreviation" name="abbreviation"  value="{{abbreviation}}"placeholder="Abbreviation" data-toggle="tooltip" required title=An abbreviation is required. It should be short, unique and as descriptive as possible.">
+                <input type="text" class="form-control" id="fieldAbbreviation" name="abbreviation"  value="{{abbreviation}}"placeholder="Abbreviation" data-toggle="tooltip" data-delay='{"show":1500}' required title=An abbreviation is required. It should be short, unique and as descriptive as possible.">
             </div>
         </div>
         {{/if}}
         <div class="form-group">
             <label for="fieldFoundingCompany" class="col-sm-2 control-label"  >Founding Company</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="fieldFoundingCompany" name="foundingCompany"  value="{{foundingCompany}}"placeholder="Founding Company" data-toggle="tooltip" required title="Founding company is required. It is typically your company name.">
+                <input type="text" class="form-control" id="fieldFoundingCompany" name="foundingCompany"  value="{{foundingCompany}}"placeholder="Founding Company" data-toggle="tooltip" data-delay='{"show":1500}' required title="Founding company is required. It is typically your company name.">
             </div>
         </div>       
      <div class="form-group">
