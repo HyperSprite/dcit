@@ -62,6 +62,7 @@ $(document).ready(function(){
         $('.autofillSystemName').autocomplete({
             serviceUrl: "/autocomplete/allSystemNames",
             minChars: 3,
+            delimiter: ',',
             autoFocus:true,
             showNoSuggestionNotice: true,
             noSuggestionNotice: '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>'            
