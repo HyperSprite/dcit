@@ -297,7 +297,7 @@ logger.warn(asc+' '+err);
 
             
                 eqs: sys.map(function(sy){
-                tempSys = strTgs.findThisInThat2(sy.systemEquipSN,eqs);
+                tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN,eqs,'equipSN');
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                     return {
@@ -365,7 +365,7 @@ logger.warn(asc+' '+err);
                 lastSearch: lastSearch,
 
                 eqs: eqs.map(function(eq){
-                tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                     return {

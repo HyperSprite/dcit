@@ -187,7 +187,7 @@ logger.warn('dcSystemPages'+err);
     Equipment.find({},{ 'equipSN':1,'equipLocation':1,'equipMake':1,'equipModel':1,'equipSubModel':1,'equipStatus':1,'equipType':1,'equipRUHieght':1,'equipPorts':1,'equipAddOns':1,'_id':0},{sort:{equipSN:1}},function(err, eq){
     var dcabbr,thisEquip;
     if(editLoad < 4){
-        thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
+        thisEquip = strTgs.findThisInThatMulti(sy.systemEquipSN,eq,'equipSN');
         dcabbr = strTgs.getDCfromLoc(thisEquip.equipLocation);
     }
     Datacenter.findOne({abbreviation: dcabbr},{'networks':1,'_id':0},function(err,oneDC){
@@ -207,8 +207,7 @@ logger.warn('dcSystemPages'+err);
 
         //logger.info ('System.findOne '+dcabbr);
         if(editLoad < 4){ // Edit or View
-            //thisEquip = strTgs.findThisInThat2(sy.systemEquipSN,eq);
-            
+             
             var dcNet,findThis;
             
             //dcabbr = strTgs.getDCfromLoc(thisEquip.equipLocation);
@@ -313,7 +312,7 @@ logger.warn('dcSystemPages'+err);
                         case 'Ethernet':
                         isEthernet = 'isEthernet';
 
-                            endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
+                            endPointAlias = strTgs.findThisInThatMulti(sp.sysPortEndPoint,sysName,'systemName');
                             
                         break;
                         case 'Infiniband':
@@ -337,7 +336,7 @@ logger.warn('dcSystemPages'+err);
                             netMask = netMask.prefixMaskStr;
                             }
                         }
-                            endPointAlias = strTgs.findThisInThat3(sp.sysPortEndPoint,sysName);
+                            endPointAlias = strTgs.findThisInThatMulti(sp.sysPortEndPoint,sysName,'systemName');
 
                         //dcNet = strTgs.findThisInThatNetwork(sp.sysPortVlan,dc);
                         //logger.info('system.dcNetwork >>>'+ dcNet);
@@ -751,7 +750,7 @@ logger.warn(asc+' '+err);
 
             
                 eqs: sys.map(function(sy){
-                tempSys = strTgs.findThisInThat2(sy.systemEquipSN,eqs);
+                tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN,eqs,'equipSN');
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                     return {
@@ -821,7 +820,7 @@ logger.warn(asc+' '+err);
                 lastSearch: lastSearch,
 
                 eqs: eqs.map(function(eq){
-                tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                     return {

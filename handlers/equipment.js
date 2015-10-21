@@ -312,7 +312,7 @@ exports.dcEquipPages = function(req,res,next){
         
         if(editLoad < 4){
 
-            tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+            tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
 
              context = {
                 access : accConfig.accessCheck(req.user),
@@ -765,7 +765,7 @@ exports.dcEquipSysPages = function(req,res,next){
                 user : req.user,
                 requrl : req.url,
                eqs: eqs.map(function(eq){
-                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                 tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
                   return {
                             //titleNow:dc.abbreviation,
                             equipLocation: eq.equipLocation,
@@ -840,7 +840,7 @@ exports.dcEquipSysPages = function(req,res,next){
                         menuLink1: '/location/rack/'+req.params.datacenter,
                         titleNow: req.params.datacenter,
                eqs: eqs.map(function(eq){
-                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                 tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
                   return {
                             
                             equipLocation: eq.equipLocation,
@@ -932,7 +932,7 @@ exports.dcRackElevationPage = function(req,res,next){
                 user : req.user,
                 requrl : req.url,
                eqs: eqs.map(function(eq){
-                 tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                 tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
                  
                  
                   
@@ -1018,7 +1018,7 @@ exports.dcRackElevationPage = function(req,res,next){
                 titleNow: rk.rackUnique,
 
                 eqs: eqs.map(function(eq){
-                tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+                tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
                 var test = strTgs.ruElevation(eq.equipLocation);
                 if(isNaN(test)===true){
                 eq.equipLocation = 1;
@@ -1099,7 +1099,7 @@ exports.dcEquipSNChange =  function(req,res){
         if(err) return next(err);
         if(!eq) return next(err);
     Systemdb.find({}, 'systemEquipSN systemName',function(err, sys){
-        tempSys = strTgs.findThisInThat(eq.equipSN,sys);
+        tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
 
              context = {
                 access : accConfig.accessCheck(req.user),
