@@ -214,7 +214,7 @@ exports.home = function(req, res){
                     access : accConfig.accessCheck(req.user),
                     user : req.user,
                     titleNow: 'Admin Upload',
-                    optModels: strTgs.findThisInThatOpt('optModels',opt),
+                    optModels: strTgs.findThisInThatMulti('optModels',opt,'optListKey'),
                 fil: fil.map(function(fi){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info('sy Map>'+fi);

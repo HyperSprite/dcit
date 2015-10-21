@@ -903,7 +903,7 @@ exports.datacenterNetworkPages = function(req,res,next){
                 abbreviation:dc.abbreviation,
                 createdOn: strTgs.dateMod(dc.createdOn),
                 foundingCompany:dc.foundingCompany,
-                optMask: strTgs.findThisInThatOpt('optMask',opt),
+                optMask: strTgs.findThisInThatMulti('optMask',opt,'optListKey'),
                 };
             res.render('location/networkedit', context);
         } else if (copy === true){ // copy
@@ -930,7 +930,7 @@ exports.datacenterNetworkPages = function(req,res,next){
                 dcNetLdapString: nk.dcNetLdapString,
                 dcNetTftpHost: nk.dcNetTftpHost,
                 dcNetACSFilePath: nk.dcNetACSFilePath,
-                optMask: strTgs.findThisInThatOpt('optMask',opt),
+                optMask: strTgs.findThisInThatMulti('optMask',opt,'optListKey'),
                 };
             res.render('location/networkedit', context);
         } else { // edit
@@ -963,7 +963,7 @@ exports.datacenterNetworkPages = function(req,res,next){
                 dcNetLdapString: nk.dcNetLdapString,
                 dcNetTftpHost: nk.dcNetTftpHost,
                 dcNetACSFilePath: nk.dcNetACSFilePath,
-                optMask: strTgs.findThisInThatOpt('optMask',opt),
+                optMask: strTgs.findThisInThatMulti('optMask',opt,'optListKey'),
                 };
             res.render('location/networkedit', context);
         }}); 
