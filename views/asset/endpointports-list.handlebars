@@ -1,48 +1,48 @@
     
 <h4>Endpoint Ports</h4>
-    <div class='container'> 
-    <div id="dvData">
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                
-                
-                <th class="table-sort" data-sort="systemName">System Name</th>
-                <th class="table-sort" data-sort="sysPortName">Name</th>
-                <th class="table-sort" data-sort="sysPortCablePath">Cable Path</th>
-                <th class="table-sort" data-sort="sysPortEndPointPre">Pre</th>
-                <th class="table-sort" data-sort="sysPortEndPointPort">Port</th>
-                <th class="table-sort" data-sort="sysPortVlan">VLAN</th>
-                <th class="table-sort" data-sort="sysPortOptions">Options</th>
-                <th class="table-sort" data-sort="sysPortAddress">Address</th>
-                <th class="table-sort" data-sort="sysPortType">Type</th>
-           
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each sys}}
-        {{#each systemPorts}}
-            <tr>
-                <td class="systemName">
-                    {{#if ../../access.edit}}{{#if systemName}}
-                        <a href="/system/edit-{{systemName}}" target="_blank">
-                        <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
-                    {{/if}}{{/if}}
-                <a href="/system/{{systemName}}">{{systemName}}</td>
-                <td class="sysPortName">{{sysPortName}}</td>
-                <td class="sysPortCablePath">{{sysPortCablePath}}</td>
-                <td class="sysPortEndPointPre">{{sysPortEndPointPre}}</td>
-                <td class="sysPortEndPointPort">{{sysPortEndPointPortPad}}</td>
-                <td class="sysPortVlan">{{sysPortVlan}}</td>
-                <td class="sysPortOptions">{{sysPortOptions}}</td>
-                <td class="sysPortAddress">{{sysPortAddress}}</td>
-                <td class="sysPortType">{{sysPortType}}</td>
-            </tr>
-        {{/each}}
-        {{/each}}
-        </tbody>
-    </table>
-    </div>
+    <div> 
+        <div id="dvData">
+            <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
+                <thead>
+                    <tr>
+                        
+                        
+                        <th class="table-sort" data-sort="systemName">System Name</th>
+                        <th class="table-sort" data-sort="sysPortName">Name</th>
+                        <th class="table-sort" data-sort="sysPortCablePath">Cable Path</th>
+                        <th class="table-sort" data-sort="sysPortEndPointPre">Pre</th>
+                        <th class="table-sort" data-sort="sysPortEndPointPort">Port</th>
+                        <th class="table-sort" data-sort="sysPortVlan">VLAN</th>
+                        <th class="table-sort" data-sort="sysPortOptions">Options</th>
+                        <th class="table-sort" data-sort="sysPortAddress">Address</th>
+                        <th class="table-sort" data-sort="sysPortType">Type</th>
+                   
+                    </tr>
+                </thead>
+                <tbody class="list">
+                {{#each sys}}
+                {{#each systemPorts}}
+                    <tr>
+                        <td class="systemName">
+                            {{#if ../../access.edit}}{{#if systemName}}
+                                <a href="/system/edit-{{systemName}}" target="_blank">
+                                <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
+                            {{/if}}{{/if}}
+                        <a href="/system/{{systemName}}">{{systemName}}</td>
+                        <td class="sysPortName">{{sysPortName}}</td>
+                        <td class="sysPortCablePath">{{sysPortCablePath}}</td>
+                        <td class="sysPortEndPointPre">{{sysPortEndPointPre}}</td>
+                        <td class="sysPortEndPointPort">{{sysPortEndPointPortPad}}</td>
+                        <td class="sysPortVlan">{{sysPortVlan}}</td>
+                        <td class="sysPortOptions">{{sysPortOptions}}</td>
+                        <td class="sysPortAddress">{{sysPortAddress}}</td>
+                        <td class="sysPortType">{{sysPortType}}</td>
+                    </tr>
+                {{/each}}
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
         {{> tocsvpartial }}
     </div>
     <hr>
