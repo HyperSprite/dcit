@@ -18,12 +18,12 @@
                 <tr>
                     <td class="dcNetEdit">
                 {{#if ../access.edit}}
-                    <form id="netEditForm" role="form" action="/location/network/{{id}}-{{dcNetId}}" method="GET"></form>
-                    <form id="netCopyForm" role="form" action="/location/network/{{id}}-{{dcNetId}}~copy" method="GET"></form>          
-                <a href="#" onclick="document.getElementById('netEditForm').submit();return false;" title="Edit">
+                    <form id="netEditForm{{@index}}" role="form" action="/location/network/{{id}}-{{dcNetId}}" method="GET"></form>
+                    <form id="netCopyForm{{@index}}" role="form" action="/location/network/{{id}}-{{dcNetId}}~copy" method="GET"></form>          
+                <a href="#" onclick="document.getElementById('netEditForm{{@index}}').submit();return false;" title="Edit">
                     <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
                 
-                <a href="#" onclick="document.getElementById('netCopyForm').submit();return false;" title="Copy">
+                <a href="#" onclick="document.getElementById('netCopyForm{{@index}}').submit();return false;" title="Copy">
                     <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
                     {{/if}}  {{@index}}</td>
                     <td class="dcNetType">{{dcNetType}}</td>     
