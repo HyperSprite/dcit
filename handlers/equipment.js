@@ -424,7 +424,7 @@ exports.dcEquipPages = function(req,res,next){
             requrl : req.url, 
                                 optSystPortType: strTgs.findThisInThatMulti('optSystPortType',opt,'optListKey'),
                                 optEquipStatus: strTgs.findThisInThatMulti('optEquipStatus',opt,'optListKey'),
-                                optEquipType: strTgs.findThisInThatMutli('optEquipType',opt,'optListKey'),
+                                optEquipType: strTgs.findThisInThatMulti('optEquipType',opt,'optListKey'),
                                 rackrUs: getRackrUs(52),
                                 rackUnique: rackUni,
                                 rUs: rk.rUs,

@@ -1,22 +1,19 @@
 <div>
-<h4>Log Files</h4>
-
-
-<div id="dvData">
-    
+  <h4>Log Files</h4>
+  <div id="dvData">
     <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                <th class="table-sort" data-sort="index">index</th>
-                <th class="table-sort" data-sort="message">Name</th>
-            </tr>
-        </thead>
-        <tbody class="list">
+      <thead>
+        <tr>
+          <th class="table-sort" data-sort="index">index</th>
+          <th class="table-sort" data-sort="message">Name</th>
+        </tr>
+      </thead>
+      <tbody class="list">
         {{#each files}}
-            <tr>
-                
-                <td class="index"><button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button> : {{@index}}</td>
-                <td class="message" ><a href="/admin/logviewer-{{name}}">{{name}}</td>
+        <tr>
+          <td class="index">
+            <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button> : {{@index}}</td>
+          <td class="message"><a href="/admin/logviewer-{{name}}">{{name}}</td>
              
             </tr>  
         {{/each}}
