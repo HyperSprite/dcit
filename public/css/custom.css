@@ -92,7 +92,6 @@ svg {
     line-height: 1.7;
     border-radius: 3px;
     border-color: #b94a48;
-    
 }
 
 .tooltip.top .tooltip.bottom .tooltip-arrow {
@@ -107,4 +106,21 @@ svg {
   color: #000;
   background: #fff;
   border: solid 1px #BA0000;
+}
+
+/* for dropdown drop-columns in top-bar */
+@media screen and (max-width: 899px){
+    .drop-columns{
+        height: 200px;
+        overflow:scroll;
+    }
+}
+
+@media screen and (min-width: 900px){
+    .drop-columns{
+        -moz-column-count:4; /* Firefox */
+        -webkit-column-count:4; /* Safari and Chrome */
+        column-count:4;
+        width: 600px;
+    }
 }
