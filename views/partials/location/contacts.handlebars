@@ -1,0 +1,41 @@
+          {{#if access.edit}}
+          <form id="contactAddForm" role="form" action="/location/datacenter/contact~{{id}}-new" method="GET"></form>
+          <a href="#" onclick="document.getElementById('contactAddForm').submit();return false;">
+          <button type="button" class="btn btn-danger btn-sm">
+          <span class="glyphicon glyphicon-plus"></span> Contacts</button>
+          </a>
+          {{/if}}
+          <div class="row">
+            {{#each contacts}}
+            <div class="col-md-6">
+              <blockquote>
+              <address>
+              <strong>{{#if conName}}{{#if ../../access.edit}}<a href="/location/datacenter/contact~{{../../id}}-{{conId}}">{{conName}}</a>{{else}}{{conName}}{{/if}}<br>{{/if}}</strong> {{#if conType}}{{conType}}
+              <br>{{/if}}
+              <ul class="list-unstyled">
+              {{#if conURL}}
+              <li><a href="http://{{conURL}}" target="_top">{{conURL}}</a></li>{{/if}} {{#if conPho1Num}}
+              <li>{{conPho1Num}} - {{conPho1Typ}}</li>{{/if}} {{#if conPho2Num}}
+              <li>{{conPho2Num}} - {{conPho2Typ}}</li>{{/if}} {{#if conPho3Num}}
+              <li>{{conPho3Num}} - {{conPho3Typ}}</li>{{/if}} {{#if conPho4Num}}
+              <li>{{conPho4Num}} - {{conPho4Typ}}</li>{{/if}} {{#if conEmail}}
+              <li><a href="mailto:{{conEmail}}" target="_top">{{conEmail}}</a></li>{{/if}} {{#if conNotes}}
+              <li>
+              <div> 
+                <strong>Notes:</strong> 
+                {{conNotes}}
+              </div>
+              <li>{{/if}} {{#if address1}}
+              <li>{{address1}}</li>{{/if}} {{#if address2}}
+              <li>{{address2}}</li>{{/if}} {{#if address3}}
+              <li>{{address3}}</li>{{/if}} {{#if address4}}
+              <li>{{address4}}</li>{{/if}} {{#if city}}
+              <li>{{city}}, {{state}} {{zip}}</li>{{/if}} {{#if country}}
+              <li>{{country}}</li>{{/if}} {{#if lat}}
+              <li><a href="https://www.google.com/maps/place/{{lat}},{{lon}}">Map</a></li>{{/if}}
+              </ul>
+              </address>
+              </blockquote>
+            </div>
+            {{/each}}
+         </div>

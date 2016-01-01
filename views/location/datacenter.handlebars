@@ -1,115 +1,125 @@
-<h2>{{fullName}} - {{abbreviation}}</h2>
-
-{{#if access.delete}}
-        <a href="/location/datacenter/edit-{{abbreviation}}" 
-            <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change Data Center Name or Company"></span>
-        </a>
-        {{/if}}
-
-{{#if foundingCompany}}{{foundingCompany}}{{/if}}
+<h2>{{fullName}} - {{abbreviation}}</h2> {{#if access.delete}}
+<a href="/location/datacenter/edit-{{abbreviation}}" <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change Data Center Name or Company"></span>
+</a>
+{{/if}} {{#if foundingCompany}}{{foundingCompany}}{{/if}}
 <br>
 <hr>
 <div class="racks">
-        {{#if access.edit}}
-            <form id="contactAddForm" role="form" action="/location/datacenter/contact~{{id}}-new" method="GET"></form>
-                <a href="#" onclick="document.getElementById('contactAddForm').submit();return false;">
-                    <button type="button" class="btn btn-danger btn-sm">
-                    <span class="glyphicon glyphicon-plus"></span> Contacts</button></a>
-        {{else}}<h4>Contacts</h4>{{/if}}
-        <div class="row">
-        {{#each contacts}}
-            
-                <div class="col-md-6">
-                <blockquote>
-                <address>
-                <strong>{{#if conName}}{{#if ../../access.edit}}<a href="/location/datacenter/contact~{{../../id}}-{{conId}}">{{conName}}</a>{{else}}{{conName}}{{/if}}<br>{{/if}}</strong>
-                {{#if conType}}{{conType}}<br>{{/if}}
-                        <ul class="list-unstyled">
-                        {{#if conURL}}<li><a href="http://{{conURL}}" target="_top">{{conURL}}</a></li>{{/if}}
-                        {{#if conPho1Num}}<li>{{conPho1Num}} - {{conPho1Typ}}</li>{{/if}}
-                        {{#if conPho2Num}}<li>{{conPho2Num}} - {{conPho2Typ}}</li>{{/if}}
-                        {{#if conPho3Num}}<li>{{conPho3Num}} - {{conPho3Typ}}</li>{{/if}}
-                        {{#if conPho4Num}}<li>{{conPho4Num}} - {{conPho4Typ}}</li>{{/if}} 
-                        {{#if conEmail}}<li><a href="mailto:{{conEmail}}" target="_top">{{conEmail}}</a></li>{{/if}}
-                        {{#if conNotes}}<li><div> <strong>Notes:</strong> {{conNotes}}</div><li>{{/if}}
-                        {{#if address1}}<li>{{address1}}</li>{{/if}}
-                        {{#if address2}}<li>{{address2}}</li>{{/if}}
-                        {{#if address3}}<li>{{address3}}</li>{{/if}}
-                        {{#if address4}}<li>{{address4}}</li>{{/if}}
-                        {{#if city}}<li>{{city}}, {{state}} {{zip}}</li>{{/if}}
-                        {{#if country}}<li>{{country}}</li>{{/if}}
-                        {{#if lat}}<li><a href="https://www.google.com/maps/place/{{lat}},{{lon}}">Map</a></li>{{/if}} 
-                </address>
-                </blockquote>
-                </div>
-        {{/each}}
-        </div>
-    <hr>        
-      
-            <div class="racks">
-              
-                   {{#if access.edit}}
-                   <form id="cageEditForm" role="form" action="/location/datacentercage/edit-{{id}}" method="GET"></form>
-                        <a href="#" onclick="document.getElementById('cageEditForm').submit();return false;">
-                            <button type="button" class="btn btn-danger btn-sm">
-                            <span class="glyphicon glyphicon-edit"></span> Cages</button></a>
-                    {{else}}<h4>Cages</h4>{{/if}}
-               <div class="row">
-               {{#each cages}} 
-                
-                  <div class="col-md-6">
-                  <blockquote>
-                    <strong>{{cageNickname}}</strong><br> 
-                    <strong>Code: {{cageAbbreviation}}</strong><br>
-                    <strong>Facility name: {{cageName}}</strong><br>
-                    {{#if cageInMeters}}Cage in Meters: {{cageInMeters}} - Feet: {{cageInFeet}}<br>{{/if}}
-                    {{#if cageWattPSM}}Watts Per Sq. Meter: {{cageWattPSM}} - Foot:{{cageWattPSF}}<br>{{/if}}
-                    {{#if cageMap}}Cage Map: <a href="{{cageMap}}" target="_blank"> Link</a><br>{{/if}}
-                    {{#if cageNotes}}Notes:{{cageNotes}}<br>{{/if}}
-                    {{#if ../access.edit}}
-                    <input form="formNewRack{{@index}}" type='submit' class='btn btn-danger btn-xs' formmethod="get" novalidate value='New Rack' formaction='/location/rack/newrack~{{dcid}}-{{id}}'>
-                    <form id="formNewRack{{@index}}"></form>
-                    {{/if}}
-                  </blockquote>
-                  </div>
-                {{/each}}
-                </div>
-              
-            </div>
-            
-    <hr>
-    <h4>Racks</h4>
-        {{> location/rack-list}}
-   
-    <hr>
-                
-
-
-    {{#if access.edit}}
-        <form id="networkAddForm" role="form" action="/location/network/{{id}}-new" method="GET"></form>
-                <a href="#" onclick="document.getElementById('networkAddForm').submit();return false;">
-                    <button type="button" class="btn btn-danger btn-sm">
-                    <span class="glyphicon glyphicon-plus"></span> Networks</button></a>
-        {{else}}<h4>Networks</h4>{{/if}}
-        {{> location/network-list}}
-    <hr>
-    {{#if access.edit}}
-        <form id="powerEditForm" role="form" action="/location/datacenterpower/edit-{{id}}" method="GET"></form>
-                <a href="#" onclick="document.getElementById('powerEditForm').submit();return false;">
-                    <button type="button" class="btn btn-danger btn-sm">
-                    <span class="glyphicon glyphicon-edit"></span> Power Mains</button></a>
-        {{else}}<h4>Power Mains</h4>{{/if}}
-
-    <ul id="powerUl" class="list-unstyled">    
-        {{#each powerNames}}
-        <li>
-        {{#if access.delete}}<a href="/location/datacenterpower/show-{{this}}">{{this}}</a>{{else}}{{this}}{{/if}}<br>
-        {{!-- Need to look into this, have not started using this feature yet --}}
-        </li>
-        {{/each}}
-    </ul>
-    Datacenter Created On: {{createdOn}}
+ 
     
+    <div class="panel panel-default"> <!-- report accordion -->
+      <div class="panel-heading">
+        <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+        Production: In Service by Environment</a>
+        </h4>
+      </div> <!-- panel heading -->
+      <div id="collapse1" class="panel-collapse collapse in">
+        <div class="panel-body">
+          {{> assets/report-inservice-env}}
+        </div> 
+      </div> <!-- collapse1 -->
+    </div> <!-- report accordion -->
+
+    <div class="panel panel-default"> <!-- contacts accordion -->
+      <div class="panel-heading">
+        <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse2">
+        Contact</a>
+        </h4>
+      </div> <!-- panel heading -->
+      <div id="collapse2" class="panel-collapse collapse">
+        <div class="panel-body">
+        {{> location/contacts}}
+        </div>
+      </div> <!-- collapse2 -->
+    </div> <!-- contacts accordion -->
+
+    <div class="panel panel-default"> <!-- cages accordion -->
+      <div class="panel-heading">
+       <h4 class="panel-title">
+       <a data-toggle="collapse" href="#collapse3">
+        Cages</a>
+       </h4>
+      </div> <!-- panel heading -->
+      <div id="collapse3" class="panel-collapse collapse">
+        <div class="panel-body">
+          {{> location/cages}}
+        </div>
+      </div> <!-- collapse3 -->
+    </div> <!-- cages accordion -->
+
+    <div class="panel panel-default"> <!-- racks accordion -->
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse4">
+          Racks</a>
+        </h4>
+      </div> <!-- panel heading -->
+      <div id="collapse4" class="panel-collapse collapse">
+        <div class="panel-body">
+        {{#if access.edit}}
+         <form id="cageEditForm" role="form" action="/location/datacentercage/edit-{{id}}" method="GET"></form>
+          <a href="#" onclick="document.getElementById('cageEditForm').submit();return false;">
+          <button type="button" class="btn btn-danger btn-sm">
+          <span class="glyphicon glyphicon-edit"></span> Cages</button>
+          </a>
+          {{/if}}
+          {{> location/rack-list}}
+        </div>
+      </div> <!-- collapse4 -->
+    </div> <!-- racks accordion -->
+
+    <div class="panel panel-default"> <!-- networks accordion -->
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse5">
+          Networks</a>
+        </h4>
+      </div> <!-- panel heading -->
+      <div id="collapse5" class="panel-collapse collapse">
+        <div class="panel-body">
+          {{#if access.edit}}
+          <form id="networkAddForm" role="form" action="/location/network/{{id}}-new" method="GET"></form>
+          <a href="#" onclick="document.getElementById('networkAddForm').submit();return false;">
+          <button type="button" class="btn btn-danger btn-sm">
+          <span class="glyphicon glyphicon-plus"></span> Networks</button>
+          </a>
+          {{/if}}
+          {{> location/network-list}}
+        </div>
+      </div> <!-- collapse5 -->
+    </div> <!-- networks accordion -->
+      
+    <div class="panel panel-default"> <!-- power accordion -->
+      <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse6">
+            Power Mains</a>
+          </h4>
+      </div> <!-- panel heading -->
+      <div id="collapse6" class="panel-collapse collapse">
+          <div class="panel-body">
+            {{#if access.edit}}
+            <form id="powerEditForm" role="form" action="/location/datacenterpower/edit-{{id}}" method="GET"></form>
+            <a href="#" onclick="document.getElementById('powerEditForm').submit();return false;">
+            <button type="button" class="btn btn-danger btn-sm">
+            <span class="glyphicon glyphicon-edit"></span> Power Mains</button>
+            </a>
+            {{/if}}
+            <ul id="powerUl" class="list-unstyled">
+            {{#each powerNames}}
+            <li>
+            {{#if access.delete}}<a href="/location/datacenterpower/show-{{this}}">{{this}}</a>{{else}}{{this}}{{/if}}
+            <br> {{!-- Need to look into this, have not started using this feature yet --}}
+            </li>
+            {{/each}}
+            </ul>
+          </div>
+      </div> <!-- collapse6 -->
+    </div> <!-- power accordion -->
+
+
+ 
+    Datacenter Created On: {{createdOn}}
 </div>
-
-

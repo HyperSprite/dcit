@@ -1,19 +1,17 @@
-<div>
-<div id="dvData">
-    
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
+<table {{> bootstrap-table}}
+        >
         <thead>
             <tr>
-                <th class="table-sort" data-sort="rackEdit">{{#if access.edit}}Edit{{/if}} Index</th>
-                <th class="table-sort" data-sort="elevationdetail">View</th>
-                <th class="table-sort" data-sort="rackNickname">DC_Cage_Rack</th>
-                <th class="table-sort" data-sort="rackStatus">Facility ID</th>
-                <th class="table-sort" data-sort="rackStatus">Status</th>
-                <th class="table-sort" data-sort="rackLat">X</th>
-                <th class="table-sort" data-sort="rackLon">Y</th>
-                <th class="table-sort" data-sort="rackRow">Row</th>
-                <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
-                <th class="table-sort" data-sort="rackDescription">Description</th>
+                <th data-sortable="true" data-field="rackEdit">{{#if access.edit}}Edit{{/if}} Index</th>
+                <th data-sortable="true" data-field="elevationdetail">View</th>
+                <th data-sortable="true" data-field="rackNickname">DC_Cage_Rack</th>
+                <th data-sortable="true" data-field="rackStatus">Facility ID</th>
+                <th data-sortable="true" data-field="rackStatus">Status</th>
+                <th data-sortable="true" data-field="rackLat">X</th>
+                <th data-sortable="true" data-field="rackLon">Y</th>
+                <th data-sortable="true" data-field="rackRow">Row</th>
+                <th data-sortable="true" data-field="modifiedOn">Last Modified</th>
+                <th data-sortable="true" data-field="rackDescription">Description</th>
                 
             </tr>
         </thead>
@@ -38,7 +36,3 @@
             {{/each}}
         </tbody>
     </table>
-    </div>
-         {{> tocsvpartial }}
-    </div>
-

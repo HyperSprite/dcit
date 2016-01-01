@@ -1,14 +1,16 @@
 var logConfig = require('../config/log.js');
 var Equipment = require('../models/equipment.js'),
     strTgs = require('../lib/stringThings.js'),
+    logger = require('../lib/logger.js'),
      dates = require('../lib/dates.js');
 var winston = require('winston');
-var logger = new (winston.Logger)({
+/*var logger = new (winston.Logger)({
   transports: [
     new winston.transports.DailyRotateFile({filename: logConfig.logDir+logConfig.fileName.uploadLog, json: false}),
     ],
   exitOnError: true
 });
+*/
          
 exports.equipmentCreate = function (data,req) {
 Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
@@ -46,7 +48,7 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
         equipPSUCount: strTgs.uTrim(data.equipPSUCount),
         equipPSUDraw: strTgs.uTrim(data.equipPSUDraw),
         equipAddOns: strTgs.uTrim(data.equipAddOns),
-        equipRecieved: strTgs.convertDates(data.equipRecieved),
+        equipReceived: strTgs.convertDates(data.equipReceived),
         equipAcquisition: strTgs.convertDates(data.equipAcquisition),
         equipInService: strTgs.convertDates(data.equipInService),
         equipEndOfLife: strTgs.convertDates(data.equipEndOfLife),
@@ -139,8 +141,8 @@ Equipment.findOne({equipSN: strTgs.cTrim(data.equipSN)},function(err,eq){
                 thisDoc.equipPSUDraw = strTgs.uTrim(data.equipPSUDraw);}
                 if(data.equipAddOns){
                 thisDoc.equipAddOns = strTgs.uTrim(data.equipAddOns);}
-                if(data.equipRecieved){
-                thisDoc.equipRecieved = strTgs.convertDates(data.equipRecieved,req.session.ses.timezone);}
+                if(data.equipReceived){
+                thisDoc.equipReceived = strTgs.convertDates(data.equipReceived,req.session.ses.timezone);}
                 if(data.equipAcquisition){
                 thisDoc.equipAcquisition = strTgs.convertDates(data.equipAcquisition,req.session.ses.timezone);}
                 if(data.equipInService){

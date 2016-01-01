@@ -1,4 +1,4 @@
-var logconfig = require('../config/log.js'),
+var logger = require('../lib/logger.js'),
        strTgs = require('../lib/stringThings.js'),
     accConfig = require('../config/access'),
     Optionsdb = require('../models/options.js');
@@ -8,13 +8,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 // load up the user model
 var User            = require('../models/user');
-var winston = require('winston');
-var logger = new (winston.Logger)({
-  transports: [
-    new winston.transports.DailyRotateFile({filename: logconfig.logDir+logconfig.fileName.accessLog, json: false}),
-    ],
-  exitOnError: true
-});
+
 
 /*
 exports.accessCheck = function(check){
