@@ -1,0 +1,11 @@
+<table {{> bootstrap-table}}
+        data-url="/reportByInserviceEnv.json?dcAbbr={{abbreviation}}"
+        >
+    <thead>
+        <tr>
+            <th data-sortable="true" data-field="env">Environment</th>
+            <th data-sortable="true" data-field="countApp">Application</th>
+            <th data-sortable="true" data-field="countDb">Database</th>
+        </tr>
+    </thead>
+</table>

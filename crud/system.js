@@ -1,15 +1,16 @@
 var logConfig = require('../config/log.js');
 var Systemdb = require('../models/system.js'),
       strTgs = require('../lib/stringThings.js'),
+      logger = require('../lib/logger.js'),
        dates = require('../lib/dates.js');
 var winston = require('winston');
-var logger = new (winston.Logger)({
+/*var logger = new (winston.Logger)({
   transports: [
     new winston.transports.DailyRotateFile({filename: logConfig.logDir+logConfig.fileName.uploadLog, json: false}),
     ],
   exitOnError: true
 });
-
+*/
     
 exports.systemdbCreate = function (data,req) {
     Systemdb.findOne({systemName: strTgs.csTrim(data.systemName)},function(err,sys){

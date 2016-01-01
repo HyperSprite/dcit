@@ -143,7 +143,7 @@ exports.home = function(req, res){
 
     }else if(req.params.datacenter === 'logs'){
 
-    fs.readdir(logConfig.logDir, function (err, files) {
+    fs.readdir(logConfig.logDirectory, function (err, files) {
       if (err) throw err;
       //logger.info('files'+files);
 
@@ -171,7 +171,7 @@ exports.home = function(req, res){
         filename = req.params.datacenter.substring (start);
             //logger.info('|filename    >'+filename);
 
-        fs.readFile(logConfig.logDir+filename, function (err, datas) {
+        fs.readFile(logConfig.logDirectory+filename, function (err, datas) {
           if (err) throw err;
           //logger.log(data);
            datas = datas.toString();

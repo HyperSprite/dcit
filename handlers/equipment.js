@@ -364,7 +364,7 @@ exports.dcEquipPages = function(req,res,next){
                                 equipPSUCount: eq.equipPSUCount,
                                 equipPSUDraw: eq.equipPSUDraw,
                                 equipAddOns: eq.equipAddOns,
-                                equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                                equipReceived: strTgs.dateMod(eq.equipReceived),
                                 equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
                                 equipInService: strTgs.dateMod(eq.equipInService),
                                 equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
@@ -459,7 +459,7 @@ exports.dcEquipPages = function(req,res,next){
                                 equipPSUCount: eq.equipPSUCount,
                                 equipPSUDraw: eq.equipPSUDraw,
                                 equipAddOns: eq.equipAddOns,
-                                equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                                equipReceived: strTgs.dateMod(eq.equipReceived),
                                 equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
                                 equipInService: strTgs.dateMod(eq.equipInService),
                             //    equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
@@ -563,7 +563,7 @@ exports.dcEquipmentPost = function(req,res){
             equipPSUCount: strTgs.uTrim(data.equipPSUCount),
             equipPSUDraw: strTgs.uTrim(data.equipPSUDraw),
             equipAddOns: strTgs.uTrim(data.equipAddOns),
-            equipRecieved: strTgs.dateAddTZ(data.equipRecieved,req.session.ses.timezone),
+            equipReceived: strTgs.dateAddTZ(data.equipReceived,req.session.ses.timezone),
             equipAcquisition: strTgs.dateAddTZ(data.equipAcquisition,req.session.ses.timezone),
             equipInService: strTgs.dateAddTZ(data.equipInService,req.session.ses.timezone),
             equipEndOfLife: strTgs.dateAddTZ(data.equipEndOfLife,req.session.ses.timezone),
@@ -685,7 +685,7 @@ exports.dcEquipmentPost = function(req,res){
                         thisDoc.equipPSUCount = strTgs.uCleanUp(thisDoc.equipPSUCount,data.equipPSUCount);
                         thisDoc.equipPSUDraw = strTgs.uCleanUp(thisDoc.equipPSUDraw,data.equipPSUDraw);
                         thisDoc.equipAddOns = strTgs.uCleanUp(thisDoc.equipAddOns,data.equipAddOns);
-                        thisDoc.equipRecieved = strTgs.dCleanup(thisDoc.equipRecieved,data.equipRecieved,req.session.ses.timezone);
+                        thisDoc.equipReceived = strTgs.dCleanup(thisDoc.equipReceived,data.equipReceived,req.session.ses.timezone);
                         thisDoc.equipAcquisition = strTgs.dCleanup(thisDoc.equipAcquisition,data.equipAcquisition,req.session.ses.timezone);
                         thisDoc.equipInService = strTgs.dCleanup(thisDoc.equipInService,data.equipInService,req.session.ses.timezone);
                         thisDoc.equipEndOfLife = strTgs.dCleanup(thisDoc.equipEndOfLife,data.equipEndOfLife,req.session.ses.timezone);
@@ -781,7 +781,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipSubModel: eq.equipSubModel,
                             equipAddOns: eq.equipAddOns,
                             equipRUHieght: eq.equipRUHieght,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                            equipReceived: strTgs.dateMod(eq.equipReceived),
                             equipPONum: eq.equipPONum,
                             equipInvoice: eq.equipInvoice,
                             equipProjectNum: eq.equipProjectNum,
@@ -859,7 +859,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipSubModel: eq.equipSubModel,
                             equipAddOns: eq.equipAddOns,
                             equipRUHieght: eq.equipRUHieght,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                            equipReceived: strTgs.dateMod(eq.equipReceived),
                             equipPONum: eq.equipPONum,
                             equipInvoice: eq.equipInvoice,
                             equipProjectNum: eq.equipProjectNum,
@@ -952,7 +952,7 @@ exports.dcRackElevationPage = function(req,res,next){
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
                             equipAddOns: eq.equipAddOns,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                            equipReceived: strTgs.dateMod(eq.equipReceived),
                             equipPONum: eq.equipPONum,
                             equipProjectNum: eq.equipProjectNum,
                             createdOn: strTgs.dateMod(eq.createdOn),
@@ -1047,7 +1047,7 @@ exports.dcRackElevationPage = function(req,res,next){
                             equipMake: eq.equipMake,
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
-                            equipRecieved: strTgs.dateMod(eq.equipRecieved),
+                            equipReceived: strTgs.dateMod(eq.equipReceived),
                             equipPONum: eq.equipPONum,
                             equipProjectNum: eq.equipProjectNum,
                             createdOn: strTgs.dateMod(eq.createdOn),
