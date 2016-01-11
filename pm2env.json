@@ -1,0 +1,21 @@
+// pm2 environment file, run: pm2 start pm2env.json --env production
+{
+  "apps" : [{
+    // app DCIT
+    "name"             : "dcit",
+    "script"           : "dcit.js",
+    "watch"            : false,
+    "autorestart"      : true,
+    "exec_mode"        : "cluster",
+    "instances"        : 0,
+    "env" : {
+      "env_production" : {
+        "NODE_ENV"     : "production",
+        "production"   : true,
+      },
+    },
+    "error_file"       : "/var/appjs/log/dcit.stderr.log",
+    "out_file"         : "/var/appjs/log/dcit.stdout.log",
+    "log_date_format"  : "YYYY-MM-DD HH:mm Z",
+}]
+}
