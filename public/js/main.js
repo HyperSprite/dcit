@@ -125,3 +125,12 @@ $(document).ready(function() {
     }
   });
 });
+
+$(function() {
+  $('table.table-sort').tablesort(); // http://www.jqueryscript.net/table/jQuery-Plugin-For-Sortable-Searchable-Tables-Tablesort.html
+  });
+
+  $('input#timezone').val(jstz.determine().name());
+  $('.noEnterSubmit').keypress(function(e) {
+    if (e.which == 13) return false;
+  });

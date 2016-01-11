@@ -31,6 +31,7 @@ module.exports = function(app) {
   // miscellaneous routes
   app.get('/', handlers.main.home);
   app.get('/about', handlers.main.about);
+  app.get('/help', handlers.main.help);
 
   // testing/sample routes
   app.get('/jquery-test', handlers.samples.jqueryTest);

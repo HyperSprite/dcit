@@ -14,11 +14,18 @@
               <br>{{/if}}
               <ul class="list-unstyled">
               {{#if conURL}}
-              <li><a href="http://{{conURL}}" target="_top">{{conURL}}</a></li>{{/if}} {{#if conPho1Num}}
-              <li>{{conPho1Num}} - {{conPho1Typ}}</li>{{/if}} {{#if conPho2Num}}
-              <li>{{conPho2Num}} - {{conPho2Typ}}</li>{{/if}} {{#if conPho3Num}}
-              <li>{{conPho3Num}} - {{conPho3Typ}}</li>{{/if}} {{#if conPho4Num}}
-              <li>{{conPho4Num}} - {{conPho4Typ}}</li>{{/if}} {{#if conEmail}}
+              <li><a href="http://{{conURL}}" target="_top">{{conURL}}</a></li>
+              {{/if}}
+              {{#if conPho1Num}}
+              <li><a href="tel:{{conPho1Num}}">{{conPho1Num}}</a> - {{conPho1Typ}}</li>
+              {{/if}} 
+              {{#if conPho2Num}}
+              <li><a href="tel:{{conPho2Num}}">{{conPho2Num}}</a> - {{conPho2Typ}}</li>
+              {{/if}} {{#if conPho3Num}}
+              <li><a href="tel:{{conPho3Num}}">{{conPho3Num}}</a> - {{conPho3Typ}}</li>
+              {{/if}} {{#if conPho4Num}}
+              <li><a href="tel:{{conPho4Num}}">{{conPho4Num}}</a> - {{conPho4Typ}}</li>
+              {{/if}} {{#if conEmail}}
               <li><a href="mailto:{{conEmail}}" target="_top">{{conEmail}}</a></li>{{/if}} {{#if conNotes}}
               <li>
               <div> 

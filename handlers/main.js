@@ -22,3 +22,12 @@ exports.about = function(req, res){
             };
 	res.render('about', context);
 };
+
+exports.help = function(req, res){
+        context = {
+            access : accConfig.accessCheck(req.user),
+            user : req.user,
+            requrl : req.url,
+            };
+    res.render('help', context);
+};

@@ -1,0 +1,74 @@
+     {{#if access.read}}
+      <ul class="nav navbar-nav navbar-left">
+      <li>
+        <form id="multiForm" class="navbar-form navbar-left" role="search" autocomplete="off" action="/reports/multi-" method="get">
+          <div class="form-group"> <!-- topnav.formgroup1 -->
+            <label class="sr-only" for="field-multiCat">Search in</label>
+            <select id="field-multiCat" class="form-control" name="searchIn">
+              <option {{{selOption 'system~systemName' lastSearch}}}>System Names</option>
+              <option {{{selOption 'system~systemAlias' lastSearch}}}>System Alias</option>
+              <option {{{selOption 'system~systemParentId' lastSearch}}}>System Parent</option>
+              <option {{{selOption 'system~systemTicket' lastSearch}}}>System Ticket</option>
+              <option {{{selOption 'system~modifiedBy' lastSearch}}}>System Modified By</option>
+              <option {{{selOption 'system~sysPortEndPoint' lastSearch}}}>System EndPoint</option>
+              <option {{{selOption 'system~sysPortAddress' lastSearch}}}>System IP Address</option>
+              <option {{{selOption 'system~sysPortCablePath' lastSearch}}}>System Cable Number</option>
+              {{#if access.edit}}
+              <option {{{selOption 'equipment~equipLocation' lastSearch}}}>Location</option> {{/if}}
+              <option {{{selOption 'equipment~equipSN' lastSearch}}}>Equipment SN</option>
+              <option {{{selOption 'equipment~equipAssetTag' lastSearch}}}>Equipment Asset Tag</option>
+              <option {{{selOption 'equipment~equipTicketNumber' lastSearch}}}>Equipment Ticket</option>
+              <option {{{selOption 'equipment~equipPONum' lastSearch}}}>Equipment PO Number</option>
+              <option {{{selOption 'equipment~equipInvoice' lastSearch}}}>Equipment Invoice</option>
+              <option {{{selOption 'equipment~equipProjectNum' lastSearch}}}>Equipment Project</option>
+              <option {{{selOption 'equipment~modifiedBy' lastSearch}}}>Equipment Modified By</option>
+              <option {{{selOption 'equipment~equipPortsAddr' lastSearch}}}>Equipment MAC Address</option>
+            </select>
+          </div> <!-- /topnav.formgroup1 -->
+          <div class="form-group"> <!-- topnav.formgroup2 -->
+            <label class="sr-only" for="field-multiText">Search for</label>
+            <input id="field-multiText" type="text" class="form-control" pattern=".{3,}" required name="searchFor" placeholder="? (3 char min)">
+          </div>
+          <!-- /topnav.formgroup2 -->
+          <button type="submit" class="sr-only btn btn-primary" value='Submit'>Submit</button>
+        </form>
+      </li>
+
+      {{#if drop1}}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop1}}<b class="caret"></b></a>
+        <ul class="dropdown-menu drop-columns pull-right">
+          {{#each drop1each}}
+          <li><a href="{{{../drop1url}}}{{this}}">{{this}}</a></li>
+          {{/each}}
+        </ul>
+      </li>{{/if}} {{#if drop2}}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop2}}<b class="caret"></b></a>
+        <ul class="dropdown-menu drop-columns pull-right">
+          {{#each drop2each}}
+          <li><a href="{{{../drop2url}}}{{this}}">{{this}}</a></li>
+          {{/each}}
+        </ul>
+      </li>{{/if}} {{#if drop3}}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{drop3}}<b class="caret"></b></a>
+        <ul class="dropdown-menu drop-columns pull-right">
+          {{#each drop3each}}
+          <li><a href="{{{../drop3url}}}{{this}}">{{this}}</a></li>
+          {{/each}}
+        </ul>
+      </li>{{/if}} {{#if menu1}}
+      <li><a href="{{menuLink1}}">{{menu1}}</a>
+      </li> {{/if}} {{#if menu2}}
+      <li><a href="{{menuLink2}}">{{menu2}}</a>
+      </li> {{/if}} {{#if menu3}}
+      <li><a href="{{menuLink3}}">{{menu3}}</a>
+      </li> {{/if}} {{#if menu4}}
+      <li><a href="{{menuLink4}}">{{menu4}}</a>
+      </li> {{/if}} {{#if lastPage}}
+      <li><a href="{{lastPage}}">Back</a>
+      </li> 
+      {{/if}}
+      </ul>
+      {{/if}}

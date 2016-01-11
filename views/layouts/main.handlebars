@@ -2,119 +2,89 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
 
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{{#if titleNow}}{{titleNow}} - {{/if}}DCIT</title>
+  {{#if showTests}}
+  <link rel="stylesheet" href="{{static '/vendor/mocha.css'}}"> {{/if}} {{{_sections.head}}}
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{static '/vendor/tablesort/css/tablesort.css'}}">
+  <link rel="stylesheet" href="{{static '/vendor/tablesort/css/styles.css'}}">
+  <link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap.css'}}">
+  <link rel="stylesheet" href="{{static '/vendor/bootstrap-table/dist/bootstrap-table.css'}}">
+  <link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap-theme.min.css'}}">
+  <link rel="stylesheet" href="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.css'}}">
+  <link rel="stylesheet" href="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.theme.css'}}">
+  <link rel="stylesheet" href="{{static '/css/custom.css'}}">
 
+  <script src="{{static '/vendor/js/d3.v3.js'}}"></script>
+</head>
 
-
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	    <title>{{#if titleNow}}{{titleNow}} - {{/if}}DCIT</title>
-		{{#if showTests}}
-			<link rel="stylesheet" href="{{static '/vendor/mocha.css'}}">
-		{{/if}}
-		{{{_sections.head}}}
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <link rel="stylesheet" href="{{static '/vendor/tablesort/css/tablesort.css'}}">
-        <link rel="stylesheet" href="{{static '/vendor/tablesort/css/styles.css'}}">
-		<link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap.css'}}">
-        <link rel="stylesheet" href="{{static '/vendor/bootstrap-table/dist/bootstrap-table.css'}}">
-        <link rel="stylesheet" href="{{static '/vendor/bootstrap/css/bootstrap-theme.min.css'}}">
-        <link rel="stylesheet" href="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.css'}}">
-        <link rel="stylesheet" href="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.theme.css'}}">
-        <link rel="stylesheet" href="{{static '/css/custom.css'}}">
-        <style>
-            body {
-                padding-top: 14px;
-                padding-bottom: 14px;
-            }
-        </style>
-        <script src="{{static '/vendor/js/d3.v3.js'}}"></script>
-
-  
-    </head>
-    <body>
-        <!--[if lt IE 7]>
+<body>
+  <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <header>
+  {{> topnav}}
+  <div class="container"> <!-- main.2 -->
+    {{#if flash}}
+    <div class="alert alert-dismissible alert-{{flash.type}}"> <!-- alert -->
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>{{flash.intro}}</strong> {{{flash.message}}}
+    </div> <!-- /alert -->
+    {{/if}} {{{body}}}
+  </div> <!-- /main.2 -->
+  
+ <div class="push"></div>
+ </div>
 
+  <div class="footer"> <!-- footer-->
+    <hr>
+    <footer>
+      <p><a href="/about">&copy; HyperSprite 2014</a></p>
+    </footer>
+  </div> <!-- /footer-->
+ 
+  <script>
+    window.jQuery || document.write('<script src="{{static '/vendor/js/jquery-2.1.1.min.js'}}"><\/script>')
+  </script>
+  {{#if showTests}}
+    <div id="mocha">
+    </div>
+    <script src="{{static '/vendor/mocha.js'}}"></script>
+    <script src="{{static '/vendor/chai.js'}}"></script>
+    <script>
+    mocha.ui('tdd');
+    var assert = chai.assert;
+   </script>
+   <script src="{{static '/qa/tests-global.js'}}"></script>
+  {{#if pageTestScript}}
+   <script src="{{pageTestScript}}"></script>
+  {{/if}}
+    <script>
+    mocha.run();
+  </script>
+  {{/if}}
+  <script src="{{static '/vendor/js/jquery-2.1.4.min.js'}}"></script>
+  <script src="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.js'}}"></script>
+  <script src="{{static '/vendor/js/jquery.autocomplete.min.js'}}"></script>
+  <script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
+  <script src="{{static '/vendor/bootstrap-table/dist/bootstrap-table.min.js'}}"></script>
+  <script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
+  <script src='{{static '/js/main.js'}}'></script>
+  <script src="{{static '/js/tocsvpartial.js'}}"></script>
+  <script src="{{static '/vendor/jquery-validate/jquery.validate.min.js'}}"></script>
+  <script src="{{static '/vendor/tableexport/tableexport.min.js'}}"></script>
+  <script src="{{static '/vendor/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js'}}"></script>
+  <script src="{{static '/vendor/tablesort/tablesort.js'}}"></script>
+  <script src="{{static '/vendor/js/handlebars.min.js'}}"></script>
+  <script src="{{static '/vendor/js/jstz-1.0.4.min.js'}}"></script>
 
-		</header>
-         <div class="navbar" > <!-- main.1 -->
-          <div > <!-- main.1.1 -->
-           {{> topnav}}
-          </div> <!-- /main.1.1 -->
-        </div> <!-- /main.1 -->
-        
-	    <div class="container-fluid"> <!-- main.2 -->
-			{{#if flash}}
-				<div class="alert alert-dismissible alert-{{flash.type}}"> <!-- alert -->
-					<button type="button" class="close" 
-						data-dismiss="alert" aria-hidden="true">&times;</button>
-					<strong>{{flash.intro}}</strong> {{{flash.message}}}
-				</div> <!-- /alert -->
-			{{/if}}
+</body>
 
-		    {{{body}}}
-      </div> <!-- /main.2 --> 
-
-      <div> <!-- footer-->
-			<hr>
-			<footer>
-                <p>&copy; HyperSprite 2014 <a href="/about">About</a></p>
-			</footer>
-      </div> <!-- /footer-->
-
-		  <script>window.jQuery || document.write('<script src="{{static '/vendor/js/jquery-2.1.1.min.js'}}"><\/script>')</script>
-		{{#if showTests}}
-			<div id="mocha"></div>
-			<script src="{{static '/vendor/mocha.js'}}"></script>
-			<script src="{{static '/vendor/chai.js'}}"></script>
-			<script>
-				mocha.ui('tdd');
-				var assert = chai.assert;
-			</script>
-			<script src="{{static '/qa/tests-global.js'}}"></script>
-			{{#if pageTestScript}}
-				<script src="{{pageTestScript}}"></script>
-			{{/if}}
-			<script>mocha.run();</script>
-		{{/if}}
-        <script src="{{static '/vendor/js/jquery-2.1.4.min.js'}}"></script>
-        <script src="{{static '/vendor/jquery-ui-1.11.4/jquery-ui.js'}}"></script>
-        <script src="{{static '/vendor/js/jquery.autocomplete.min.js'}}"></script>
-        <script src="{{static '/vendor/bootstrap/js/bootstrap.min.js'}}"></script>
-        <script src="{{static '/vendor/bootstrap-table/dist/bootstrap-table.min.js'}}"></script>
-        <script src="{{static '/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js'}}"></script>
-
-        <script src='{{static '/js/main.js'}}'></script>       
-        <script src="{{static '/js/tocsvpartial.js'}}"></script>        
-
-        <script src="{{static '/vendor/jquery-validate/jquery.validate.min.js'}}"></script>
-        <script src="{{static '/vendor/tableexport/tableexport.min.js'}}"></script>
-        <script src="{{static '/vendor/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js'}}"></script>
-        <script src="{{static '/vendor/tablesort/tablesort.js'}}"></script>
-        <script src="{{static '/vendor/js/handlebars.min.js'}}"></script>
-        <script src="{{static '/vendor/js/jstz-1.0.4.min.js'}}"></script>
-
-        <script type="text/javascript">
-            
-            $(function () {
-                $('table.table-sort').tablesort();
-                // http://www.jqueryscript.net/table/jQuery-Plugin-For-Sortable-Searchable-Tables-Tablesort.html
-            });
-        </script> 
-        <script> 
-            $('input#timezone').val( jstz.determine().name() );
-            $('.noEnterSubmit').keypress(function(e){
-                if ( e.which == 13 ) return false;
-            });
-        </script>
-
-
-    </body>
 </html>
