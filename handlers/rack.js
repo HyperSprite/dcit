@@ -27,11 +27,7 @@ this is the Rack List block. Looks for 'List' in the URL and returns list of dat
 */
 exports.dcRackPages = function(req,res,next){
     if (accConfig.accessCheck(req.user).read !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{
 //logger.info('***********exports.dcRackPages First >' +req.params.datacenter);
@@ -427,12 +423,8 @@ link to this looks
 */
 exports.dcRackPost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
-        return res.redirect(303, '/');
+    req.session.flash = strTgs.notAuth;
+    return res.redirect(303, '/');
     }else{ 
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
@@ -561,11 +553,7 @@ exports.dcRackPost = function(req,res){
 */
 exports.rackDelete = function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     res.abbreviation = req.body.abbreviation;
@@ -607,11 +595,7 @@ if (req.body.rackUnique){
 
 exports.dcRackPowPost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     // this makes the abbreviation available for the URL
@@ -696,11 +680,7 @@ exports.dcRackPowPost = function(req,res){
 
 exports.rackSubDelete = function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     res.abbreviation = req.body.abbreviation;

@@ -35,11 +35,7 @@ this is the Equip List block. Looks for 'List' in the URL and returns list of Eq
 */
 exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     // logger.info('***********exports.dcSystemPages First >' +req.params.datacenter);
@@ -499,11 +495,7 @@ exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
 
 exports.dcSystemPortPages = function fdcSystemPortPages(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     //logger.info('--------------------exports.dcSystemPortPages First >');
@@ -806,11 +798,7 @@ function queryString(findThis, opt, searchIn) {
 
 exports.dcSystembyEnvRole = function fdcSystembyEnvRole(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     //    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
@@ -1084,11 +1072,7 @@ aggregate({ $match: { seller: user, status: 'completed' } }, {
 
 exports.findEndpoints = function ffindEndpoints(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     var fEndPoint = req.params.datacenter.toLowerCase();
@@ -1192,11 +1176,7 @@ exports.findEndpoints = function ffindEndpoints(req, res, next) {
 */
 exports.dcSystemPost = function(req, res) {
   if (accConfig.accessCheck(req.user).edit !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     var bd = req.body;
@@ -1420,11 +1400,7 @@ findOne({
 
 exports.dcSystemNameChange = function(req, res) {
   if (accConfig.accessCheck(req.user).delete !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     //    logger.info('req.params.datacenter >>>>>> '+req.params.datacenter);
@@ -1514,11 +1490,7 @@ function countPortEndPoint(oldSystemName, systemName) {
 
 exports.dcSystemNameChangePost = function(req, res) {
   if (accConfig.accessCheck(req.user).delete !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     var oldSystemName = strTgs.csTrim(req.body.oldSystemName);
@@ -1607,11 +1579,7 @@ exports.dcSystemNameChangePost = function(req, res) {
 */
 exports.dcsystemDelete = function(req, res) {
   if (accConfig.accessCheck(req.user).delete !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     res.abbreviation = req.body.systemName;
@@ -1657,11 +1625,7 @@ exports.dcsystemDelete = function(req, res) {
 exports.dcsystemSubDelete = function(req, res) {
   logger.info('portSubDelete');
   if (accConfig.accessCheck(req.user).delete !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     res.abbreviation = req.body.abbreviation;

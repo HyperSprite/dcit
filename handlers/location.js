@@ -1,20 +1,16 @@
-    
-var         strTgs = require('../lib/stringThings.js'),
-         accConfig = require('../config/access'),
-      seedDataLoad = require('../seedDataLoad.js'),
-              dcit = require('../dcit.js'),
-          ObjectId = require('mongoose').Types.ObjectId,
-            logger = require('../lib/logger.js'),
-IpSubnetCalculator = require( 'ip-subnet-calculator' );
+const strTgs = require('../lib/stringThings.js');
+const accConfig = require('../config/access');
+const seedDataLoad = require('../seedDataLoad.js');
+const dcit = require('../dcit.js');
+const ObjectId = require('mongoose').Types.ObjectId;
+const logger = require('../lib/logger.js');
+const IpSubnetCalculator = require( 'ip-subnet-calculator' );
 // Models
-var Datacenter = require('../models/datacenter.js'),
-          Rack = require('../models/rack.js'),
-     Optionsdb = require('../models/options.js'),
-     Equipment = require('../models/equipment.js'),
-      Systemdb = require('../models/system.js');    
-    
-    
-var ObjectId = require('mongoose').Types.ObjectId;
+const Datacenter = require('../models/datacenter.js');
+const Rack = require('../models/rack.js');
+const Optionsdb = require('../models/options.js');
+const Equipment = require('../models/equipment.js');
+const Systemdb = require('../models/system.js');
 
 // convenience function for joining fields
 function smartJoin(arr, separator){
@@ -29,58 +25,51 @@ function smartJoin(arr, separator){
 // ***** Datacenter ******************************************
 // these are used by the arrayByType function to return a specific value.
 var dbqCity = {
-    dKey: 'conType',
-    dVal: 'Main',
-    dRet: 'city'
+  dKey: 'conType',
+  dVal: 'Main',
+  dRet: 'city',
 };
 var dbqCountry = {
-    dKey: 'conType',
-    dVal: 'Main',
-    dRet: 'country'
+  dKey: 'conType',
+  dVal: 'Main',
+  dRet: 'country',
 };
 /*
-    
 Datacenter List
-
 this is the DC List block. Looks for "List" in the URL and returns list of datacenters with city and country from Main contact.
 */
-exports.datacenterPages = function(req,res,next){
-        if (accConfig.accessCheck(req.user).read !== 1){
-            req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
-        return res.redirect(303, '/');
-    }else{ 
-//logger.info('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
-    if (req.params.datacenter === 'list' || !req.params.datacenter){
+exports.datacenterPages = function(req,res,next) {
+  if (accConfig.accessCheck(req.user).read !== 1) {
+    req.session.flash = strTgs.notAuth;
+    return res.redirect(303, '/');
+  } else {
+  // logger.info('***********exports.datacenterPages First ' /*+req.params.datacenter*/);
+    if (req.params.datacenter === 'list' || !req.params.datacenter) {
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
-         Datacenter.find(function(err, datacenters){
-            var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
-                ses: req.session.ses,
-                datacenters: datacenters.map(function(dc){
-                    //var dc = datacenter;
-                    //logger.info(dc);
-                    return {
-                        id: dc._id,
-                        fullName: dc.fullName,
-                        titleNow: 'Datacenter List',
-                        abbreviation: dc.abbreviation,
-                        foundingCompany:dc.foundingCompany,
-                        city:strTgs.arrayByType(dc.contacts,dbqCity),
-                        country:strTgs.arrayByType(dc.contacts,dbqCountry),
-
-                    };
-                })
+      Datacenter.find(function(err, datacenters) {
+        var context = {
+          access: accConfig.accessCheck(req.user),
+          user: req.user,
+          requrl: req.url,
+          ses: req.session.ses,
+          datacenters: datacenters.map(function(dc){
+          //var dc = datacenter;
+          //logger.info(dc);
+            return {
+              id: dc._id,
+              fullName: dc.fullName,
+              titleNow: 'Datacenter List',
+              abbreviation: dc.abbreviation,
+              foundingCompany:dc.foundingCompany,
+              city:strTgs.arrayByType(dc.contacts,dbqCity),
+              country:strTgs.arrayByType(dc.contacts,dbqCountry),
             };
+          }),
+        };
             // the 'location/datacenter-list' is the view that will be called
             // context is the data from above
-            res.render('location/datacenter-list', context );
-        });
+        res.render('location/datacenter-list', context );
+      });
 
 /*
 Datacenter Contact Edit for single doc
@@ -89,286 +78,276 @@ Edit Contact
 //this is the DC edit block. Looks for "contact" in the URL and redirects to a form to edit the Datacenter.
 */
     } else if (req.params.datacenter.indexOf ('contact') !=-1){
-        //logger.info('else if (req.params.datacenter.indexOf ("contact")');
-        //logger.info("datacenter "+req.params.datacenter);
-        start = req.params.datacenter.indexOf ('~')+1;
+        // logger.info('else if (req.params.datacenter.indexOf ("contact")');
+        // logger.info("datacenter "+req.params.datacenter);
+      start = req.params.datacenter.indexOf ('~')+1;
         //    logger.info("|start   >"+start);
-        dcInfo = req.params.datacenter.substring (start);
+      dcInfo = req.params.datacenter.substring (start);
         //    logger.info("|dcInfo  >"+dcInfo);
-        dcSplit = dcInfo.indexOf ('-');
+      dcSplit = dcInfo.indexOf ('-');
         //    logger.info("|dcSplit >"+dcSplit);
-        dcSubId = dcInfo.substring (dcSplit+1);
+      dcSubId = dcInfo.substring (dcSplit+1);
          //   logger.info("|dcSubId >"+dcSubId);
-        dcId = dcInfo.substring (0,dcSplit);
+      dcId = dcInfo.substring (0,dcSplit);
         //    logger.info("|dcId    >"+dcId);
 
-        Datacenter.findById(dcId,function(err,datacenter){
+      Datacenter.findById(dcId,function(err,datacenter){
         var dc = datacenter;
         var context;
         if (dcSubId === 'new'){
-            context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
-                ses: req.session.ses,
-                id:dc._id,
-                titleNow:dc.abbreviation,
-                fullName:dc.fullName,
-                abbreviation:dc.abbreviation,
-                createdOn: strTgs.dateMod(dc.createdOn),
-                foundingCompany:dc.foundingCompany,
-                };
-            res.render('location/datacentercontact', context);
+          context = {
+            access: accConfig.accessCheck(req.user),
+            user: req.user,
+            requrl: req.url,
+            ses: req.session.ses,
+            id:dc._id,
+            titleNow:dc.abbreviation,
+            fullName:dc.fullName,
+            abbreviation:dc.abbreviation,
+            createdOn: strTgs.dateMod(dc.createdOn),
+            foundingCompany:dc.foundingCompany,
+          };
+          res.render('location/datacentercontact', context);
         } else {
-       
-        var thisSubDoc = datacenter.contacts.id(dcSubId);
 
-        if(err) return next(err);
-        if(!datacenter) return next();
-//logger.info(datacenter);
-            context ={
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
-                ses: req.session.ses,
-                id:dc._id,
-                fullName:dc.fullName,
-                abbreviation:dc.abbreviation,
-                createdOn: strTgs.dateMod(dc.createdOn),
-                foundingCompany:dc.foundingCompany,
-                titleNow:thisSubDoc.conName+' - '+dc.abbreviation,
-                menu1: dc.abbreviation,
-                menuLink1: '',
-               
-                        conId : thisSubDoc.id,
-                        conGuid: thisSubDoc.conGuid,
-                        conType: thisSubDoc.conType,
-                        conName: thisSubDoc.conName,
-                        address1: thisSubDoc.address1,
-                        address2: thisSubDoc.address2,
-                        address3: thisSubDoc.address3,
-                        address4: thisSubDoc.address4,
-                        city:thisSubDoc.city,
-                        state:thisSubDoc.state,
-                        country:thisSubDoc.country,
-                        zip:thisSubDoc.zip,
-                        lat:thisSubDoc.lat,
-                        lon:thisSubDoc.lon,
-                        conEmail: thisSubDoc.conEmail,
-                        conURL: thisSubDoc.conURL,
-                        conPho1Num: thisSubDoc.conPho1Num,
-                        conPho1Typ: thisSubDoc.conPho1Typ,
-                        conPho2Num: thisSubDoc.conPho2Num,
-                        conPho2Typ: thisSubDoc.conPho2Typ,
-                        conPho3Num: thisSubDoc.conPho3Num,
-                        conPho3Typ: thisSubDoc.conPho3Typ,                        
-                        conPho4Num: thisSubDoc.conPho4Num,
-                        conPho4Typ: thisSubDoc.conPho4Typ,        
-                        conNotes: thisSubDoc.conNotes, 
-                    
-                };
-                
-        //logger.info(context);
-        res.render('location/datacentercontact', context);  
+          var thisSubDoc = datacenter.contacts.id(dcSubId);
+
+          if(err) return next(err);
+          if(!datacenter) return next();
+            // logger.info(datacenter);
+          context ={
+            access : accConfig.accessCheck(req.user),
+            user : req.user,
+            requrl : req.url,
+            ses: req.session.ses,
+            id:dc._id,
+            fullName:dc.fullName,
+            abbreviation:dc.abbreviation,
+            createdOn: strTgs.dateMod(dc.createdOn),
+            foundingCompany:dc.foundingCompany,
+            titleNow:thisSubDoc.conName+' - '+dc.abbreviation,
+            menu1: dc.abbreviation,
+            menuLink1: '',
+            conId : thisSubDoc.id,
+            conGuid: thisSubDoc.conGuid,
+            conType: thisSubDoc.conType,
+            conName: thisSubDoc.conName,
+            address1: thisSubDoc.address1,
+            address2: thisSubDoc.address2,
+            address3: thisSubDoc.address3,
+            address4: thisSubDoc.address4,
+            city:thisSubDoc.city,
+            state:thisSubDoc.state,
+            country:thisSubDoc.country,
+            zip:thisSubDoc.zip,
+            lat:thisSubDoc.lat,
+            lon:thisSubDoc.lon,
+            conEmail: thisSubDoc.conEmail,
+            conURL: thisSubDoc.conURL,
+            conPho1Num: thisSubDoc.conPho1Num,
+            conPho1Typ: thisSubDoc.conPho1Typ,
+            conPho2Num: thisSubDoc.conPho2Num,
+            conPho2Typ: thisSubDoc.conPho2Typ,
+            conPho3Num: thisSubDoc.conPho3Num,
+            conPho3Typ: thisSubDoc.conPho3Typ,
+            conPho4Num: thisSubDoc.conPho4Num,
+            conPho4Typ: thisSubDoc.conPho4Typ,
+            conNotes: thisSubDoc.conNotes,
+          };
+        // logger.info(context);
+          res.render('location/datacentercontact', context);
         }});
 
 /*
-Datacenter Main New and Edit  
+Datacenter Main New and Edit
 
 New is Working
 this is the DC edit block. Looks for "edit" in the URL and redirects to a form to edit the Datacenter.
 If "New" is in the URL, it does New, otherwise it goes to existing
 */
-    } else if (req.params.datacenter.indexOf ('edit') !=-1){
-            if(!req.user || req.user.access < 3){
+    } else if (req.params.datacenter.indexOf('edit') != -1) {
+      if (!req.user || req.user.access < 3) {
         req.session.flash = {
-        type: 'danger',
-        intro: 'Not Authorized!',
-        message: 'You are not authorized for this action.',
-    };
+          type: 'danger',
+          intro: 'Not Authorized!',
+          message: 'You are not authorized for this action.',
+        };
         return res.redirect(303, '/home');
-    }else{
-//logger.info('else if (req.params.datacenter.indexOf ("edit")');
-        start = req.params.datacenter.indexOf ('-');
-        dcabbr = req.params.datacenter.substring (start+1);
-        
-        if (dcabbr ==='new'){
-            var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
-                ses: req.session.ses,
-                };                   
-        res.render('location/datacenteredit', context);
+      } else {
+      // logger.info('else if (req.params.datacenter.indexOf ("edit")');
+        start = req.params.datacenter.indexOf('-');
+        dcabbr = req.params.datacenter.substring( start + 1);
+        if (dcabbr === 'new') {
+          var context = {
+            access: accConfig.accessCheck(req.user),
+            user: req.user,
+            requrl: req.url,
+            ses: req.session.ses,
+          };                   
+          res.render('location/datacenteredit', context);
         } else {
         
-        //logger.info('edit called' + dcabbr);
-            Datacenter.findOne({abbreviation: dcabbr},function(err,datacenter){
-        if(err) return next(err);
-        if(!datacenter) return next();
-        //logger.info(datacenter);
-            var dc = datacenter;
-            var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
-                ses: req.session.ses,
-                id:dc._id,
-                fullName:dc.fullName,
-                abbreviation:dc.abbreviation,
-                createdOn: strTgs.dateMod(dc.createdOn),
-                foundingCompany:dc.foundingCompany,
-                };            
-
-        //logger.info(context);
-        res.render('location/datacenteredit', context);  
-        });
+        // logger.info('edit called' + dcabbr);
+          Datacenter.findOne({abbreviation: dcabbr}, function(err, datacenter) {
+          if(err) return next(err);
+          if(!datacenter) return next();
+          // logger.info(datacenter);
+          var dc = datacenter;
+          var context = {
+            access : accConfig.accessCheck(req.user),
+            user : req.user,
+            requrl : req.url,
+            ses: req.session.ses,
+            id:dc._id,
+            fullName:dc.fullName,
+            abbreviation:dc.abbreviation,
+            createdOn: strTgs.dateMod(dc.createdOn),
+            foundingCompany:dc.foundingCompany,
+          };
+        // logger.info(context);
+            res.render('location/datacenteredit', context);
+          });
         }}
-    }  else {
-
+    } else {
 /*
 Datacenter Full display
 
 Working but not sure if I need it any more
 this takes the abbreviation and displays the matching datacenter details
-*/  
-    Datacenter.findOne({abbreviation: req.params.datacenter},function(err,datacenter){
-        if(err) return next(err);
-        if(!datacenter) return next();
-        //logger.info(datacenter);
-        //logger.info ('Datacenter.findOne - abbreviation to matching datacenter');
+*/
+      Datacenter.findOne({abbreviation: req.params.datacenter}, function(err, datacenter) {
+        if (err) return next(err);
+        if (!datacenter) return next();
+        // logger.info(datacenter);
+        // logger.info ('Datacenter.findOne - abbreviation to matching datacenter');
         var dc = datacenter;
         // looks up racks in Rack based on datacenter id
-        Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err,racks){
-        //logger.info ('Rack - id to matching rack to datacenter'+ dc._id); 
-            var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
-                ses: req.session.ses,
-                menu1: dc.abbreviation,
-                menuLink1: '/location/datacenter/'+dc.abbreviation,
+        Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err, racks) {
+        // logger.info ('Rack - id to matching rack to datacenter'+ dc._id);
+          var context = {
+            access : accConfig.accessCheck(req.user),
+            user : req.user,
+            requrl : req.url,
+            ses: req.session.ses,
+            menu1: dc.abbreviation,
+            menuLink1: '/location/datacenter/'+dc.abbreviation,
+            id:dc._id,
+            titleNow:dc.abbreviation,
+            fullName:dc.fullName,
+            abbreviation:dc.abbreviation,
+            foundingCompany:dc.foundingCompany,
+            createdOn: strTgs.dateMod(dc.createdOn),
+            powerNames: dc.powerNames,
+            contacts: dc.contacts.map(function(contact){
+              var ct = contact;
+              return {
                 id:dc._id,
-                titleNow:dc.abbreviation,
-                fullName:dc.fullName,
-                abbreviation:dc.abbreviation,
-                foundingCompany:dc.foundingCompany,
-                createdOn: strTgs.dateMod(dc.createdOn),
-                powerNames: dc.powerNames,
-                contacts: dc.contacts.map(function(contact){
-                    var ct = contact;
-                    return {
-                        id:dc._id,
-                        conId: ct.id,
-                        conType: ct.conType,
-                        conName: ct.conName,
-                        address1: ct.address1,
-                        address2: ct.address2,
-                        address3: ct.address3,
-                        address4: ct.address4,
-                        city:ct.city,
-                        state:ct.state,
-                        zip:ct.zip,
-                        country:ct.country,
-                        lat:ct.lat,
-                        lon:ct.lon,
-                        conEmail: ct.conEmail,
-                        conURL: ct.conURL,
-                        conPho1Num: ct.conPho1Num,
-                        conPho1Typ: ct.conPho1Typ,
-                        conPho2Num: ct.conPho2Num,
-                        conPho2Typ: ct.conPho2Typ,
-                        conPho3Num: ct.conPho3Num,
-                        conPho3Typ: ct.conPho3Typ,                        
-                        conPho4Num: ct.conPho4Num,
-                        conPho4Typ: ct.conPho4Typ,        
-                        conNotes: ct.conNotes, 
-                    };
-                }),
-                cages: dc.cages.map(function(cage){
-                    var cg = cage;
-                    return {
-                            id:cg._id,
-                            dcid:dc._id,
-                            cageNickname:cg.cageNickname,
-                            cageAbbreviation: cg.cageAbbreviation,
-                            cageName: cg.cageName,
-                            cageInMeters: cg.cageInMeters,
-                            cageInFeet: strTgs.convertMetersToFeet(cg.cageInMeters),
-                            cageWattPSM: cg.cageWattPSM,
-                            cageWattPSF: strTgs.convertMetersToFeet(cg.cageWattPSM),
-                            cageMap: cg.cageMap,
-                            cageNotes: cg.cageNotes,
-                        };
-                    
-                }),
-                networks: dc.networks.map(function(nk){
-                var iPRange;
-                    if(nk !== false){
+                conId: ct.id,
+                conType: ct.conType,
+                conName: ct.conName,
+                address1: ct.address1,
+                address2: ct.address2,
+                address3: ct.address3,
+                address4: ct.address4,
+                city:ct.city,
+                state:ct.state,
+                zip:ct.zip,
+                country:ct.country,
+                lat:ct.lat,
+                lon:ct.lon,
+                conEmail: ct.conEmail,
+                conURL: ct.conURL,
+                conPho1Num: ct.conPho1Num,
+                conPho1Typ: ct.conPho1Typ,
+                conPho2Num: ct.conPho2Num,
+                conPho2Typ: ct.conPho2Typ,
+                conPho3Num: ct.conPho3Num,
+                conPho3Typ: ct.conPho3Typ,
+                conPho4Num: ct.conPho4Num,
+                conPho4Typ: ct.conPho4Typ,
+                conNotes: ct.conNotes,
+              };
+            }),
+            cages: dc.cages.map(function(cage) {
+              var cg = cage;
+              return {
+                id:cg._id,
+                dcid:dc._id,
+                cageNickname:cg.cageNickname,
+                cageAbbreviation: cg.cageAbbreviation,
+                cageName: cg.cageName,
+                cageInMeters: cg.cageInMeters,
+                cageInFeet: strTgs.convertMetersToFeet(cg.cageInMeters),
+                cageWattPSM: cg.cageWattPSM,
+                cageWattPSF: strTgs.convertMetersToFeet(cg.cageWattPSM),
+                cageMap: cg.cageMap,
+                cageNotes: cg.cageNotes,
+              };
+            }),
+            networks: dc.networks.map(function(nk) {
+              var iPRange;
+              if(nk !== false){
                 iPRange = IpSubnetCalculator.calculateSubnetMask(nk.dcNetNetwork,nk.dcNetMask);     
-                    }
-                    return {
-                                id:dc._id,
-                                dcNetId: nk._id,
-                                dcNetUnique: nk.dcNetUnique,
-                                dcNetType: nk.dcNetType,
-                                dcNetNetwork: nk.dcNetNetwork,
-                                dcNetMask: nk.dcNetMask,
-                                dcNetVlan: nk.dcNetVlan,
-                                dcNetDesc: nk.dcNetDesc,
-                                dcNetGateway: nk.dcNetGateway,
-                                dcNetDomain: nk.dcNetDomain,
-                                dcNetDns1: nk.dcNetDns1,
-                                dcNetDns2: nk.dcNetDns2,
-                                dcNetNTP1: nk.dcNetNTP1,
-                                dcNetNTP2: nk.dcNetNTP2,
-                                dcNetLdap1: nk.dcNetLdap1,
-                                dcNetLdap2: nk.dcNetLdap2,
-                                dcNetLdapString: nk.dcNetLdapString,
-                                dcNetTftpHost: nk.dcNetTftpHost,
-                                dcNetACSFilePath: nk.dcNetACSFilePath,
-                                ipLowStr: iPRange.ipLowStr,
-                                ipHighStr: iPRange.ipHighStr,
-                                prefixMaskStr: iPRange.prefixMaskStr
-                    };
-                }),
-
-
-                racks: racks.map(function(rack){
-                    return {
-                            rackParentDC: rack.rackParentDC,
-                            rackParentCage: rack.rackParentCage,
-                            rackNickname: rack.rackNickname,
-                            rackName: rack.rackName,
-                            rackUnique: rack.rackUnique,
-                            rackDescription: rack.rackDescription,
-                            rackLat: rack.rackLat,
-                            rackLon: rack.rackLon,
-                            rackRow: rack.rackRow,
-                            rackStatus: strTgs.trueFalseIcon(rack.rackStatus,rack.rackStatus),
-                            rackSN: rack.rackSN,
-                            rUs: rack.rUs,
-                            createdBy: rack.createdBy,
-                            createdOn: strTgs.dateMod(rack.createdOn),
-                            modifiedOn: strTgs.dateMod(rack.modifiedOn),
-                    };
-                }),
-
-            };   
-        res.render('location/datacenter', context);  
+              }
+              return {
+                id:dc._id,
+                dcNetId: nk._id,
+                dcNetUnique: nk.dcNetUnique,
+                dcNetType: nk.dcNetType,
+                dcNetNetwork: nk.dcNetNetwork,
+                dcNetMask: nk.dcNetMask,
+                dcNetVlan: nk.dcNetVlan,
+                dcNetDesc: nk.dcNetDesc,
+                dcNetGateway: nk.dcNetGateway,
+                dcNetDomain: nk.dcNetDomain,
+                dcNetDns1: nk.dcNetDns1,
+                dcNetDns2: nk.dcNetDns2,
+                dcNetNTP1: nk.dcNetNTP1,
+                dcNetNTP2: nk.dcNetNTP2,
+                dcNetLdap1: nk.dcNetLdap1,
+                dcNetLdap2: nk.dcNetLdap2,
+                dcNetLdapString: nk.dcNetLdapString,
+                dcNetTftpHost: nk.dcNetTftpHost,
+                dcNetACSFilePath: nk.dcNetACSFilePath,
+                ipLowStr: iPRange.ipLowStr,
+                ipHighStr: iPRange.ipHighStr,
+                prefixMaskStr: iPRange.prefixMaskStr
+              };
+            }),
+            racks: racks.map(function(rack){
+              return {
+                rackParentDC: rack.rackParentDC,
+                rackParentCage: rack.rackParentCage,
+                rackNickname: rack.rackNickname,
+                rackName: rack.rackName,
+                rackUnique: rack.rackUnique,
+                rackDescription: rack.rackDescription,
+                rackLat: rack.rackLat,
+                rackLon: rack.rackLon,
+                rackRow: rack.rackRow,
+                rackStatus: strTgs.trueFalseIcon(rack.rackStatus, rack.rackStatus),
+                rackSN: rack.rackSN,
+                rUs: rack.rUs,
+                createdBy: rack.createdBy,
+                createdOn: strTgs.dateMod(rack.createdOn),
+                modifiedOn: strTgs.dateMod(rack.modifiedOn),
+              };
+            }),
+          };
+          res.render('location/datacenter', context);
         });
-        });
+      });
     }
-}
+  }
 };
 /*
 Datacenter Contact Post
 Working - Done
 this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects to a form to edit the Datacenter.
 */
-// this works like this: 
+// this works like this:
 // if(thisSubDoc.conType==="" && req.body.conType==""){}else{thisSubDoc.conType = req.body.conType.trim();}
-/*uCleanUp
+/* uCleanUp
 uCleanUp = function(old,current){
     logger.info ("was>"+old);
     logger.info ("now>"+current)
@@ -380,11 +359,7 @@ New Datacenter working
 */
 exports.datacenterPost = function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     // this makes the abbreviation available for the URL
@@ -457,11 +432,7 @@ exports.datacenterPost = function(req,res){
   
 exports.datacenterContactPost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     // this makes the abbreviation available for the URL
@@ -554,11 +525,7 @@ exports.datacenterContactPost = function(req,res){
 
 exports.datacenterDelete = function(req,res){
     if (accConfig.accessCheck(req.user).root !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     res.abbreviation = req.body.id;
@@ -600,11 +567,7 @@ this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects 
 */  
 exports.datacenterCagePages = function(req,res,next){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
@@ -664,11 +627,7 @@ this is the DC Cage edit block. Looks for "cage/edit-" in the URL and redirects 
 
 exports.datacenterCagePost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     // this makes the abbreviation available for the URL
@@ -757,11 +716,7 @@ this is the DC Power edit block. Looks for "cage/edit-" in the URL and redirects
 */  
 exports.datacenterPowerPages = function(req,res,next){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     //logger.info('***********datacenterCagePages First ' +req.params.datacenter);
@@ -803,11 +758,7 @@ exports.datacenterPowerPages = function(req,res,next){
 
 exports.datacenterPowerPost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     // this makes the abbreviation available for the URL
@@ -862,11 +813,7 @@ exports.datacenterPowerPost = function(req,res){
 
 exports.datacenterNetworkPages = function(req,res,next){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     // /location/network/{{id}}-new
@@ -974,11 +921,7 @@ exports.datacenterNetworkPages = function(req,res,next){
 
 exports.datacenterNetworkPost = function(req,res,next){
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     //logger.info('exports.datacenterNetworkPost');
@@ -1052,70 +995,62 @@ exports.datacenterNetworkPost = function(req,res,next){
                 };
                 return res.redirect(303, 'location/datacenter/'+ res.abbreviation);
             }
-            req.session.flash = {
+              req.session.flash = {
                 type: 'success',
                 intro: 'Thank you!',
                 message: 'Your update has been made.',
-            };
-            return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
-        });
-
-});
-}
+              };
+              return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
+            });
+    });
+    }
 };
-
-
-
-
 
 // contact and cage Delete
 
-exports.datacenterSubDelete = function(req,res){
-if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
-        return res.redirect(303, '/');
-    }else{    
+exports.datacenterSubDelete = function(req, res) {
+  if (accConfig.accessCheck(req.user).delete !== 1) {
+    req.session.flash = strTgs.notAuth;
+    return res.redirect(303, '/');
+  } else {
     res.abbreviation = req.body.abbreviation;
-if (req.body.id && req.body.subId){
-            
-    Datacenter.findById(req.body.id,req.body.subDoc,function (err, datacenter){
-        //    logger.info('first : '+datacenter); 
-        if(err){
+    if (req.body.id && req.body.subId){
+
+      Datacenter.findById(req.body.id, req.body.subDoc, function(err, datacenter) {
+        //    logger.info('first : '+datacenter);
+        if (err) {
         logger.info(err);
-        //return res.redirect(303 '/location/datacenter/'+res.abbreviation);
-        }else{            
-            if(req.body.collectionSub === 'contact'){
-               datacenter.contacts.id(req.body.subId).remove();
-                //logger.info('delete: '+req.body.subId+' - '+req.body.subName);
-            } else if (req.body.collectionSub === 'cages'){//(req.body.collectionSub === "cages")
-                datacenter.cages.id(req.body.subId).remove();
-                //logger.info('delete: '+req.body.subId+' - '+req.body.subName);
-            } else if (req.body.collectionSub === 'network'){//(req.body.collectionSub === "network")
-                datacenter.networks.id(req.body.subId).remove();
-                //logger.info('delete: '+req.body.subId+' - '+req.body.subName);
+        // return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+        } else {
+          if (req.body.collectionSub === 'contact') {
+            datacenter.contacts.id(req.body.subId).remove();
+            // logger.info('delete: '+req.body.subId+' - '+req.body.subName);
+          } else if (req.body.collectionSub === 'cages') { // (req.body.collectionSub === "cages")
+            datacenter.cages.id(req.body.subId).remove();
+            // logger.info('delete: '+req.body.subId+' - '+req.body.subName);
+          } else if (req.body.collectionSub === 'network') { // (req.body.collectionSub === "network")
+            datacenter.networks.id(req.body.subId).remove();
+            // logger.info('delete: '+req.body.subId+' - '+req.body.subName);
+          }
+          datacenter.save(function(err) {
+            if (err) {
+            logger.info(err);
+              req.session.flash = {
+                type: 'danger',
+                intro: 'Ooops!',
+                message: 'Something went wrong, ' + req.body.subName + ' was not deleted.',
+              };
+              return res.redirect(303, '/location/datacenter/' + res.abbreviation);
+            } else {
+              req.session.flash = {
+                type: 'success',
+                intro: 'Done!',
+                message:  req.body.subName + ' has been deleted.',
+              };
+              return res.redirect(303, '/location/datacenter/' + res.abbreviation);
             }
-            datacenter.save(function(err){
-                if(err){
-                logger.info(err);
-                req.session.flash = {
-                        type: 'danger',
-                        intro: 'Ooops!',
-                        message: 'Something went wrong, '+ req.body.subName +' was not deleted.',
-                    };
-                    return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
-                } else {
-                    req.session.flash = {
-                    type: 'success',
-                    intro: 'Done!',
-                    message:  req.body.subName +' has been deleted.',
-                };
-                return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
-                }
-            }); 
-    } }); }
-}
+          });
+        }
+      }); }
+  }
 };

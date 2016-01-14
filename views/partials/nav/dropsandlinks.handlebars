@@ -13,8 +13,9 @@
               <option {{{selOption 'system~sysPortEndPoint' lastSearch}}}>System EndPoint</option>
               <option {{{selOption 'system~sysPortAddress' lastSearch}}}>System IP Address</option>
               <option {{{selOption 'system~sysPortCablePath' lastSearch}}}>System Cable Number</option>
-              {{#if access.edit}}
-              <option {{{selOption 'equipment~equipLocation' lastSearch}}}>Location</option> {{/if}}
+            {{#if access.edit}}
+              <option {{{selOption 'equipment~equipLocation' lastSearch}}}>Location</option> 
+            {{/if}}
               <option {{{selOption 'equipment~equipSN' lastSearch}}}>Equipment SN</option>
               <option {{{selOption 'equipment~equipAssetTag' lastSearch}}}>Equipment Asset Tag</option>
               <option {{{selOption 'equipment~equipTicketNumber' lastSearch}}}>Equipment Ticket</option>

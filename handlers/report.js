@@ -23,18 +23,14 @@ var query;
 
 module.exports.dcReport = function fdcReport(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
-    Models.Systemdb.distinct('systemEnviron').exec(function fdcSystembyEnvRole09000(err, env) {
+    Models.Systemdb.distinct('systemEnviron').exec(function(err, env) {
       // logger.info(env);
-      Models.Systemdb.distinct('systemRole').exec(function fdcSystembyEnvRole09030(err, role) {
+      Models.Systemdb.distinct('systemRole').exec(function(err, role) {
         // logger.info(role);
-        Models.Equipment.distinct('equipMake').exec(function fdcSystembyEnvRole09050(err, make) {
+        Models.Equipment.distinct('equipMake').exec(function(err, make) {
           context = {
             access: accConfig.accessCheck(req.user),
             user: req.user,
@@ -63,18 +59,13 @@ function reduceRoles(element, index, array) {
   console.log('a[' + index + '] = ' + element);
 }
         result.reduce(function(preVal, curVal, curIndx, ) {
-          
         })
         // console.dir(result);
 */
 // This report requires MongoDB 3.2 or higher for the $lookup (left join).
-module.exports.reportByInserviceEnv = function frBIE1(req, res, next) {
+module.exports.reportByInserviceEnv = function(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     var findThis = (req.query.dcAbbr || 'rsys');
@@ -140,13 +131,9 @@ module.exports.reportByInserviceEnv = function frBIE1(req, res, next) {
   }
 };
 
-module.exports.reportByInserviceEnvRole = function frBIE1(req, res, next) {
+module.exports.reportByInserviceEnvRole = function(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     var inEnv = (req.query.inEnv || 'dc1');
@@ -526,13 +513,9 @@ function queryString(findThis, opt, searchIn) {
 //           list by Env and Role env-role-reports
 // -------------------------------------------------------------
 
-module.exports.dcByEnvRole = function fdcSystembyEnvRole(req, res, next) {
+module.exports.dcByEnvRole = function(req, res, next) {
   if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
+    req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
     //    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
@@ -598,11 +581,11 @@ module.exports.dcByEnvRole = function fdcSystembyEnvRole(req, res, next) {
     }
     //        logger.info('page type selected >'+editLoad);
 
-    Models.Systemdb.distinct('systemEnviron').exec(function fdcSystembyEnvRole09000(err, env) {
+    Models.Systemdb.distinct('systemEnviron').exec(function(err, env) {
       // logger.info(env);
-      Models.Systemdb.distinct('systemRole').exec(function fdcSystembyEnvRole09030(err, role) {
+      Models.Systemdb.distinct('systemRole').exec(function(err, role) {
         // logger.info(role);
-        Models.Equipment.distinct('equipMake').exec(function fdcSystembyEnvRole09050(err, make) {
+        Models.Equipment.distinct('equipMake').exec(function(err, make) {
 
           if (editLoad > 1 && editLoad < 9) {
 
@@ -610,12 +593,12 @@ module.exports.dcByEnvRole = function fdcSystembyEnvRole(req, res, next) {
             query = queryString(searchFor, editLoad, searchIn);
             query.sort({
               'systemName': 'asc'
-            }).exec(function fdcSystembyEnvRole09130(err, sys) {
+            }).exec(function(err, sys) {
               if (err) {
                 logger.warn(asc + ' ' + err);
               } else {
                 //        logger.info('2-9 >'+searchFor);
-                Models.Equipment.find({}, 'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', function fdcSystembyEnvRole09180(err, eqs) {
+                Models.Equipment.find({}, 'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', function(err, eqs) {
 
                   //logger.info('system-list'+sys);
                   var context = {
@@ -637,7 +620,7 @@ module.exports.dcByEnvRole = function fdcSystembyEnvRole(req, res, next) {
                     lastSearch: lastSearch,
 
 
-                    eqs: sys.map(function fdcSystembyEnvRole09400(sy) {
+                    eqs: sys.map(function(sy) {
                       tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
                       //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
@@ -687,12 +670,12 @@ module.exports.dcByEnvRole = function fdcSystembyEnvRole(req, res, next) {
             query = queryString(searchFor, editLoad, searchIn);
             query.sort({
               'equipSN': 'asc'
-            }).exec(function fdcSystembyEnvRole09890(err, eqs) {
+            }).exec(function(err, eqs) {
               if (err) {
                 logger.warn(asc + ' ' + err);
               } else {
                 //logger.info('>9 >'+searchFor);
-                Models.Systemdb.find({}, 'systemName systemAlias systemParentId systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn', function fdcSystembyEnvRole09950(err, sys) {
+                Models.Systemdb.find({}, 'systemName systemAlias systemParentId systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn', function(err, sys) {
 
                   //logger.info('system-list'+sys);
                   var context = {
@@ -703,17 +686,17 @@ module.exports.dcByEnvRole = function fdcSystembyEnvRole(req, res, next) {
                     equipsys: 'true',
                     reportType: req.body.systemEnviron,
                     drop1: 'Environment',
-                    drop1url: '/report/env-',
+                    drop1url: '/reports/env-',
                     drop1each: env.sort(),
                     drop2: 'Roles',
-                    drop2url: '/report/role-',
+                    drop2url: '/reports/role-',
                     drop2each: role.sort(),
                     drop3: 'Make',
-                    drop3url: '/report/make-',
+                    drop3url: '/reports/make-',
                     drop3each: make.sort(),
                     lastSearch: lastSearch,
 
-                    eqs: eqs.map(function fdcSystembyEnvRole10160(eq) {
+                    eqs: eqs.map(function(eq) {
                       tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
                       //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);

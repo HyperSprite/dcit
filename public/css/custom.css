@@ -3,7 +3,8 @@ body {
     padding-bottom: 14px;
 }
 
-@font-face {
+/*The font is local for users with no internet access*/
+/*@font-face {
   font-family: 'Roboto';
   font-weight: 400;
   font-style: normal;
@@ -15,7 +16,7 @@ body {
        url('/fonts/Roboto-regular/Roboto-regular.woff') format('woff'),
        url('/fonts/Roboto-regular/Roboto-regular.ttf') format('truetype'),
        url('/fonts/Roboto-regular/Roboto-regular.svg#Roboto') format('svg');
-}
+}*/
 
 h1 {
     text-transform: uppercase;
