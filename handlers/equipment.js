@@ -32,11 +32,7 @@ this is the Equip List block. Looks for 'List' in the URL and returns list of Eq
 exports.dcEquipPages = function(req,res,next){
     //logger.info('***********exports.dcEquipPages First >' +req.params.datacenter);
     if (accConfig.accessCheck(req.user).read !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     if (!req.params.datacenter ){
@@ -496,11 +492,7 @@ exports.dcEquipPages = function(req,res,next){
 exports.dcEquipmentPost = function(req,res){
     // this makes the abbreviation available for the URL
     if (accConfig.accessCheck(req.user).edit !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     var data = req.body;
@@ -739,11 +731,7 @@ exports.dcEquipPortPostAJAX = function(req,res){
 
 exports.dcEquipSysPages = function(req,res,next){
     if (accConfig.accessCheck(req.user).read !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     //logger.info('***********exports.dcEquipSysPages First >' +req.params.datacenter);
@@ -842,8 +830,7 @@ exports.dcEquipSysPages = function(req,res,next){
                         titleNow: req.params.datacenter,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
-                  return {
-                            
+                  return {                      
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,
@@ -858,7 +845,6 @@ exports.dcEquipSysPages = function(req,res,next){
                             equipModel: eq.equipModel,
                             equipSubModel: eq.equipSubModel,
                             equipAddOns: eq.equipAddOns,
-                            equipRUHieght: eq.equipRUHieght,
                             equipReceived: strTgs.dateMod(eq.equipReceived),
                             equipPONum: eq.equipPONum,
                             equipInvoice: eq.equipInvoice,
@@ -908,11 +894,7 @@ exports.dcEquipSysPages = function(req,res,next){
 
 exports.dcRackElevationPage = function(req,res,next){
         if (accConfig.accessCheck(req.user).read !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+          req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     //logger.info('***********exports.dcRackElevationPage First >' +req.params.datacenter);
@@ -1089,11 +1071,7 @@ exports.dcRackElevationPage = function(req,res,next){
 
 exports.dcEquipSNChange =  function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+      req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{
 //    logger.info('req.params.datacenter >>>>>> '+req.params.datacenter);
@@ -1125,11 +1103,7 @@ exports.dcEquipSNChangePost =  function(req,res){
 
 //logger.info('got this far');
     if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+      req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{
         res.oldEquipSN = req.body.oldEquipSN;
@@ -1193,11 +1167,7 @@ exports.dcEquipSNChangePost =  function(req,res){
 */
 exports.dcEquipDelete = function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+      req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
     
@@ -1241,11 +1211,7 @@ if (req.body.equipSN){
 
 exports.equipSubDelete = function(req,res){
 if (accConfig.accessCheck(req.user).delete !== 1){
-    req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'Not Authorized!',
-            };
+    req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
     }else{ 
 

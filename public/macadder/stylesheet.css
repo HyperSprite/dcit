@@ -6,4 +6,5 @@ form {
 #messages {
     font-size: 14px;
     font-family: Garamond, Times, Serif;
+    border-left: 3px solid #888888
 }

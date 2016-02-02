@@ -38,13 +38,13 @@ module.exports.dcReport = function fdcReport(req, res, next) {
             titleNow: 'Reports',
             reportType: req.body.systemEnviron,
             drop1: 'Environment',
-            drop1url: '/env-role-report/env-',
+            drop1url: '/reports/env-',
             drop1each: env.sort(),
             drop2: 'Roles',
-            drop2url: '/env-role-report/role-',
+            drop2url: '/reports/role-',
             drop2each: role.sort(),
             drop3: 'Make',
-            drop3url: '/env-role-report/make-',
+            drop3url: '/reports/make-',
             drop3each: make.sort(),
           };
           res.render('asset/env-role-report', context);

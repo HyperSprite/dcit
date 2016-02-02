@@ -1,37 +1,31 @@
-
-
-var     logger = require('../lib/logger.js'),
-        strTgs = require('../lib/stringThings.js'),
-          dcit = require('../dcit.js'),
-            fs = require('fs'),
-          path = require('path'),
-    formidable = require('formidable'),
-           csv = require('fast-csv'), 
-  seedDataLoad = require('../seedDataLoad.js'),
- equipmentCrud = require('../crud/equipment.js'),
-  systemdbCrud = require('../crud/system.js'),
-      ObjectId = require('mongoose').Types.ObjectId,
-     accConfig = require('../config/access'),
-     logConfig = require('../config/log');
+const logger = require('../lib/logger.js');
+const strTgs = require('../lib/stringThings.js');
+const dcit = require('../dcit.js');
+const fs = require('fs');
+const path = require('path');
+const formidable = require('formidable');
+const csv = require('fast-csv');
+const seedDataLoad = require('../seedDataLoad.js');
+const equipmentCrud = require('../crud/equipment.js');
+const systemdbCrud = require('../crud/system.js');
+const ObjectId = require('mongoose').Types.ObjectId;
+const accConfig = require('../config/access');
+const logConfig = require('../config/log');
 
 // Models
-var Datacenter = require('../models/datacenter.js'),
-          Rack = require('../models/rack.js'),
-     Optionsdb = require('../models/options.js'),
-     Equipment = require('../models/equipment.js'),
-      Systemdb = require('../models/system.js'),
-          User = require('../models/user.js'),
-      Fileinfo = require('../models/fileinfo.js');
+const Datacenter = require('../models/datacenter.js');
+const Rack = require('../models/rack.js');
+const Optionsdb = require('../models/options.js');
+const Equipment = require('../models/equipment.js');
+const Systemdb = require('../models/system.js');
+const User = require('../models/user.js');
+const Fileinfo = require('../models/fileinfo.js');
 
     
 exports.home = function(req, res){
     //logger.info('exports.home >'+req.params.datacenter);
     if (accConfig.accessCheck(req.user).root !== 1){
-        req.session.flash = {
-                type: 'danger',
-                intro: 'Ooops!',
-                message: 'Not Authorized!',
-                };
+        req.session.flash = strTgs.notAuth;
             return res.redirect(303, '/');
     }else{         
     if(!req.params.datacenter){

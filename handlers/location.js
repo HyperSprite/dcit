@@ -186,7 +186,6 @@ If "New" is in the URL, it does New, otherwise it goes to existing
           };                   
           res.render('location/datacenteredit', context);
         } else {
-        
         // logger.info('edit called' + dcabbr);
           Datacenter.findOne({abbreviation: dcabbr}, function(err, datacenter) {
           if(err) return next(err);
