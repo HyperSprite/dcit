@@ -8,12 +8,10 @@
     "autorestart"      : true,
     "exec_mode"        : "cluster",
     "instances"        : 0,
-    "env" : {
-      "env_production" : {
+    "env_production"   : {
         "NODE_ENV"     : "production",
         "production"   : true,
       },
-    },
     "error_file"       : "/var/appjs/log/dcit.stderr.log",
     "out_file"         : "/var/appjs/log/dcit.stdout.log",
     "log_date_format"  : "YYYY-MM-DD HH:mm Z",
