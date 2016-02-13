@@ -98,7 +98,7 @@ module.exports = function(app) {
   app.get('/reportByInserviceEnv.json', handlers.report.reportByInserviceEnv);
   app.get('/reportByInserviceEnvRole.json', handlers.report.reportByInserviceEnvRole);
 
-  app.get('/reports/systems-aggr/:findIn/:findWhat', handlers.report.systemsAggr);
+  app.get('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
 
   // Admin
   app.get('/admin', isLoggedIn, handlers.admin.home);

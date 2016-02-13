@@ -2,6 +2,7 @@ const async = require('async');
 const logger = require('../lib/logger.js');
 const strTgs = require('../lib/stringThings.js');
 const accConfig = require('../config/access');
+const csv = require('fast-csv');
 const dates = require('../lib/dates.js');
 const moment = require('moment');
 const ObjectId = require('mongoose').Types.ObjectId;
@@ -202,66 +203,7 @@ module.exports.reportByInserviceEnvRole = function(req, res) {
   }
 };
 
-//  /////////////////////////////////////////////////////////////////////////
-//  _______ System Ports Report  __________________________________________________
-//  ////////////////////////////////////////////////////////////////////////
-/*
-function dcSystemPortPages(req, res, next) {
-  if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
-    return res.redirect(303, '/');
-  } else {
-    //logger.info('--------------------exports.dcSystemPortPages First >');
-    if (!req.params.datacenter) {
-      Models.Systemdb.find({}).sort({ 'modifiedOn': 'desc'}).exec(function (err, sys) {
-        if (err) {
-          //    logger.info(err);
-        } else {
-          //logger.info('system-list'+sys);
-          var context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
-            sys: sys.map(function fdcSystemPortPages05280(sy) {
-              // rack.populate('rackParentDC', 'abbreviation cageNickname')
-              // logger.info('sy Map>'+sy);
-              return {
-                systemPorts: sy.systemPorts.map(function fdcSystemPortPages05320(sp) {
-                  return {
-                    systemName: sy.systemName,
-                    equipSN: sy.systemEquipSN,
-                    sysPortId: sp._id,
-                    sysPortType: sp.sysPortType,
-                    sysPortName: sp.sysPortName,
-                    sysPortAddress: sp.sysPortAddress,
-                    sysPortCablePath: sp.sysPortCablePath,
-                    sysPortEndPoint: sp.sysPortEndPoint,
-                    sysPortEndPointPre: sp.sysPortEndPointPre,
-                    sysPortEndPointPort: sp.sysPortEndPointPort,
-                    sysPortVlan: sp.sysPortVlan,
-                    sysPortOptions: sp.sysPortOptions,
-                    sysPortURL: sp.sysPortURL,
-                    sysPortCrossover: sp.sysPortCrossover,
-                    sysPortCrossoverChecked: strTgs.setCheckBox(sp.sysPortCrossover),
-                  };
-                }),
-              };
-            }),
-          };
-          // the 'location/datacenter-list' is the view that will be called
-          // context is the data from above
-          res.render('asset/systemports-list', context);
-        }
-      });
-    }
-  }
-};
 
-*/
 //  /////////////////////////////////////////////////////////////////////////
 //  _______ EquipSys Report Switch __________________________________________________
 //  ////////////////////////////////////////////////////////////////////////
@@ -595,7 +537,7 @@ module.exports.dcByEnvRole = function(req, res) {
               'systemName': 'asc'
             }).exec(function(err, sys) {
               if (err) {
-                logger.warn(asc + ' ' + err);
+                logger.warn('asc' + ' ' + err);
               } else {
                 //        logger.info('2-9 >'+searchFor);
                 Models.Equipment.find({}, 'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', function(err, eqs) {
@@ -759,55 +701,76 @@ The route is based on the collection targeted.
 
 */
 
-// /reports/systems-aggr/:findIn/:findWhat
+// /reports/systems/:findIn/:findWhat
 
-// /reports/systems-aggr/dcSite/rsys-dc01.csv
-// /reports/systems-aggr/dcSite/rsys-dc01
-// /reports/systems-aggr/systemRole/launch.csv
-// /reports/systems-aggr/systemEnviron/ri4
+// /reports/systems/dcSite/rsys-dc01.csv
+// /reports/systems/dcSite/rsys-dc01
+// /reports/systems/systemRole/launch.csv
+// /reports/systems/systemEnviron/ri4
 // req.params.findIn
 // req.params.findWhat
 
 
 module.exports.systemsAggr = (req, res) => {
   var context = {};
-  var prms = req.params;
-  var data = {};
+  var data = req.params;
+  var queryTest;
+  // setting some defaults if they don't pick have a file type
   data.resType = 'view';
-  data.findVar = prms.findWhat;
   data.resExt = '';
-  if ((/.csv$/).test(prms.findWhat)) {
+  // set to CSV or JSON
+  if ((/.csv$/).test(data.findWhat)) {
     data.resType = 'csv';
     data.resExt = '.csv';
-    data.findVar = data.findVar.substring(0, data.findVar.length - 4);
-  } else if ((/.json/g).test(prms.findWhat)) {
+    data.findWhat = data.findWhat.substring(0, data.findWhat.length - 4);
+  } else if ((/.json/g).test(data.findWhat)) {
     data.resType = 'json';
     data.resExt = '.json';
-    data.findVar = data.findVar.substring(0, data.findVar.length - 5);
+    data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
   }
-  var findThis = (req.query.dcAbbr || 'rsys');
-    Models.Systemdb.aggregate([
-      {$match:
-        {$or: [
-          {'systemStatus': 'Production App'},
-          {'systemStatus': 'Production DB'},
-        ]},
-        },
-        {$lookup:
-          { from: 'equipment',
-            localField: 'systemEquipSN',
-            foreignField: 'equipSN',
-            as: 'equip',
-          },
-        },
-        {$match:
-          { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
-        },
-        },
-    ],
+  // What are we looking for, this can certainly get better with query strings
+  // This says, if they are specific, do that, otherwise do rsys
+
+  // This block does locations
+ var findThis = (data.findWhat || 'rsys');
+
+  var matchTest = {
+    equipLocation: { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'}},
+    equipMake: { 'equip.equipMake': { '$regex': findThis, '$options': 'i'}},
+    equipPONum: { 'equip.equipPONum': { '$regex': findThis, '$options': 'i'}},
+    systemName: { 'systemName': { '$regex': findThis, '$options': 'i'}},
+    systemRole: { 'systemRole': { '$regex': findThis, '$options': 'i'}},
+    systemEnviron: { 'systemEnviron': { '$regex': findThis, '$options': 'i'}},
+  };
+
+  queryTest = matchTest.hasOwnProperty(data.findIn);
+  if (!queryTest) {
+    console.warn('ERRORsystems-aggr Report - Incorrect findIn value');
+    res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
+    return;
+  }
+  data.queryIn = matchTest[data.findIn];
+
+  Models.Systemdb.aggregate([
+    {$lookup:
+      { from: 'equipment',
+        localField: 'systemEquipSN',
+        foreignField: 'equipSN',
+        as: 'equip',
+      },
+    },
+    {$match: data.queryIn,
+    },
+    {$match:
+      {$or: [
+        {'equip.equipStatus': 'In Service'},
+        {'systemStatus': 'In Service with issues'},
+      ]},
+    },
+  ],
     function(err, result) {
       if (err) {
-        next(err);
+        console.log(err);
       } else {
         context = result.map(function(rslt) {
           rslt.locCode = strTgs.locDest(rslt.equip[0].equipLocation);
@@ -847,89 +810,31 @@ module.exports.systemsAggr = (req, res) => {
             equip_id: rslt.equip._id,
           };
         });
-            //  result.forEach(reduceRoles);
+        //
         if (data.resType === 'csv') {
-          res.csv(context);
+          var filename = data.findWhat + data.resExt;
+          res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+          res.setHeader('content-type', 'text/csv');
+          csv.writeToString(context, {
+            headers: true,
+            objectMode: true,
+          }, function(err, contextCsv) {
+            if (err) {
+              console.log(err);
+            }
+            res.send(contextCsv);
+          });
         } else if (data.resType === 'json') {
           res.json(context);
         } else {
-          res.render(context);
+          res.render('asset/equipsys-list', context);
         }
       }
     }
   // res.status(200).send(`rFndWt ${req.params.findWhat} <br>
-                        // fVar ${data.findVar} <br>
+                        // fVar ${data.findWhat} <br>
                         // rType ${data.resType}`);
   );
-};
-
-
-module.exports.reportByInserviceEnvspare = function(req, res, next) {
-  if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  } else {
-    var findThis = (req.query.dcAbbr || 'rsys');
-    Models.Systemdb.aggregate([
-      {$match:
-        {$or: [
-          {'systemStatus': 'Production App'},
-          {'systemStatus': 'Production DB'},
-        ]},
-        },
-        {$lookup:
-          { from: 'equipment',
-            localField: 'systemEquipSN',
-            foreignField: 'equipSN',
-            as: 'equip',
-          },
-        },
-        {$match:
-          { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
-        },
-        },
-
-        {$match:
-          { $or: [
-            {'equip.equipStatus': 'In Service'},
-            {'equip.equipStatus': 'In Service with issues'},
-          ]},
-        },
-        {$group:
-        {
-          _id: { env: '$systemEnviron', dcAbbr: '$dcAbbr'},
-          countApp: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production App' ]}, 1, 0]}},
-          countDb: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production DB' ]}, 1, 0]}},
-        },
-        },
-        {$sort:
-        {
-          '_id.env': 1,
-          'countApp': -1,
-          'countDb': -1,
-        },
-        },
-        { $project:
-        {
-          '_id': 0,
-          'env': '$_id.env',
-          'dcAbbr': '$_dc.dcAbbr',
-          'countApp': '$countApp',
-          'countDb': '$countDb',
-        },
-        },
-    ],
-    function(err, result) {
-      if (err) {
-        next(err);
-      } else {
-      //  result.forEach(reduceRoles);
-
-        res.json(result);
-      }
-    }
-  );
-  }
 };
 
 
