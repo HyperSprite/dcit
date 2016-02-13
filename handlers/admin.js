@@ -21,26 +21,25 @@ const Systemdb = require('../models/system.js');
 const User = require('../models/user.js');
 const Fileinfo = require('../models/fileinfo.js');
 
-    
-exports.home = function(req, res){
-    //logger.info('exports.home >'+req.params.datacenter);
-    if (accConfig.accessCheck(req.user).root !== 1){
-        req.session.flash = strTgs.notAuth;
-            return res.redirect(303, '/');
-    }else{         
-    if(!req.params.datacenter){
-        context = {
-            lastPage : '/admin',
-            access : accConfig.accessCheck(req.user),
-            user : req.user,
-            titleNow: 'Admin Home',
-            };
+exports.home = function(req, res) {
+    // logger.info('exports.home >'+req.params.datacenter);
+  if (accConfig.accessCheck(req.user).root !== 1) {
+    req.session.flash = strTgs.notAuth;
+    return res.redirect(303, '/');
+  } else {
+    if (!req.params.datacenter) {
+      context = {
+        lastPage: '/admin',
+        access: accConfig.accessCheck(req.user),
+        user: req.user,
+        titleNow: 'Admin Home',
+      };
     res.render ('admin/home', context );
 //
 //          Options page
 //
     }else if (req.params.datacenter  === 'options'){
-     //logger.info('called admin.options');     
+     //logger.info('called admin.options');
         Optionsdb.find(function(err,opts){
         //logger.info(opts);
         if (!opts){
@@ -51,7 +50,7 @@ exports.home = function(req, res){
                 titleNow: 'Admin Options',
                 optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
             };
-         
+
             res.render('admin/options', context );
         }else{
         if (err) return next (err);
@@ -78,8 +77,8 @@ exports.home = function(req, res){
     }});
 //
 //  OptionsEdit page
-//   
-    
+//
+
 //
 //  Models page
 //
@@ -102,11 +101,11 @@ exports.home = function(req, res){
             titleNow: 'Admin DB Insert',
             };
         res.render ('admin/dbinsert', context );
-//    
+//
 //  User Admin
 //
     }else if(req.params.datacenter === 'useradmin'){
-        
+
         User.find({}).sort({'access':'desc'}).exec(function (err, usr) {
             if(err){
                 logger.info(err);
@@ -124,16 +123,16 @@ exports.home = function(req, res){
                         name : ur.local.name,
                         phone : ur.local.phone,
                         createdOn : ur.local.createdOn,
-                        lastAccessed : ur.local.lastAccessed,                       
+                        lastAccessed : ur.local.lastAccessed,
                     };
                 })
             };
-         res.render ('admin/useradmin', context );  
+         res.render ('admin/useradmin', context );
     }});
 
 // ///////////////////////////////////////////////////////
 // //    Log reader ------------------------------------------------
-// ///////////////////////////////////////////////////////    
+// ///////////////////////////////////////////////////////
 
     }else if(req.params.datacenter === 'logs'){
 
@@ -155,7 +154,7 @@ exports.home = function(req, res){
       });
 // ///////////////////////////////////////////////////////
 // //    Log View ------------------------------------------------
-// /////////////////////////////////////////////////////// 
+// ///////////////////////////////////////////////////////
 
 
 
@@ -186,18 +185,18 @@ exports.home = function(req, res){
         };
        res.render ('admin/logviewer', context);
 
-        });   
+        });
 
 
 
-//    
+//
 //  File Manager
 //
     }else if(req.params.datacenter === 'filemanager'){
-    
+
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
-    
+
     Fileinfo.find({}).sort({'modifiedOn': 'desc'}).exec(function(err, fil){
         if(err){
         //logger.info(err);
@@ -230,11 +229,11 @@ exports.home = function(req, res){
                     };
                 })
             };
-            
+
             res.render('admin/filemanager', context);
         }});});
- 
-//    
+
+//
 //  Joins
 //
     }else if(req.params.datacenter === 'joins'){
@@ -244,13 +243,13 @@ exports.home = function(req, res){
                 user : req.user,
                 titleNow: 'Admin Joins',
             };
-    
-    
-    
-        res.render ('admin/joins', context);   
+
+
+
+        res.render ('admin/joins', context);
 //
 //  Models (not working)
-// 
+//
     }else if(req.params.datacenter === 'models'){
             context = {
                 lastPage : '/admin/models',
@@ -281,7 +280,7 @@ exports.userEdit = function (req, res) {
             message: 'Not Authorized!',
             };
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     User.findOne({'_id':req.body.id}, function(err,ur){
         if(err){
             logger.warn(err);
@@ -298,9 +297,9 @@ exports.userEdit = function (req, res) {
                 locName : ur.local.name,
                 locPhone : ur.local.phone,
                 LocCreatedOn : ur.local.createdOn,
-                locLastAccessed : ur.local.lastAccessed,                       
+                locLastAccessed : ur.local.lastAccessed,
             };
-    res.render ('admin/userprofile', context);   
+    res.render ('admin/userprofile', context);
     }});
 }
 };
@@ -315,7 +314,7 @@ exports.userEditPost = function (req, res) {
             message: 'Not Authorized!',
             };
         return res.redirect(303, '/');
-    }else{ 
+    }else{
         //logger.info('userEditPost >'+ req.body.id);
         var data = req.body;
     User.findOne({'_id':req.body.id}, function(err,ur){
@@ -353,7 +352,7 @@ exports.userEditPost = function (req, res) {
         return res.redirect(303, '/admin/useradmin');
         });
     });
-    }   
+    }
 };
 
 exports.optionsEdit = function(req, res){
@@ -364,10 +363,10 @@ exports.optionsEdit = function(req, res){
             message: 'Not Authorized!',
             };
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     var dcInfo = req.params.datacenter;
             logger.info('|dcInfo  >'+dcInfo);
-        
+
         if (dcInfo ==='new'){
             context={
                 lastPage : '/admin/optionsedit',
@@ -376,7 +375,7 @@ exports.optionsEdit = function(req, res){
                 titleNow: 'Admin Options Edit',
                 stat: 'isNew',
             };
-        
+
             res.render('admin/optionsedit', context);
             } else {
             Optionsdb.findOne({optListKey: dcInfo},function(err,opt){
@@ -418,7 +417,7 @@ exports.optionsEditPost = function(req,res,err){
                     createdOn: Date.now(),
                     createdBy:req.user,
                     },function(err){
-                     	    
+
 	        if(err) {
 	        	console.error(err.stack);
 	            req.session.flash = {
@@ -435,8 +434,8 @@ exports.optionsEditPost = function(req,res,err){
 	        };
 
 	        return res.redirect(303, '/admin/options');
-	    });            
-                    
+	    });
+
     } else {
         Optionsdb.findById(req.body.id,function(err,opt){
         if (err) {
@@ -445,7 +444,7 @@ exports.optionsEditPost = function(req,res,err){
                     //logger.info(opt);
                     opt.optListArray = strTgs.csvCleanup(req.body.optListArray);
                     }
-        
+
 	    opt.save(function(err){
 	        if(err) {
 	        	console.error(err.stack);
@@ -463,7 +462,7 @@ exports.optionsEditPost = function(req,res,err){
 	        };
 	        return res.redirect(303, '/admin/options');
 	    });
-    });    
+    });
 }}
 };
 //
@@ -500,7 +499,7 @@ exports.uploadPost = function(req,res){
         }
 
 
-    
+
         Fileinfo.create({
                     fileName: file.name,
                     filePath: './'+file.path,
@@ -520,7 +519,7 @@ exports.uploadPost = function(req,res){
             };
             return res.redirect(303, '/admin');
         }else{
-    
+
         req.session.flash = {
             type: 'success',
             intro: 'Awesome!',
@@ -543,7 +542,7 @@ exports.uploadDeletePost = function(req,res){
                 message: 'Not Authorized!',
                 };
             return res.redirect(303, '/');
-    }else{ 
+    }else{
 if (req.body.id){
 
         var bdy = req.body;
@@ -599,10 +598,10 @@ exports.logdelete = function(req,res){
                 message: 'Not Authorized!',
                 };
             return res.redirect(303, '/');
-    }else{ 
+    }else{
     if (req.body.name){
         var fileName = logConfig.logDir+req.body.name;
-        
+
             fs.unlink(fileName, function(err){
                     if(err){
 logger.warn('failed '+fileName+ 'delete');
@@ -628,7 +627,7 @@ logger.warn('failed '+fileName+ 'delete');
 
 //
 //  CSV to DB
-// 
+//
 exports.csvToDBPost = function(req,res){
     //logger.info('csvToDBPost >'+req.body.file);
 
@@ -660,7 +659,7 @@ exports.csvToDBPost = function(req,res){
             .on('end', function(){
              //logger.info('done');
         });
-    
+
         break;
     case 'Systemdb':
         var systemdbStream = fs.createReadStream(req.body.file);
@@ -675,7 +674,7 @@ exports.csvToDBPost = function(req,res){
             .on('end', function(){
              //logger.info('done');
         });
-    
+
         break;
     case 'Systemdb.systemPorts':
         var systemPortsStream = fs.createReadStream(req.body.file);
@@ -690,8 +689,8 @@ exports.csvToDBPost = function(req,res){
             .on('end', function(){
              //logger.info('done');
         });
-    
-        break;        
+
+        break;
 
         default:
             req.session.flash = {
@@ -700,7 +699,7 @@ exports.csvToDBPost = function(req,res){
                 message: 'Error, no upload for this Database.',
             };
 }
-    
+
 
  return res.redirect(303, '/admin/filemanager');
 };
@@ -717,9 +716,9 @@ exports.userDelete = function(req,res){
             message: 'Not Authorized!',
             };
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     res.abbreviation = req.body.email;
-   
+
 
 if (req.body.id){
         //logger.info('delete got this far id >'+ req.body.id);
@@ -778,11 +777,11 @@ exports.dropRackGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{      
+    }else{
     dcit.dropRack(Rack);
     logger.warn('dropRack by,'+req.user.local.email);
 	return res.redirect(303, '/location/datacenter/list');
-    } 
+    }
 };
 
 exports.dropOptionsdbGet = function(req,res){
@@ -793,7 +792,7 @@ exports.dropOptionsdbGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{  
+    }else{
     dcit.dropOptionsdb(Optionsdb);
     logger.warn('dropOptionsdb by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
@@ -808,7 +807,7 @@ exports.dropEquipmentGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{      
+    }else{
     dcit.dropEquipment(Equipment);
     logger.warn('dropEquipment by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
@@ -823,7 +822,7 @@ exports.dropSystemGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{  
+    }else{
     dcit.dropSystem(Systemdb);
     logger.warn('dropSystem by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
@@ -839,11 +838,11 @@ exports.seedDatacetnerGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{  
+    }else{
     seedDataLoad.seedDatacenter(Datacenter);
     logger.warn('seedDatacetner by,'+req.user.local.email);
 	return res.redirect(303, '/location/datacenter/list');
-    } 
+    }
 };
 
 exports.seedOptionsdbGet = function(req,res){
@@ -854,7 +853,7 @@ exports.seedOptionsdbGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{  
+    }else{
     seedDataLoad.seedOptionsDataBase(Optionsdb);
     logger.warn('seedOptionsdb by,'+req.user.local.email);
 	return res.redirect(303, '/admin/options');
@@ -869,7 +868,7 @@ exports.seedEquipmentGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{      
+    }else{
     seedDataLoad.seedEquipmentDataBase(Equipment);
     logger.warn('seedEquipment by,'+req.user.local.email);
     return res.redirect(303, '/admin/options');
@@ -883,9 +882,9 @@ exports.seedSystemGet = function(req,res){
         message: 'You are not authorized for this action.',
     };
         return res.redirect(303, '/home');
-    }else{  
+    }else{
     seedDataLoad.seedSystemDataBase(Systemdb);
     logger.warn('seedSystem by,'+req.user.local.email);
     return res.redirect(303, '/admin/options');
-    }	
+    }
 };

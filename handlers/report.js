@@ -21,7 +21,7 @@ var dcId = '';
 
 var query;
 
-module.exports.dcReport = function fdcReport(req, res, next) {
+module.exports.dcReport = function fdcReport(req, res) {
   if (accConfig.accessCheck(req.user).read !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
@@ -131,7 +131,7 @@ module.exports.reportByInserviceEnv = function(req, res, next) {
   }
 };
 
-module.exports.reportByInserviceEnvRole = function(req, res, next) {
+module.exports.reportByInserviceEnvRole = function(req, res) {
   if (accConfig.accessCheck(req.user).read !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
@@ -513,7 +513,7 @@ function queryString(findThis, opt, searchIn) {
 //           list by Env and Role env-role-reports
 // -------------------------------------------------------------
 
-module.exports.dcByEnvRole = function(req, res, next) {
+module.exports.dcByEnvRole = function(req, res) {
   if (accConfig.accessCheck(req.user).read !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
@@ -530,7 +530,7 @@ module.exports.dcByEnvRole = function(req, res, next) {
       editLoad = 1;
       //            logger.info('none slected');
     } else {
-      lastSearch = searchIn; //.substring (req.params.datacenter.indexOf('~')+1);
+      lastSearch = searchIn; // .substring (req.params.datacenter.indexOf('~')+1);
       start = req.params.datacenter.indexOf('-');
       searchFor = req.params.datacenter.substring(start + 1);
       if (req.params.datacenter.indexOf('env') != -1) {
@@ -600,7 +600,7 @@ module.exports.dcByEnvRole = function(req, res, next) {
                 //        logger.info('2-9 >'+searchFor);
                 Models.Equipment.find({}, 'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', function(err, eqs) {
 
-                  //logger.info('system-list'+sys);
+                  // logger.info('system-list'+sys);
                   var context = {
                     access: accConfig.accessCheck(req.user),
                     user: req.user,
@@ -621,9 +621,9 @@ module.exports.dcByEnvRole = function(req, res, next) {
 
 
                     eqs: sys.map(function(sy) {
-                      tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
+                      var tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                      //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
+                      // logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                       return {
                         systemName: sy.systemName,
                         systemAlias: sy.systemAlias,
@@ -665,19 +665,18 @@ module.exports.dcByEnvRole = function(req, res, next) {
               }
             });
           } else if (editLoad > 9) {
-
             // this looks for 'list' as the / url. if it exists, it prints the datacenter list
             query = queryString(searchFor, editLoad, searchIn);
             query.sort({
-              'equipSN': 'asc'
+              'equipSN': 'asc',
             }).exec(function(err, eqs) {
               if (err) {
                 logger.warn(asc + ' ' + err);
               } else {
-                //logger.info('>9 >'+searchFor);
+                // logger.info('>9 >'+searchFor);
                 Models.Systemdb.find({}, 'systemName systemAlias systemParentId systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn', function(err, sys) {
 
-                  //logger.info('system-list'+sys);
+                  // logger.info('system-list'+sys);
                   var context = {
                     access: accConfig.accessCheck(req.user),
                     user: req.user,
@@ -697,9 +696,9 @@ module.exports.dcByEnvRole = function(req, res, next) {
                     lastSearch: lastSearch,
 
                     eqs: eqs.map(function(eq) {
-                      tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
+                      var tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                      //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
+                      // logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                       return {
                         systemName: tempSys.systemName,
                         systemAlias: tempSys.systemAlias,
@@ -746,4 +745,191 @@ module.exports.dcByEnvRole = function(req, res, next) {
     });
   }
 };
+
+
+// Custom CSV report ///////////////////////////////////////////
+/*
+I never had any intention of writing a direct to CSV report but
+consumers were not ready for a JSON api and needed CSV so this
+is what I came up with to try and get the most utility out of
+this request.
+
+The route is based on the collection targeted.
+
+
+*/
+
+// /reports/systems-aggr/:findIn/:findWhat
+
+// /reports/systems-aggr/dcSite/rsys-dc01.csv
+// /reports/systems-aggr/dcSite/rsys-dc01
+// /reports/systems-aggr/systemRole/launch.csv
+// /reports/systems-aggr/systemEnviron/ri4
+// req.params.findIn
+// req.params.findWhat
+
+
+module.exports.systemsAggr = (req, res) => {
+  var context = {};
+  var prms = req.params;
+  var data = {};
+  data.resType = 'view';
+  data.findVar = prms.findWhat;
+  data.resExt = '';
+  if ((/.csv$/).test(prms.findWhat)) {
+    data.resType = 'csv';
+    data.resExt = '.csv';
+    data.findVar = data.findVar.substring(0, data.findVar.length - 4);
+  } else if ((/.json/g).test(prms.findWhat)) {
+    data.resType = 'json';
+    data.resExt = '.json';
+    data.findVar = data.findVar.substring(0, data.findVar.length - 5);
+  }
+  var findThis = (req.query.dcAbbr || 'rsys');
+    Models.Systemdb.aggregate([
+      {$match:
+        {$or: [
+          {'systemStatus': 'Production App'},
+          {'systemStatus': 'Production DB'},
+        ]},
+        },
+        {$lookup:
+          { from: 'equipment',
+            localField: 'systemEquipSN',
+            foreignField: 'equipSN',
+            as: 'equip',
+          },
+        },
+        {$match:
+          { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
+        },
+        },
+    ],
+    function(err, result) {
+      if (err) {
+        next(err);
+      } else {
+        context = result.map(function(rslt) {
+          rslt.locCode = strTgs.locDest(rslt.equip[0].equipLocation);
+          return {
+            systemName: rslt.systemName,
+            dcSite: rslt.locCode.dcSite,
+            dcCage: rslt.locCode.dcCage,
+            dcRack: rslt.locCode.dcRack,
+            dcRU: rslt.locCode.dcRU,
+            equipRUHieght: rslt.equip[0].equipRUHieght,
+            systemStatus: rslt.systemStatus,
+            systemEnviron: rslt.systemEnviron,
+            systemRole: rslt.systemRole,
+            equipSN: rslt.equip[0].equipSN,
+            equipStatus: rslt.equip[0].equipStatus,
+            equipMake: rslt.equip[0].equipMake,
+            equipModelWithSubs: rslt.equip[0].equipModel + ' ' + rslt.equip[0].equipSubModel + ' ' + rslt.equip[0].equipSubModel,
+            equipModel: rslt.equip[0].equipModel,
+            equipSubModel: rslt.equip[0].equipSubModel,
+            equipAddOns: rslt.equip[0].equipAddOns,
+            systemAlias: rslt.systemAlias,
+            systemParentId: rslt.systemParentId,
+            systemEquipSN: rslt.systemEquipSN,
+            sysmodifiedOn: rslt.modifiedOn,
+            systemTicket: rslt.systemTicket,
+            systemNotes: rslt.systemNotes,
+            equipLocation: rslt.equip[0].equipLocation,
+            equipStatusLight: rslt.equip[0].equipStatus,
+            equipType: rslt.equip[0].equipType,
+            equipAcquisition: rslt.equip[0].equipAcquisition,
+            equipPONum: rslt.equip[0].equipPONum,
+            equipInvoice: rslt.equip[0].equipInvoice,
+            equipProjectNum: rslt.equip[0].equipProjectNum,
+            equipNotes: rslt.equip[0].equipNotes,
+            equipmodifiedOn: rslt.equip[0].modifiedOn,
+            system_id: rslt._id,
+            equip_id: rslt.equip._id,
+          };
+        });
+            //  result.forEach(reduceRoles);
+        if (data.resType === 'csv') {
+          res.csv(context);
+        } else if (data.resType === 'json') {
+          res.json(context);
+        } else {
+          res.render(context);
+        }
+      }
+    }
+  // res.status(200).send(`rFndWt ${req.params.findWhat} <br>
+                        // fVar ${data.findVar} <br>
+                        // rType ${data.resType}`);
+  );
+};
+
+
+module.exports.reportByInserviceEnvspare = function(req, res, next) {
+  if (accConfig.accessCheck(req.user).read !== 1) {
+    req.session.flash = strTgs.notAuth;
+    return res.redirect(303, '/');
+  } else {
+    var findThis = (req.query.dcAbbr || 'rsys');
+    Models.Systemdb.aggregate([
+      {$match:
+        {$or: [
+          {'systemStatus': 'Production App'},
+          {'systemStatus': 'Production DB'},
+        ]},
+        },
+        {$lookup:
+          { from: 'equipment',
+            localField: 'systemEquipSN',
+            foreignField: 'equipSN',
+            as: 'equip',
+          },
+        },
+        {$match:
+          { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
+        },
+        },
+
+        {$match:
+          { $or: [
+            {'equip.equipStatus': 'In Service'},
+            {'equip.equipStatus': 'In Service with issues'},
+          ]},
+        },
+        {$group:
+        {
+          _id: { env: '$systemEnviron', dcAbbr: '$dcAbbr'},
+          countApp: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production App' ]}, 1, 0]}},
+          countDb: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production DB' ]}, 1, 0]}},
+        },
+        },
+        {$sort:
+        {
+          '_id.env': 1,
+          'countApp': -1,
+          'countDb': -1,
+        },
+        },
+        { $project:
+        {
+          '_id': 0,
+          'env': '$_id.env',
+          'dcAbbr': '$_dc.dcAbbr',
+          'countApp': '$countApp',
+          'countDb': '$countDb',
+        },
+        },
+    ],
+    function(err, result) {
+      if (err) {
+        next(err);
+      } else {
+      //  result.forEach(reduceRoles);
+
+        res.json(result);
+      }
+    }
+  );
+  }
+};
+
 

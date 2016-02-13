@@ -10,21 +10,20 @@ function isLoggedIn(req, res, next) {
 }
 
 module.exports = function(app) {
-
   app.post('/admin/uploadpost', isLoggedIn, handlers.admin.uploadPost);
 // cross-site request forgery protection
   app.use(require('csurf')());
   app.use(function(req, res, next){
-       res.locals._csrfToken = req.csrfToken(); 
-       next();
+    res.locals._csrfToken = req.csrfToken();
+    next();
   });
-  app.use(function (err, req, res, next) {
-    if (err.code !== 'EBADCSRFTOKEN') return next(err)
-  // handle CSRF token errors here 
-    logger.warn('crsf error req.csrfToken >'+req.csrfToken());
+  app.use(function(err, req, res, next) {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err);
+  // handle CSRF token errors here
+    logger.warn('crsf error req.csrfToken >' + req.csrfToken());
 
-    res.status(403)
-    res.send('session has expired or form tampered with')
+    res.status(403);
+    res.send('session has expired or form tampered with');
   });
 
 
@@ -98,6 +97,8 @@ module.exports = function(app) {
   app.get('/env-role-report/:datacenter', handlers.report.dcByEnvRole);
   app.get('/reportByInserviceEnv.json', handlers.report.reportByInserviceEnv);
   app.get('/reportByInserviceEnvRole.json', handlers.report.reportByInserviceEnvRole);
+
+  app.get('/reports/systems-aggr/:findIn/:findWhat', handlers.report.systemsAggr);
 
   // Admin
   app.get('/admin', isLoggedIn, handlers.admin.home);
