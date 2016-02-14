@@ -17,6 +17,7 @@ const seedDataLoad = require('./seedDataLoad.js');
 const logger = require('./lib/logger.js');
 const FileStreamRotator = require('file-stream-rotator');
 const logConfig = require('./config/log');
+const accConfig = require('./config/access');
 
 const app = express();
 
@@ -159,12 +160,17 @@ app.use(passport.session());
 
 app.use(flash());
 
-// flash message middleware
+// flash and user to locals middleware
 app.use((req, res, next) => {
-  // if there's a flash message, transfer
-  // it to the context, then clear it
+  res.locals.access = accConfig.accessCheck(req.user);
+  res.locals.user = accConfig.userCheck(req.user);
+  res.locals.requrl = req.url;
+
+  // res.locals.accessLevel = accConfig.accessCheck(req.user);
+  // res.locals.currentUser = req.user;
   res.locals.flash = req.session.flash;
   delete req.session.flash;
+  console.log(res.locals);
   next();
 });
 
@@ -190,17 +196,13 @@ require('./routes')(app);
 // 404 catch-all handler (middleware)
 app.use((req, res) => {
   console.warn('404 url: ' + req.url);
-  res.status(404);
-  var context = { user : req.user };
-  res.render('404', context);
+  res.status(404).render('404');
 });
 
 // 500 error handler (middleware)
 app.use((err, req, res) => {
   console.error(err.stack);
-  res.status(500);
-   var context = { user : req.user };
-  res.render('500', context);
+  res.status(500).render('500');
 });
 
 const secureServer = https.createServer({

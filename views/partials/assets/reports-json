@@ -1,0 +1,23 @@
+     {{#if access.read}}
+
+        <form id="report-json" class="" role="search" autocomplete="off" action="#" method="POST">
+          <div class="form-group col-sm-4"> <!-- topnav.formgroup1 -->
+            <label class="sr-only" for="field-findIn">Search in</label>
+            <select id="field-findIn" class="form-control" name="findIn">
+              <option {{{selOption 'equipLocation' lastSearch}}}>equipLocation</option>
+              <option {{{selOption 'equipMake' lastSearch}}}>equipMake</option>
+              <option {{{selOption 'equipPONum' lastSearch}}}>equipPONum</option>
+              <option {{{selOption 'systemEnviron' lastSearch}}}>systemEnviron</option>
+              <option {{{selOption 'systemName' lastSearch}}}>systemName</option>
+              <option {{{selOption 'systemRole' lastSearch}}}>systemRole</option>
+            </select>
+          </div> <!-- /topnav.formgroup1 -->
+          <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+          <div class="form-group  col-sm-4"> <!-- topnav.formgroup2 -->
+            <label class="sr-only" for="field-multiText">Search for</label>
+            <input id="field-multiText" type="text" class="form-control" pattern=".{3,}" required name="findWhat" placeholder="? (3 char min)">
+          </div>
+          <!-- /topnav.formgroup2 -->
+          <button type="submit" class="btn btn-danger" value='Submit'>Submit</button>
+        </form>
+      {{/if}}

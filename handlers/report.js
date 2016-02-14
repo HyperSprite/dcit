@@ -26,33 +26,32 @@ module.exports.dcReport = function fdcReport(req, res) {
   if (accConfig.accessCheck(req.user).read !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
-  } else {
-    Models.Systemdb.distinct('systemEnviron').exec(function(err, env) {
-      // logger.info(env);
-      Models.Systemdb.distinct('systemRole').exec(function(err, role) {
-        // logger.info(role);
-        Models.Equipment.distinct('equipMake').exec(function(err, make) {
-          context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
-            titleNow: 'Reports',
-            reportType: req.body.systemEnviron,
-            drop1: 'Environment',
-            drop1url: '/reports/env-',
-            drop1each: env.sort(),
-            drop2: 'Roles',
-            drop2url: '/reports/role-',
-            drop2each: role.sort(),
-            drop3: 'Make',
-            drop3url: '/reports/make-',
-            drop3each: make.sort(),
-          };
-          res.render('asset/env-role-report', context);
-        });
+  }
+  Models.Systemdb.distinct('systemEnviron').exec(function(err, env) {
+    // logger.info(env);
+    Models.Systemdb.distinct('systemRole').exec(function(err, role) {
+      // logger.info(role);
+      Models.Equipment.distinct('equipMake').exec(function(err, make) {
+        var context = {
+          access: accConfig.accessCheck(req.user),
+          // user: req.user,
+          // requrl: req.url,
+          titleNow: 'Reports',
+          reportType: req.body.systemEnviron,
+          drop1: 'Environment',
+          drop1url: '/reports/env-',
+          drop1each: env.sort(),
+          drop2: 'Roles',
+          drop2url: '/reports/role-',
+          drop2each: role.sort(),
+          drop3: 'Make',
+          drop3url: '/reports/make-',
+          drop3each: make.sort(),
+        };
+        res.render('asset/env-role-report', context);
       });
     });
-  }
+  });
 };
 
 /*
@@ -709,12 +708,22 @@ The route is based on the collection targeted.
 // /reports/systems/systemEnviron/ri4
 // req.params.findIn
 // req.params.findWhat
-
+// module.exports.systemsAggrPost = (req, res) => {
+//   var prms = req.body;
+//   // console.dir(req.body);
+//   res.redirect(`/reports/systems/${prms.findIn}/${prms.findWhat}`);
+// };
 
 module.exports.systemsAggr = (req, res) => {
+  console.dir(req.body);
   var context = {};
   var data = req.params;
   var queryTest;
+  if (!data.findIn) {
+    data.findIn = req.body.findIn;
+    data.findWhat = req.body.findWhat;
+  }
+  // console.dir(data);
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
@@ -727,6 +736,9 @@ module.exports.systemsAggr = (req, res) => {
     data.resType = 'json';
     data.resExt = '.json';
     data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
+  } else {
+    res.render('asset/reports', data);
+    return;
   }
   // What are we looking for, this can certainly get better with query strings
   // This says, if they are specific, do that, otherwise do rsys

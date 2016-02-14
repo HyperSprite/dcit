@@ -1,6 +1,7 @@
-const logger = require('./lib/logger.js');
+const logger = require('./lib/logger');
 const passport = require('passport');
 const handlers = require('./handlers');
+const strTgs = require('./lib/stringThings');
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -47,8 +48,10 @@ module.exports = function(app) {
   // locations
   // URL is incoming / :datacenter is the req storage (this could have had a better name)
   // Next part is the export file.name in handlers dir.
+
   app.get('/location/datacenters', handlers.location.datacenterPages);
   app.get('/location/datacenter/:datacenter', handlers.location.datacenterPages);
+
   app.post('/location/datacentercontact/:datacenter', isLoggedIn, handlers.location.datacenterContactPost);
   app.post('/location/datacenterdelete/:datacenter', isLoggedIn, handlers.location.datacenterDelete);
   app.post('/location/datacentersubdelete/:datacenter', isLoggedIn, handlers.location.datacenterSubDelete);
@@ -99,6 +102,9 @@ module.exports = function(app) {
   app.get('/reportByInserviceEnvRole.json', handlers.report.reportByInserviceEnvRole);
 
   app.get('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
+  app.post('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
+  // app.post('/reports/systemsPost', handlers.report.systemsAggr);
+  // app.post('/reports/systemsPost', handlers.report.systemsAggrPost);
 
   // Admin
   app.get('/admin', isLoggedIn, handlers.admin.home);

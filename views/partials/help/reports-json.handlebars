@@ -1,0 +1,24 @@
+<h4 id="csv-and-json-report-builder">CSV and JSON report builder</h4>
+
+<p>A new addition to DCIT is CSV and JSON reporting. This was designed as a API for reporting and is less useful to humans than machines. </p>
+
+<p>The URL for this is: /reports/systems/ (findIn)/(findWhat)</p>
+
+
+
+<h5 id="findin-options-are">findIn options are</h5>
+
+<ul>
+<li>equipLocation</li>
+<li>equipMake</li>
+<li>equipPONum</li>
+<li>systemEnviron</li>
+<li>systemName</li>
+<li>systemRole</li>
+</ul>
+
+
+
+<h5 id="findwhat-is-similar-to-the-top-bar-search">findWhat is similar to the top bar search.</h5>
+
+<p>The report returned will give you an idea of what the data will look like. Now, looking at the URL, if you add “.csv”, it will prompt you to download a csv file. If you add “.json” it will download a JSON array. This has been tested on Chrome, curl (with the “-k” flag) and wget (with the “–no-check-certificate” flag).</p>

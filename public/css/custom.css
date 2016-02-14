@@ -43,6 +43,11 @@ navbar navbar-fixed-top > li > a {
                  0px 18px 23px rgba(0,0,0,0.1);
 }
 
+#reportURL {
+  margin: auto;
+  /*text-align: center;*/
+  font-size: 16px;
+}
 
 .footer, .push {
     height: 50px;
@@ -57,7 +62,7 @@ textarea.form-fixer {
     height: 28px;
 }
 div.marginRow {
-   margin-bottom:0px !important; 
+   margin-bottom:0px !important;
 }
 code {
 white-space: normal;
@@ -77,19 +82,19 @@ svg {
     background-color: #F5F5F7;
     overflow: hidden;
 }
-.autocomplete-selected { 
-    background: #FCBBBB; 
+.autocomplete-selected {
+    background: #FCBBBB;
 }
-.autocomplete-suggestions strong { 
+.autocomplete-suggestions strong {
     font-weight: bold;
-    color: #800000; 
+    color: #800000;
 }
-.autocomplete-group { 
-    padding: 2px 5px; 
+.autocomplete-group {
+    padding: 2px 5px;
 }
-.autocomplete-group strong { 
-    display: block; 
-    border-bottom: 1px solid #000; 
+.autocomplete-group strong {
+    display: block;
+    border-bottom: 1px solid #000;
 }
 .autocomplete-nofound {
     font-size: 120%;

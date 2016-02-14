@@ -1,33 +1,12 @@
 
-var     strTgs = require('../lib/stringThings'),
-     accConfig = require('../config/access'),
-      ObjectId = require('mongoose').Types.ObjectId;
-var     logger = require('../lib/logger');
- 
-exports.home = function(req, res){
-    //logger.info('exports.home');
-        context = {
-            access : accConfig.accessCheck(req.user),
-            user : req.user,
-            requrl : req.url,
-            };
-	res.render('home', context);
+module.exports.home = function(req, res) {
+  res.render('home');
 };
 
-exports.about = function(req, res){
-        context = {
-            access : accConfig.accessCheck(req.user),
-            user : req.user,
-            requrl : req.url,
-            };
-	res.render('about', context);
+module.exports.about = function(req, res) {
+  res.render('about');
 };
 
-exports.help = function(req, res){
-        context = {
-            access : accConfig.accessCheck(req.user),
-            user : req.user,
-            requrl : req.url,
-            };
-    res.render('help', context);
+module.exports.help = function(req, res) {
+  res.render('help');
 };

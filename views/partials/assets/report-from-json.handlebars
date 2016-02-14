@@ -1,0 +1,34 @@
+
+<div> <!-- part /report-from-json.part1 -->
+  <table id="tblPendingRequests" {{> bootstrap-table}}
+    data-url="/reports/systems/{{findIn}}/{{findWhat}}.json"
+    >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="index" data-visible="false">Index</th>
+        <th data-sortable="true" data-field="equipLocation" data-order="asc">DC_Cage_Rack_RU</th>
+        <th data-sortable="true" data-field="systemName">System Name</th>
+        <th data-sortable="true" data-field="systemAlias" data-visible="false">Alias</th>
+        <th data-sortable="true" data-field="systemParentId" data-visible="false">Parent</th>
+        <th data-sortable="true" data-field="systemStatus">Status</th>
+        <th data-sortable="true" data-field="systemEnviron">Env</th>
+        <th data-sortable="true" data-field="systemRole">Role</th>
+        <th data-sortable="true" data-field="systemTicket" data-visible="false">System Ticket</th>
+        <th data-sortable="true" data-field="systemNotes" data-visible="false">System Notes</th>
+        <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
+        <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
+        <th data-sortable="true" data-field="equipStatus">Status</th>
+        <th data-sortable="true" data-field="equipType" data-visible="false">Type</th>
+        <th data-sortable="true" data-field="makeModel">Make - Model</th>
+        <th data-sortable="true" data-field="equipRUHieght" data-visible="false">RU Height</th>
+        <th data-sortable="true" data-field="equipAcquisition">Acquisition</th>
+        <th data-sortable="true" data-field="equipPONum" data-visible="false">PO Number</th>
+        <th data-sortable="true" data-field="equipInvoice" data-visible="false">Invoice</th>
+        <th data-sortable="true" data-field="equipProjectNum" data-visible="false">Project Number</th>
+        <th data-sortable="true" data-field="equipNotes" data-visible="false">Notes</th>
+        <th data-sortable="true" data-field="equipmodifiedOn" data-visible="false">Modified On</th>
+      </tr>
+    </thead>
+  </table>
+</div> <!-- part /report-from-json.part1 -->
+
