@@ -14,7 +14,7 @@ module.exports = function(app) {
   app.post('/admin/uploadpost', isLoggedIn, handlers.admin.uploadPost);
 // cross-site request forgery protection
   app.use(require('csurf')());
-  app.use(function(req, res, next){
+  app.use(function(req, res, next) {
     res.locals._csrfToken = req.csrfToken();
     next();
   });
@@ -22,6 +22,7 @@ module.exports = function(app) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err);
   // handle CSRF token errors here
     logger.warn('crsf error req.csrfToken >' + req.csrfToken());
+    logger.warn(req.hostname + req.originalUrl);
 
     res.status(403);
     res.send('session has expired or form tampered with');

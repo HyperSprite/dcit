@@ -170,7 +170,7 @@ app.use((req, res, next) => {
   // res.locals.currentUser = req.user;
   res.locals.flash = req.session.flash;
   delete req.session.flash;
-  console.log(res.locals);
+  // console.log(res.locals);
   next();
 });
 
