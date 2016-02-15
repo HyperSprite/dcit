@@ -50,9 +50,6 @@ exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
         } else {
           // logger.info('system-list'+sys);
           var context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
             sys: sys.map(function fdcSystemPages00600(sy) {
               // rack.populate('rackParentDC', 'abbreviation cageNickname')
               //logger.info('sy Map>'+sy);
@@ -67,7 +64,7 @@ exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
                 createdOn: strTgs.dateMod(sy.createdOn),
                 modifiedOn: strTgs.dateMod(sy.modifiedOn),
               };
-            })
+            }),
           };
           // the 'location/datacenter-list' is the view that will be called
           // context is the data from above
@@ -128,9 +125,6 @@ exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
             }
 
             context = {
-              access: accConfig.accessCheck(req.user),
-              user: req.user,
-              requrl: req.url,
               titleNow: 'New System',
               sysNameList: sysUni,
               equipSNList: eqUni,
@@ -175,7 +169,7 @@ exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
 
       // note to self, may need to seperate this out so I can do the DC search which is not needed on the on the copy.
       // or
-      // move datacenter search up, return only network 
+      // move datacenter search up, return only network
       // then do two find this in that, find DC from Loc, then Find vlan, down in the port section to get the ports
 
       Models.Systemdb.find({}, {
@@ -289,9 +283,6 @@ exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
                     thisEquipPortsMapped = '';
                   }
                   context = {
-                    access: accConfig.accessCheck(req.user),
-                    user: req.user,
-                    requrl: req.url,
                     titleNow: sy.systemName,
                     menu1: 'Show connected ports',
                     menuLink1: '/endpoint/' + sy.systemName,
@@ -436,8 +427,6 @@ exports.dcSystemPages = function fdcSystemPages00360(req, res, next) {
                   };
                 } else { // Copy
                   context = {
-                    access: accConfig.accessCheck(req.user),
-                    user: req.user,
                     equipSNList: eqUni,
                     optSystPortType: strTgs.findThisInThatMulti('optSystPortType', opt, 'optListKey'),
                     optSystStatus: strTgs.findThisInThatMulti('optSystStatus', opt, 'optListKey'),
@@ -506,9 +495,6 @@ exports.dcSystemPortPages = function fdcSystemPortPages(req, res, next) {
         } else {
           //logger.info('system-list'+sys);
           var context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
             sys: sys.map(function fdcSystemPortPages05280(sy) {
               // rack.populate('rackParentDC', 'abbreviation cageNickname')
               // logger.info('sy Map>'+sy);
@@ -679,7 +665,7 @@ function queryString(findThis, opt, searchIn) {
       });
       //        logger.info('query13'+query);
       break;
-    case 14: // End of life    
+    case 14: // End of life
       query = Models.Equipment.find({
         'equipStatus': {
           $in: ['End of Life', 'Missing', 'End of Life - Recycled', 'End of Life - RMA']
@@ -885,9 +871,6 @@ exports.dcSystembyEnvRole = function fdcSystembyEnvRole(req, res, next) {
 
                   //logger.info('system-list'+sys);
                   var context = {
-                    access: accConfig.accessCheck(req.user),
-                    user: req.user,
-                    requrl: req.url,
                     titleNow: '.. ' + searchFor,
                     equipsys: 'true',
                     reportType: req.body.systemEnviron,
@@ -904,7 +887,7 @@ exports.dcSystembyEnvRole = function fdcSystembyEnvRole(req, res, next) {
 
 
                     eqs: sys.map(function fdcSystembyEnvRole09400(sy) {
-                      tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
+                      var tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
                       //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                       return {
@@ -951,7 +934,7 @@ exports.dcSystembyEnvRole = function fdcSystembyEnvRole(req, res, next) {
             // this looks for 'list' as the / url. if it exists, it prints the datacenter list
             query = queryString(searchFor, editLoad, searchIn);
             query.sort({
-              'equipSN': 'asc'
+              'equipSN': 'asc',
             }).exec(function fdcSystembyEnvRole09890(err, eqs) {
               if (err) {
                 logger.warn(asc + ' ' + err);
@@ -961,9 +944,6 @@ exports.dcSystembyEnvRole = function fdcSystembyEnvRole(req, res, next) {
 
                   //logger.info('system-list'+sys);
                   var context = {
-                    access: accConfig.accessCheck(req.user),
-                    user: req.user,
-                    requrl: req.url,
                     titleNow: '.. ' + searchFor,
                     equipsys: 'true',
                     reportType: req.body.systemEnviron,
@@ -979,7 +959,7 @@ exports.dcSystembyEnvRole = function fdcSystembyEnvRole(req, res, next) {
                     lastSearch: lastSearch,
 
                     eqs: eqs.map(function fdcSystembyEnvRole10160(eq) {
-                      tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
+                      var tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
                       // rack.populate('rackParentDC', 'abbreviation cageNickname')
                       //logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
                       return {
@@ -1024,9 +1004,6 @@ exports.dcSystembyEnvRole = function fdcSystembyEnvRole(req, res, next) {
 
           } else {
             var context = {
-              access: accConfig.accessCheck(req.user),
-              user: req.user,
-              requrl: req.url,
               titleNow: searchFor,
               reportType: req.body.systemEnviron,
               drop1: 'Environment',
@@ -1058,7 +1035,7 @@ aggregate({ $match: { seller: user, status: 'completed' } }, {
   if(err){
   logger.info(err);
   }else{
-          
+
           var context ={
           envCnt: model.map(function(ec){
               return{
@@ -1086,11 +1063,8 @@ exports.findEndpoints = function ffindEndpoints(req, res, next) {
         'systemPorts.sysPortEndPoint': fEndPoint
       }, 'systemName systemPorts.sysPortName systemPorts.sysPortCablePath systemPorts.sysPortEndPoint systemPorts.sysPortEndPointPre systemPorts.sysPortEndPointPort systemPorts.sysPortVlan systemPorts.sysPortOptions systemPorts.sysPortAddress systemPorts.sysPortType', function ffindEndpoints11270(err, sys) {
         if (err) return next(err);
-        //logger.info('sys > '+sys);
+        // logger.info('sys > '+sys);
         context = {
-          access: accConfig.accessCheck(req.user),
-          user: req.user,
-          requrl: req.url,
           titleNow: fEndPoint,
           sysPortEndPoint: fEndPoint,
           menu1: 'Show ' + fEndPoint + ' details',
@@ -1416,9 +1390,6 @@ exports.dcSystemNameChange = function(req, res) {
       } else {
 
         context = {
-          access: accConfig.accessCheck(req.user),
-          user: req.user,
-          requrl: req.url,
           menu1: sys.systemName,
           menuLink1: '#',
           titleNow: sys.systemName,

@@ -19,9 +19,9 @@ var start  = '',
     dcSubId = '',
     dcId ='';
 
-//---------------------------------------------------------------------   
+//---------------------------------------------------------------------
 //----------------------   Rack List  ---------------------------------
-//--------------------------------------------------------------------- 
+//---------------------------------------------------------------------
 /*
 this is the Rack List block. Looks for 'List' in the URL and returns list of datacenters with city and country from Main contact.
 */
@@ -43,9 +43,6 @@ logger.info(err);
 logger.info(err);
         }else{
             var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                 racks: racks.map(function(rack){
                 var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
@@ -86,9 +83,9 @@ logger.info(err);
             // context is the data from above
             res.render('location/rack-list', context);
         }});}});
-        
+
 /*------------------------------------------------------------------
------------------------ Create New Rack Power   --------------------   
+----------------------- Create New Rack Power   --------------------
 ------------------------------------------------------------------------
 */
     } else if (req.params.datacenter.indexOf ('circuit') !=-1){
@@ -104,9 +101,9 @@ logger.info(err);
 //logger.info('|dcSubId >'+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
 //logger.info('|dcId    >'+dcId);
-        
-        
-        
+
+
+
         Rack.findOne({rackUnique: dcId},function(err,rk){
         if(err)return next(err);
         Optionsdb.findOne({optListKey: 'optEquipStatus'},function(err,opt){
@@ -114,7 +111,7 @@ logger.info(err);
 //logger.info(opt);
         Datacenter.find({},'_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err,datacenter){
         if(err) return next(err);
-        
+
         // New Rack Power (no existing)
         var uber = strTgs.findCGParent(rk.rackParentCage,datacenter);
         var context;
@@ -146,9 +143,9 @@ logger.info(err);
                 rackParentCage: rk.rackParentCage,
                 };
             res.render('location/rackpower', context);
-        
+
         } else {
-       
+
         var thisSubDoc = rk.powers.id(dcSubId);
 
         if(err) return next(err);
@@ -180,10 +177,10 @@ logger.info(err);
                     rackPowPhase: thisSubDoc.rackPowPhase,
                     rackPowAmps: thisSubDoc.rackPowAmps,
                     rackPowReceptacle: thisSubDoc.rackPowReceptacle,
-                    };        
-        
+                    };
+
         } else {
-// Edit Rack Power 
+// Edit Rack Power
 //logger.info(rk);
             context ={
                 access : accConfig.accessCheck(req.user),
@@ -214,9 +211,9 @@ logger.info(err);
                 rackPowAmps: thisSubDoc.rackPowAmps,
                 rackPowReceptacle: thisSubDoc.rackPowReceptacle,
                 };
-            }    
+            }
 //logger.info(context);
-        res.render('location/rackpower', context); 
+        res.render('location/rackpower', context);
         }});});});
 /*----------------------------------------------------------------------
 ---------------------  Create New Rack   -------------------------------
@@ -272,7 +269,7 @@ link to this looks
                         cageAbbreviation: thisSubDoc.cageAbbreviation,
                 };
 //logger.info(context);
-        res.render('location/rackedit', context);  
+        res.render('location/rackedit', context);
         }});});
 
     }  else {
@@ -299,24 +296,24 @@ link to this looks
             dcabbr = req.params.datacenter;
 //logger.info('view rack '+dcabbr);
         }
-        
-  
+
+
     Rack.findOne({rackUnique: dcabbr},function(err,rack){
         if(err) return next(err);
         if(!rack) return next();
 //logger.info(datacenter);
-        
+
     Optionsdb.findOne({optListKey: 'optRackStatus'},function(err,opt){
         if(err)return next(err);
-//logger.info(opt);    
-    Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err, datacenter){ 
+//logger.info(opt);
+    Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err, datacenter){
         if(err){
         logger.info(err);
         }else{
 //logger.info ('Rack.findOne takes the id and displays the matching rack');
-            var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);            
+            var uber = strTgs.findCGParent(rack.rackParentCage,datacenter);
         if(editLoad < 4){
-             context = {    
+             context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
                 requrl : req.url,
@@ -342,7 +339,7 @@ link to this looks
                             rackDepth: rack.rackDepth,
                             rackMake: rack.rackMake,
                             rackModel: rack.rackModel,
-                            rUs: rack.rUs,            
+                            rUs: rack.rUs,
                             rackNickname: rack.rackNickname,
                             rackName: rack.rackName,
                             rackUnique: rack.rackUnique,
@@ -376,8 +373,8 @@ link to this looks
                                 modifiedOn: strTgs.dateMod(rp.modifiedOn),
                             };
                             }),
-                        }; 
-        } else {   
+                        };
+        } else {
            context = {
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
@@ -401,15 +398,15 @@ link to this looks
                             rackModel: rack.rackModel,
                             rUs: rack.rUs,
                             rackStatus: rack.rackStatus,
-                        };    
-        }                    
- 
+                        };
+        }
+
 //logger.info(context);
         if (editLoad > 2){
 //logger.info('rackedit');
-            res.render('location/rackedit', context); 
+            res.render('location/rackedit', context);
         }else{
-        res.render('location/rack', context);  
+        res.render('location/rack', context);
         }
         }});
         });
@@ -425,13 +422,13 @@ exports.dcRackPost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
-    }else{ 
+    }else{
     // this makes the abbreviation available for the URL
     res.abbreviation = req.body.abbreviation;
 //logger.info('dcRackPost abbreviation>'+res.abbreviation);
 //logger.info('rUs >'+req.body.rUs);
 //logger.info('rUs expanded >'+ strTgs.compUs(req.body.rUs));
-// rackUniqe is created when making a new rack so it does not exist on new 
+// rackUniqe is created when making a new rack so it does not exist on new
 // or copied racks
     res.lastRack = req.body.rackNickname;
     if (!req.body.rackUnique){
@@ -459,7 +456,7 @@ exports.dcRackPost = function(req,res){
                         rUs: strTgs.sTrim(req.body.rUs),
                         rackNotes: strTgs.uTrim(req.body.rackNotes),
                         createdOn: Date.now(),
-                        createdBy:req.user.local.email,                        
+                        createdBy:req.user.local.email,
 
                     },function(err){
 	        if(err) {
@@ -470,8 +467,8 @@ exports.dcRackPost = function(req,res){
 	                intro: 'Duplicate!',
 	                message: 'Looks like there is already a rack by that name.',
 	            };
-                
-                } else { 
+
+                } else {
 	            req.session.flash = {
 	                type: 'danger',
 	                intro: 'Ooops!',
@@ -486,7 +483,7 @@ exports.dcRackPost = function(req,res){
 	            message: 'Your update has been made.',
                 };
 	        return res.redirect(303, '/location/datacenter/'+ res.abbreviation);
-            } else { 
+            } else {
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
@@ -497,7 +494,7 @@ exports.dcRackPost = function(req,res){
             }
 	    }
         );
-        
+
 	} else {
     Rack.findOne({rackUnique: req.body.rackUnique},function(err,rack){
     res.abbreviation = req.body.rackUnique;
@@ -546,7 +543,7 @@ exports.dcRackPost = function(req,res){
 }
 }
 };
-  
+
 /*---------------------------------------------------------------------
 ---------------------------- Rack Delete ------------------------------
 ------------------------------------------------------------------------
@@ -555,7 +552,7 @@ exports.rackDelete = function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     res.abbreviation = req.body.abbreviation;
     res.rackUnique = req.body.rackUnique;
 if (req.body.rackUnique){
@@ -597,7 +594,7 @@ exports.dcRackPowPost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     // this makes the abbreviation available for the URL
     //res.abbreviation = req.body.rackUnique;
 
@@ -612,9 +609,9 @@ exports.dcRackPowPost = function(req,res){
     //logger.info('Rack Power rackPowMain '+req.body.rackPowMain);
     //logger.info('Rack Power rackPowVolts '+req.body.rackPowVolts);
     //logger.info('Rack Power rackPowPhase '+req.body.rackPowPhase);
-    
-    
-    
+
+
+
     Rack.findOne({rackUnique: req.body.rackUnique},function(err,rk){
     res.abbreviation = req.body.rackUnique;
     //logger.info('Rack Power findOne '+rk);
@@ -682,7 +679,7 @@ exports.rackSubDelete = function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){
     Rack.findById(req.body.id,req.body.subDoc,function (err, rk){

@@ -49,9 +49,6 @@ exports.datacenterPages = function(req, res, next) {
     // this looks for "list" as the / url. if it exists, it prints the datacenter list
       Datacenter.find(function(err, datacenters) {
         var context = {
-          access: accConfig.accessCheck(req.user),
-          user: req.user,
-          requrl: req.url,
           ses: req.session.ses,
           datacenters: datacenters.map(function(dc) {
           // var dc = datacenter;
@@ -97,9 +94,6 @@ Edit Contact
         var context;
         if (dcSubId === 'new') {
           context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
             ses: req.session.ses,
             id: dc._id,
             titleNow: dc.abbreviation,
@@ -117,9 +111,6 @@ Edit Contact
           if (!datacenter) return next();
             // logger.info(datacenter);
           context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
             ses: req.session.ses,
             id: dc._id,
             fullName: dc.fullName,
@@ -180,9 +171,6 @@ If "New" is in the URL, it does New, otherwise it goes to existing
         var dcabbr = req.params.datacenter.substring( start + 1);
         if (dcabbr === 'new') {
           var context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
             ses: req.session.ses,
           };
           res.render('location/datacenteredit', context);
@@ -225,9 +213,6 @@ this takes the abbreviation and displays the matching datacenter details
         Rack.find({rackParentDC: dc._id}).sort('rackUnique').exec(function(err, racks) {
         // logger.info ('Rack - id to matching rack to datacenter'+ dc._id);
           var context = {
-            access: accConfig.accessCheck(req.user),
-            user: req.user,
-            requrl: req.url,
             ses: req.session.ses,
             menu1: dc.abbreviation,
             menuLink1: '/location/datacenter/' + dc.abbreviation,

@@ -23,9 +23,9 @@ var start  = '',
     dcId ='';
 
 
-//---------------------------------------------------------------------     
+//---------------------------------------------------------------------
 //----------------------   Equipment List  ----------------------------
-//--------------------------------------------------------------------- 
+//---------------------------------------------------------------------
 /*
 this is the Equip List block. Looks for 'List' in the URL and returns list of Equipment.
 */
@@ -34,7 +34,7 @@ exports.dcEquipPages = function(req,res,next){
     if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     if (!req.params.datacenter ){
     //logger.info('in List');
     // this looks for 'list' as the / url. if it exists, it prints the datacenter list
@@ -43,9 +43,6 @@ exports.dcEquipPages = function(req,res,next){
         logger.info(err);
         }else{
             var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                 eqs: eqs.map(function(eq){
                        // rack.populate('rackParentDC', 'abbreviation cageNickname')
                     //logger.info(eq);
@@ -73,9 +70,9 @@ exports.dcEquipPages = function(req,res,next){
             // context is the data from above
             res.render('asset/equipment-list', context);
         }});
-        
+
 /*------------------------------------------------------------------
------------------------ Create New Rack Power   --------------------   
+----------------------- Create New Rack Power   --------------------
 ------------------------------------------------------------------------
 */
     } else if (req.params.datacenter.indexOf ('circuit') !=-1){
@@ -91,22 +88,19 @@ exports.dcEquipPages = function(req,res,next){
             //logger.info('|dcSubId >'+dcSubId);
         dcId = dcInfo.substring (0,dcSplit);
             //logger.info('|dcId    >'+dcId);
-        
-        
-        
+
+
+
         Rack.findOne({rackUnique: dcId},function(err,rk){
         if(err)return next(err);
         Datacenter.find({},'_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName',function(err,datacenter){
         if(err) return next(err);
-        
-        
+
+
         var uber = strTgs.findCGParent(rk.rackParentCage,datacenter);
         var context;
         if (dcSubId === 'new'){
             context ={
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                 rackParentDC: rk.rackParentDC,
                 fullName: uber.fullName,
                 abbreviation: uber.abbreviation,
@@ -122,14 +116,14 @@ exports.dcEquipPages = function(req,res,next){
                 rackParentCage: rk.rackParentCage,
                 };
             res.render('location/rackpower', context);
-        
+
         } else {
-       
+
         var thisSubDoc = rk.powers.id(dcSubId);
 
         if(err) return next(err);
         if(!rk) return next();
-        
+
         if (req.params.datacenter.indexOf ('copy') !=-1){
            //logger.info(rk);
                 context ={
@@ -154,10 +148,10 @@ exports.dcEquipPages = function(req,res,next){
                     rackPowPhase: thisSubDoc.rackPowPhase,
                     rackPowAmps: thisSubDoc.rackPowAmps,
                     rackPowReceptacle: thisSubDoc.rackPowReceptacle,
-                    };        
-        
+                    };
+
         } else {
-        
+
        //logger.info(rk);
             context ={
                 access : accConfig.accessCheck(req.user),
@@ -186,9 +180,9 @@ exports.dcEquipPages = function(req,res,next){
                 rackPowAmps: thisSubDoc.rackPowAmps,
                 rackPowReceptacle: thisSubDoc.rackPowReceptacle,
                 };
-            }    
+            }
         //logger.info(context);
-        res.render('location/rackpower', context); 
+        res.render('location/rackpower', context);
         }});});
 /*------------------------------------------------------------------
 ---------------------  Create New Equipment   ---------------------------
@@ -202,12 +196,12 @@ exports.dcEquipPages = function(req,res,next){
         start = req.params.datacenter.indexOf ('-')+1;
             //logger.info('|start   >'+start);
         dcId = req.params.datacenter.substring (start);
-        
+
             //logger.info('|dcId    >'+dcId);
 
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
-        
+
 
     Rack.find({},{ 'rUs':1,'rackUnique':1,'_id': 0},{sort:{rackUnique:1}},function(err, rk){
         if(err) return next(err);
@@ -218,7 +212,7 @@ exports.dcEquipPages = function(req,res,next){
         rackUni[i] = rk[i].rackUnique;
         //logger.info('rackUni >'+rackUni[i]);
         }
-        
+
         //var RuTemp = 52;
         var getRackrUs = function(RuTemp){
            //logger.info('getRackrUs'+RuTemp);
@@ -227,12 +221,9 @@ exports.dcEquipPages = function(req,res,next){
             tempRu[i]=strTgs.pad([i]);
         }
             //logger.info('getRackrUs>> '+tempRu);
-        return tempRu; 
+        return tempRu;
         };
             context ={
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                 optSystPortType: strTgs.findThisInThatMulti('optSystPortType',opt,'optListKey'),
                 optEquipStatus: strTgs.findThisInThatMulti('optEquipStatus',opt,'optListKey'),
                 optEquipType: strTgs.findThisInThatMulti('optEquipType',opt,'optListKey'),
@@ -240,7 +231,7 @@ exports.dcEquipPages = function(req,res,next){
                 rackrUs: getRackrUs(52),
                 };
        //logger.info(context);
-        res.render('asset/equipmentedit', context);  
+        res.render('asset/equipmentedit', context);
         });});
 
     }  else {
@@ -267,18 +258,18 @@ exports.dcEquipPages = function(req,res,next){
             dcabbr = req.params.datacenter;
             //logger.info('view equip '+dcabbr);
         }
-        
-  
+
+
     Equipment.findOne({equipSN: dcabbr},function(err,eq){
         if(err) return next(err);
         if(!eq) return next();
         //logger.info(datacenter);
     //Optionsdb.findOne({optListKey: 'optEquipStatus'},function(err,opt){
     //    if(err)return next(err);
-    
+
     Optionsdb.find({}, 'optListKey optListArray',function(err,opt){
         if(err)return next(err);
-    
+
     Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
 
 
@@ -291,7 +282,7 @@ exports.dcEquipPages = function(req,res,next){
         rackUni[i] = rk[i].rackUnique;
         //logger.info('rackUni >'+rackUni[i]);
         }
-        
+
         //var RuTemp = 52;
         var getRackrUs = function(RuTemp){
            //logger.info('getRackrUs'+RuTemp);
@@ -300,190 +291,184 @@ exports.dcEquipPages = function(req,res,next){
             tempRu[i]=strTgs.pad([i]);
         }
             //logger.info('getRackrUs>> '+tempRu);
-        return tempRu; 
+        return tempRu;
         };
         //logger.info('rackUni >'+rackUni);
 
        //logger.info ('Equipment.findOne '+dcabbr);
-        
+
         if(editLoad < 4){
 
             tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
 
              context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url, 
-                                menu1: eq.equipSN,
-                                menuLink1: '#',
-                                titleNow:eq.equipSN,
-                                optSystPortType: strTgs.findThisInThatMulti('optSystPortType',opt,'optListKey'),
-                                optEquipStatus: strTgs.findThisInThatMulti('optEquipStatus',opt,'optListKey'),
-                                optEquipType: strTgs.findThisInThatMulti('optEquipType',opt,'optListKey'),
-                                rackUnique: rackUni,
-                                rackrUs: getRackrUs(52),
-                                equipId: eq._id,
-                                equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-                                equipLocationRu: strTgs.ruElevation(eq.equipLocation),
-                                equipLocation: eq.equipLocation,
-                                equipSN: eq.equipSN,
-                                equipAssetTag: eq.equipAssetTag,
-                                equipTicketNumber: eq.equipTicketNumber,
-                                equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
-                                equipInventoryStatus: eq.equipInventoryStatus,
-                                equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
-                                equipInventoryStatusChecked: strTgs.setCheckBox(eq.equipInventoryStatus),
-                                equipStatus: eq.equipStatus,
-                                equipIsVirtual: eq.equipIsVirtual,
-                                equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
-                                equipType: eq.equipType,
-                                equipMake: eq.equipMake,
-                                equipModel: eq.equipModel,
-                                equipSubModel: eq.equipSubModel,
-                                equipRUHieght: eq.equipRUHieght,
-                                equipImgFront: eq.equipImgFront,
-                                equipImgRear: eq.equipImgRear,
-                                equipImgInternal: eq.equipImgInternal,
-                                equipFirmware: eq.equipFirmware,
-                                equipMobo: eq.equipMobo,
-                                equipCPUCount: eq.equipCPUCount,
-                                equipCPUCores: eq.equipCPUCores,
-                                equipCPUType: eq.equipCPUType,
-                                equipMemType: eq.equipMemType,
-                                equipMemTotal: eq.equipMemTotal,
-                                equipRaidType: eq.equipRaidType,
-                                equipRaidLayout: eq.equipRaidLayout,
-                                equipHDDCount: eq.equipHDDCount,
-                                equipHDDType: eq.equipHDDType,
-                                equipNICCount: eq.equipNICCount,
-                                equipNICType: eq.equipNICType,
-                                equipPSUCount: eq.equipPSUCount,
-                                equipPSUDraw: eq.equipPSUDraw,
-                                equipAddOns: eq.equipAddOns,
-                                equipReceived: strTgs.dateMod(eq.equipReceived),
-                                equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
-                                equipInService: strTgs.dateMod(eq.equipInService),
-                                equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
-                                equipWarrantyMo: eq.equipWarrantyMo,
-                                equipPONum: eq.equipPONum,
-                                equipInvoice: eq.equipInvoice,
-                                equipProjectNum: eq.equipProjectNum,
-                                equipLicense: eq.equipLicense,
-                                equipMaintAgree: eq.equipMaintAgree,
-                                equipPurchaseType: eq.equipPurchaseType,
-                                equipPurchaser: eq.equipPurchaser,
-                                equipPurchaseTerms: eq.equipPurchaseTerms,
-                                equipPurchaseEnd: strTgs.dateMod(eq.equipPurchaseEnd),
-                                equipNotes: eq.equipNotes,
-                                createdBy: eq.createdBy,
-                                createdOn: strTgs.dateMod(eq.createdOn),
-                                modifiedBy: eq.modifiedBy,
-                                modifiedOn: strTgs.dateMod(eq.modifiedOn),
-                            equipPorts: eq.equipPorts.map(function(ep){
-                            return {
-                                equipPortId: ep._id,
-                                equipPortType: ep.equipPortType,
-                                equipPortsAddr: ep.equipPortsAddr,
-                                equipPortName: ep.equipPortName,
-                                equipPortsOpt: ep.equipPortsOpt,
-                                createdBy: ep.createdBy,
-                                createdOn: strTgs.dateMod(ep.createdOn),
-                                modifiedby: ep.modifiedbBy,
-                                modifiedOn: strTgs.dateMod(ep.modifiedOn),
-                            };
-                            }),
-                            equipRMAs: eq.equipRMAs.map(function(er){
-                            return {
-                                equipRMA: er._id,
-                                equipRMAOpened: strTgs.dateMod(er.equipRMAOpened),
-                                equipRMAClosed: strTgs.dateMod(er.equipRMAClosed),
-                                equipRMATicket: er.equipRMATicket,
-                                equipRMANumber: er.equipRMANumber,
-                                equipRMANotes: er.equipRMANotes,
-                                createdBy: er.createdBy,
-                                createdOn: strTgs.dateMod(er.createdOn),
-                                modifiedby: er.modifiedbBy,
-                                modifiedOn: strTgs.dateMod(er.modifiedOn), 
-                            };
-                            }),
-                            systemName: tempSys.systemName,
-                            systemEnviron: tempSys.systemEnviron,
-                            systemRole: tempSys.systemRole,
-                            systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
-                            sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-                        }; 
-        
+                menu1: eq.equipSN,
+                menuLink1: '#',
+                titleNow:eq.equipSN,
+                optSystPortType: strTgs.findThisInThatMulti('optSystPortType',opt,'optListKey'),
+                optEquipStatus: strTgs.findThisInThatMulti('optEquipStatus',opt,'optListKey'),
+                optEquipType: strTgs.findThisInThatMulti('optEquipType',opt,'optListKey'),
+                rackUnique: rackUni,
+                rackrUs: getRackrUs(52),
+                equipId: eq._id,
+                equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
+                equipLocationRu: strTgs.ruElevation(eq.equipLocation),
+                equipLocation: eq.equipLocation,
+                equipSN: eq.equipSN,
+                equipAssetTag: eq.equipAssetTag,
+                equipTicketNumber: eq.equipTicketNumber,
+                equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
+                equipInventoryStatus: eq.equipInventoryStatus,
+                equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
+                equipInventoryStatusChecked: strTgs.setCheckBox(eq.equipInventoryStatus),
+                equipStatus: eq.equipStatus,
+                equipIsVirtual: eq.equipIsVirtual,
+                equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
+                equipType: eq.equipType,
+                equipMake: eq.equipMake,
+                equipModel: eq.equipModel,
+                equipSubModel: eq.equipSubModel,
+                equipRUHieght: eq.equipRUHieght,
+                equipImgFront: eq.equipImgFront,
+                equipImgRear: eq.equipImgRear,
+                equipImgInternal: eq.equipImgInternal,
+                equipFirmware: eq.equipFirmware,
+                equipMobo: eq.equipMobo,
+                equipCPUCount: eq.equipCPUCount,
+                equipCPUCores: eq.equipCPUCores,
+                equipCPUType: eq.equipCPUType,
+                equipMemType: eq.equipMemType,
+                equipMemTotal: eq.equipMemTotal,
+                equipRaidType: eq.equipRaidType,
+                equipRaidLayout: eq.equipRaidLayout,
+                equipHDDCount: eq.equipHDDCount,
+                equipHDDType: eq.equipHDDType,
+                equipNICCount: eq.equipNICCount,
+                equipNICType: eq.equipNICType,
+                equipPSUCount: eq.equipPSUCount,
+                equipPSUDraw: eq.equipPSUDraw,
+                equipAddOns: eq.equipAddOns,
+                equipReceived: strTgs.dateMod(eq.equipReceived),
+                equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
+                equipInService: strTgs.dateMod(eq.equipInService),
+                equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
+                equipWarrantyMo: eq.equipWarrantyMo,
+                equipPONum: eq.equipPONum,
+                equipInvoice: eq.equipInvoice,
+                equipProjectNum: eq.equipProjectNum,
+                equipLicense: eq.equipLicense,
+                equipMaintAgree: eq.equipMaintAgree,
+                equipPurchaseType: eq.equipPurchaseType,
+                equipPurchaser: eq.equipPurchaser,
+                equipPurchaseTerms: eq.equipPurchaseTerms,
+                equipPurchaseEnd: strTgs.dateMod(eq.equipPurchaseEnd),
+                equipNotes: eq.equipNotes,
+                createdBy: eq.createdBy,
+                createdOn: strTgs.dateMod(eq.createdOn),
+                modifiedBy: eq.modifiedBy,
+                modifiedOn: strTgs.dateMod(eq.modifiedOn),
+            equipPorts: eq.equipPorts.map(function(ep){
+            return {
+                equipPortId: ep._id,
+                equipPortType: ep.equipPortType,
+                equipPortsAddr: ep.equipPortsAddr,
+                equipPortName: ep.equipPortName,
+                equipPortsOpt: ep.equipPortsOpt,
+                createdBy: ep.createdBy,
+                createdOn: strTgs.dateMod(ep.createdOn),
+                modifiedby: ep.modifiedbBy,
+                modifiedOn: strTgs.dateMod(ep.modifiedOn),
+            };
+            }),
+            equipRMAs: eq.equipRMAs.map(function(er){
+            return {
+                equipRMA: er._id,
+                equipRMAOpened: strTgs.dateMod(er.equipRMAOpened),
+                equipRMAClosed: strTgs.dateMod(er.equipRMAClosed),
+                equipRMATicket: er.equipRMATicket,
+                equipRMANumber: er.equipRMANumber,
+                equipRMANotes: er.equipRMANotes,
+                createdBy: er.createdBy,
+                createdOn: strTgs.dateMod(er.createdOn),
+                modifiedby: er.modifiedbBy,
+                modifiedOn: strTgs.dateMod(er.modifiedOn),
+            };
+            }),
+            systemName: tempSys.systemName,
+            systemEnviron: tempSys.systemEnviron,
+            systemRole: tempSys.systemRole,
+            systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
+            sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
+        };
+
         } else {
            context = {
-            access : accConfig.accessCheck(req.user),
-            user : req.user,
-            requrl : req.url, 
-                                optSystPortType: strTgs.findThisInThatMulti('optSystPortType',opt,'optListKey'),
-                                optEquipStatus: strTgs.findThisInThatMulti('optEquipStatus',opt,'optListKey'),
-                                optEquipType: strTgs.findThisInThatMulti('optEquipType',opt,'optListKey'),
-                                rackrUs: getRackrUs(52),
-                                rackUnique: rackUni,
-                                rUs: rk.rUs,
-                                wasCopy: eq.equipSN,
-                                equipTicketNumber: eq.equipTicketNumber,
-                                equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
-                                equipInventoryStatus: eq.equipInventoryStatus,
-                                equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
-                                equipStatus: eq.equipStatus,
-                                equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
-                                equipType: eq.equipType,
-                                equipMake: eq.equipMake,
-                                equipModel: eq.equipModel,
-                                equipSubModel: eq.equipSubModel,
-                                equipRUHieght: eq.equipRUHieght,
-                                equipImgFront: eq.equipImgFront,
-                                equipImgRear: eq.equipImgRear,
-                                equipImgInternal: eq.equipImgInternal,
-                                equipFirmware: eq.equipFirmware,
-                                equipMobo: eq.equipMobo,
-                                equipCPUCount: eq.equipCPUCount,
-                                equipCPUCores: eq.equipCPUCores,
-                                equipCPUType: eq.equipCPUType,
-                                equipMemType: eq.equipMemType,
-                                equipMemTotal: eq.equipMemTotal,
-                                equipRaidType: eq.equipRaidType,
-                                equipRaidLayout: eq.equipRaidLayout,
-                                equipHDDCount: eq.equipHDDCount,
-                                equipHDDType: eq.equipHDDType,
-                                equipNICCount: eq.equipNICCount,
-                                equipNICType: eq.equipNICType,
-                                equipPSUCount: eq.equipPSUCount,
-                                equipPSUDraw: eq.equipPSUDraw,
-                                equipAddOns: eq.equipAddOns,
-                                equipReceived: strTgs.dateMod(eq.equipReceived),
-                                equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
-                                equipInService: strTgs.dateMod(eq.equipInService),
-                            //    equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
-                                equipWarrantyMo: eq.equipWarrantyMo,
-                                equipPONum: eq.equipPONum,
-                                equipInvoice: eq.equipInvoice,
-                                equipProjectNum: eq.equipProjectNum,
-                                equipLicense: eq.equipLicense,
-                                equipMaintAgree: eq.equipMaintAgree,
-                                equipPurchaseType: eq.equipPurchaseType,
-                                equipPurchaser: eq.equipPurchaser,
-                                equipPurchaseTerms: eq.equipPurchaseTerms,
-                                equipPurchaseEnd: strTgs.dateMod(eq.equipPurchaseEnd),
-                        };     
-        }                    
- 
+            optSystPortType: strTgs.findThisInThatMulti('optSystPortType',opt,'optListKey'),
+            optEquipStatus: strTgs.findThisInThatMulti('optEquipStatus',opt,'optListKey'),
+            optEquipType: strTgs.findThisInThatMulti('optEquipType',opt,'optListKey'),
+            rackrUs: getRackrUs(52),
+            rackUnique: rackUni,
+            rUs: rk.rUs,
+            wasCopy: eq.equipSN,
+            equipTicketNumber: eq.equipTicketNumber,
+            equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipTicketNumber),
+            equipInventoryStatus: eq.equipInventoryStatus,
+            equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus,eq.equipStatus),
+            equipStatus: eq.equipStatus,
+            equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
+            equipType: eq.equipType,
+            equipMake: eq.equipMake,
+            equipModel: eq.equipModel,
+            equipSubModel: eq.equipSubModel,
+            equipRUHieght: eq.equipRUHieght,
+            equipImgFront: eq.equipImgFront,
+            equipImgRear: eq.equipImgRear,
+            equipImgInternal: eq.equipImgInternal,
+            equipFirmware: eq.equipFirmware,
+            equipMobo: eq.equipMobo,
+            equipCPUCount: eq.equipCPUCount,
+            equipCPUCores: eq.equipCPUCores,
+            equipCPUType: eq.equipCPUType,
+            equipMemType: eq.equipMemType,
+            equipMemTotal: eq.equipMemTotal,
+            equipRaidType: eq.equipRaidType,
+            equipRaidLayout: eq.equipRaidLayout,
+            equipHDDCount: eq.equipHDDCount,
+            equipHDDType: eq.equipHDDType,
+            equipNICCount: eq.equipNICCount,
+            equipNICType: eq.equipNICType,
+            equipPSUCount: eq.equipPSUCount,
+            equipPSUDraw: eq.equipPSUDraw,
+            equipAddOns: eq.equipAddOns,
+            equipReceived: strTgs.dateMod(eq.equipReceived),
+            equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
+            equipInService: strTgs.dateMod(eq.equipInService),
+        //    equipEndOfLife: strTgs.dateMod(eq.equipEndOfLife),
+            equipWarrantyMo: eq.equipWarrantyMo,
+            equipPONum: eq.equipPONum,
+            equipInvoice: eq.equipInvoice,
+            equipProjectNum: eq.equipProjectNum,
+            equipLicense: eq.equipLicense,
+            equipMaintAgree: eq.equipMaintAgree,
+            equipPurchaseType: eq.equipPurchaseType,
+            equipPurchaser: eq.equipPurchaser,
+            equipPurchaseTerms: eq.equipPurchaseTerms,
+            equipPurchaseEnd: strTgs.dateMod(eq.equipPurchaseEnd),
+        };
+        }
+
         //logger.info(context);
         if (editLoad > 2){
             //logger.info('equipment Edit');
-            res.render('asset/equipmentedit', context); 
+            res.render('asset/equipmentedit', context);
         }else{
-        res.render('asset/equipment', context);  
+        res.render('asset/equipment', context);
         }
         });});});});
     }
 }
 };
-    
+
 
 /* ---------------------------------------------------------------------
 -----------------------   New and copy equipment POST working   --------
@@ -494,7 +479,7 @@ exports.dcEquipmentPost = function(req,res){
     if (accConfig.accessCheck(req.user).edit !== 1){
     req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     var data = req.body;
     res.abbreviation = strTgs.cTrim(data.equipSN);
     if(data.isEdit){
@@ -521,7 +506,7 @@ exports.dcEquipmentPost = function(req,res){
         }
         return Ports;
     }};
-    
+
     Equipment.create({
             equipPorts: varPortsNew(data),
             equipLocation: strTgs.locComb(data.equipLocationRack,data.equipLocationRu),
@@ -583,8 +568,8 @@ exports.dcEquipmentPost = function(req,res){
 	                intro: 'Duplicate!',
 	                message: 'Looks like there is already a Equipment SN by that name.',
 	            };
-                
-                } else { 
+
+                } else {
 	            req.session.flash = {
 	                type: 'danger',
 	                intro: 'Ooops!',
@@ -599,7 +584,7 @@ exports.dcEquipmentPost = function(req,res){
 	            message: '<a href="/equipment/'+res.abbreviation+'">'+res.abbreviation+'</a> was created.',
                 };
 	        return res.redirect(303, '/equipment/'+ res.abbreviation);
-            } else { 
+            } else {
             req.session.flash = {
 	            type: 'success',
 	            intro: 'Thank you!',
@@ -610,7 +595,7 @@ exports.dcEquipmentPost = function(req,res){
             }
 	    }
         );
-        
+
 	} else {
     Equipment.findOne({equipSN: req.body.equipSN.toUpperCase()},function(err,eq){
     res.abbreviation = strTgs.cTrim(req.body.equipSN);
@@ -621,11 +606,11 @@ exports.dcEquipmentPost = function(req,res){
             //logger.info(err);
             res.redirect('location/datacenter/'+res.abbreviation);
         } else {
-    
+
     for(i=0;i<data.equipPortType.length;i++){
-        
+
         //logger.info('equip \n PortType >'+data.equipPortType[i] +' - addr >'+ data.equipPortsAddr[i] +' - name >'+ data.equipPortName[i] +' - Opt >'+ data.equipPortsOpt[i]);
-        
+
         if(data.equipPortType[i] === ''){
         //logger.info('equipPortType nonw');
             } else if(data.equipPortId[i] === 'new'){
@@ -645,7 +630,7 @@ exports.dcEquipmentPost = function(req,res){
             thisSubDoc.equipPortsOpt = strTgs.uCleanUp(thisSubDoc.equipPortsOpt,data.equipPortsOpt[i]);
         }
     }
-    
+
 
                         thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack,data.equipLocationRu);
                         thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag,data.equipAssetTag);
@@ -716,7 +701,7 @@ exports.dcEquipmentPost = function(req,res){
 }
 }
 };
-  
+
 
 
 
@@ -733,7 +718,7 @@ exports.dcEquipSysPages = function(req,res,next){
     if (accConfig.accessCheck(req.user).read !== 1){
     req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     //logger.info('***********exports.dcEquipSysPages First >' +req.params.datacenter);
     if (!req.params.datacenter){
     //logger.info('in EquipSysPages - List');
@@ -743,15 +728,12 @@ exports.dcEquipSysPages = function(req,res,next){
         if(!eqs) return next();
         //logger.info(eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus systemTicket systemNotes modifiedOn',function(err, sys){
-        
+
         if(err) return next(err);
         if(!sys) return next();
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
                   return {
@@ -790,7 +772,7 @@ exports.dcEquipSysPages = function(req,res,next){
                                 modifiedOn: strTgs.dateMod(ep.modifiedOn),
                             };
                             }),
-                            
+
                             systemName: tempSys.systemName,
                             systemEnviron: tempSys.systemEnviron,
                             systemRole: tempSys.systemRole,
@@ -798,7 +780,7 @@ exports.dcEquipSysPages = function(req,res,next){
                             systemTicket: tempSys.systemTicket,
                             systemNotes: tempSys.systemNotes,
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-                            
+
                     };
                 })
             };
@@ -807,7 +789,7 @@ exports.dcEquipSysPages = function(req,res,next){
             // context is the data from above
             res.render('asset/equipsys-list', context);
         });});
-    } else { 
+    } else {
     // little regex to get the contains rack location
     var re = new RegExp(req.params.datacenter, 'i');
     Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:-1}).exec(function(err, eqs){
@@ -815,22 +797,19 @@ exports.dcEquipSysPages = function(req,res,next){
         if(!eqs) return next();
        //logger.info('eqs'+eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus systemTicket systemNotes modifiedOn',function(err, sys){
-        
+
         if(err) return next(err);
         if(!sys) return next();
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                         rackView: req.params.datacenter,
                         menu1: req.params.datacenter,
                         menuLink1: '/location/rack/'+req.params.datacenter,
                         titleNow: req.params.datacenter,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
-                  return {                      
+                  return {
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,
@@ -896,7 +875,7 @@ exports.dcRackElevationPage = function(req,res,next){
         if (accConfig.accessCheck(req.user).read !== 1){
           req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
     //logger.info('***********exports.dcRackElevationPage First >' +req.params.datacenter);
     if (!req.params.datacenter){
     //logger.info('in EquipSysPages - List');
@@ -906,22 +885,19 @@ exports.dcRackElevationPage = function(req,res,next){
         if(!eqs) return next();
         //logger.info(eqs);
         Systemdb.find({}, 'systemName systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn',function(err, sys){
-        
+
         if(err) return next(err);
         if(!sys) return next();
         //logger.info('SYS >>>>>>>>>>>'+sys);
 
             var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                eqs: eqs.map(function(eq){
                  tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
-                 
-                 
-                  
+
+
+
                   return {
-                            
+
                             equipLocation: eq.equipLocation,
                             equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
                             equipSN: eq.equipSN,
@@ -952,13 +928,13 @@ exports.dcRackElevationPage = function(req,res,next){
                                 modifiedOn: strTgs.dateMod(ep.modifiedOn),
                             };
                             }),
-                            
+
                             systemName: tempSys.systemName,
                             systemEnviron: tempSys.systemEnviron,
                             systemRole: tempSys.systemRole,
                             systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
                             sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-                            
+
                     };
                 })
             };
@@ -967,7 +943,7 @@ exports.dcRackElevationPage = function(req,res,next){
             // context is the data from above
             res.render('asset/elevation', context);
         });});
-    } else { 
+    } else {
     // little regex to get the contains rack location
     var re = new RegExp(req.params.datacenter, 'i');
     Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation:1}).exec(function(err, eqs){
@@ -975,7 +951,7 @@ exports.dcRackElevationPage = function(req,res,next){
         if(!eqs) return next();
        //logger.info('eqs'+eqs);
         Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn',function(err, sys){
-        
+
         if(err) return next(err);
         if(!sys) return next();
         //logger.info('SYS >>>>>>>>>>>'+sys);
@@ -983,9 +959,6 @@ exports.dcRackElevationPage = function(req,res,next){
         //logger.info('rk >>>>>>>>>>>'+rk);
         //logger.info('rk.rackUnique>'+rk.rackUnique);
             var context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url,
                 rackView: req.params.datacenter,
                 rackUnique: rk.rackUnique,
                 rackDescription: rk.rackDescription,
@@ -1082,16 +1055,13 @@ exports.dcEquipSNChange =  function(req,res){
         tempSys = strTgs.findThisInThatMulti(eq.equipSN,sys,'systemEquipSN');
 
              context = {
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                requrl : req.url, 
                     menu1: eq.equipSN,
                     menuLink1: '#',
                     titleNow:eq.equipSN,
                     equipId: eq._id,
                     oldEquipSN: eq.equipSN,
                     systemName: tempSys.systemName,
-                    }; 
+                    };
         res.render('asset/equipmentsnchange', context);
 });});
 }
@@ -1114,7 +1084,7 @@ exports.dcEquipSNChangePost =  function(req,res){
         async.waterfall([
             function (callback) {
                 Equipment.findOne({equipSN: res.oldEquipSN},function(err,equipSNtoChange){
-                if(err){ 
+                if(err){
                     //logger.info(err);
                     callback(null);
                 }else{
@@ -1169,8 +1139,8 @@ exports.dcEquipDelete = function(req,res){
     if (accConfig.accessCheck(req.user).delete !== 1){
       req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
-    
+    }else{
+
     res.abbreviation = req.body.equipSN;
     res.newpage = req.body.equipLocationRack;
 if (req.body.equipSN){
@@ -1213,7 +1183,7 @@ exports.equipSubDelete = function(req,res){
 if (accConfig.accessCheck(req.user).delete !== 1){
     req.session.flash = strTgs.notAuth;
         return res.redirect(303, '/');
-    }else{ 
+    }else{
 
     res.abbreviation = req.body.abbreviation;
 if (req.body.id && req.body.subId){

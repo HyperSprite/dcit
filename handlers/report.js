@@ -34,8 +34,6 @@ module.exports.dcReport = function fdcReport(req, res) {
       Models.Equipment.distinct('equipMake').exec(function(err, make) {
         var context = {
           access: accConfig.accessCheck(req.user),
-          // user: req.user,
-          // requrl: req.url,
           titleNow: 'Reports',
           reportType: req.body.systemEnviron,
           drop1: 'Environment',
@@ -543,9 +541,6 @@ module.exports.dcByEnvRole = function(req, res) {
 
                   // logger.info('system-list'+sys);
                   var context = {
-                    access: accConfig.accessCheck(req.user),
-                    user: req.user,
-                    requrl: req.url,
                     titleNow: '.. ' + searchFor,
                     equipsys: 'true',
                     reportType: req.body.systemEnviron,
@@ -619,9 +614,6 @@ module.exports.dcByEnvRole = function(req, res) {
 
                   // logger.info('system-list'+sys);
                   var context = {
-                    access: accConfig.accessCheck(req.user),
-                    user: req.user,
-                    requrl: req.url,
                     titleNow: '.. ' + searchFor,
                     equipsys: 'true',
                     reportType: req.body.systemEnviron,

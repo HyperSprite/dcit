@@ -16,7 +16,7 @@ module.exports.accessCheck = (check) => {
 var access = {};
   if (!check) {
     check = {};
-    check.access = 1;
+    check.access = 2;
   }
   if (check.access > 4) {access.root = 1;}
   if (check.access > 3) {access.delete = 1;}
