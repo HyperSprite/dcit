@@ -808,6 +808,7 @@ module.exports.systemsAggr = (req, res) => {
             equipPONum: rslt.equip[0].equipPONum,
             equipInvoice: rslt.equip[0].equipInvoice,
             equipProjectNum: rslt.equip[0].equipProjectNum,
+            equipMaintAgree: rslt.equip[0].equipMaintAgree,
             equipNotes: rslt.equip[0].equipNotes,
             equipmodifiedOn: rslt.equip[0].modifiedOn,
             system_id: rslt._id,
