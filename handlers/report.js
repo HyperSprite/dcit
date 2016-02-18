@@ -801,6 +801,8 @@ module.exports.systemsAggr = (req, res) => {
             sysmodifiedOn: rslt.modifiedOn,
             systemTicket: rslt.systemTicket,
             systemNotes: rslt.systemNotes,
+            systemOSType: rslt.systemOSType,
+            systemOSVersion: rslt.systemOSVersion,
             equipLocation: rslt.equip[0].equipLocation,
             equipStatusLight: rslt.equip[0].equipStatus,
             equipType: rslt.equip[0].equipType,
