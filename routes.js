@@ -104,6 +104,7 @@ module.exports = function(app) {
 
   app.get('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
   app.post('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
+  // app.get('/reports/:inDB/:findIn/:findWhat', handlers.report.allAggr);
   // app.post('/reports/systemsPost', handlers.report.systemsAggr);
   // app.post('/reports/systemsPost', handlers.report.systemsAggrPost);
 
@@ -137,6 +138,7 @@ module.exports = function(app) {
   app.get('/autocomplete/allEquipMake', handlers.ajax.allEquipMake);
   app.get('/autocomplete/allEquipModel', handlers.ajax.allEquipModel);
   app.get('/autocomplete/allLocationRack', handlers.ajax.allLocationRack);
+  app.get('/utility/distinct/:findIn/:findWhat', handlers.ajax.distinct);
   app.post('/process/singleportdelete', isLoggedIn, handlers.ajax.singlePortDelete);
 };
 

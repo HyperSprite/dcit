@@ -109,6 +109,25 @@ $(document).ready(function() {
   $(function() {
     $('[data-toggle="tooltip"]').tooltip();
   });
+
+  $('.reportDrop').click(function() {
+    var getUrl = '/utility/distinct/' + findIn + '/' + findWhat;
+    $.ajax({
+      url: getUrl,
+      type: 'GET',
+      dataType: 'json',
+      success: function(jsonArray) {
+        var newList = '';
+        jsonArray.forEach(function(jsonRes) {
+          newList += '<li><a href="/reports/' + findIn + '/' + findWhat + '/' + jsonRes + '">' + jsonRes + '</a></li>';
+        });
+        $(this).children('ul').html
+      }
+
+
+    })
+  });
+
 // form validation
 //
 // for this to work you need jquery-validate

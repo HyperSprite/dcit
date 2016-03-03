@@ -13,6 +13,7 @@ const accConfig = require('../config/access');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 // Models
+const Models = require('../models');
 const Datacenter = require('../models/datacenter.js');
 const Rack = require('../models/rack.js');
 const Optionsdb = require('../models/options.js');
@@ -291,6 +292,22 @@ exports.equipStatusEdit = function(req, res) {
         res.render('asset/equipstatusedit', {layout: null, context: context});
       }); // opt
     }); // eq
+  }
+};
+
+// json returns
+
+module.exports.distinct = function(req, res) {
+  if (req.params.findIn !== 'User') {
+    const query = Models[req.params.findIn].distinct(req.params.findWhat);
+    query.exec(function(err, data) {
+      if (err) {
+        console.warn(err);
+        res.send(`${req.params.findWhat} lookup error`);
+      } else {
+        res.json(data.sort());
+      }
+    });
   }
 };
 

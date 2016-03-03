@@ -346,7 +346,15 @@ function queryString(findThis, opt, searchIn) {
     case 15: // Spares
       query = Models.Equipment.find({
         'equipStatus': {
-          $in: ['Spare']
+          $in: [
+            'Not yet ordered',
+            'Ordered',
+            'In transit',
+            'Received',
+            'Spare',
+            'Spare with issues',
+            'Assigned',
+          ]
         }
       });
       //        logger.info('query13'+query);
