@@ -4,7 +4,7 @@ exports.seedOptionsDataBase = (function(Optionsdb){
 new Optionsdb({
     optListName: 'Equipment Status',
     optListKey: 'optEquipStatus',
-    optListArray:['Not yet ordered','Ordered','In transit','Received','Spare','Assigned','Build in Progress','Ready','In Service','In Service with issues','Spare with issues','Out for RMA','Damaged','Decommissioned','End of Life - Recycled','End of Life - RMA','End of Life - Transfered','Missing'],
+    optListArray:['Not yet ordered','Ordered','In transit','Received','Spare','Assigned','Build in Progress','Ready','In Service','In Service with issues','Spare with issues','Out for RMA', 'Parts Only', 'Damaged','Decommissioned','End of Life - Recycled','End of Life - RMA','End of Life - Transfered','Missing'],
     }).save();
 new Optionsdb({
     optListName: 'Equipment Type',
@@ -45,9 +45,9 @@ new Optionsdb({
     optListName: 'Models',
     optListKey: 'optModels',
     optListArray: ['Datacenter','Rack','Optionsdb','Equipment','Equipment.equipPorts','Systemdb','Systemdb.systemPorts'],
-    }).save();    
+    }).save();
     logger.info("created new Optionsdb.Status");
-    
+
 });
 
 exports.seedDatacenter = (function(Datacenter){
@@ -86,7 +86,7 @@ exports.seedDatacenter = (function(Datacenter){
             conPho1Typ: '24/7 Support',
             conPho2Num: 5555551122,
             conPho2Typ: 'Magic Hands',
-            conNotes: 'When you call, be ready to describe the location of the equipment.', 
+            conNotes: 'When you call, be ready to describe the location of the equipment.',
             },
         ],
         cages:[{
@@ -105,8 +105,8 @@ exports.seedDatacenter = (function(Datacenter){
             cageWattPSM:13,
             cageNotes:'Running low on power'
             },
-        ],  
+        ],
     }).save();
-    
+
     logger.info("created new Datacenters");
 });

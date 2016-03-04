@@ -338,7 +338,7 @@ function queryString(findThis, opt, searchIn) {
     case 14: // End of life
       query = Models.Equipment.find({
         'equipStatus': {
-          $in: ['End of Life', 'Missing', 'End of Life - Recycled', 'End of Life - RMA']
+          $in: ['End of Life', 'Missing', 'End of Life - Recycled', 'End of Life - RMA', 'End of Life - Transfered', 'Parts Only']
         }
       });
       //        logger.info('query13'+query);
