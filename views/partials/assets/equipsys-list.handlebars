@@ -1,10 +1,10 @@
 
 
-<div>   <!-- equipsys-list.part1 --> 
+<div>   <!-- equipsys-list.part1 -->
 <h4>{{#if rackView}}Rack <a href="/location/rack/{{rackView}}">{{rackView}}</a> - {{else}}{{titleNow}}{{/if}} Report</h4>
 
-<div> <!-- equipsys-list.part2 --> 
-   
+<div> <!-- equipsys-list.part2 -->
+
     <table {{> bootstrap-table}}
         >
         <thead>
@@ -16,7 +16,7 @@
                 <th data-sortable="true" data-field="systemParentId" data-visible="false">Parent</th>
                 <th data-sortable="true" data-field="systemStatus">Status</th>
                 <th data-sortable="true" data-field="systemEnviron">Env</th>
-                <th data-sortable="true" data-field="systemRole">Role</th>                
+                <th data-sortable="true" data-field="systemRole">Role</th>
                 <th data-sortable="true" data-field="systemTicket" data-visible="false">System Ticket</th>
                 <th data-sortable="true" data-field="systemNotes" data-visible="false">System Notes</th>
                 <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
@@ -36,7 +36,7 @@
         <tbody>
         {{#each eqs}}
             <tr>
-                
+
                 <td>{{@index}}</td>
                 <td><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></td>
                 <td>{{#if ../access.edit}}{{#if systemName}}
@@ -67,11 +67,11 @@
                 <td>{{equipProjectNum}}</td>
                 <td>{{equipNotes}}</td>
                 <td>{{equipmodifiedOn}}</td>
-            </tr>  
+            </tr>
         {{/each}}
-  
+
         </tbody>
     </table>
    </div> <!-- /equipsys-list.part2 -->
-</div> <!-- /equipsys-list.part1 --> 
+</div> <!-- /equipsys-list.part1 -->
 

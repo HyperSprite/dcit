@@ -738,6 +738,7 @@ module.exports.systemsAggr = (req, res) => {
     data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
   } else {
     res.render('asset/reports', data);
+    // data.findWhat = data.findWhat;
     return;
   }
   // What are we looking for, this can certainly get better with query strings
@@ -786,6 +787,7 @@ module.exports.systemsAggr = (req, res) => {
       } else {
         context = result.map(function(rslt) {
           rslt.locCode = strTgs.locDest(rslt.equip[0].equipLocation);
+          rslt.equipModelWithSubs = rslt.equip[0].equipModel + ' ' + rslt.equip[0].equipSubModel + ' ' + rslt.equip[0].equipSubModel;
           return {
             systemName: rslt.systemName,
             dcSite: rslt.locCode.dcSite,
@@ -799,7 +801,7 @@ module.exports.systemsAggr = (req, res) => {
             equipSN: rslt.equip[0].equipSN,
             equipStatus: rslt.equip[0].equipStatus,
             equipMake: rslt.equip[0].equipMake,
-            equipModelWithSubs: rslt.equip[0].equipModel + ' ' + rslt.equip[0].equipSubModel + ' ' + rslt.equip[0].equipSubModel,
+            equipModelWithSubs: rslt.equipModelWithSubs,
             equipModel: rslt.equip[0].equipModel,
             equipSubModel: rslt.equip[0].equipSubModel,
             equipAddOns: rslt.equip[0].equipAddOns,
@@ -839,16 +841,11 @@ module.exports.systemsAggr = (req, res) => {
             }
             res.send(contextCsv);
           });
-        } else if (data.resType === 'json') {
-          res.json(context);
         } else {
-          res.render('asset/equipsys-list', context);
+          res.json(context);
         }
       }
     }
-  // res.status(200).send(`rFndWt ${req.params.findWhat} <br>
-                        // fVar ${data.findWhat} <br>
-                        // rType ${data.resType}`);
   );
 };
 
