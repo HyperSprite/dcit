@@ -12,27 +12,27 @@
                 <th data-sortable="true" data-field="rackRow">Row</th>
                 <th data-sortable="true" data-field="modifiedOn">Last Modified</th>
                 <th data-sortable="true" data-field="rackDescription">Description</th>
-                
+
             </tr>
         </thead>
-        <tbody class="list">
+        <tbody>
             {{#each racks}}
                 <tr>
-                    <td class="rackEdit">{{#if ../access.edit}}
+                    <td>{{#if ../access.edit}}
                     <a href="/location/rack/edit-{{rackUnique}}" target="_blank"><span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
                     <a href="/location/rack/edit~copy-{{rackUnique}}" target="_blank"><span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
                     {{/if}} {{@index}}</td>
-                    <td class="elevationdetail"><a href="/elevation/{{rackUnique}}" target="_blank" title="View Rack Elevation"><span class="glyphicon glyphicon-align-justify glyphicon-danger"></span></a> <a href="/equipment-systems/{{rackUnique}}" target="_blank" title="View Rack Details"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span></a></td> 
-                    <td class="rackNickname">{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}" target="_blank">{{rackUnique}}</a>{{else}}{{rackUnique}}{{/if}}</td>
-                    <td class="rackName"><a href="/location/rack/{{rackUnique}}" target="_blank">{{rackName}}</a></td>
-                    <td class="rackStatus">{{{rackStatus}}}</td>
-                    <td class="rackLat">{{rackLat}}</td>
-                    <td class="rackLon">{{rackLon}}</td>
-                    <td class="rackRow">{{rackRow}}</td>
-                    <td class="modifiedOn">{{modifiedOn}}</td>
-                    <td class="rackDescription">{{rackDescription}}</td>
-                    
-                </tr>  
+                    <td><a href="/elevation/{{rackUnique}}" target="_blank" title="View Rack Elevation"><span class="glyphicon glyphicon-align-justify glyphicon-danger"></span></a> <a href="/equipment-systems/{{rackUnique}}" target="_blank" title="View Rack Details"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span></a></td>
+                    <td>{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}" target="_blank">{{rackUnique}}</a>{{else}}{{rackUnique}}{{/if}}</td>
+                    <td><a href="/location/rack/{{rackUnique}}" target="_blank">{{rackName}}</a></td>
+                    <td>{{{rackStatus}}}</td>
+                    <td>{{rackLat}}</td>
+                    <td>{{rackLon}}</td>
+                    <td>{{rackRow}}</td>
+                    <td>{{modifiedOn}}</td>
+                    <td>{{rackDescription}}</td>
+
+                </tr>
             {{/each}}
         </tbody>
     </table>

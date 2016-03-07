@@ -1,4 +1,4 @@
-
+<div>
 `{{#if access.edit}}
     <form id="powerAddForm" role="form" action="/location/rack/circuit~{{rackUnique}}>new" method="GET"></form>
         <a href="#" onclick="document.getElementById('powerAddForm').submit();return false;">
@@ -6,44 +6,40 @@
                     <span class="glyphicon glyphicon-edit"></span> Power</button></a>
         {{else}}<h4>Power</h4>{{/if}}
 
-    <div id="dvData">
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                {{#if access.edit}}<th class="table-sort" data-sort="rackEdit">Edit</th>{{/if}}
-                <th class="table-sort" data-sort="rackPowUnique">Circuit</th>
-                <th class="table-sort" data-sort="rackPowStatus">Status</th>
-                <th class="table-sort" data-sort="rackPowVolts">Volts</th>
-                <th class="table-sort" data-sort="rackPowPhase">Phase</th>
-                <th class="table-sort" data-sort="rackPowAmps">Amps</th>
-                <th class="table-sort" data-sort="rackPowReceptacle ">Receptical</th>
-                <th class="table-sort" data-sort="createdOn">Created On</th> 
-                <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
-                
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each powers}}
-            <tr>
-                <td class="rackEdit">
-                    <a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}" >
-                        <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
-                    <a href="/location/rack/circuitcopy~{{../rackUnique}}>{{rackPowId}}">
-                        <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
-                </td>
-                <td class="rackPowUnique"><a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}"  target="_blank">{{rackPowUnique}}</a></td>
-                <td class="rackPowStatus">{{rackPowStatus}}</td>
-                <td class="rackPowVolts">{{rackPowVolts}}</td>
-                <td class="rackPowPhase">{{rackPowPhase}}</td>
-                <td class="rackPowAmps">{{rackPowAmps}}</td>
-                <td class="rackPowReceptacle">{{rackPowReceptacle}}</td>
-                <td class="createdOn">{{createdOn}}</td>
-                <td class="modifiedOn">{{modifiedOn}}</td>
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        {{#if access.edit}}<th data-sortable="true" data-field="rackEdit">Edit</th>{{/if}}
+        <th data-sortable="true" data-field="rackPowUnique">Circuit</th>
+        <th data-sortable="true" data-field="rackPowStatus">Status</th>
+        <th data-sortable="true" data-field="rackPowVolts">Volts</th>
+        <th data-sortable="true" data-field="rackPowPhase">Phase</th>
+        <th data-sortable="true" data-field="rackPowAmps">Amps</th>
+        <th data-sortable="true" data-field="rackPowReceptacle ">Receptical</th>
+        <th data-sortable="true" data-field="createdOn">Created On</th>
+        <th data-sortable="true" data-field="modifiedOn">Last Modified</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each powers}}
+      <tr>
+        <td>
+          <a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}" >
+          <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
+          <a href="/location/rack/circuitcopy~{{../rackUnique}}>{{rackPowId}}">
+          <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
+        </td>
+        <td><a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}"  target="_blank">{{rackPowUnique}}</a></td>
+        <td>{{rackPowStatus}}</td>
+        <td>{{rackPowVolts}}</td>
+        <td>{{rackPowPhase}}</td>
+        <td>{{rackPowAmps}}</td>
+        <td>{{rackPowReceptacle}}</td>
+        <td>{{createdOn}}</td>
+        <td>{{modifiedOn}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+  </table>
+</div>
 
-            </tr>  
-        {{/each}}
-  
-        </tbody>
-    </table>
-    </div>
-        {{> tocsvpartial }}

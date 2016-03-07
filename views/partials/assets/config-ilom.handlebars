@@ -1,30 +1,28 @@
 
-  
-    {{#each systemPorts}}
-      {{#if sysPortisNetMgmt}}
-      <div class="col-md-6">
-      <h5>Ilom Config</h5>
-        
-        <blockquote>
-        <ol>
-          <li>Using a console connection set to "cisco" type, 9600, 8, none, 1. </li>
-          <li>Login to the SP with a privileged user.</li>
-          <li>Paste the following commands:</li>
-        </ol>
-          <p><code>
-          set /SP hostname=<strong>{{../../systemName}}-{{sysPortName}}</strong><br>
-          cd /SP/network<br>
-          set pendingipdiscovery=static<br>
-          set pendingipaddress=<strong>{{sysPortAddress}}</strong><br>
-          set pendingipnetmask=<strong>{{netMask}}</strong><br>
-          set pendingipgateway=<strong>{{dcNet.dcNetGateway}}</strong><br>
-          set commitpending=true<br>
-          set /SP/services/ssh state=enabled<br>
-          set /SP/services/https servicestate=enabled port=443<br>
-          </code></p>
-          </blockquote>
-        </div>
-         
-      {{/if}}
-    {{/each}}
-  
+
+{{#each systemPorts}}
+  {{#if sysPortisNetMgmt}}
+  <div class="col-md-6">
+  <h5>Ilom Config</h5>
+    <blockquote>
+    <ol>
+      <li>Using a console connection set to "cisco" type, 9600, 8, none, 1. </li>
+      <li>Login to the SP with a privileged user.</li>
+      <li>Paste the following commands:</li>
+    </ol>
+      <p><code>
+      set /SP hostname=<strong>{{../../systemName}}-{{sysPortName}}</strong><br>
+      cd /SP/network<br>
+      set pendingipdiscovery=static<br>
+      set pendingipaddress=<strong>{{sysPortAddress}}</strong><br>
+      set pendingipnetmask=<strong>{{netMask}}</strong><br>
+      set pendingipgateway=<strong>{{dcNet.dcNetGateway}}</strong><br>
+      set commitpending=true<br>
+      set /SP/services/ssh state=enabled<br>
+      set /SP/services/https servicestate=enabled port=443<br>
+      </code></p>
+      </blockquote>
+    </div>
+  {{/if}}
+{{/each}}
+

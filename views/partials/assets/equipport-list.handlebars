@@ -1,33 +1,30 @@
-    
+
 <h4>Equipment Ports</h4>
-    <table class="table-sort table-sort-search">
-        <thead>
-            <tr>
-                <th class="table-sort" data-sort="equipSN">Equipment</th>
-                <th class="table-sort" data-sort="equipPortType">Type</th>
-                <th class="table-sort" data-sort="equipPortName">Name</th>
-                <th class="table-sort" data-sort="equipPortsAddr">Address</th>
-                <th class="table-sort" data-sort="equipPortsOpt">Options</th>                
-                <th class="table-sort" data-sort="createdOn">Created On</th> 
-                <th class="table-sort" data-sort="modifiedOn">Last Modified</th>
-            
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each equipPorts}}
-            <tr>
-                <td class="systemName"><a href="/equipment/{{../equipSN}}">{{../equipSN}}</a></td>
-                <td class="equipPortType">{{equipPortType}}</td>
-                <td class="equipPortName">{{equipPortName}}</td>
-                <td class="equipPortsAddr">{{equipPortsAddr}}</td>
-                <td class="equipPortsOpt">{{equipPortsOpt}}</td>
-                <td class="createdOn">{{createdOn}}</td>
-                <td class="modifiedOn">{{modifiedOn}}</td>
-           
-            </tr>  
-        {{/each}}
-  
-        </tbody>
-    </table>
-    
- 
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="equipSN">Equipment</th>
+        <th data-sortable="true" data-field="equipPortType">Type</th>
+        <th data-sortable="true" data-field="equipPortName" data-order="asc">Name</th>
+        <th data-sortable="true" data-field="equipPortsAddr">Address</th>
+        <th data-sortable="true" data-field="equipPortsOpt">Options</th>
+        <th data-sortable="true" data-field="createdOn">Created On</th>
+        <th data-sortable="true" data-field="modifiedOn">Last Modified</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each equipPorts}}
+      <tr>
+        <td><a href="/equipment/{{../equipSN}}">{{../equipSN}}</a></td>
+        <td>{{equipPortType}}</td>
+        <td>{{equipPortName}}</td>
+        <td>{{equipPortsAddr}}</td>
+        <td>{{equipPortsOpt}}</td>
+        <td>{{createdOn}}</td>
+        <td>{{modifiedOn}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+
+

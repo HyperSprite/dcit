@@ -1,43 +1,20 @@
-<ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/systems">Systems</a></li>
-  <li>Report Select</li>
-</ol>
-
+<div>
 <h4>Report Select</h4>
-
-<!--
-Report picker for environment
-System Search
-Equipment Search
-Cable Search
-list of systems modified in the last 30 days
-list of equipment modified in the last 30 days
-
-
-
--->
-
-
-<div class='container'> 
-    <div id="dvData">
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-            <th class="table-sort" data-sort="systemEnviron">Environment</th>
-            <th class="table-sort" data-sort="systemCount">Count</th>
-        </tr>
-    <tbody class="list">
-        {{#each envCnt}}
-        <tr>
-            <td class="systemEnviron">{{systemEnviron}}</td>
-            <td class="systemCount">{{systemCount}}</td>
-        </tr>
-        {{/each}}
-    </tbody>   
-</table>
-</div>
-    {{> tocsvpartial }}
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="systemEnviron">Environment</th>
+        <th data-sortable="true" data-field="systemCount">Count</th>
+      </tr>
+    <tbody>
+    {{#each envCnt}}
+      <tr>
+        <td>{{systemEnviron}}</td>
+        <td>{{systemCount}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
 </div>
 
 
@@ -56,11 +33,11 @@ list of equipment modified in the last 30 days
                 </datalist>
             </div>
         </div>
-        
+
             <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
-                
+
         </div>
     </div>
 </form>
@@ -79,11 +56,11 @@ list of equipment modified in the last 30 days
                 </datalist>
             </div>
         </div>
-        
+
             <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
-                
+
         </div>
     </div>
 </form>
@@ -93,21 +70,21 @@ list of equipment modified in the last 30 days
 
         <div class="form-group">
             <label for="field-equipLocationRack" class="col-sm-2 control-label" >Location</label>
-            
+
             <div class="col-xs-3">
-                
-                <input list="equipLocationRack" id="field-equipLocationRack" class="form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" > 
+
+                <input list="equipLocationRack" id="field-equipLocationRack" class="form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" >
                     <datalist id="equipLocationRack">
                         {{#each rackUnique}}
                         <option {{{this}}}>{{this}}</option>
                         {{/each}}
                     </datalist>
-            
+
             </div>
             <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
                 <button type="submit" class="btn btn-primary btn-xs" value='Submit'>Submit</button>
-                
+
         </div>
     </div>
 </form>

@@ -1,48 +1,44 @@
 <div>
 <h4>Files</h4>
-          <div id="dvData">
-    
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                <th class="table-sort" data-sort="edit">D</th>
-                <th class="table-sort" data-sort="fileHRName">File Name</th>
-                <th class="table-sort" data-sort="fileType">Type</th>
-                <th class="table-sort" data-sort="fileDescription">Description</th>
-                <th class="table-sort" data-sort="createdBy">Owner</th>
-                <th class="table-sort" data-sort="createdOn">Upload Date</th>
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each fil}}
-            <tr>
-                <td class="edit"><button type="submit" class="btn btn-success btn-xs" form="csvToDBPostform{{@index}}">U</button>
-                <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button></td>
-                <td class="fileHRName">{{fileHRName}}</td>
-                <td class="fileType">{{fileType}}</td>
-                <td class="fileDescription">{{fileDescription}}</td>
-                <td class="createdBy">{{createdBy}}</td>
-                <td class="createdOn">{{createdOn}}</td>
-              </tr>  
-        {{/each}}
-        </tbody>
-    </table>
-    </div>
-         {{> tocsvpartial }}
-    </div>
-        {{#each fil}}
-            <form id="csvToDBPostform{{@index}}" action="/admin/csvtodb" method="POST" onsubmit="return confirm('Are you sure you want to upload this file to the database?')">
-            <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
-            <input type="hidden" name="id" value="{{fileId}}">
-            <input type="hidden" name="file" value="{{filePath}}">
-            <input type="hidden" name="fileDescription" value="{{fileDescription}}">
-            </form>
-        {{/each}} 
-        {{#each fil}}
-            <form id="deleteform{{@index}}" action="/admin/uploaddelete" method="POST" onsubmit="return confirm('Are you sure you want to delete this file?')">
-            <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
-            <input type="hidden" name="id" value="{{fileId}}">
-            <input type="hidden" name="fileName" value="{{fileName}}">
-            <input type="hidden" name="filePath" value="{{filePath}}">
-            </form>
-        {{/each}}
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="edit">D</th>
+        <th data-sortable="true" data-field="fileHRName">File Name</th>
+        <th data-sortable="true" data-field="fileType">Type</th>
+        <th data-sortable="true" data-field="fileDescription">Description</th>
+        <th data-sortable="true" data-field="createdBy">Owner</th>
+        <th data-sortable="true" data-field="createdOn">Upload Date</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each fil}}
+      <tr>
+        <td class="edit"><button type="submit" class="btn btn-success btn-xs" form="csvToDBPostform{{@index}}">U</button>
+           <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">D</button></td>
+        <td>{{fileHRName}}</td>
+        <td>{{fileType}}</td>
+        <td>{{fileDescription}}</td>
+        <td>{{createdBy}}</td>
+        <td>{{createdOn}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+{{#each fil}}
+  <form id="csvToDBPostform{{@index}}" action="/admin/csvtodb" method="POST" onsubmit="return confirm('Are you sure you want to upload this file to the database?')">
+    <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
+    <input type="hidden" name="id" value="{{fileId}}">
+    <input type="hidden" name="file" value="{{filePath}}">
+    <input type="hidden" name="fileDescription" value="{{fileDescription}}">
+  </form>
+{{/each}}
+{{#each fil}}
+  <form id="deleteform{{@index}}" action="/admin/uploaddelete" method="POST" onsubmit="return confirm('Are you sure you want to delete this file?')">
+    <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
+    <input type="hidden" name="id" value="{{fileId}}">
+    <input type="hidden" name="fileName" value="{{fileName}}">
+    <input type="hidden" name="filePath" value="{{filePath}}">
+  </form>
+{{/each}}

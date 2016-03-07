@@ -13,6 +13,7 @@ const accConfig = require('../config/access');
 const logConfig = require('../config/log');
 
 // Models
+const Models = require('../models');
 const Datacenter = require('../models/datacenter.js');
 const Rack = require('../models/rack.js');
 const Optionsdb = require('../models/options.js');
@@ -20,41 +21,53 @@ const Equipment = require('../models/equipment.js');
 const Systemdb = require('../models/system.js');
 const User = require('../models/user.js');
 const Fileinfo = require('../models/fileinfo.js');
+const addContext = require('contextualizer');
 
 exports.home = function(req, res) {
+  var context = {};
+  var msg = 'Something went sideways, sorry';
     // logger.info('exports.home >'+req.params.datacenter);
   if (accConfig.accessCheck(req.user).root !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
-  } else {
-    if (!req.params.datacenter) {
-      context = {
-        lastPage: '/admin',
-        access: accConfig.accessCheck(req.user),
-        user: req.user,
-        titleNow: 'Admin Home',
-      };
-    res.render ('admin/home', context );
+  }
+  if (!req.params.datacenter) {
+    context = {
+      lastPage: '/admin',
+      access: accConfig.accessCheck(req.user),
+      user: req.user,
+      titleNow: 'Admin Home',
+    };
+    res.render('admin/home', context);
 //
 //          Options page
 //
-    }else if (req.params.datacenter  === 'options'){
-     //logger.info('called admin.options');
-        Optionsdb.find(function(err,opts){
-        //logger.info(opts);
-        if (!opts){
-        	context = {
-                lastPage : '/admin/options',
-                access : accConfig.accessCheck(req.user),
-                user : req.user,
-                titleNow: 'Admin Options',
-                optEquipStatus: ['____________________________', 'Seed Optionsdb to populate','____________________________'],
-            };
-
-            res.render('admin/options', context );
-        }else{
-        if (err) return next (err);
-        context ={
+  } else if (req.params.datacenter === 'options') {
+  // logger.info('called admin.options');
+    Models.Optionsdb.find((err, opts) => {
+      if (err) {
+        msg = 'Something went wrong - err:Options ad58';
+        logger.log(addContext(err, msg));
+        req.session.flash = strTgs.errMsg(msg);
+        res.redirect('/');
+      }
+        // msg = 'Something went wrong - err:Options ad58';
+        // next();
+        // req.session.flash = strTgs.errMsg(msg);
+        // res.redirect('/');
+      // }
+    // logger.info(opts);
+      if (!opts) {
+        context = {
+          lastPage: '/admin/options',
+          access: accConfig.accessCheck(req.user),
+          user: req.user,
+          titleNow: 'Admin Options',
+          optEquipStatus: ['____________________________', 'Seed Optionsdb to populate', '____________________________'],
+        };
+        res.render('admin/options', context);
+      } else {
+        context = {
                 lastPage : '/admin/options',
                 access : accConfig.accessCheck(req.user),
                 user : req.user,
@@ -268,7 +281,6 @@ exports.home = function(req, res) {
                 titleNow: 'Admin',
             };
     res.render ('admin/'+req.params.datacenter, context);
-    }
     }
 };
 

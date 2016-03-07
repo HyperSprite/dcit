@@ -1,40 +1,36 @@
 <h4>{{#if rackView}}Rack <a href="/location/rack/{{rackView}}">{{rackView}}</a> - {{/if}} Elevation</h4>
-        <div class='container'> 
-          <div id="dvData">
-    
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                <th class="table-sort" data-sort="equipLocation">DC_Cage_Rack_RU</th>
-                <th class="table-sort" data-sort="systemName">System Name</th>
-                <th class="table-sort" data-sort="systemStatus">Status</th>
-                <th class="table-sort" data-sort="systemEnviron">Env</th>
-                <th class="table-sort" data-sort="systemRole">Role</th>                
-                <th class="table-sort" data-sort="equipSN ">Equipment SN</th>
-                <th class="table-sort" data-sort="equipStatus">Status</th>
-                <th class="table-sort" data-sort="makeModel">Make - Model</th>
-                <th class="table-sort" data-sort="sysmodifiedOn">System Mod</th> 
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each eqs}}
-            <tr>
-                
-                <td class="equipLocation"><a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a></td>
-                <td class="systemName"><a href="/system/{{systemName}}">{{systemName}}</a></td>
-                <td class="systemStatus" >{{{systemStatus}}}</td>
-                <td class="systemEnviron">{{systemEnviron}}</td>
-                <td class="systemRole">{{systemRole}}</td>
-                <td class="equipSN"><a href="/equipment/{{equipSN}}">{{equipSN}}</a></td>
-                <td class="equipStatus">{{{equipStatusLight}}}</td>
-                <td class="modifiedOn">{{equipMake}} {{equipModel}}</td>
-                <td class="sysmodifiedOn">{{sysmodifiedOn}}</td>
-                
-            </tr>  
-        {{/each}}
-  
-        </tbody>
+<div class='container'>
+  <div id="dvData">
+
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="equipLocation">DC_Cage_Rack_RU</th>
+        <th data-sortable="true" data-field="systemName">System Name</th>
+        <th data-sortable="true" data-field="systemStatus">Status</th>
+        <th data-sortable="true" data-field="systemEnviron">Env</th>
+        <th data-sortable="true" data-field="systemRole">Role</th>
+        <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
+        <th data-sortable="true" data-field="equipStatus">Status</th>
+        <th data-sortable="true" data-field="makeModel">Make - Model</th>
+        <th data-sortable="true" data-field="sysmodifiedOn">System Mod</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#each eqs}}
+      <tr>
+        <td class="equipLocation"><a href="/location/rack/{{equipLocationRack}}">{{equipLocation}}</a></td>
+        <td class="systemName"><a href="/system/{{systemName}}">{{systemName}}</a></td>
+        <td class="systemStatus" >{{{systemStatus}}}</td>
+        <td class="systemEnviron">{{systemEnviron}}</td>
+        <td class="systemRole">{{systemRole}}</td>
+        <td class="equipSN"><a href="/equipment/{{equipSN}}">{{equipSN}}</a></td>
+        <td class="equipStatus">{{{equipStatusLight}}}</td>
+        <td class="modifiedOn">{{equipMake}} {{equipModel}}</td>
+        <td class="sysmodifiedOn">{{sysmodifiedOn}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
     </table>
-        </div>
-         {{> tocsvpartial }}
-    </div>
+  </div>
+</div>

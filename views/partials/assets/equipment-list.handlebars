@@ -1,51 +1,46 @@
 <div>
-<h4>Equipment</h4>
-          <div id="dvData">
-    
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                <th class="table-sort" data-sort="rackEdit">Edit</th>
-                <th class="table-sort" data-sort="equipLocation">Location</th>
-                <th class="table-sort" data-sort="equipSN">SN</th>
-                <th class="table-sort" data-sort="equipStatus">Status</th>
-                <th class="table-sort" data-sort="equipType">Type</th>
-                <th class="table-sort" data-sort="equipMake">Make</th>
-                <th class="table-sort" data-sort="equipModel">Model</th>
-                <th class="table-sort" data-sort="equipReceived">Received</th>
-                <th class="table-sort" data-sort="equipPONum">PO</th>
-                <th class="table-sort" data-sort="equipProjectNum">Project</th>
-                <th class="table-sort" data-sort="equipticketNumber">Ticket</th>
-                <th class="table-sort" data-sort="modifiedOn">Modified</th>
-                
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each eqs}}
-            <tr>
-            
-                <td class="rackEdit">{{#if access.edit}}
-                <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
-                <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
-                <input type='submit' class='btn btn-warning btn-xs' formaction='/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='E'>
-                <input type='submit' class='btn btn-info btn-xs' formaction='/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='C'>
-                {{/if}} </td>   
-                <td class="name"><a href="/location/rack/{{equipLocationRack}}" target="_blank">{{equipLocation}}</a></td>
-                <td class="code"><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
-                <td class="equipStatus">{{{equipStatusLight}}}</td>
-                <td class="equipType">{{equipType}}</td>
-                <td class="equipMake">{{equipMake}}</td>
-                <td class="equipModel">{{equipModel}} {{equipSubModel}}</td>
-                <td class="equipReceived">{{{equipAcquisition}}}</td>
-                <td class="equipPONum">{{equipPONum}}</td>
-                <td class="equipProjectNum">{{equipProjectNum}}</td>
-                <td class="equipticketNumber">{{{equipInventoryStatus}}}</td>
-                <td class="modifiedOn">{{modifiedOn}}</td>
-                
-            </tr>  
-        {{/each}}
-        </tbody>
-    </table>
-    </div>
-         {{> tocsvpartial }}
-    </div>
+  <h4>Equipment</h4>
+  <div id="dvData">
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="rackEdit">Edit</th>
+        <th data-sortable="true" data-field="equipLocation">Location</th>
+        <th data-sortable="true" data-field="equipSN">SN</th>
+        <th data-sortable="true" data-field="equipStatus">Status</th>
+        <th data-sortable="true" data-field="equipType">Type</th>
+        <th data-sortable="true" data-field="equipMake">Make</th>
+        <th data-sortable="true" data-field="equipModel">Model</th>
+        <th data-sortable="true" data-field="equipReceived">Received</th>
+        <th data-sortable="true" data-field="equipPONum">PO</th>
+        <th data-sortable="true" data-field="equipProjectNum">Project</th>
+        <th data-sortable="true" data-field="equipticketNumber">Ticket</th>
+        <th data-sortable="true" data-field="modifiedOn">Modified</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each eqs}}
+      <tr>
+        <td>{{#if access.edit}}
+          <form id=formEdit></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
+          <form id=formCopy><input type="hidden" name="wasCopy" value="{{wasCopy}}"></form>
+          <input type='submit' class='btn btn-warning btn-xs' formaction='/equipment/edit-{{equipSN}}' form="formEdit" formmethod="get" value='E'>
+          <input type='submit' class='btn btn-info btn-xs' formaction='/equipment/edit~copy-{{equipSN}}' form="formCopy" formmethod="get" value='C'>
+          {{/if}} </td>
+          <td><a href="/location/rack/{{equipLocationRack}}" target="_blank">{{equipLocation}}</a></td>
+          <td><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
+          <td>{{{equipStatusLight}}}</td>
+          <td>{{equipType}}</td>
+          <td>{{equipMake}}</td>
+          <td>{{equipModel}} {{equipSubModel}}</td>
+          <td>{{{equipAcquisition}}}</td>
+          <td>{{equipPONum}}</td>
+          <td>{{equipProjectNum}}</td>
+          <td>{{{equipInventoryStatus}}}</td>
+          <td>{{modifiedOn}}</td>
+        </tr>
+      {{/each}}
+      </tbody>
+  </table>
+  </div>
+</div>

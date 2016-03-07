@@ -7,6 +7,7 @@ const dates = require('../lib/dates.js');
 const moment = require('moment');
 const ObjectId = require('mongoose').Types.ObjectId;
 const IpSubnetCalculator = require('ip-subnet-calculator');
+const addContext = require('contextualizer');
 
 // Models
 const Models = require('../models');

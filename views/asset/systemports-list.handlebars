@@ -1,51 +1,45 @@
-<dive>    
+<dive>
 <h4>System Ports</h4>
-    <div id="dvData">
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                <th class="table-sort" data-sort="index">index</th>
-                <th class="table-sort" data-sort="overwrite">overwrite</th>
-                <th class="table-sort" data-sort="systemName">systemName</th>
-                <th class="table-sort" data-sort="sysPortType">sysPortType</th>
-                <th class="table-sort" data-sort="sysPortName">sysPortName</th>
-                <th class="table-sort" data-sort="sysPortCablePath">sysPortCablePath</th>
-                <th class="table-sort" data-sort="sysPortEndPoint">sysPortEndPoint</th>
-                <th class="table-sort" data-sort="sysPortEndPointPre">sysPortEndPointPre</th>
-                <th class="table-sort" data-sort="sysPortEndPointPort">sysPortEndPointPort</th>          
-                <th class="table-sort" data-sort="sysPortVlan">sysPortVlan</th>
-                <th class="table-sort" data-sort="sysPortOptions">sysPortOptions</th>
-                <th class="table-sort" data-sort="sysPortAddress">sysPortAddress</th>
-                <th class="table-sort" data-sort="sysPortURL">sysPortURL</th>
-                <th class="table-sort" data-sort="equipSN ">Equipment SN</th>
-               <!-- <th class="table-sort" data-sort="sysPortCrossover">Xover</th>-->
-            
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each sys}}
-        {{#each systemPorts}}
-            <tr>
-                <td class="index">{{@index}}</td>
-                <td class="overwrite"></td>
-                <td class="systemName"><a href="/system/{{systemName}}" target="_blank">{{systemName}}</a></td>
-                <td class="sysPortType">{{sysPortType}}</td>
-                <td class="sysPortName">{{sysPortName}}</td>
-                <td class="sysPortCablePath">{{sysPortCablePath}}</td>
-                <td class="sysPortEndPoint"><a href="/system/{{sysPortEndPoint}}">{{sysPortEndPoint}}</a></td>
-                <td class="sysPortEndPointPre">{{sysPortEndPointPre}}</td>
-                <td class="sysPortEndPointPort">{{sysPortEndPointPort}}</td>
-                <td class="sysPortVlan">{{sysPortVlan}}</td>
-                <td class="sysPortOptions">{{sysPortOptions}}</td>
-                <td class="sysPortAddress">{{sysPortAddress}}</td>
-                <td class="sysPortURL"><a href="{{sysPortURL}}" target="_blank">{{sysPortURL}}</a>
-                <!--<td class="sysPortCrossover"><input type="checkbox" name="sysPortCrossover" value="true" {{sysPortCrossoverChecked}} disabled></td>-->
-                <td class="equipSN"><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
-            </tr>  
-        {{/each}}
-        {{/each}}
-        </tbody>
-    </table>
-    </div>
-        {{> tocsvpartial }}
-    </div>
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="index">index</th>
+        <th data-sortable="true" data-field="overwrite">overwrite</th>
+        <th data-sortable="true" data-field="systemName">systemName</th>
+        <th data-sortable="true" data-field="sysPortType">sysPortType</th>
+        <th data-sortable="true" data-field="sysPortName">sysPortName</th>
+        <th data-sortable="true" data-field="sysPortCablePath">sysPortCablePath</th>
+        <th data-sortable="true" data-field="sysPortEndPoint">sysPortEndPoint</th>
+        <th data-sortable="true" data-field="sysPortEndPointPre">sysPortEndPointPre</th>
+        <th data-sortable="true" data-field="sysPortEndPointPort">sysPortEndPointPort</th>
+        <th data-sortable="true" data-field="sysPortVlan">sysPortVlan</th>
+        <th data-sortable="true" data-field="sysPortOptions">sysPortOptions</th>
+        <th data-sortable="true" data-field="sysPortAddress">sysPortAddress</th>
+        <th data-sortable="true" data-field="sysPortURL">sysPortURL</th>
+        <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each sys}}
+    {{#each systemPorts}}
+      <tr>
+        <td>{{@index}}</td>
+        <td></td>
+        <td><a href="/system/{{systemName}}" target="_blank">{{systemName}}</a></td>
+        <td>{{sysPortType}}</td>
+        <td>{{sysPortName}}</td>
+        <td>{{sysPortCablePath}}</td>
+        <td><a href="/system/{{sysPortEndPoint}}">{{sysPortEndPoint}}</a></td>
+        <td>{{sysPortEndPointPre}}</td>
+        <td>{{sysPortEndPointPort}}</td>
+        <td>{{sysPortVlan}}</td>
+        <td>{{sysPortOptions}}</td>
+        <td>{{sysPortAddress}}</td>
+        <td><a href="{{sysPortURL}}" target="_blank">{{sysPortURL}}</a>
+        <td><a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
+      </tr>
+    {{/each}}
+    {{/each}}
+    </tbody>
+  </table>
+</div>

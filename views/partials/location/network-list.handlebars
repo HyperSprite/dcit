@@ -1,4 +1,4 @@
-   
+
     <table {{> bootstrap-table}}
         >
         <thead>
@@ -13,26 +13,26 @@
         <th data-sortable="true" data-field="dcNetSettings">Settings</th>
       </tr>
     </thead>
-    <tbody class="list">
+    <tbody>
       {{#each networks}}
         <tr>
-          <td class="dcNetEdit">
+          <td>
            {{#if ../access.edit}}
             <form id="netEditForm{{@index}}" role="form" action="/location/network/{{id}}-{{dcNetId}}" method="GET"></form>
-            <form id="netCopyForm{{@index}}" role="form" action="/location/network/{{id}}-{{dcNetId}}~copy" method="GET"></form>          
+            <form id="netCopyForm{{@index}}" role="form" action="/location/network/{{id}}-{{dcNetId}}~copy" method="GET"></form>
             <a href="#" onclick="document.getElementById('netEditForm{{@index}}').submit();return false;" title="Edit">
             <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
-              
+
              <a href="#" onclick="document.getElementById('netCopyForm{{@index}}').submit();return false;" title="Copy">
              <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
                {{/if}}  {{@index}}</td>
-               <td class="dcNetType">{{dcNetType}}</td>     
-               <td class="dcNetNickname">{{dcNetUnique}}<br><br>Start {{ipLowStr}}<br>End {{ipHighStr}}<br>Mask {{prefixMaskStr}}</td>
-               <td class="dcNetVlan">{{dcNetVlan}}</td>
-               <td class="dcNetDesc">{{{dcNetDesc}}}</td>
-               <td class="dcNetGateway">{{dcNetGateway}}</td>
-               <td class="dcNetDomain">{{dcNetDomain}}</td>
-               <td class="dcNetSettings">
+               <td>{{dcNetType}}</td>
+               <td>{{dcNetUnique}}<br><br>Start {{ipLowStr}}<br>End {{ipHighStr}}<br>Mask {{prefixMaskStr}}</td>
+               <td>{{dcNetVlan}}</td>
+               <td>{{{dcNetDesc}}}</td>
+               <td>{{dcNetGateway}}</td>
+               <td>{{dcNetDomain}}</td>
+               <td>
                   {{#if iPRangeipLowStr}}Low Range: {{iPRangeipLowStr}}<br>
                                          High Range: {{iPRangeipHighStr}}<br>
                                     Mask String: {{iPRangeprefixMaskStr}}<br>{{/if}}
@@ -45,9 +45,9 @@
                   {{#if dcNetLdapString}}Secondary LDAP:{{dcNetLdapString}}<br>{{/if}}
                   {{#if dcNetTftpHost}}TFTP Host: {{dcNetTftpHost}}<br>{{/if}}
                   {{#if dcNetACSFilePath}}ACS TFTP File Path: {{dcNetACSFilePath}}<br>{{/if}}
-                        
+
             </td>
-          </tr>  
+          </tr>
             {{/each}}
       </tbody>
     </table>

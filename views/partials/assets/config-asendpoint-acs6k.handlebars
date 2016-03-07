@@ -1,32 +1,32 @@
-    <div class="col-md-6 ">
-        <h5>Avocent Console Config {{sysPortEndPoint}}</h5>
-       {{#each sys}}
-       {{#each systemPorts}}
-        {{#if sysPortisConsole}}
-        <blockquote>
-        <code>
-        <ul class="list-unstyled">
-        <li>cd /ports/serial_ports</li>
-           <li>{{#if sysPortEndPointPort}}set_cas <strong>{{sysPortEndPointPort}}</strong>{{else}}}<mark>set_cas ??</mark>{{/if}}</li>
-           <li>{{#if sysPortOptions}}set enable_cisco_rj45_pin-out=<strong>{{sysPortOptions}}</strong>{{else}}<mark>set enable_cisco_rj45_pin-out= ??</mark>{{/if}}</li>
-           <li>set status=enabled</li>
-           <li>set speed=9600</li>
-           <li>set parity=none</li>
-           <li>set data_bits=8</li>
-           <li>set stop_bits=1</li>
-           <li>set flow_control=none</li>
-           <li>cd cas</li>
-           <li>set port_name=<strong>{{systemName}}</strong></li>
-           <li>set enable_auto_discovery=no</li>
-           <li>set protocol=ssh</li>
-           <li>set authentication_type=ldap|local</li>
-           <li>save --cancelOnError</li>
-           <li>echo on</li>
-           <li>commit</li>
-           </ul>
-           </code>
-           </blockquote>
-            {{/if}}
-        {{/each}}
-        {{/each}}
-    </div>
+<div class="col-md-6 ">
+  <h5>Avocent Console Config {{sysPortEndPoint}}</h5>
+ {{#each sys}}
+ {{#each systemPorts}}
+  {{#if sysPortisConsole}}
+  <blockquote>
+  <code>
+  <ul class="list-unstyled">
+  <li>cd /ports/serial_ports</li>
+    <li>{{#if sysPortEndPointPort}}set_cas <strong>{{sysPortEndPointPort}}</strong>{{else}}}<mark>set_cas ??</mark>{{/if}}</li>
+    <li>{{#if sysPortOptions}}set enable_cisco_rj45_pin-out=<strong>{{sysPortOptions}}</strong>{{else}}<mark>set enable_cisco_rj45_pin-out= ??</mark>{{/if}}</li>
+    <li>set status=enabled</li>
+    <li>set speed=9600</li>
+    <li>set parity=none</li>
+    <li>set data_bits=8</li>
+    <li>set stop_bits=1</li>
+    <li>set flow_control=none</li>
+    <li>cd cas</li>
+    <li>set port_name=<strong>{{systemName}}</strong></li>
+    <li>set enable_auto_discovery=no</li>
+    <li>set protocol=ssh</li>
+    <li>set authentication_type=ldap|local</li>
+    <li>save --cancelOnError</li>
+    <li>echo on</li>
+    <li>commit</li>
+    </ul>
+    </code>
+    </blockquote>
+    {{/if}}
+  {{/each}}
+  {{/each}}
+</div>

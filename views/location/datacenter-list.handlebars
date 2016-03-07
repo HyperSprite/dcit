@@ -7,30 +7,27 @@
 
 
 <div id="datacenter">
-    <table class="table-sort table-sort-search ">
-        <thead>
-            <tr>
-                
-                <th class="table-sort" data-sort="name">Name</th>
-                <th class="table-sort" data-sort="code">Code</th>
-                <th class="table-sort" data-sort="foundingCompany">Company</th>
-                <th class="table-sort" data-sort="city">City</th>
-                <th class="table-sort" data-sort="country">Country</th>
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each datacenters}}
-            <tr>
-                
-                <td class="name"><a href="/location/datacenter/{{abbreviation}}">{{fullName}}</a></td>
-                <td class="code"><a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></td>
-                <td class="foundingCompany">{{foundingCompany}}</td>
-                <td class="city">{{city}}</td>
-                <td class="country">{{country}}</td>
-            </tr>  
-        {{/each}}
- 
-        </tbody>
-    </table>
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="name">Name</th>
+        <th data-sortable="true" data-field="code">Code</th>
+        <th data-sortable="true" data-field="foundingCompany">Company</th>
+        <th data-sortable="true" data-field="city">City</th>
+        <th data-sortable="true" data-field="country">Country</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each datacenters}}
+      <tr>
+        <td><a href="/location/datacenter/{{abbreviation}}">{{fullName}}</a></td>
+        <td><a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></td>
+        <td>{{foundingCompany}}</td>
+        <td>{{city}}</td>
+        <td>{{country}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
 </div>
- 
+

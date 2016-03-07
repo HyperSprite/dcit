@@ -1,77 +1,72 @@
 
-
 <div>   <!-- equipsys-list.part1 -->
-<h4>{{#if rackView}}Rack <a href="/location/rack/{{rackView}}">{{rackView}}</a> - {{else}}{{titleNow}}{{/if}} Report</h4>
+  <h4>{{#if rackView}}Rack <a href="/location/rack/{{rackView}}">{{rackView}}</a> - {{else}}{{titleNow}}{{/if}} Report</h4>
+  <div> <!-- equipsys-list.part2 -->
+    <table {{> bootstrap-table}} >
+      <thead>
+        <tr>
+          <th data-sortable="true" data-field="index" data-visible="false">Index</th>
+          <th data-sortable="true" data-field="equipLocation" data-order="asc">DC_Cage_Rack_RU</th>
+          <th data-sortable="true" data-field="systemName">System Name</th>
+          <th data-sortable="true" data-field="systemAlias" data-visible="false">Alias</th>
+          <th data-sortable="true" data-field="systemParentId" data-visible="false">Parent</th>
+          <th data-sortable="true" data-field="systemStatus">Status</th>
+          <th data-sortable="true" data-field="systemEnviron">Env</th>
+          <th data-sortable="true" data-field="systemRole">Role</th>
+          <th data-sortable="true" data-field="systemTicket" data-visible="false">System Ticket</th>
+          <th data-sortable="true" data-field="systemNotes" data-visible="false">System Notes</th>
+          <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
+          <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
+          <th data-sortable="true" data-field="equipStatus">Status</th>
+          <th data-sortable="true" data-field="equipType" data-visible="false">Type</th>
+          <th data-sortable="true" data-field="makeModel">Make - Model</th>
+          <th data-sortable="true" data-field="equipRUHieght" data-visible="false">RU Height</th>
+          <th data-sortable="true" data-field="equipAcquisition">Acquisition</th>
+          <th data-sortable="true" data-field="equipPONum" data-visible="false">PO Number</th>
+          <th data-sortable="true" data-field="equipInvoice" data-visible="false">Invoice</th>
+          <th data-sortable="true" data-field="equipProjectNum" data-visible="false">Project Number</th>
+          <th data-sortable="true" data-field="equipNotes" data-visible="false">Notes</th>
+          <th data-sortable="true" data-field="equipmodifiedOn" data-visible="false">Modified On</th>
+        </tr>
+      </thead>
+    <tbody>
+    {{#each eqs}}
+    <tr>
 
-<div> <!-- equipsys-list.part2 -->
-
-    <table {{> bootstrap-table}}
-        >
-        <thead>
-            <tr>
-                <th data-sortable="true" data-field="index" data-visible="false">Index</th>
-                <th data-sortable="true" data-field="equipLocation" data-order="asc">DC_Cage_Rack_RU</th>
-                <th data-sortable="true" data-field="systemName">System Name</th>
-                <th data-sortable="true" data-field="systemAlias" data-visible="false">Alias</th>
-                <th data-sortable="true" data-field="systemParentId" data-visible="false">Parent</th>
-                <th data-sortable="true" data-field="systemStatus">Status</th>
-                <th data-sortable="true" data-field="systemEnviron">Env</th>
-                <th data-sortable="true" data-field="systemRole">Role</th>
-                <th data-sortable="true" data-field="systemTicket" data-visible="false">System Ticket</th>
-                <th data-sortable="true" data-field="systemNotes" data-visible="false">System Notes</th>
-                <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
-                <th data-sortable="true" data-field="equipSN ">Equipment SN</th>
-                <th data-sortable="true" data-field="equipStatus">Status</th>
-                <th data-sortable="true" data-field="equipType" data-visible="false">Type</th>
-                <th data-sortable="true" data-field="makeModel">Make - Model</th>
-                <th data-sortable="true" data-field="equipRUHieght" data-visible="false">RU Height</th>
-                <th data-sortable="true" data-field="equipAcquisition">Acquisition</th>
-                <th data-sortable="true" data-field="equipPONum" data-visible="false">PO Number</th>
-                <th data-sortable="true" data-field="equipInvoice" data-visible="false">Invoice</th>
-                <th data-sortable="true" data-field="equipProjectNum" data-visible="false">Project Number</th>
-                <th data-sortable="true" data-field="equipNotes" data-visible="false">Notes</th>
-                <th data-sortable="true" data-field="equipmodifiedOn" data-visible="false">Modified On</th>
-            </tr>
-        </thead>
-        <tbody>
-        {{#each eqs}}
-            <tr>
-
-                <td>{{@index}}</td>
-                <td><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></td>
-                <td>{{#if ../access.edit}}{{#if systemName}}
-                    <a href="/system/edit-{{systemName}}" target="_blank">
-                        <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
-                    {{/if}}{{/if}}
-                <a href="/system/{{systemName}}" target="_blank"> {{systemName}}</a></td>
-                <td>{{systemAlias}}</td>
-                <td>{{systemParentId}}</td>
-                <td>{{{systemStatus}}}</td>
-                <td>{{systemEnviron}}</td>
-                <td>{{systemRole}}</td>
-                <td>{{systemTicket}}</td>
-                <td>{{systemNotes}}</td>
-                <td>{{sysmodifiedOn}}</td>
-                <td>{{#if ../access.edit}}{{#if equipSN}}
-                    <a href="/equipment/edit-{{equipSN}}" target="_blank">
-                        <span class="glyphicon glyphicon-edit glyphicon-danger"  title="Edit {{equipSN}}"></span></a>
-                {{/if}}{{/if}}
-                <a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
-                <td>{{{equipStatusLight}}}</td>
-                <td>{{equipType}}</td>
-                <td>{{equipMake}} {{equipModel}} {{equipSubModel}}{{#if equipAddOns}} + {{equipAddOns}}{{/if}}</td>
-                <td>{{equipRUHieght}}</td>
-                <td>{{#if equipWarrantyMo}}<mark>{{equipAcquisition}}</mark>{{else}}{{equipAcquisition}}{{/if}}</td>
-                <td>{{equipPONum}}</td>
-                <td>{{equipInvoice}}</td>
-                <td>{{equipProjectNum}}</td>
-                <td>{{equipNotes}}</td>
-                <td>{{equipmodifiedOn}}</td>
-            </tr>
-        {{/each}}
-
-        </tbody>
-    </table>
-   </div> <!-- /equipsys-list.part2 -->
+      <td>{{@index}}</td>
+      <td><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></td>
+      <td>{{#if ../access.edit}}{{#if systemName}}
+        <a href="/system/edit-{{systemName}}" target="_blank">
+          <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
+          {{/if}}{{/if}}
+          <a href="/system/{{systemName}}" target="_blank"> {{systemName}}</a></td>
+      <td>{{systemAlias}}</td>
+      <td>{{systemParentId}}</td>
+      <td>{{{systemStatus}}}</td>
+      <td>{{systemEnviron}}</td>
+      <td>{{systemRole}}</td>
+      <td>{{systemTicket}}</td>
+      <td>{{systemNotes}}</td>
+      <td>{{sysmodifiedOn}}</td>
+      <td>{{#if ../access.edit}}{{#if equipSN}}
+        <a href="/equipment/edit-{{equipSN}}" target="_blank">
+          <span class="glyphicon glyphicon-edit glyphicon-danger"  title="Edit {{equipSN}}"></span></a>
+          {{/if}}{{/if}}
+          <a href="/equipment/{{equipSN}}" target="_blank">{{equipSN}}</a></td>
+      <td>{{{equipStatusLight}}}</td>
+      <td>{{equipType}}</td>
+      <td>{{equipMake}} {{equipModel}} {{equipSubModel}}{{#if equipAddOns}} + {{equipAddOns}}{{/if}}</td>
+      <td>{{equipRUHieght}}</td>
+      <td>{{#if equipWarrantyMo}}<mark>{{equipAcquisition}}</mark>{{else}}{{equipAcquisition}}{{/if}}</td>
+      <td>{{equipPONum}}</td>
+      <td>{{equipInvoice}}</td>
+      <td>{{equipProjectNum}}</td>
+      <td>{{equipNotes}}</td>
+      <td>{{equipmodifiedOn}}</td>
+    </tr>
+    {{/each}}
+    </tbody>
+  </table>
+  </div> <!-- /equipsys-list.part2 -->
 </div> <!-- /equipsys-list.part1 -->
 

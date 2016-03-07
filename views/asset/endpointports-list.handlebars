@@ -1,53 +1,47 @@
-    
+<div>
 <h4>Endpoint Ports</h4>
-    <div> 
-        <div id="dvData">
-            <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-                <thead>
-                    <tr>
-                        
-                        
-                        <th class="table-sort" data-sort="systemName">System Name</th>
-                        <th class="table-sort" data-sort="sysPortName">Name</th>
-                        <th class="table-sort" data-sort="sysPortCablePath">Cable Path</th>
-                        <th class="table-sort" data-sort="sysPortEndPointPre">Pre</th>
-                        <th class="table-sort" data-sort="sysPortEndPointPort">Port</th>
-                        <th class="table-sort" data-sort="sysPortVlan">VLAN</th>
-                        <th class="table-sort" data-sort="sysPortOptions">Options</th>
-                        <th class="table-sort" data-sort="sysPortAddress">Address</th>
-                        <th class="table-sort" data-sort="sysPortType">Type</th>
-                   
-                    </tr>
-                </thead>
-                <tbody class="list">
-                {{#each sys}}
-                {{#each systemPorts}}
-                    <tr>
-                        <td class="systemName">
-                            {{#if ../../access.edit}}{{#if systemName}}
-                                <a href="/system/edit-{{systemName}}" target="_blank">
-                                <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
-                            {{/if}}{{/if}}
-                        <a href="/system/{{systemName}}">{{systemName}}</td>
-                        <td class="sysPortName">{{sysPortName}}</td>
-                        <td class="sysPortCablePath">{{sysPortCablePath}}</td>
-                        <td class="sysPortEndPointPre">{{sysPortEndPointPre}}</td>
-                        <td class="sysPortEndPointPort">{{sysPortEndPointPortPad}}</td>
-                        <td class="sysPortVlan">{{sysPortVlan}}</td>
-                        <td class="sysPortOptions">{{sysPortOptions}}</td>
-                        <td class="sysPortAddress">{{sysPortAddress}}</td>
-                        <td class="sysPortType">{{sysPortType}}</td>
-                    </tr>
-                {{/each}}
-                {{/each}}
-                </tbody>
-            </table>
-        </div>
-        {{> tocsvpartial }}
-    </div>
-    <hr>
-    <div class="row">
-    {{> assets/config-asendpoint-acs6k }}
-
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="systemName">System Name</th>
+        <th data-sortable="true" data-field="sysPortName">Name</th>
+        <th data-sortable="true" data-field="sysPortCablePath">Cable Path</th>
+        <th data-sortable="true" data-field="sysPortEndPointPre">Pre</th>
+        <th data-sortable="true" data-field="sysPortEndPointPort">Port</th>
+        <th data-sortable="true" data-field="sysPortVlan">VLAN</th>
+        <th data-sortable="true" data-field="sysPortOptions">Options</th>
+        <th data-sortable="true" data-field="sysPortAddress">Address</th>
+        <th data-sortable="true" data-field="sysPortType">Type</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each sys}}
+      {{#each systemPorts}}
+      {{#if sysPortName}}
+      <tr>
+        <td>
+          {{#if ../../../access.edit}}{{#if systemName}}
+          <a href="/system/edit-{{systemName}}" target="_blank">
+          <span class="glyphicon glyphicon-edit glyphicon-danger" title="Edit {{systemName}}"></span></a>
+            {{/if}}{{/if}}
+              <a href="/system/{{systemName}}">{{systemName}}</td>
+            <td>{{sysPortName}}</td>
+            <td>{{sysPortCablePath}}</td>
+            <td>{{sysPortEndPointPre}}</td>
+            <td>{{sysPortEndPointPortPad}}</td>
+            <td>{{sysPortVlan}}</td>
+            <td>{{sysPortOptions}}</td>
+            <td>{{sysPortAddress}}</td>
+            <td>{{sysPortType}}</td>
+          </tr>
+          {{/if}}
+        {{/each}}
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<hr>
+<div class="row">
+      {{> assets/config-asendpoint-acs6k }}
 {{!--    {{> assets/config-asendpoint-servtechports }} --}}
-   </div>
+</div>

@@ -1,38 +1,31 @@
-<div>    
-<h4>System Ports</h4>
-    <div id="dvData" class="table-responsive">
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                
-                <th class="table-sort" data-sort="sysPortType">Type</th>
-                <th class="table-sort" data-sort="sysPortName">Name</th>
-                <th class="table-sort" data-sort="sysPortCablePath">Cable Path</th>
-                <th class="table-sort" data-sort="sysPortEndPoint">End Point/Pre/Port</th>                
-                <th class="table-sort" data-sort="sysPortVlan">VLAN</th>
-                <th class="table-sort" data-sort="sysPortOptions">Options</th>
-                <th class="table-sort" data-sort="sysPortAddress">Address</th>
-                <th class="table-sort" data-sort="sysPortURL">URL</th>
-               <!-- <th class="table-sort" data-sort="sysPortCrossover">Xover</th>-->
-            
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each systemPorts}}
-            <tr>
-                <td class="sysPortType">{{sysPortType}}</td>
-                <td class="sysPortName">{{sysPortName}}</td>
-                <td class="sysPortCablePath">{{sysPortCablePath}}</td>
-                <td class="sysPortEndPoint"><a href="/endpoint/{{sysPortEndPoint}}">{{sysPortEndPoint}}</a>{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}{{#if sysPortEndPointPort}}/{{sysPortEndPointPort}}{{/if}}</td>
-                <td class="sysPortVlan">{{sysPortVlan}}</td>
-                <td class="sysPortOptions">{{sysPortOptions}}</td>
-                <td class="sysPortAddress">{{sysPortAddress}}</td>
-                <td class="sysPortURL"><a href="{{sysPortURL}}" target="_blank">{{sysPortURL}}</a>
-                <!--<td class="sysPortCrossover"><input type="checkbox" name="sysPortCrossover" value="true" {{sysPortCrossoverChecked}} disabled></td>-->
-            </tr>  
-        {{/each}}
-        </tbody>
-    </table>
-    </div>
-        {{> tocsvpartial }}
-    </div>
+<div>
+  <h4>System Ports</h4>
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="sysPortType">Type</th>
+        <th data-sortable="true" data-field="sysPortName" data-order="dsc">Name</th>
+        <th data-sortable="true" data-field="sysPortCablePath">Cable Path</th>
+        <th data-sortable="true" data-field="sysPortEndPoint">End Point/Pre/Port</th>
+        <th data-sortable="true" data-field="sysPortVlan">VLAN</th>
+        <th data-sortable="true" data-field="sysPortOptions">Options</th>
+        <th data-sortable="true" data-field="sysPortAddress">Address</th>
+        <th data-sortable="true" data-field="sysPortURL">URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each systemPorts}}
+      <tr>
+        <td>{{sysPortType}}</td>
+        <td>{{sysPortName}}</td>
+        <td>{{sysPortCablePath}}</td>
+        <td><a href="/endpoint/{{sysPortEndPoint}}">{{sysPortEndPoint}}</a>{{#if sysPortEndPointPre}}/{{sysPortEndPointPre}}{{/if}}{{#if sysPortEndPointPort}}/{{sysPortEndPointPort}}{{/if}}</td>
+        <td>{{sysPortVlan}}</td>
+        <td>{{sysPortOptions}}</td>
+        <td>{{sysPortAddress}}</td>
+        <td><a href="{{sysPortURL}}" target="_blank">{{sysPortURL}}</a>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

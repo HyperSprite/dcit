@@ -1,40 +1,35 @@
 <div>
 <h4>Users</h4>
-          <div id="dvData">
-    
-    <table id="toCSV" class="table-sort table-sort-search " style="overflow: scroll;">
-        <thead>
-            <tr>
-                <th class="table-sort" data-sort="edit">E</th>
-                <th class="table-sort" data-sort="id">ID</th>
-                <th class="table-sort" data-sort="email">Email</th>
-                <th class="table-sort" data-sort="phone">Phone</th>
-                <th class="table-sort" data-sort="usraccess">Access</th>
-                <th class="table-sort" data-sort="createdOn">Created On</th>
-                <th class="table-sort" data-sort="lastAccessed">Last Accessed</th>
-            </tr>
-        </thead>
-        <tbody class="list">
-        {{#each usr}}
-            <tr>
-                <td class="edit"><button type="submit" class="btn btn-success btn-xs" form="editform{{@index}}">E</button></td>
-                <td class="id">{{id}}</td>
-                <td class="email">{{email}}</td>
-                <td class="phone">{{phone}}</td>
-                <td class="usraccess">{{usrAccess}}</td>
-                <td class="createdOn">{{createdOn}}</td>
-                <td class="lastAccessed">{{lastAccessed}}</td>
-              </tr>  
-        {{/each}}
-        </tbody>
-    </table>
-    </div>
-         {{> tocsvpartial }}
-    </div>
-
-        {{#each usr}}
-            <form id="editform{{@index}}" action="/admin/userprofile" method="POST">
-            <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
-            <input type="hidden" name="id" value="{{id}}">
-            </form>
-        {{/each}} 
+  <table {{> bootstrap-table}} >
+    <thead>
+      <tr>
+        <th data-sortable="true" data-field="edit">E</th>
+        <th data-sortable="true" data-field="id">ID</th>
+        <th data-sortable="true" data-field="email">Email</th>
+        <th data-sortable="true" data-field="phone">Phone</th>
+        <th data-sortable="true" data-field="usraccess">Access</th>
+        <th data-sortable="true" data-field="createdOn">Created On</th>
+        <th data-sortable="true" data-field="lastAccessed">Last Accessed</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each usr}}
+      <tr>
+        <td><button type="submit" class="btn btn-success btn-xs" form="editform{{@index}}">E</button></td>
+        <td>{{id}}</td>
+        <td>{{email}}</td>
+        <td>{{phone}}</td>
+        <td>{{usrAccess}}</td>
+        <td>{{createdOn}}</td>
+        <td>{{lastAccessed}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+  {{#each usr}}
+    <form id="editform{{@index}}" action="/admin/userprofile" method="POST">
+    <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
+    <input type="hidden" name="id" value="{{id}}">
+    </form>
+  {{/each}}
