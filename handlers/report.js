@@ -225,7 +225,7 @@ function queryString(findThis, opt, searchIn) {
       query = Models.Systemdb.find({
         'systemName': {
           '$regex': findThis,
-          '$options': 'i'
+          '$options': 'i',
         }
       });
       break;
@@ -236,7 +236,7 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'systemName': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
             }
           });
           break;
@@ -245,7 +245,7 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'systemAlias': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
             }
           });
           break;
@@ -254,7 +254,7 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'systemParentId': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
             }
           });
           break;
@@ -263,7 +263,7 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'systemTicket': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
             }
           });
           break;
@@ -272,7 +272,7 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'modifiedBy': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
             }
           });
           break;
@@ -281,7 +281,7 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'systemPorts.sysPortCablePath': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
             }
           });
           break;
@@ -290,7 +290,7 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'systemPorts.sysPortEndPoint': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
             }
           });
           break;
@@ -299,7 +299,16 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Systemdb.find({
             'systemPorts.sysPortAddress': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
+            }
+          });
+          break;
+        case 'sysPortVlan':
+          findThis = strTgs.stTrim(findThis);
+          query = Models.Systemdb.find({
+            'systemPorts.sysPortVlan': {
+              '$regex': findThis,
+              '$options': 'i',
             }
           });
           break;
@@ -312,7 +321,7 @@ function queryString(findThis, opt, searchIn) {
       query = Models.Equipment.find({
         'equipSN': {
           '$regex': findThis,
-          '$options': 'i'
+          '$options': 'i',
         }
       });
       break;
@@ -324,15 +333,15 @@ function queryString(findThis, opt, searchIn) {
       break;
     case 12: // Homeless equipment
       query = Models.Equipment.find({
-        equipLocation: ''
+        equipLocation: '',
       });
       //        logger.info('query12'+query);
       break;
     case 13: // Not In Service
       query = Models.Equipment.find({
         'equipStatus': {
-          $nin: ['In Service', 'In Service with issues', 'End of Life', 'End of Life - Recycled', 'End of Life - RMA']
-        }
+          $nin: ['In Service', 'In Service with issues', 'End of Life', 'End of Life - Recycled', 'End of Life - RMA'],
+        },
       });
       //        logger.info('query13'+query);
       break;
@@ -340,7 +349,7 @@ function queryString(findThis, opt, searchIn) {
       query = Models.Equipment.find({
         'equipStatus': {
           $in: ['End of Life', 'Missing', 'End of Life - Recycled', 'End of Life - RMA', 'End of Life - Transfered', 'Parts Only']
-        }
+        },
       });
       //        logger.info('query13'+query);
       break;
@@ -355,8 +364,8 @@ function queryString(findThis, opt, searchIn) {
             'Spare',
             'Spare with issues',
             'Assigned',
-          ]
-        }
+          ],
+        },
       });
       //        logger.info('query13'+query);
       break;
@@ -368,7 +377,7 @@ function queryString(findThis, opt, searchIn) {
             'equipSN': {
               '$regex': findThis,
               '$options': 'i'
-            }
+            },
           });
           break;
         case 'equipAssetTag':
@@ -376,8 +385,8 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipAssetTag': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
         case 'equipTicketNumber':
@@ -385,8 +394,8 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipTicketNumber': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
         case 'equipPONum':
@@ -394,8 +403,8 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipPONum': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
         case 'equipInvoice':
@@ -403,8 +412,8 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipInvoice': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
         case 'equipProjectNum':
@@ -412,16 +421,16 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipProjectNum': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
         case 'modifiedBy':
           query = Models.Equipment.find({
             'modifiedBy': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
         case 'equipPortsAddr':
@@ -429,8 +438,8 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipPorts.equipPortsAddr': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
         case 'equipLocation':
@@ -438,8 +447,8 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipLocation': {
               '$regex': findThis,
-              '$options': 'i'
-            }
+              '$options': 'i',
+            },
           });
           break;
 

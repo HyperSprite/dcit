@@ -12,9 +12,10 @@
               <option {{{selOption 'system~modifiedBy' lastSearch}}}>System Modified By</option>
               <option {{{selOption 'system~sysPortEndPoint' lastSearch}}}>System EndPoint</option>
               <option {{{selOption 'system~sysPortAddress' lastSearch}}}>System IP Address</option>
+              <option {{{selOption 'system~sysPortVlan' lastSearch}}}>System VLan</option>
               <option {{{selOption 'system~sysPortCablePath' lastSearch}}}>System Cable Number</option>
             {{#if access.edit}}
-              <option {{{selOption 'equipment~equipLocation' lastSearch}}}>Location</option> 
+              <option {{{selOption 'equipment~equipLocation' lastSearch}}}>Location</option>
             {{/if}}
               <option {{{selOption 'equipment~equipSN' lastSearch}}}>Equipment SN</option>
               <option {{{selOption 'equipment~equipAssetTag' lastSearch}}}>Equipment Asset Tag</option>
@@ -28,7 +29,7 @@
           </div> <!-- /topnav.formgroup1 -->
           <div class="form-group"> <!-- topnav.formgroup2 -->
             <label class="sr-only" for="field-multiText">Search for</label>
-            <input id="field-multiText" type="text" class="form-control" pattern=".{3,}" required name="searchFor" placeholder="? (3 char min)">
+            <input id="field-multiText" type="text" class="form-control" pattern=".{1,}" required name="searchFor" placeholder="? (3 char min)">
           </div>
           <!-- /topnav.formgroup2 -->
           <button type="submit" class="sr-only btn btn-primary" value='Submit'>Submit</button>
@@ -69,7 +70,7 @@
       <li><a href="{{menuLink4}}">{{menu4}}</a>
       </li> {{/if}} {{#if lastPage}}
       <li><a href="{{lastPage}}">Back</a>
-      </li> 
+      </li>
       {{/if}}
       </ul>
       {{/if}}
