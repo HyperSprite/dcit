@@ -18,6 +18,9 @@ body {
        url('/fonts/Roboto-regular/Roboto-regular.svg#Roboto') format('svg');
 }*/
 
+
+
+
 h1 {
     text-transform: uppercase;
     font-weight: lighter;
@@ -42,6 +45,44 @@ navbar navbar-fixed-top > li > a {
                  0px 8px 13px rgba(0,0,0,0.1),
                  0px 18px 23px rgba(0,0,0,0.1);
 }
+
+table {
+  width           : 100%;
+  margin-bottom   : 10px;
+  border-collapse : collapse;
+  background      : #fff;
+  box-shadow      : 0 2px 6px rgba(0,0,0,0.1);
+}
+
+th {
+  font-weight        : 300;
+  color              : #fff;
+  background-image   : -webkit-linear-gradient(bottom,rgb(189,39,33), rgb(207,22,19) );
+  background-image   :    -moz-linear-gradient(bottom,rgb(189,39,33), rgb(207,22,19) );
+  background-image   :     -ms-linear-gradient(bottom,rgb(189,39,33), rgb(207,22,19) );
+  background-image   :         linear-gradient(bottom,rgb(189,39,33), rgb(207,22,19) );
+  -webkit-transition : all 0.3s;
+  -moz-transition    : all 0.3s;
+  -ms-transition     : all 0.3s;
+  -o-transition      : all 0.3s;
+  transition         : all 0.3s;
+}
+
+td {
+  font-weight    : 300;
+  vertical-align : top;
+}
+
+td,th {
+  padding     : 0 10px;
+  font-size   : 13px;
+  line-height : 32px;
+}
+
+tbody tr:nth-child(even) {
+  background: rgb(240, 240, 240);
+}
+
 
 #reportURL {
   margin: auto;

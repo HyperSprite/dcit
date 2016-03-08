@@ -305,12 +305,7 @@ function queryString(findThis, opt, searchIn) {
           break;
         case 'sysPortVlan':
           findThis = strTgs.stTrim(findThis);
-          query = Models.Systemdb.find({
-            'systemPorts.sysPortVlan': {
-              '$regex': findThis,
-              '$options': 'i',
-            }
-          });
+          query = Models.Systemdb.find({ 'systemPorts.sysPortVlan': findThis });
           break;
         default:
           //                logger.info('no opt for queryString');
