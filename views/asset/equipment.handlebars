@@ -1,10 +1,11 @@
 <div class="racks">
     <h4>Equipment SN: {{equipSN}}
 </h4>
-    <ul id="eachUl"class="list-unstyled"> 
+    <ul id="eachUl"class="list-unstyled">
             <li>
             <div class="row">
               <div class="col-md-4">
+                {{#if equipParent}} Parent: <a href="/equipment/{{equipParent}}"><strong>{{equipParent}}</strong></a><br>{{/if}}
                     Location: <strong><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
                     Ticket: {{{equipTicketNumberlit}}}<br>
                     Equipment Status: {{{equipStatuslit}}}<br>
@@ -22,14 +23,15 @@
             </div>
             <div class="row">
                 <hr>
-    
+
                 {{> assets/equipport-list}}
-                
+
                 <hr>
                 <div class="row">
                 <div class="col-md-4">
-                
+
                 {{#if equipIsVirtual}} Is Virtual {{/if}}
+                {{#if equipEOL}} Is EOL {{/if}}
                 {{#if equipMake}}{{equipMake}}<br>{{/if}}
                 {{#if equipModel}}{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}<br>{{/if}}
                 {{#if equipType}}Type: {{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
@@ -77,11 +79,11 @@
             </div>
             </li><br>
         </ul>
-     
 
 
-    
-    
+
+
+
 </div>
 
 

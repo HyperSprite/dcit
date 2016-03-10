@@ -1,6 +1,6 @@
-{{#if access.edit}}  
-    <a href="/equipment/edit-{{equipSN}}" >
+{{#if access.edit}}
+    <a href="/equipment/{{equipSN}}/edit" >
         <span class="glyphicon glyphicon-edit glyphicon-danger" accesskey="x"  title="Press Alt x to Edit {{equipSN}}" ></span></a>
-    <a href="/equipment/edit~copy-{{equipSN}}">
+    <a href="/equipment/{{equipSN}}/copy">
         <span class="glyphicon glyphicon-plus-sign glyphicon-danger" accesskey="c" title="Press Alt c to Copy {{equipSN}}"></span></a>
 {{/if}}

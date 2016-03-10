@@ -36,6 +36,7 @@ var equipmentSchema = mongoose.Schema({
   equipInventoryStatus: {type: Boolean, default: false},
   equipStatus: String,
   equipIsVirtual: {type: Boolean, default: false},
+  equipEOL: {type: Boolean, default: false},
   equipType: String,
   equipMake: String,
   equipModel: String,
@@ -62,7 +63,7 @@ var equipmentSchema = mongoose.Schema({
   equipPSUCount: Number,
   equipPSUDraw: Number,
   equipAddOns: String,
-  equipReceived: {type: Date, default: Date.now},
+  equipReceived: {type: Date},
   equipAcquisition: Date,
   equipInService: Date,
   equipEndOfLife: Date,
@@ -88,6 +89,15 @@ equipmentSchema.plugin(uniqueValidator);
 
 equipmentSchema.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.' });
 
+equipmentSchema.virtual('equipLocRack').get(function() {
+  var cutLine = this.equipLocation.lastIndexOf('_');
+  return this.equipLocation.substring(0, cutLine);
+});
+
+equipmentSchema.virtual('equipLocRU').get(function() {
+  var cutLine = this.equipLocation.lastIndexOf('_');
+  return this.equipLocation.slice(cutLine + 1);
+});
 
 equipmentSchema.virtual('dcAbbr').get(function() {
   var start = this.equipLocation.indexOf('-');

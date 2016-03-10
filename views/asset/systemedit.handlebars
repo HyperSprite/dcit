@@ -1,9 +1,9 @@
 <div class="racks">
     <h4>{{#if systemName}}System{{else}}New System{{/if}}</h4>
-    <div class="datacenter"> 
+    <div class="datacenter">
 
     <div class="formContainer">
-    
+
     {{#if systemName}}
     <form id="datacenterForm"class="form-horizontal datacenterForm" name="assetEdit" role="form" action="/system/{{systemName}}" method="POST">
     <input type="hidden" name="isEdit" value="{{systemName}}">
@@ -12,14 +12,14 @@
     <form id="datacenterForm"class="form-horizontal datacenterForm" name="assetEdit" role="form" action="/system/new" method="POST">
     <input type="hidden" name="wasCopy" value="{{wasCopy}}">
     <input type="hidden" name="systemId" value="new">
-    {{/if}} 
+    {{/if}}
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="equipLocation" value="{{equipLocation}}">
         <p class="form-control-static"></p>
-    <div class="row">       
-        <div class="col-md-10">   
+    <div class="row">
+        <div class="col-md-10">
             <div class="form-group">
-        
+
             <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
                 <div class="col-sm-4">
                 {{#if systemName}}
@@ -27,7 +27,7 @@
                 <p><strong>{{systemName}}</strong>
                 {{#if access.delete}}
 
-                     <a href="/system-namechange/{{systemName}}" 
+                     <a href="/system-namechange/{{systemName}}"
                     <span class="glyphicon glyphicon-pencil glyphicon-danger" data-toggle="tooltip" data-delay='{"show":1500}' title="Click to edit the system name."></span>
                     </a>
                 {{/if}}
@@ -43,7 +43,7 @@
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="systemAlias" name="systemAlias"  value="{{systemAlias}}" placeholder="AKA?" data-toggle="tooltip" data-delay='{"show":1500}'  title="Also known as, for use with systems with more than one name.">
             </div>
-        </div>  
+        </div>
         <div class="form-group">
             <label for="field-systemParentId" class="col-sm-2 control-label" >System Parent</label>
             <div class="col-sm-4">
@@ -58,40 +58,40 @@
                     {{#each optSystStatus}}
                     <option {{{selOption this ../systemStatus}}} >{{this}}</option>
                     {{/each}}
-                    
+
                 </select>
-                
+
             </div>
-        </div> 
-        
+        </div>
+
         <div class="form-group">
             <label for="field-systemTicket" class="col-sm-2 control-label" >Ticket</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="systemTicket" name="systemTicket"  value="{{systemTicket}}" placeholder="Case requesting this System?" data-toggle="tooltip" data-delay='{"show":1500}' title="Ticket is any case number associated with this system. multiple cases can be added using comma separation.">
             </div>
-        </div>  
-        
+        </div>
+
         <div class="form-group">
             <label for="systemEquipSN" class="col-sm-2 control-label" >Equipment SN</label>
             <div class="col-sm-4">
-                <input type="text" id="systemEquipSN" class="noEnterSubmit form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" data-toggle="tooltip" data-delay='{"show":1500}' title="Autofill will present matching Equipment Serial Numbers as you type.">
+                <input type="text" id="systemEquipSN" class="autofillEquipSN noEnterSubmit form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" data-toggle="tooltip" data-delay='{"show":1500}' title="Autofill will present matching Equipment Serial Numbers as you type.">
             </div>
-        </div> 
+        </div>
         {{#if equipLocation}}<div class="form-group">
             <label for="field-equipLocation" class="col-sm-2 control-label">Location</label>
             <div class="col-sm-4">
                 {{equipLocation}}
             </div>
-        </div> 
+        </div>
         {{/if}}
-            
+
 
         <div class="form-group">
             <label for="field-systemInventoryStatus" class="col-sm-2 control-label"  >Inventory Status</label>
             <div class="col-sm-4">
                 <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} data-toggle="tooltip" data-delay='{"show":1500}' title="Check this box if this page is complete">
             </div>
-        </div>  
+        </div>
         <div class="form-group">
             <label for="field-systemIsVirtual" class="col-sm-2 control-label"  >Is Virtual</label>
             <div class="col-sm-4">
@@ -101,7 +101,7 @@
     </div>
     <div class="col-md-1>
         <div form-group">
-                
+
                 <a href="#" class="assetFormSubmit" accesskey="x" data-toggle="tooltip" data-delay='{"show":1500}' title="Press Alt x to Save" >
                     <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
 
@@ -110,7 +110,7 @@
 
                 <a href="#" onclick="document.getElementById('cancelForm').submit();return false;" title="Cancel edit">
                     <span class="glyphicon glyphicon-ban-circle glyphicon-danger"></span></a>
-                
+
         </div>
     </div>
 
@@ -119,12 +119,12 @@
                 <tr>
                 <th></th>
                 <th ><strong>System Ports</strong></th>
-                
-                
+
+
                 </tr>
             </thead>
             <tbody id="tbody1" class="list">
-                
+
                 {{#if systemPorts}}
                 {{#each systemPorts}}
                 <tr id="{{sysPortId}}" class="tr-ports">
@@ -132,32 +132,32 @@
                     <td>
                         <button type="submit" class="btn btn-danger btn-xs" form="singlePortDelForm{{@index}}" title="Delete this port"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
-                    
-                    
+
+
                     <td>
                         <div class="form-group row marginRow">
                             <div class="col-sm-2">
-                            <input list="sysPortType{{@index}}" id="form-sysPortType{{@index}}" class="form-control form-fixer" name="sysPortType[{{@index}}]" value="{{sysPortType}}" autocomplete="off" data-toggle="tooltip" data-delay='{"show":1500}' title="Select the Port Type. The field affects various reports at the bottom of the page."> 
+                            <input list="sysPortType{{@index}}" id="form-sysPortType{{@index}}" class="form-control form-fixer" name="sysPortType[{{@index}}]" value="{{sysPortType}}" autocomplete="off" data-toggle="tooltip" data-delay='{"show":1500}' title="Select the Port Type. The field affects various reports at the bottom of the page.">
                             <datalist id="sysPortType{{@index}}">
                                 {{#each ../optSystPortType}}
                                     <option {{{this}}}>{{this}}</option>
                                 {{/each}}
                             </datalist>
-                            </div>    
+                            </div>
                             <div class="col-sm-2 ">
                                 <input type="text"  id="sysPortName{{@index}}" class="form-control col-sm-2 form-fixer" name="sysPortName[{{@index}}]"value="{{sysPortName}}" placeholder="e0, con, netmgmt" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Name (or label) 'e0' 'e1' 'con' 'netmgmt' 'ilom' 'drac' 'p0' 'p1' etc.">
-                            </div>    
+                            </div>
                             <div class="col-sm-2">
                                 <input type="text" id="sysPortEndPoint{{@index}}" class="form-control col-sm-2  form-fixer autofillSystemName" name="sysPortEndPoint[{{@index}}]" value="{{sysPortEndPoint}}" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
-                                
-                            </div>    
+
+                            </div>
                             <div class="col-sm-1">
                                 <input type="text"   id="sysPortEndPointPre{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[{{@index}}]"value="{{sysPortEndPointPre}}" placeholder="Blade" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Endpoint Pre Port is for modules, blades or branches of larger units.">
-                            </div>    
+                            </div>
                             <div class="col-sm-1">
                                 <input type="text"   id="sysPortEndPointPort{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[{{@index}}]"value="{{sysPortEndPointPort}}" placeholder="1-48ish" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Endpoint Port is the port number or label.">
-                             </div>    
-                            <div class="col-sm-1">   
+                             </div>
+                            <div class="col-sm-1">
                                 <input type="text"  id="sysPortVlan{{@index}}" class="form-control col-sm-1 form-fixer" name="sysPortVlan[{{@index}}]"value="{{sysPortVlan}}" placeholder="vlan #" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Vlan number. Required for some reports">
                             </div>
                             <div class="col-sm-3">
@@ -171,21 +171,21 @@
                         <div class="col-sm-2">
                             <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress{{@index}}" name="sysPortAddress[{{@index}}]"value="{{sysPortAddress}}" placeholder="10.10.10.10" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Address is the IP address. Required for some reports">
                         </div>
-                        
-                        
+
+
                         <div class="col-sm-3">
                             <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL{{@index}}" name="sysPortURL[{{@index}}]"value="{{sysPortURL}}" placeholder="http://" data-toggle="tooltip" data-delay='{"show":1500}' title="Port URL is for future features.">
                         </div>
-                        
+
                         <div class="checkbox col-sm-2">
                         <label for="sysPortCrossover{{@index}}" class="control-label form-fixer">
                             <input type="checkbox"  name="sysPortCrossover[{{@index}}]" value="true" {{sysPortCrossoverChecked}}>Crossover
                         </label>
                         </div>
-                        
-                        
+
+
                         </div>
-                        
+
                     </td>
 
                 </tr>
@@ -196,31 +196,31 @@
                     <td>
                         <button type="submit" class="btn btn-danger btn-xs" form="deleteform0"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
-                    
-                    
+
+
                     <td>
                         <div class="form-group row marginRow">
                             <div class="col-sm-2">
-                            <input list="sysPortType0" id="form-sysPortType0" class="form-control form-fixer" name="sysPortType[0]" autocomplete="off"> 
+                            <input list="sysPortType0" id="form-sysPortType0" class="form-control form-fixer" name="sysPortType[0]" autocomplete="off">
                             <datalist id="sysPortType0" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Name (or label) 'e0','e1','con','netmgmt','ilom','drac','p0','p1' etc.">
                                 {{#each ../optSystPortType}}
                                     <option {{{this}}}>{{this}}</option>
                                 {{/each}}
                             </datalist>
-                            </div>    
+                            </div>
                             <div class="col-sm-2 ">
                                 <input type="text"  id="sysPortName0" class="form-control col-sm-2 form-fixer" name="sysPortName[0]" placeholder="e0, con, netmgmt" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Name (or label) 'e0' 'e1' 'con' 'netmgmt' 'ilom' 'drac' 'p0' 'p1' etc.">
-                            </div>    
+                            </div>
                             <div class="col-sm-2">
                                 <input type="text" id="sysPortEndPoint0" class="form-control col-sm-2  form-fixer autofillSystemName" name="sysPortEndPoint[0]" placeholder="Pick a Switch, PDU, Console" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Endpoint is the device this port is attached to. Autofill will preset matching Systems as you type. Hint, type the most unique part of the System Name for faster results.">
-                            </div>   
+                            </div>
                             <div class="col-sm-1">
                                 <input type="text"   id="sysPortEndPointPre0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPre[0]" placeholder="Blade" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Endpoint Pre Port is for modules, blades or branches of larger units.">
-                            </div>    
+                            </div>
                             <div class="col-sm-1">
                                 <input type="text"   id="sysPortEndPointPort0" class="form-control col-sm-1 form-fixer" name="sysPortEndPointPort[0]"value="{{sysPortEndPointPort}}" placeholder="1-48ish" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Endpoint Port is the port number or label.">
-                             </div>    
-                            <div class="col-sm-1">   
+                             </div>
+                            <div class="col-sm-1">
                                 <input type="text"  id="sysPortVlan0" class="form-control col-sm-1 form-fixer" name="sysPortVlan[0]"value="{{sysPortVlan}}" placeholder="vlan #" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Vlan number. Required for some reports">
                             </div>
                             <div class="col-sm-3">
@@ -234,35 +234,35 @@
                         <div class="col-sm-2">
                             <input type="text" class="form-control col-sm-2 form-fixer" id="sysPortAddress0" name="sysPortAddress[0]"value="{{sysPortAddress}}" placeholder="10.10.10.10" data-toggle="tooltip" data-delay='{"show":1500}' title="Port Address is the IP address. Required for some reports">
                         </div>
-                        
-                        
+
+
                         <div class="col-sm-3">
                             <input type="text" class="form-control col-sm-3 form-fixer" id="sysPortURL0" name="sysPortURL[0]"value="{{sysPortURL}}" placeholder="http://" data-toggle="tooltip" data-delay='{"show":1500}' title="Port URL is for future features.">
                         </div>
-                        
+
                         <div class="checkbox col-sm-2">
                         <label for="sysPortCrossover0" class="control-label form-fixer">
                             <input type="checkbox"  name="sysPortCrossover[0]" value="true">Crossover</label>
                         </div>
-                        
-                        
+
+
                         </div>
-                        
+
                     </td>
 
                 </tr>
                 {{/if}}
 
             </tbody>
-        </table>                
+        </table>
 
 
-        
+
                 <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('tbody1','tr',16);">+ 1</button>
-        
+
         <div>
         <hr>
-        <ul id="eachUl"class="list-unstyled">    
+        <ul id="eachUl"class="list-unstyled">
             <li id="eachLi" class="eachLi">
          <div class="form-group">
             <label for="systemEnviron" class="col-sm-2 control-label" >Environment</label>
@@ -290,12 +290,12 @@
                     {{#each optImpactLevel}}
                     <option {{{selOption this ../systemImpact}}} >{{this}}</option>
                     {{/each}}
-                    
+
                 </select>
-                
+
             </div>
         </div> --}}
-        
+
         <hr>
         <div class="form-group">
             <label for="field-systemOSType" class="col-sm-2 control-label" >OS</label>
@@ -308,33 +308,33 @@
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="systemOSVersion" name="systemOSVersion"  value="{{systemOSVersion}}" placeholder="5u8,6u5,2008 R2" data-toggle="tooltip" data-delay='{"show":1500}' title="OS Versions like ‘6u5’ ‘2008 R2’">
             </div>
-        </div>        
-    
+        </div>
+
         <div class="form-group">
             <label for="field-systemApplications" class="col-sm-2 control-label" >Software</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="systemApplications" name="systemApplications"  value="{{systemApplications}}" placeholder="Paid software" data-toggle="tooltip" data-delay='{"show":1500}' title="Software is that which requires purchase or license. Can be coma separated">
             </div>
-        </div>        
+        </div>
         <div class="form-group">
             <label for="field-systemSupLic" class="col-sm-2 control-label" >Support License</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="systemSupLic" name="systemSupLic"  value="{{systemSupLic}}" placeholder="Contract Numbers" data-toggle="tooltip" data-delay='{"show":1500}' title="Software Contract or License numbers">
             </div>
-        </div>        
+        </div>
         <div class="form-group">
             <label for="field-systemSupEndDate" class="col-sm-2 control-label" >Software Support End Date</label>
             <div class="col-sm-4">
                 <input type="date" class="form-control" id="systemSupEndDate" name="systemSupEndDate"  value="{{systemSupEndDate}}" data-toggle="tooltip" data-delay='{"show":1500}' title="Software Support End Date is for future feature to have reminders about support expiration. Not yet implemented">
             </div>
-        </div>      
+        </div>
         <hr>
         <div class="form-group">
             <label for="field-systemInstall" class="col-sm-2 control-label" >System Install Date</label>
             <div class="col-sm-4">
                 <input type="date" class="form-control" id="systemInstall" name="systemInstall"  value="{{systemInstall}}" data-toggle="tooltip" data-delay='{"show":1500}' title="System Install Date is the day it is ready for OS install.">
             </div>
-        </div>        
+        </div>
         <div class="form-group">
             <label for="field-systemStart" class="col-sm-2 control-label" >System Start Date</label>
             <div class="col-sm-4">
@@ -354,7 +354,7 @@
             </div>
         </div>
     </ul>
-    <div> 
+    <div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
@@ -370,7 +370,7 @@
         </div>
     </div>
     </form>
-    <form id="cancelForm" role="form" action="{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}" method="GET"></form>  
+    <form id="cancelForm" role="form" action="{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}" method="GET"></form>
     {{#if access.delete}}
     <form id="deleteForm" action="/systemdelete/{{systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{systemName}}. This can not be undone!')">
         <input type="hidden" name="equipLocationRack" value="{{equipLocationRack}}">
@@ -394,7 +394,7 @@
             <input type="hidden" name="wasCopy" value="{{../wasCopy}}">
             </form>
         {{/each}}
-        {{/if}}    
+        {{/if}}
 
 
 <script language="Javascript" type="text/javascript">
@@ -406,7 +406,7 @@
 function addField(area,field,limit) {
     var count;
     if(!document.getElementById) return;
-    var field_area = document.getElementById(area);  
+    var field_area = document.getElementById(area);
     var liList = document.getElementById(area).getElementsByTagName("tr");
     var count = liList.length
 
@@ -415,10 +415,10 @@ function addField(area,field,limit) {
     //If the maximum number of elements have been reached, exit the function.
     //      If the given limit is lower than 0, infinite number of fields can be created.
     if(count > limit && limit > 0) return;
-    
-    if(document.createElement) { 
+
+    if(document.createElement) {
          //Older Method
         field_area.insertAdjacentHTML('beforeend', {{> assets/systemeditPlus1}});
-    }   
+    }
 }
-</script> 
+</script>

@@ -73,8 +73,11 @@ module.exports = function(app) {
   app.post('/location/rackpower/:datacenter', isLoggedIn, handlers.rack.dcRackPowPost);
   app.post('/location/racksubdelete/:datacenter', isLoggedIn, handlers.rack.rackSubDelete);
   // Equipment
-  app.get('/equipment', handlers.equipment.dcEquipPages);
-  app.get('/equipment/:datacenter', handlers.equipment.dcEquipPages);
+  app.get('/equipment', handlers.equipment.dcEquipAll);
+  app.get('/equipment/new', handlers.equipment.dcEquipNew);
+  app.get('/equipment/:data', handlers.equipment.dcEquipView);
+  app.get('/equipment/:data/copy', handlers.equipment.dcEquipCopy);
+  app.get('/equipment/:data/edit', handlers.equipment.dcEquipEdit);
   app.get('/equipment-systems', handlers.equipment.dcEquipSysPages);
   app.get('/equipment-systems/:datacenter', handlers.equipment.dcEquipSysPages);
   app.get('/elevation/:datacenter', handlers.equipment.dcRackElevationPage);

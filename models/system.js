@@ -1,5 +1,5 @@
-var mongoose = require('mongoose'),
-  uniqueValidator = require('mongoose-unique-validator');
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 //   Systems
 
@@ -14,48 +14,26 @@ var systemPortSchema = mongoose.Schema({
   sysPortVlan: String,
   sysPortOptions: String,
   sysPortURL: String,
-  sysPortCrossover: {
-    type: Boolean,
-    default: false,
-  },
+  sysPortCrossover: {type: Boolean, default: false},
   createdBy: String,
   modifiedBy: String,
 },
-  {timestamps: {
-    createdAt: 'createdOn',
-    updatedAt: 'modifiedOn',
-  },
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
 var systemdbSchema = mongoose.Schema({
-  systemName: {
-    type: String,
-    unique: true,
-    sparse: true,
-    index: 1,
-    required: true,
-  },
-  systemEquipSN: {
-    type: String,
-    index: 1,
-  },
-  systemAlias: {
-    type: String,
-  },
+  systemName: {type: String, unique: true, sparse: true, index: 1, required: true},
+  systemEquipSN: {type: String, index: 1},
+  systemAlias: {type: String},
   systemEnviron: String,
   systemRole: String,
-  systemInventoryStatus: {
-    type: Boolean,
-    default: false,
-  },
+  systemInventoryStatus: {type: Boolean, default: false},
   systemTicket: String,
   systemStatus: String,
   systemOwner: String,
+  systemLOB: String,
   systemImpact: String,
-  systemIsVirtual: {
-    type: Boolean,
-    default: false,
-  },
+  systemIsVirtual: {type: Boolean, default: false},
   systemParentId: String,
   systemOSType: String,
   systemOSVersion: String,
@@ -70,10 +48,7 @@ var systemdbSchema = mongoose.Schema({
   createdBy: String,
   modifiedBy: String,
 },
-  {timestamps: {
-    createdAt: 'createdOn',
-    updatedAt: 'modifiedOn',
-  },
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
 // Apply the uniqueValidator plugin to datacenterSchema

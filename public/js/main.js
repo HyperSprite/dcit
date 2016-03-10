@@ -1,7 +1,7 @@
 // https://github.com/devbridge/jQuery-Autocomplete
 
 $(document).ready(function() {
-  $('#systemEquipSN').autocomplete({
+  $('.autofillEquipSN').autocomplete({
     serviceUrl: '/autocomplete/allEquipSN',
     minChars: 3,
     autoFocus: true,
@@ -150,4 +150,12 @@ $(document).ready(function() {
     if (e.which == 13) return false;
   });
 
-
+// to dissable location field if parent exists
+var equipParent = document.getElementById('equipParent');
+equipParent.onchange = function () {
+  if (this.value !== '' || this.value.length > 0) {
+    document.getElementById('equipLocationRack').disabled = true;
+  } else {
+    document.getElementById('equipLocationRack').disabled = false;
+  }
+};

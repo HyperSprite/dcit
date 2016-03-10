@@ -1,5 +1,5 @@
    <h4>Change Equipment Serial Number for {{oldEquipSN}}</h4>
-    
+
     {{#if access.delete}}
     <div>
         <form id="datacenterForm" class="form-horizontal" role="form" action="/equipment-snchange/update" method="POST">
@@ -8,33 +8,33 @@
                 <input type="hidden" name="id" value="{{equipId}}">
             <div class="form-group">
                 <label for="field-equipSN" class="col-sm-2 control-label">Serial Number</label>
-                <div class="col-sm-4">   
+                <div class="col-sm-4">
                     <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" value="{{oldEquipSN}}" placeholder="*Required" data-toggle="tooltip" required title="Equipment Serial Number is required, should be all upper case and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." aria-describedby="equipSNStatus">
                 </div>
-            </div>      
-            
+            </div>
+
         {{#if systemName}}
             <div class="form-group">
                 <label for="field-systemName" class="col-sm-2 control-label" >System</label>
-                <div class="col-sm-4">  
+                <div class="col-sm-4">
                     <p class="form-control-static">{{systemName}}</p>
                 </div>
-            </div>                     
-            
-        {{/if}}   
+            </div>
+
+        {{/if}}
         <div class="form-group">
                     <button type="submit" class="btn btn-danger btn-xs assetFormSubmit" input accesskey="x" title="Press Alt x to Update Serial Number" value="Submit"><span class="glyphicon glyphicon-save"></span> Update Serial Number</button>
                     <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
-                    
+
                     <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
                     <button type="button" class="btn btn-danger btn-xs">
                     <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
-                    
 
-                    
-        
+
+
+
         </div>
-        </form><form id="cancelForm" role="form" action="/equipment/edit-{{oldEquipSN}}" method="GET"></form>
-    </div>    
-    
+        </form><form id="cancelForm" role="form" action="/equipment/{{oldEquipSN}}" method="GET"></form>
+    </div>
+
     {{/if}}

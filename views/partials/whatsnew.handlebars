@@ -1,5 +1,14 @@
 ### What’s new
 
+####v0.2.07
+ - Added Equipment Parent (github issue #9). This allows for child Equipment, such as blades in a chassis or nodes an full rack Engineered System, to move with the Parent. Update the Parent location and all children will be updated. RUs will remain unchanged.
+ - Fixed Received Date bug (github issue #17).
+ - General refactoring of Equipment.js Route Handlers, including separating View, New, Edit and Copy modules. These now work with the following routes:
+ /equipment/equipSN to View
+ /equipment/new for new
+ /equipment/equipSN/edit to Edit
+ /equipment/equipSN/copy to Copy
+
 ####v0.2.04
  - added vlan search to top bar (github issue #15)
 ####v0.2.03
