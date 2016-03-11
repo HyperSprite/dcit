@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 var optionsSchema = mongoose.Schema({
-  optListName: {type: String, unique: true, sparse: true, require:1},
-  optListKey: {type: String, unique: true, sparse: true, require:1},
+  optListName: {type: String, unique: true, sparse: true, require: 1},
+  optListKey: {type: String, unique: true, sparse: true, require: 1},
   optListArray: Array,
   createdBy: String,
   createdOn: {type: Date, default: Date.now},
