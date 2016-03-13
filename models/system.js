@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const addHistory = require('mongoose-history');
+const historyOptions = { diffOnly: true };
+
 
 //   Systems
 
-var systemPortSchema = mongoose.Schema({
+const systemPortSchema = mongoose.Schema({
   sysPortType: String,
   sysPortName: String,
   sysPortAddress: String,
@@ -21,7 +24,7 @@ var systemPortSchema = mongoose.Schema({
   {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
-var systemdbSchema = mongoose.Schema({
+const systemdbSchema = mongoose.Schema({
   systemName: {type: String, unique: true, sparse: true, index: 1, required: true},
   systemEquipSN: {type: String, index: 1},
   systemAlias: {type: String},
@@ -54,5 +57,7 @@ var systemdbSchema = mongoose.Schema({
 // Apply the uniqueValidator plugin to datacenterSchema
 systemdbSchema.plugin(uniqueValidator);
 
-var Systemdb = mongoose.model('Systemdb', systemdbSchema);
+systemdbSchema.plugin(addHistory, historyOptions);
+
+const Systemdb = mongoose.model('Systemdb', systemdbSchema);
 module.exports = Systemdb;

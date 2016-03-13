@@ -371,7 +371,16 @@ function queryString(findThis, opt, searchIn) {
           query = Models.Equipment.find({
             'equipSN': {
               '$regex': findThis,
-              '$options': 'i'
+              '$options': 'i',
+            },
+          });
+          break;
+        case 'equipParent':
+          findThis = strTgs.sTrim(findThis);
+          query = Models.Equipment.find({
+            'equipParent': {
+              '$regex': findThis,
+              '$options': 'i',
             },
           });
           break;
@@ -550,7 +559,7 @@ module.exports.dcByEnvRole = function(req, res) {
                 logger.warn('asc' + ' ' + err);
               } else {
                 //        logger.info('2-9 >'+searchFor);
-                Models.Equipment.find({}, 'equipLocation equipSN equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', function(err, eqs) {
+                Models.Equipment.find({}, 'equipLocation equipSN equipParent equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', function(err, eqs) {
 
                   // logger.info('system-list'+sys);
                   var context = {

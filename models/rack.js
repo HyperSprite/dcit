@@ -1,5 +1,8 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const addHistory = require('mongoose-history');
+const historyOptions = { diffOnly: true };
+
 
 // future to audit rack power, could be manual, could pull from PDUs
 var rackPowNowSchema = mongoose.Schema({
@@ -19,9 +22,9 @@ var rackPowersSchema = mongoose.Schema({
   rackPowReceptacle: String,
   rackPowNow: [rackPowNowSchema],
   createdBy: String,
-  createdOn: {type: Date, default: Date.now},
   modifiedBy: String,
-  modifiedOn: {type: Date, default: Date.now},
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
 var rackSchema = mongoose.Schema({
@@ -46,9 +49,9 @@ var rackSchema = mongoose.Schema({
   powers: [rackPowersSchema],
   rackNotes: String,
   createdBy: String,
-  createdOn: {type: Date, default: Date.now},
   modifiedBy: String,
-  modifiedOn: {type: Date, default: Date.now},
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
 // gets rUs based on Rack ID
@@ -59,6 +62,7 @@ rackSchema.methods.getrUs = function(){
 // Apply the uniqueValidator plugin to datacenterSchema
 rackSchema.plugin(uniqueValidator);
 
+rackSchema.plugin(addHistory, historyOptions);
 
 var Rack = mongoose.model('Rack', rackSchema);
 module.exports = Rack;

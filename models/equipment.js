@@ -1,32 +1,34 @@
-var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
+const addHistory = require('mongoose-history');
+const historyOptions = { diffOnly: true };
 
 // Equipment
 
-var equipRMASchema = mongoose.Schema({
+const equipRMASchema = mongoose.Schema({
   equipRMAOpened: Date,
   equipRMAClosed: Date,
   equipRMANumber: String,
   equipRMANotes: String,
   equipRMATicket: String,
   createdBy: String,
-  createdOn: {type: Date, default: Date.now},
   modifiedBy: String,
-  modifiedOn: {type: Date, default: Date.now},
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
-var equipPortSchema = mongoose.Schema({
+const equipPortSchema = mongoose.Schema({
   equipPortType: String,
   equipPortsAddr: {type: String, unique: true, sparse: true},
   equipPortName: String,
   equipPortsOpt: String,
   createdBy: String,
-  createdOn: {type: Date, default: Date.now},
   modifiedBy: String,
-  modifiedOn: {type: Date, default: Date.now},
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
-var equipmentSchema = mongoose.Schema({
+const equipmentSchema = mongoose.Schema({
   equipLocation: {type: String, index: 1},
   equipSN: {type: String, unique: true, index: 1, sparse: true, required: true},
   equipAssetTag: String,
@@ -79,9 +81,9 @@ var equipmentSchema = mongoose.Schema({
   equipPurchaseEnd: Date,
   equipNotes: String,
   createdBy: String,
-  createdOn: {type: Date, default: Date.now},
   modifiedBy: String,
-  modifiedOn: {type: Date, default: Date.now},
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
 // Apply the uniqueValidator plugin to datacenterSchema
@@ -104,7 +106,7 @@ equipmentSchema.virtual('dcAbbr').get(function() {
   return this.equipLocation.substring(start + 1);
 });
 
-var Equipment = mongoose.model('Equipment', equipmentSchema);
+equipmentSchema.plugin(addHistory, historyOptions);
+
+const Equipment = mongoose.model('Equipment', equipmentSchema);
 module.exports = Equipment;
-
-

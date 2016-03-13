@@ -1,13 +1,13 @@
 {
   "name": "dcit",
-  "version": "2.0.21",
+  "version": "2.1.1",
   "description": "DCIT is for saving Data Center Informantion Transcript.",
   "main": "dcit.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "C. Dunavan chris-git@hypersprite.com",
-  "license": "GPL, MIT",
+  "license": "MIT",
   "dependencies": {
     "async": "^1.5.0",
     "bcrypt-nodejs": "0.0.3",
@@ -22,6 +22,7 @@
     "cookie-parser": "^1.4.0",
     "cors": "^2.7.1",
     "csurf": "^1.8.3",
+    "deep-diff": "^0.3.3",
     "express": "^4.13.3",
     "express-handlebars": "^2.0.1",
     "express-session": "^1.12.1",
@@ -39,6 +40,7 @@
     "moment": "^2.10.6",
     "moment-timezone": "^0.4.1",
     "mongoose": "^4.3.0",
+    "mongoose-history": "^0.4.2",
     "mongoose-unique-validator": "^0.6.2",
     "morgan": "^1.6.1",
     "multer": "^1.1.0",

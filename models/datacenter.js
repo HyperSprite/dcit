@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Rack = require('../models/rack.js');
+const addHistory = require('mongoose-history');
+const historyOptions = { diffOnly: true };
 
-var dcCagesSchema = mongoose.Schema({
+
+const dcCagesSchema = mongoose.Schema({
   cageNickname: {type: String, required: true},
   cageAbbreviation: String,
   cageName: {type: String, required: true},
@@ -11,10 +14,12 @@ var dcCagesSchema = mongoose.Schema({
   cageNotes: String,
   cageMap: String,
   cageracks: [{ type: mongoose.Schema.ObjectId, ref: 'Rack' }],
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
 
-var dcContactsSchema = mongoose.Schema({
+const dcContactsSchema = mongoose.Schema({
   conGuid: {type: String},
   conType: {type: String, required: true},
   conName: {type: String, required: true},
@@ -39,9 +44,11 @@ var dcContactsSchema = mongoose.Schema({
   conPho4Num: Number,
   conPho4Typ: String,
   conNotes: String,
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
-var dcNetworkSchema = mongoose.Schema({
+const dcNetworkSchema = mongoose.Schema({
   dcNetUnique: {type: String, unique: true, required: true, sparse: true},
   dcNetType: {type: Number, required: true},
   dcNetNetwork: {type: String, required: true},
@@ -59,25 +66,25 @@ var dcNetworkSchema = mongoose.Schema({
   dcNetLdapString: String,
   dcNetTftpHost: String,
   dcNetACSFilePath: String,
-  createdOn: {type: Date, default: Date.now},
   createdBy: String,
-  modifiedOn: {type: Date, default: Date.now},
   modifiedBy: String,
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
-var datacenterSchema = mongoose.Schema({
+const datacenterSchema = mongoose.Schema({
   fullName: {type: String, unique: true, required: true, index:1, sparse: true},
   abbreviation: {type: String, unique: true, required: true, index:1, sparse: true},
   foundingCompany: String,
-  createdOn: {type: Date, default: Date.now},
   createdBy: String,
-  modifiedOn: {type: Date, default: Date.now},
   modifiedBy: String,
   contacts: [dcContactsSchema],
   cages: [dcCagesSchema],
   networks: [dcNetworkSchema],
   powerNames: Array,
   racks: [{ type: mongoose.Schema.ObjectId, ref: 'Rack' }],
+},
+  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
 });
 
 // gets Cages based on Datacenter ID
@@ -92,5 +99,7 @@ datacenterSchema.methods.getRacks = function(){
 // Apply the uniqueValidator plugin to datacenterSchema
 datacenterSchema.plugin(uniqueValidator);
 
-var Datacenter = mongoose.model('Datacenter', datacenterSchema);
+datacenterSchema.plugin(addHistory, historyOptions);
+
+const Datacenter = mongoose.model('Datacenter', datacenterSchema);
 module.exports = Datacenter;

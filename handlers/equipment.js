@@ -4,7 +4,7 @@ const strTgs = require('../lib/stringThings.js');
 const accConfig = require('../config/access');
 const addContext = require('contextualizer');
 const ObjectId = require('mongoose').Types.ObjectId;
-
+const _ = require('lodash');
 
 // Models
 const Models = require('../models');
@@ -560,6 +560,7 @@ exports.dcEquipCopy = (req, res, next) => {
 -----------------------   New and copy equipment POST working   --------
 ------------------------------------------------------------------------
 */
+
 exports.dcEquipmentPost = (req, res) => {
 // this makes the abbreviation available for the URL
   var varPortsNew;
@@ -626,6 +627,7 @@ exports.dcEquipmentPost = (req, res) => {
           equipImgRear: strTgs.uTrim(data.equipImgRear),
           equipImgInternal: strTgs.uTrim(data.equipImgInternal),
           equipFirmware: strTgs.uTrim(data.equipFirmware),
+          equipIPMIv: strTgs.uTrim(data.equipIPMIv),
           equipMobo: strTgs.uTrim(data.equipMobo),
           equipCPUCount: strTgs.uTrim(data.equipCPUCount),
           equipCPUCores: strTgs.uTrim(data.equipCPUCores),
@@ -735,7 +737,7 @@ exports.dcEquipmentPost = (req, res) => {
             }
             thisDoc.equipLocation = strTgs.locComb(data.equipLocationRack, data.equipLocationRu);
             thisDoc.equipAssetTag = strTgs.uCleanUp(thisDoc.equipAssetTag, data.equipAssetTag);
-            thisDoc.equipTicketNumber = strTgs.clCleanUp(thisDoc.equipTicketNumber, data.equipTicketNumber);
+            thisDoc.equipTicketNumber = strTgs.clTrim(data.equipTicketNumber);
             thisDoc.equipInventoryStatus = strTgs.uCleanUp(thisDoc.equipInventoryStatus, data.equipInventoryStatus);
             thisDoc.equipStatus = strTgs.uCleanUp(thisDoc.equipStatus, data.equipStatus);
             thisDoc.equipIsVirtual = strTgs.uCleanUp(thisDoc.equipIsVirtual, data.equipIsVirtual);
@@ -750,6 +752,7 @@ exports.dcEquipmentPost = (req, res) => {
             thisDoc.equipImgRear = strTgs.uCleanUp(thisDoc.equipImgRear, data.equipImgRear);
             thisDoc.equipImgInternal = strTgs.uCleanUp(thisDoc.equipImgInternal, data.equipImgInternal);
             thisDoc.equipFirmware = strTgs.uCleanUp(thisDoc.equipFirmware, data.equipFirmware);
+            thisDoc.equipIPMIv = strTgs.multiClean(thisDoc.equipIPMIv, data.equipIPMIv, 6);
             thisDoc.equipMobo = strTgs.uCleanUp(thisDoc.equipMobo, data.equipMobo);
             thisDoc.equipCPUCount = strTgs.uCleanUp(thisDoc.equipCPUCount, data.equipCPUCount);
             thisDoc.equipCPUCores = strTgs.uCleanUp(thisDoc.equipCPUCores, data.equipCPUCores);
@@ -792,6 +795,7 @@ exports.dcEquipmentPost = (req, res) => {
                 message: 'There was an error processing your request.',
               };
             } else {
+
               req.session.flash = {
                 type: 'success',
                 intro: 'Thank you!',
