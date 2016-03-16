@@ -18,6 +18,7 @@ const logger = require('./lib/logger.js');
 const FileStreamRotator = require('file-stream-rotator');
 const logConfig = require('./config/log');
 const accConfig = require('./config/access');
+const expressSanitizer = require('express-sanitizer');
 
 const app = express();
 
@@ -146,6 +147,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(expressSanitizer());
 // adding connect-mongo
 app.use(session({
   secret: credentials.cookieSecret,

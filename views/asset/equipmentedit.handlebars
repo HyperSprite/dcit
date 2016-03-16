@@ -1,472 +1,471 @@
 <div class="racks">
-    <h4>{{#if equipSN}}Equipment{{else}}New Equipment{{/if}}</h4>
-    <div class="datacenter">
+  <div class="row">
+  <div class="col-sm-10">
+  <h4>{{#if equipSN}}Equipment{{else}}New Equipment{{/if}}</h4>
+  </div>
+  <div class="col-sm-2">
+    <div class="form-group">
+      <a href="#"  class="assetFormSubmit" accesskey="x" title="Press Alt x to Save" >
+      <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
+      <a href="#" onclick="document.getElementById('datacenterForm').reset();return false;" title="Reset form">
+      <span class="glyphicon glyphicon-refresh glyphicon-danger"></span></a>
+      <a href="#" onclick="document.getElementById('cancelForm').submit();return false;" title="Cancel edit">
+      <span class="glyphicon glyphicon-ban-circle glyphicon-danger"></span></a>
+      </div>
+  </div>
+  <div class="datacenter">
 
-<div class="formContainer">
-    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/equipment/{{#if equipSN}}{{equipSN}}{{else}}new{{/if}}" method="POST">
-		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
-        <div class="row">
-        <div class="col-md-10">
+    <div class="formContainer">
+      <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/equipment/{{#if equipSN}}{{equipSN}}{{else}}new{{/if}}" method="POST">
+      <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+
+      <div class="row">
+        <div class="col-md-6">
         <p class="form-control-static">{{#if equipSN}}</p>
-        <div class="form-group">
-            <input type="hidden" name="isEdit" value="{{equipSN}}">
-            <label for="field-equipSN" class="col-sm-2 control-label">Serial Number</label>
-            <div class="col-sm-4">
-                {{equipSN}}
-                {{#if access.delete}}
-                    <a href="/equipment-snchange/{{equipSN}}"
-                    <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change Serial Number"></span>
-                    </a>
-                {{/if}}
-                <br>
-                <input type="hidden" name="equipSN" value="{{equipSN}}">
+          <div class="form-group">
+          <input type="hidden" name="isEdit" value="{{equipSN}}">
+          <label for="field-equipSN" class="col-sm-4 control-label">Serial Number</label>
+            <div class="col-sm-8">
+            {{equipSN}}
+            {{#if access.delete}}
+              <a href="/equipment-snchange/{{equipSN}}"
+              <span class="glyphicon glyphicon-pencil glyphicon-danger" title="Change Serial Number"></span>
+              </a>
+            {{/if}}
+            <br>
+            <input type="hidden" name="equipSN" value="{{equipSN}}">
             </div>
-        </div>
-        {{else}}
-        {{#if wasCopy}} <input type="hidden" name="wasCopy" value="{{wasCopy}}"> {{/if}}
-        <div class="form-group equipSNVal has-feedback ui-widget">
-            <label for="field-equipSN" class="col-sm-2 control-label" >Serial Number</label>
-            <div class="col-sm-4 ">
-                <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Equipment Serial Number is required. It should be all upper case and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." aria-describedby="equipSNStatus">
+          </div>
+          {{else}}
+          {{#if wasCopy}} <input type="hidden" name="wasCopy" value="{{wasCopy}}"> {{/if}}
+            <div class="form-group equipSNVal has-feedback ui-widget">
+            <label for="field-equipSN" class="col-sm-4 control-label" >Serial Number</label>
+              <div class="col-sm-8">
+              <input type="text" class="noEnterSubmit form-control" id="equipSN" name="equipSN" placeholder="*Required" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Equipment Serial Number is required. It should be all upper case and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." aria-describedby="equipSNStatus">
+              </div>
             </div>
-        </div>
-        <p id="empty-message"></p>
-        {{/if}}
-            <div class="form-group">
-            <label for="field-Status" class="col-sm-2 control-label" >Status</label>
-            <div class="col-sm-4">
-                <select id="equipStatus" name="equipStatus" class="form-control" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Equipment Status is required. Pick the most appropriate selection.">
-                    <option "" ></option>
-                    {{#each optEquipStatus}}
-                    <option {{{selOption this ../equipStatus}}} >{{this}}</option>
-                    {{/each}}
+            <p id="empty-message"></p>
+          {{/if}}
 
+        <div class="form-group">
+        <label for="field-equipParent" class="col-sm-4 control-label" >Parent</label>
+          <div class="col-sm-8 ui-widget">
+          <input type="text" class="autofillEquipSN noEnterSubmit form-control" id="equipParent" name="equipParent"  value="{{equipParent}}" placeholder="A Parent Equipment SN" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' title="If this unit is part of a larger Equipment">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="equipLocationRack" class="col-sm-4 control-label" >Location</label>
+        <div class="col-sm-6 ui-widget">
+        <input type="text" id="equipLocationRack" class="noEnterSubmit form-control form-group-sm" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' title="format DC_Cage_Rack. Rack Location will Autofill. The quickest way is to type the rack number and select it from the list" {{#if equipParent}}disabled{{/if}}>
+        </div>
+        <div class="col-xs-2">
+        <input list="equipLocationRu" id="list-equipLocationRu" class="noEnterSubmit form-control  form-group-sm" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" maxlength="2" tite"1.75 or 3 hole Units counted from bottom of rack">
+          <datalist id="equipLocationRu">
+          <option "0a" >0a</option>
+          <option "0b" >0b</option>
+          <option "0c" >0c</option>
+          <option "0d" >0d</option>
+          {{#each rackrUs}}
+          <option {{{this}}} >{{this}}</option>
+          {{/each}}
 				</select>
-
-            </div>
         </div>
-        <div class="form-group">
-            <label for="field-equipTicketNumber" class="col-sm-2 control-label" >Ticket Number</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipTicketNumber" name="equipTicketNumber"  value="{{equipTicketNumber}}" placeholder="Internal">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="field-equipParent" class="col-sm-2 control-label" >Parent</label>
-            <div class="col-sm-4 ui-widget">
-                <input type="text" class="autofillEquipSN noEnterSubmit form-control" id="equipParent" name="equipParent"  value="{{equipParent}}" placeholder="A Parent Equipment SN" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' title="If this unit is part of a larger Equipment">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="equipLocationRack" class="col-sm-2 control-label" >Location</label>
-            <div class="col-xs-3 ui-widget">
-                <input type="text" id="equipLocationRack" class="noEnterSubmit form-control form-group-sm col-xs-3" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' title="format DC_Cage_Rack. Rack Location will Autofill. The quickest way is to type the rack number and select it from the list" {{#if equipParent}}disabled{{/if}}>
-            </div>
-            <div class="col-xs-2">
-                <input list="equipLocationRu" id="field-equipLocationRu" class="noEnterSubmit form-control  form-group-sm col-xs-3" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" maxlength="2" tite"1.75 or 3 hole Units counted from bottom of rack">
-                    <datalist id="equipLocationRu">
-                    <option "0a" >0a</option>
-                    <option "0b" >0b</option>
-                    <option "0c" >0c</option>
-                    <option "0d" >0d</option>
-                    {{#each rackrUs}}
-                    <option {{{this}}} >{{this}}</option>
-                    {{/each}}
-
-				</select>
-            </div>
+      </div>
 
 
-         </div>
+    {{!-- </div> --}}
+    </div>
+    <div class="col-md-6">
 
 
         <div class="form-group">
-            <label for="field-equipInventoryStatus" class="col-sm-2 control-label"  title="Check if inventory is complete">Inventory Status</label>
-            <div class="col-sm-4">
-                <input type="checkbox" name="equipInventoryStatus" value="true" {{equipInventoryStatusChecked}}>
-            </div>
+          <label for="field-Status" class="col-sm-4 control-label" >Status</label>
+          <div class="col-sm-8">
+            <select id="equipStatus" name="equipStatus" class="form-control" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Equipment Status is required. Pick the most appropriate selection.">
+            <option "" ></option>
+            {{#each optEquipStatus}}
+              <option {{{selOption this ../equipStatus}}} >{{this}}</option>
+            {{/each}}
+            </select>
+          </div>
         </div>
         <div class="form-group">
-            <label for="field-equipIsVirtual" class="col-sm-2 control-label" title="Is this a virtual machine?" >Is Virtual</label>
-            <div class="col-sm-4">
-                <input type="checkbox" name="equipIsVirtual" value="true" {{equipIsVirtualChecked}}>
-            </div>
+          <label for="field-equipTicketNumber" class="col-sm-4 control-label" >Ticket Number</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="equipTicketNumber" name="equipTicketNumber"  value="{{equipTicketNumber}}" placeholder="Internal">
+          </div>
         </div>
+<div class="row">
+      <div class="col-sm-6">
+      <div class="form-group">
+        <label for="field-equipInventoryStatus" class="col-sm-8 control-label"  title="Check if inventory is complete">Inventory Status</label>
+        <div class="col-sm-2">
+        <input type="checkbox" name="equipInventoryStatus" value="true" {{equipInventoryStatusChecked}}>
         </div>
-        <div class="col-md-1">
-
-
-        <div class="form-group">
-                <a href="#"  class="assetFormSubmit" accesskey="x" title="Press Alt x to Save" >
-                    <span class="glyphicon glyphicon-save glyphicon-danger"></span></a>
-
-                <a href="#" onclick="document.getElementById('datacenterForm').reset();return false;" title="Reset form">
-                    <span class="glyphicon glyphicon-refresh glyphicon-danger"></span></a>
-
-                <a href="#" onclick="document.getElementById('cancelForm').submit();return false;" title="Cancel edit">
-                    <span class="glyphicon glyphicon-ban-circle glyphicon-danger"></span></a>
-
+      </div>
+    </div>
+    <div class="col-sm-6"
+      <div class="form-group">
+        <label for="field-equipIsVirtual" class="col-sm-8 control-label" title="Is this a virtual machine?" >Is Virtual</label>
+        <div class="col-sm-2">
+        <input type="checkbox" name="equipIsVirtual" value="true" {{equipIsVirtualChecked}}>
         </div>
-        </div>
-        </div>
-        <table id="portsTable" class="table table-condensed">
-            <thead>
-                <tr>
-                    <th><div></div></th>
-                    <th><div >Type</div></th>
-                    <th><div >Name</div></th>
-                    <th><div >Address</div></th>
-                    <th><div >Options</div></th>
-                </tr>
-            </thead>
-            <tbody id="tbody1" class="list">
-
-                {{#if equipPorts}}
-                {{#each equipPorts}}
-                <tr id="{{equipPortId}}" class="tr-ports">
-                <input type="hidden" name="equipPortId[{{@index}}]" value="{{equipPortId}}">
-                    <td>
-                        <button type="submit" class="btn btn-danger btn-xs" form="singlePortDelForm{{@index}}" title="Delete this port"><span class="glyphicon glyphicon-trash"></span></button>
-                    </td>
-
-
-                    <td>
-
-                        <input list="equipPortType{{@index}}" id="form-equipPortType{{@index}}" class="form-control form-group-sm" name="equipPortType[{{@index}}]" value="{{equipPortType}}" >
-                    <datalist id="equipPortType{{@index}}">
-                        {{#each ../optSystPortType}}
-                            <option {{{this}}}>{{this}}</option>
-                        {{/each}}
-                    </datalist>
-
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortName{{@index}}" name="equipPortName[{{@index}}]"value="{{equipPortName}}" placeholder="e0, con, netmgmt" title="This is the physical port">
-
-                    </td>
-                    <td>
-                        <input type="text" class="noEnterSubmit form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[{{@index}}]"value="{{equipPortsAddr}}" placeholder="01:23:45:67:89:AB:CD">
-
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[{{@index}}]"value="{{equipPortsOpt}}" placeholder="Options {{@index}}">
-
-                    </td>
-                </tr>
-                {{/each}}
-                {{else}}
-                <tr class="tr-ports">
-                    <td></td>
-                    <td>
-                    <input type="hidden" name="equipPortId[0]" value="new">
-                     <input list="equipPortType0" id="form-equipPortType0" class="form-control form-group-sm" name="equipPortType[0]" >
-                    <datalist id="equipPortType0">
-                        {{#each optSystPortType}}
-                        <option {{{this}}}>{{this}}</option>
-                        {{/each}}
-                    </datalist>
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortName0" name="equipPortName[0]" placeholder="e0, con, netmgmt">
-                    </td>
-                    <td>
-                        <input type="text" class=" noEnterSubmit form-control form-group-sm"  id="equipPortsAddr0" name="equipPortsAddr[0]" placeholder="01:23:45:67:89:AB:CD" >
-                    </td>
-                    <td>
-                        <input type="text" class="form-control form-group-sm"  id="equipPortsOpt0" name="equipPortsOpt[0]" placeholder="Options">
-                    </td>
-                </tr>
-
-                {{/if}}
-
-            </tbody>
-        </table>
-        <div class="form-group">
-        <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('tbody1','tr',10);">+ 1</button>
-        </div>
-        <hr>
-        <ul id="eachUl"class="list-unstyled">
-            <li id="eachLi" class="eachLi">
+      </div>
+    </div>
 
 
 
+    </div>
+  </div>
+  <table id="portsTable" class="table table-condensed">
+  <thead>
+    <tr>
+      <th><div></div></th>
+      <th><div >Type</div></th>
+      <th><div >Name</div></th>
+      <th><div >Address</div></th>
+      <th><div >Options</div></th>
+    </tr>
+  </thead>
+    <tbody id="tbody1" class="list">
+    {{#if equipPorts}}
+    {{#each equipPorts}}
+      <tr id="{{equipPortId}}" class="tr-ports">
+      <input type="hidden" name="equipPortId[{{@index}}]" value="{{equipPortId}}">
+      <td>
+      <button type="submit" class="btn btn-danger btn-xs" form="singlePortDelForm{{@index}}" title="Delete this port"><span class="glyphicon glyphicon-trash"></span></button>
+      </td>
+      <td>
+      <input list="equipPortType{{@index}}" id="form-equipPortType{{@index}}" class="form-control form-group-sm" name="equipPortType[{{@index}}]" value="{{equipPortType}}" >
+      <datalist id="equipPortType{{@index}}">
+      {{#each ../optSystPortType}}
+        <option {{{this}}}>{{this}}</option>
+      {{/each}}
+      </datalist>
+      </td>
+      <td>
+      <input type="text" class="form-control form-group-sm"  id="equipPortName{{@index}}" name="equipPortName[{{@index}}]"value="{{equipPortName}}" placeholder="e0, con, netmgmt" title="This is the physical port">
+      </td>
+      <td>
+      <input type="text" class="noEnterSubmit form-control form-group-sm"  id="equipPortsAddr{{@index}}" name="equipPortsAddr[{{@index}}]"value="{{equipPortsAddr}}" placeholder="01:23:45:67:89:AB:CD">
+      </td>
+      <td>
+      <input type="text" class="form-control form-group-sm"  id="equipPortsOpt{{@index}}" name="equipPortsOpt[{{@index}}]"value="{{equipPortsOpt}}" placeholder="Options {{@index}}">
+      </td>
+      </tr>
+      {{/each}}
+      {{else}}
+      <tr class="tr-ports">
+      <td></td>
+      <td>
+      <input type="hidden" name="equipPortId[0]" value="new">
+      <input list="equipPortType0" id="form-equipPortType0" class="form-control form-group-sm" name="equipPortType[0]" >
+      <datalist id="equipPortType0">
+      {{#each optSystPortType}}
+        <option {{{this}}}>{{this}}</option>
+      {{/each}}
+      </datalist>
+      </td>
+      <td>
+      <input type="text" class="form-control form-group-sm"  id="equipPortName0" name="equipPortName[0]" placeholder="e0, con, netmgmt">
+      </td>
+      <td>
+      <input type="text" class=" noEnterSubmit form-control form-group-sm"  id="equipPortsAddr0" name="equipPortsAddr[0]" placeholder="01:23:45:67:89:AB:CD" >
+      </td>
+      <td>
+      <input type="text" class="form-control form-group-sm"  id="equipPortsOpt0" name="equipPortsOpt[0]" placeholder="Options">
+      </td>
+      </tr>
+    {{/if}}
+    </tbody>
+  </table>
+  <div class="form-group">
+  <button type="button" class="btn btn-default btn-xs" value="Add Another" onclick="addField('tbody1','tr',10);">+ 1</button>
+  </div>
+  <hr>
+{{!--   <ul id="eachUl"class="list-unstyled">
+  <li id="eachLi" class="eachLi"> --}}
 
 
-                <div class="form-group">
-            <label for="field-equipType" class="col-sm-2 control-label" >Type *</label>
-            <div class="col-sm-4">
-               <select id="field-equipType" name="equipType" class="form-control" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Type is required. Pick the most appropriate selection.">
-                <!--     <option {{{selOption "" equipType}}}  >Current Status</option>-->
-                    <option ""></option>
-                    {{#each optEquipType}}
-                    <option {{{selOption this ../equipType}}} >{{this}}</option>
-                    {{/each}}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+      <label for="field-equipType" class="col-sm-4 control-label" >Type *</label>
+        <div class="col-sm-8">
+          <select id="field-equipType" name="equipType" class="form-control" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Type is required. Pick the most appropriate selection.">
+          <!--     <option {{{selOption "" equipType}}}  >Current Status</option>-->
+          <option ""></option>
+          {{#each optEquipType}}
+           <option {{{selOption this ../equipType}}} >{{this}}</option>
+          {{/each}}
+          </select>
+        </div>
+      </div>
 
-				</select>
+    <div class="form-group">
+        <label for="field-equipRUHieght" class="col-sm-4 control-label" >Height in RU *</label>
+        <div class="col-sm-8">
+            <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="RU is required.">
+        </div>
+    </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+      <label for="field-equipAssetTag" class="col-sm-4 control-label" >Asset Tag</label>
+        <div class="col-sm-8">
+        <input type="text" class="form-control" id="equipAssetTag" name="equipAssetTag"  value="{{equipAssetTag}}" placeholder="If availible">
+        </div>
+      </div>
+    </div>
 
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="field-equipAssetTag" class="col-sm-2 control-label" >Asset Tag</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipAssetTag" name="equipAssetTag"  value="{{equipAssetTag}}" placeholder="If availible">
-            </div>
-        </div>
-
-        <h4>Hardware</h4>
-        <div class="form-group">
-            <label for="field-equipMake" class="col-sm-2 control-label" >Make *</label>
-            <div class="col-sm-4 ui-widget">
-                <input type="text" class="form-control" id="equipMake" name="equipMake"  value="{{equipMake}}" placeholder="Oracle, Dell, HP" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Make is required. This field will autofill, pick the most appropriate selection. Makes not on the list should be considered carefully before adding them.">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="field-equipModel" class="col-sm-2 control-label" >Model *</label>
-            <div class="col-sm-4 ui-widget">
-                <input type="text" class="form-control" id="equipModel" name="equipModel"  value="{{equipModel}}" placeholder="Sun x4-2, DL360 G6" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Model is required. This field will Autofill, pick the most appropriate selection. Models not on the list should be considered carefully before adding them.">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipSubModel" class="col-sm-2 control-label" >Sub Model</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipSubModel" name="equipSubModel"  value="{{equipSubModel}}" placeholder="v3, Type 10">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipAddOns" class="col-sm-2 control-label" >Add Ons</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipAddOns" name="equipAddOns"  value="{{equipAddOns}}" placeholder="1.2gb FusionIO">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipRUHieght" class="col-sm-2 control-label" >Height in RU *</label>
-            <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipRUHieght" name="equipRUHieght"  value="{{equipRUHieght}}" placeholder="1" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="RU is required.">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipFirmware" class="col-sm-2 control-label" >Firmware</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipFirmware" name="equipFirmware"  value="{{equipFirmware}}" >
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipIPMIv" class="col-sm-2 control-label" >IPMI version</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipIPMIv" name="equipIPMIv"  value="{{equipIPMIv}}">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipMobo" class="col-sm-2 control-label" >Motherboard</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipMobo" name="equipMobo"  value="{{equipMobo}}">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipCPUCount" class="col-sm-2 control-label" >CPU count</label>
-            <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipCPUCount" name="equipCPUCount"  value="{{equipCPUCount}}" placeholder="Physical CPUs">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipCPUCores" class="col-sm-2 control-label" >CPU Cores</label>
-            <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipCPUCores" name="equipCPUCores"  value="{{equipCPUCores}}" placeholder="Cores per proc">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipCPUType" class="col-sm-2 control-label" >CPU Type</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipCPUType" name="equipCPUType"  value="{{equipCPUType}}" placeholder="Make, model, speed etc.">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipMemTotal" class="col-sm-2 control-label" >Memory Total</label>
-            <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipMemTotal" name="equipMemTotal"  value="{{equipMemTotal}}" placeholder="16, 256 Numbers only">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipMemType" class="col-sm-2 control-label" >Memory Type</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipMemType" name="equipMemType"  value="{{equipMemType}}" placeholder="16gb DDR3 Hynix PN">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipRaidType" class="col-sm-2 control-label" >Raid Card Type</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipRaidType" name="equipRaidType"  value="{{equipRaidType}}" placeholder="Adaptec 256gb BBU">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipRaidLayout" class="col-sm-2 control-label" >Raid Layout</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipRaidLayout" name="equipRaidLayout"  value="{{equipRaidLayout}}" placeholder="1,10 csv">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipHDDCount" class="col-sm-2 control-label" >HDD Count</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipHDDCount" name="equipHDDCount"  value="{{equipHDDCount}}" placeholder="8">
-            </div>
-        </div>
-                <div class="form-group">
-            <label for="field-equipHDDType" class="col-sm-2 control-label" >HDD Type</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipHDDType" name="equipHDDType"  value="{{equipHDDType}}" placeholder="250gb SAS 10k 2.5">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="field-equipNICCount" class="col-sm-2 control-label" >NIC Count</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipNICCount" name="equipNICCount"  value="{{equipNICCount}}" placeholder="4">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="field-equipNICType" class="col-sm-2 control-label" >NIC Type</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipNICType" name="equipNICType"  value="{{equipNICType}}" placeholder="Intel Pro 1000">
-            </div>
-        </div>
+  </div>
 
 
-                <div class="form-group">
-            <label for="field-equipPSUCount" class="col-sm-2 control-label" >PSU Count</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipPSUCount" name="equipPSUCount"  value="{{equipPSUCount}}" placeholder="If availible">
-            </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Hardware</h4>
+      <div class="form-group">
+        <label for="field-equipMake" class="col-sm-4 control-label" >Make *</label>
+        <div class="col-sm-8 ui-widget">
+          <input type="text" class="form-control" id="equipMake" name="equipMake"  value="{{equipMake}}" placeholder="Oracle, Dell, HP" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Make is required. This field will autofill, pick the most appropriate selection. Makes not on the list should be considered carefully before adding them.">
         </div>
-        <div class="form-group">
-            <label for="field-equipPSUDraw" class="col-sm-2 control-label" >Power Draw in W</label>
-            <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipPSUDraw" name="equipPSUDraw"  value="{{equipPSUDraw}}" placeholder="200 in Watts">
-            </div>
-        </div>
+      </div>
 
-        <div class="form-group">
-            <label for="field-equipReceived" class="col-sm-2 control-label" >Date Received</label>
-            <div class="col-sm-4">
-                <input type="date" class="form-control" id="equipReceived" name="equipReceived"  value="{{equipReceived}}" title="Date added to inventory">
+      <div class="form-group">
+        <label for="field-equipModel" class="col-sm-4 control-label" >Model *</label>
+        <div class="col-sm-8 ui-widget">
+          <input type="text" class="form-control" id="equipModel" name="equipModel"  value="{{equipModel}}" placeholder="Sun x4-2, DL360 G6" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Model is required. This field will Autofill, pick the most appropriate selection. Models not on the list should be considered carefully before adding them.">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipSubModel" class="col-sm-4 control-label" >Sub Model</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipSubModel" name="equipSubModel"  value="{{equipSubModel}}" placeholder="v3, Type 10">
             </div>
         </div>
-        <div class="form-group">
-            <label for="field-equipAcquisition" class="col-sm-2 control-label" >Date Acquired</label>
-            <div class="col-sm-4">
-                <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Acquisition Date is required. This is usually the date the equipment arrived on site." title="Arrival date">
-            </div>
+      <div class="form-group">
+        <label for="field-equipAddOns" class="col-sm-4 control-label" >Add Ons</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipAddOns" name="equipAddOns"  value="{{equipAddOns}}" placeholder="1.2gb FusionIO">
         </div>
-                <div class="form-group">
-            <label for="field-equipInService" class="col-sm-2 control-label" >Date First in Service</label>
-            <div class="col-sm-4">
-                <input type="date" class="form-control" id="equipInService" name="equipInService"  value="{{equipInService}}" title="Date first powered">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipFirmware" class="col-sm-4 control-label" >Firmware</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipFirmware" name="equipFirmware"  value="{{equipFirmware}}" >
         </div>
-        <div class="form-group">
-            <label for="field-equipEndOfLife" class="col-sm-2 control-label" >End of Life</label>
-            <div class="col-sm-4">
-                <input type="date" class="form-control" id="equipEndOfLife" name="equipEndOfLife"  value="{{equipEndOfLife}}" title="Date removed from facility">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipIPMIv" class="col-sm-4 control-label" >IPMI version</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipIPMIv" name="equipIPMIv"  value="{{equipIPMIv}}">
         </div>
-        <div class="form-group">
-            <label for="field-equipWarrantyMo" class="col-sm-2 control-label" >Warranty in Months</label>
-            <div class="col-sm-4">
-                <input type="number" class="form-control" id="equipWarrantyMo" name="equipWarrantyMo"  value="{{equipWarrantyMo}}" placeholder="36">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipMobo" class="col-sm-4 control-label" >Motherboard</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipMobo" name="equipMobo"  value="{{equipMobo}}">
         </div>
-                <div class="form-group">
-            <label for="field-equipPONum" class="col-sm-2 control-label" >PO Number</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipPONum" name="equipPONum"  value="{{equipPONum}}" title"">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipCPUCount" class="col-sm-4 control-label" >CPU count</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control" id="equipCPUCount" name="equipCPUCount"  value="{{equipCPUCount}}" placeholder="Physical CPUs">
         </div>
-                <div class="form-group">
-            <label for="field-equipInvoice" class="col-sm-2 control-label" >Invoice</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipInvoice" name="equipInvoice"  value="{{equipInvoice}}">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipCPUCores" class="col-sm-4 control-label" >CPU Cores</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control" id="equipCPUCores" name="equipCPUCores"  value="{{equipCPUCores}}" placeholder="Cores per proc">
         </div>
-                <div class="form-group">
-            <label for="field-equipProjectNum" class="col-sm-2 control-label" >Project Number</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipProjectNum" name="equipProjectNum"  value="{{equipProjectNum}}">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipCPUType" class="col-sm-4 control-label" >CPU Type</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipCPUType" name="equipCPUType"  value="{{equipCPUType}}" placeholder="Make, model, speed etc.">
         </div>
-                <div class="form-group">
-            <label for="field-equipLicense" class="col-sm-2 control-label" >License</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipLicense" name="equipLicense"  value="{{equipLicense}}">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipMemTotal" class="col-sm-4 control-label" >Memory Total</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control" id="equipMemTotal" name="equipMemTotal"  value="{{equipMemTotal}}" placeholder="16, 256 Numbers only">
         </div>
-                <div class="form-group">
-            <label for="field-equipMaintAgree" class="col-sm-2 control-label" >Maintenance Agreement</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipMaintAgree" name="equipMaintAgree"  value="{{equipMaintAgree}}" >
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipMemType" class="col-sm-4 control-label" >Memory Type</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipMemType" name="equipMemType"  value="{{equipMemType}}" placeholder="16gb DDR3 Hynix PN">
         </div>
-                <div class="form-group">
-            <label for="field-equipPurchaseType" class="col-sm-2 control-label" >Purchase Type</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipPurchaseType" name="equipPurchaseType"  value="{{equipPurchaseType}}" placeholder="Purchase, Lease">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipRaidType" class="col-sm-4 control-label" >Raid Card Type</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipRaidType" name="equipRaidType"  value="{{equipRaidType}}" placeholder="Adaptec 256gb BBU">
         </div>
-                <div class="form-group">
-            <label for="field-equipPurchaser" class="col-sm-2 control-label" >Purchaser</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipPurchaser" name="equipPurchaser"  value="{{equipPurchaser}}" placeholder="Company Name">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipRaidLayout" class="col-sm-4 control-label" >Raid Layout</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipRaidLayout" name="equipRaidLayout"  value="{{equipRaidLayout}}" placeholder="1,10 csv">
         </div>
-                <div class="form-group">
-            <label for="field-equipPurchaseTerms" class="col-sm-2 control-label" >Purchase Terms</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="equipPurchaseTerms" name="equipPurchaseTerms"  value="{{equipPurchaseTerms}}" placeholder="3 year lease">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipHDDCount" class="col-sm-4 control-label" >HDD Count</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipHDDCount" name="equipHDDCount"  value="{{equipHDDCount}}" placeholder="8">
         </div>
-                        <div class="form-group">
-            <label for="field-equipPurchaseEnd" class="col-sm-2 control-label" >Purchase End</label>
-            <div class="col-sm-4">
-                <input type="date" class="form-control" id="equipPurchaseEnd" name="equipPurchaseEnd"  value="{{equipPurchaseEnd}}" placeholder="3 year lease">
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipHDDType" class="col-sm-4 control-label" >HDD Type</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipHDDType" name="equipHDDType"  value="{{equipHDDType}}" placeholder="250gb SAS 10k 2.5">
         </div>
-                <div class="form-group">
-            <label for="field-equipNotes" class="col-sm-2 control-label">Notes</label>
-            <div class="col-sm-4">
-                <textarea rows="3" class="form-control" id="fieldequipNotes" name="equipNotes">{{equipNotes}}</textarea>
-            </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipNICCount" class="col-sm-4 control-label" >NIC Count</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipNICCount" name="equipNICCount"  value="{{equipNICCount}}" placeholder="4">
         </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipNICType" class="col-sm-4 control-label" >NIC Type</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipNICType" name="equipNICType"  value="{{equipNICType}}" placeholder="Intel Pro 1000">
+        </div>
+      </div>
 
-
+      <div class="form-group">
+        <label for="field-equipPSUCount" class="col-sm-4 control-label" >PSU Count</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipPSUCount" name="equipPSUCount"  value="{{equipPSUCount}}" placeholder="If availible">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipPSUDraw" class="col-sm-4 control-label" >Power Draw in W</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control" id="equipPSUDraw" name="equipPSUDraw"  value="{{equipPSUDraw}}" placeholder="200 in Watts">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="field-equipReceived" class="col-sm-4 control-label" >Date Received *</label>
+        <div class="col-sm-8">
+          <input type="date" class="form-control" id="equipReceived" name="equipReceived"  value="{{equipReceived}}" title="Date added to inventory">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipAcquisition" class="col-sm-4 control-label" >Date Acquired *</label>
+        <div class="col-sm-8">
+          <input type="date" class="form-control" id="equipAcquisition" name="equipAcquisition"  value="{{equipAcquisition}}" data-toggle="tooltip" data-delay='{"show":1500}' data-delay='{"show":1500}' required title="Acquisition Date is required. This is usually the date the equipment arrived on site." title="Arrival date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipInService" class="col-sm-4 control-label" >Date First in Service</label>
+        <div class="col-sm-8">
+          <input type="date" class="form-control" id="equipInService" name="equipInService"  value="{{equipInService}}" title="Date first powered">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipEndOfLife" class="col-sm-4 control-label" >End of Life</label>
+        <div class="col-sm-8">
+          <input type="date" class="form-control" id="equipEndOfLife" name="equipEndOfLife"  value="{{equipEndOfLife}}" title="Date removed from facility">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipWarrantyMo" class="col-sm-4 control-label" >Warranty in Months</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control" id="equipWarrantyMo" name="equipWarrantyMo"  value="{{equipWarrantyMo}}" placeholder="36">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipPONum" class="col-sm-4 control-label" >PO Number</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipPONum" name="equipPONum"  value="{{equipPONum}}" title"">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipInvoice" class="col-sm-4 control-label" >Invoice</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipInvoice" name="equipInvoice"  value="{{equipInvoice}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipProjectNum" class="col-sm-4 control-label" >Project Number</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipProjectNum" name="equipProjectNum"  value="{{equipProjectNum}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipLicense" class="col-sm-4 control-label" >License</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipLicense" name="equipLicense"  value="{{equipLicense}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipMaintAgree" class="col-sm-4 control-label" >Maintenance Agreement</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipMaintAgree" name="equipMaintAgree"  value="{{equipMaintAgree}}" >
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipPurchaseType" class="col-sm-4 control-label" >Purchase Type</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipPurchaseType" name="equipPurchaseType"  value="{{equipPurchaseType}}" placeholder="Purchase, Lease">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipPurchaser" class="col-sm-4 control-label" >Purchaser</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipPurchaser" name="equipPurchaser"  value="{{equipPurchaser}}" placeholder="Company Name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipPurchaseTerms" class="col-sm-4 control-label" >Purchase Terms</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="equipPurchaseTerms" name="equipPurchaseTerms"  value="{{equipPurchaseTerms}}" placeholder="3 year lease">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipPurchaseEnd" class="col-sm-4 control-label" >Purchase End</label>
+        <div class="col-sm-8">
+          <input type="date" class="form-control" id="equipPurchaseEnd" name="equipPurchaseEnd"  value="{{equipPurchaseEnd}}" placeholder="3 year lease">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="field-equipNotes" class="col-sm-4 control-label">Notes</label>
+        <div class="col-sm-8">
+          <textarea rows="3" class="form-control" id="fieldequipNotes" name="equipNotes">{{equipNotes}}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
     </ul>
-     <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-4">
-                {{#if access.edit}}
-                <button type="submit" class="btn btn-danger btn-xs  assetFormSubmit" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
-                {{/if}}
-                <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
-                <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
-                    <button type="button" class="btn btn-danger btn-xs">
-                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
-                {{#if access.delete}}{{#if equipSN}}
-                <button type="submit" class="btn btn-danger btn-xs" form="deleteForm"><span class="glyphicon glyphicon-trash"></span> Delete</button>
-                {{/if}}{{/if}}
-
-            </div>
-        </div>
-     </form><form id="cancelForm" role="form" action="{{#if equipSN}}/equipment/{{equipSN}}{{else}}{{ses.lastPage}}{{/if}}" method="GET"></form>
-    {{#if access.delete}}
-     <form id="deleteForm" action="/equipmentdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-md-12">
+        {{#if access.edit}}
+          <button type="submit" class="btn btn-danger btn-xs  assetFormSubmit" value='Submit'><span class="glyphicon glyphicon-save"></span> Save</button>
+        {{/if}}
+        <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+        <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
+        <button type="button" class="btn btn-danger btn-xs">
+        <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
+        {{#if access.delete}}{{#if equipSN}}
+          <button type="submit" class="btn btn-danger btn-xs" form="deleteForm"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        {{/if}}{{/if}}
+      </div>
+    </div>
+      </form><form id="cancelForm" role="form" action="{{#if equipSN}}/equipment/{{equipSN}}{{else}}{{ses.lastPage}}{{/if}}" method="GET"></form>
+      {{#if access.delete}}
+        <form id="deleteForm" action="/equipmentdelete/{{equipSN}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{equipSN}}. This can not be undone!')">
         <input type="hidden" name="equipLocationRack" value="{{equipLocationRack}}">
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="equipSN" value="{{equipSN}}">
-    </form>
-    {{/if}}
-    {{#if access.edit}}
-        {{#if equipPorts}}
-        {{#each equipPorts}}
+        </form>
+      {{/if}}
+      {{#if access.edit}}
+      {{#if equipPorts}}
+      {{#each equipPorts}}
             <form id="singlePortDelForm{{@index}}" action="/equipmentportdelete1/{{../equipSN}}" data-confirm="Are you sure you want to delete this port?" method="POST">
             <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
             <input type="hidden" name="id" value="{{../equipId}}">
@@ -475,35 +474,34 @@
             <input type="hidden" name="collectionName" value="equipment">
             <input type="hidden" name="collectionSub" value="equipPorts">
             </form>
-        {{/each}}
-        {{/if}}
-    {{/if}}
+      {{/each}}
+      {{/if}}
+      {{/if}}
+      <script language="Javascript" type="text/javascript">
+        <!--
+        //Add more fields dynamically.
+        /* area is the region you want to add to, in this case id="tbody1"
+           field is element you want to count, in this case <tr>
+           limit is how many to be allowed to make, 10 is the default here
+        */
+        function addField(area,field,limit) {
+        	if(!document.getElementById) return;
+            var count;
+            var field_area = document.getElementById(area);
+            var liList = document.getElementById(area).getElementsByTagName("tr");
+            var count = liList.length
 
- <script language="Javascript" type="text/javascript">
-<!--
-//Add more fields dynamically.
-/* area is the region you want to add to, in this case id="tbody1"
-   field is element you want to count, in this case <tr>
-   limit is how many to be allowed to make, 10 is the default here
-*/
-function addField(area,field,limit) {
-	if(!document.getElementById) return;
-    var count;
-    var field_area = document.getElementById(area);
-    var liList = document.getElementById(area).getElementsByTagName("tr");
-    var count = liList.length
+            /*var count = count + 1;*/
+            if (isNaN===count)count=0;
+        	//If the maximum number of elements have been reached, exit the function.
+        	//		If the given limit is lower than 0, infinite number of fields can be created.
+        	if(count > limit && limit > 0) return;
 
-    /*var count = count + 1;*/
-    if (isNaN===count)count=0;
-	//If the maximum number of elements have been reached, exit the function.
-	//		If the given limit is lower than 0, infinite number of fields can be created.
-	if(count > limit && limit > 0) return;
+        	if(document.createElement) {
+        		 //Older Method
+        		field_area.insertAdjacentHTML('beforeend', '{{> assets/equipmenteditPlus1}}');
+        	}
 
-	if(document.createElement) {
-		 //Older Method
-		field_area.insertAdjacentHTML('beforeend', '{{> assets/equipmenteditPlus1}}');
-	}
-
-}
-//-->
-</script>
+        }
+        //-->
+      </script>

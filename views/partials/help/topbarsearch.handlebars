@@ -1,27 +1,140 @@
+<h1 id="welcome-to-dcit-help">WELCOME TO DCIT HELP</h1>
 
-<h4>Search from the the header bar</h4>
+<hr>
 
-<p>Search from the header bar is your friend, it is always available and can use partials. For instance a System Name search for “pache” will return all systems with some part of “pache” in the name. So apache01, apache2, apacheproxy01 etc would all be returned. At this time you can not use wildcards in the middle of the word “ap*che” will not return results. Your search results tab label will start with “..” and then your search phrase. So as in the example above, a search for “pache”, the tab label will be .. pache. This can be handy for keeping track of the tab with your search in it.<p>
+<p><div class="toc">
+<ul>
+<li><a href="#welcome-to-dcit-help">WELCOME TO DCIT HELP</a><ul>
+<li><a href="#search-from-the-the-header-bar">Search from the the header bar</a></li>
+<li><a href="#other-searches">Other searches:</a></li>
+<li><a href="#main-menu-reports">Main Menu Reports</a></li>
+<li><a href="#csv-and-json-report-builder-added-in-v0202">CSV and JSON report builder (added in v0.2.02)</a></li>
+<li><a href="#parent-equipment-added-in-v-0207">Parent Equipment (added in v 0.2.07)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</p>
 
-<h5>Other searches:</h5>
+<p>Data Center Information Tracking is a one stop data center information repository. Facilities, Power, Equipment and Systems all in one place.</p>
+
+<blockquote>
+  <p>Note: This site has only been tested on the latest Chrome. It uses HTML5 extensively and many features are still not available in other browsers. Sorry, I just don’t have time to test more than one at this time.</p>
+</blockquote>
+
+
+
+<h2 id="search-from-the-the-header-bar">Search from the the header bar</h2>
+
+<p>Search from the header bar is your friend, it is always available and can use partials. For instance a System Name search for “pache” will return all systems with some part of “pache” in the name. So apache01, apache2, apacheproxy01 etc would all be returned. At this time you can not use wildcards in the middle of the word “ap*che” will not return results. Your search results tab label will start with “..” and then your search phrase. So as in the example above, a search for “pache”, the tab label will be .. pache. This can be handy for keeping track of the tab with your search in it.</p>
+
+
+
+<h2 id="other-searches">Other searches:</h2>
+
 <ul>
 <li>Ticket Number: The Jira ticket number the System was requested with.</li>
-<li>Modified by: Last person to edit that System or Equipment.</li>
-<li>EndPoint: All Systems attached to an end point or loop.</li>
-<li>Cable Number: A cable serial number.</li>
-<li>Equipment SN: Equipment Serial Number.</li>
-<li>Asset Tag: Not used.</li>
-<li>Ticket Number: The Jira ticket number the Equipment was received with.</li>
-<li>PO Number: PO the Equipment was ordered with.</li>
-<li>Invoice Number: Invoice related to the Equipment.</li>
-<li>Project Number: Project the Equipment was ordered for.</li>
-<li>MAC Address: Equipment MAC address can be searched by 00:00:00 or 00000000</li>
+<li>Modified by: Last person to edit that System or Equipment. </li>
+<li>EndPoint: All Systems attached to an end point or loop. </li>
+<li>Cable Number: A cable serial number. </li>
+<li>Asset Tag: Not used. </li>
+<li>Ticket Number: The Jira ticket number the Equipment was received with. </li>
+<li>Invoice Number: Invoice related to the Equipment. </li>
+<li>MAC Address: Equipment MAC address can be searched by 00:00:00 or 00000000 Reports</li>
+<li>vlan: vlan seachs are the exact match type. Searching for “2” will only return vlan: 2 and not vlan: 32 or vlan: 23.</li>
 </ul>
 
-<h4>Reports</h4>
+
+
+<h2 id="main-menu-reports">Main Menu Reports</h2>
+
 <p>Using the DCIT drop down menu on the top left, select reports. From here you can select Environment, Role and Make reports. These are all displayed using the same tabled format with Location, System Name, Equipment SN and a few other vitals.</p>
+
 <ul>
 <li>Environment: This will find all Systems tagged to an environment</li>
 <li>Role: This will find all Systems tagged to a role</li>
 <li>Make: This will find all Equipment from that Make</li>
 </ul>
+
+
+
+<h2 id="csv-and-json-report-builder-added-in-v0202">CSV and JSON report builder (added in v0.2.02)</h2>
+
+<p>A new addition to DCIT is CSV and JSON reporting. This was designed as a API for reporting and is less useful to humans than machines. </p>
+
+<p>The URL for this is: /reports/systems/ (findIn)/(findWhat)</p>
+
+<p><strong>findIn</strong> options are: <br>
+ - equipLocation <br>
+ - equipMake <br>
+ - equipPONum <br>
+ - systemEnviron <br>
+ - systemName <br>
+ - systemRole <br>
+<strong>findWhat</strong> is similar to the top bar search. </p>
+
+<p>The report returned will give you an idea of what the data will look like. Now, looking at the URL, if you add “.csv”, it will prompt you to download a csv file. If you add “.json” it will download a JSON array. This has been tested on Chrome, curl (with the “-k” flag) and wget (with the “–no-check-certificate” flag).</p>
+
+
+
+<h2 id="parent-equipment-added-in-v-0207">Parent Equipment (added in v 0.2.07)</h2>
+
+<p>Parent Equipment is an Equipment that holds other tracked Equipment. This includes Engineered Systems, such as an EMC Storage cabinet or an Exadata, it also includes chassis type equipment like Cisco Nexus 9000 with blades. </p>
+
+<p>Why is this cool? Before if you wanted to move a cabinet full of gear, you had to move every piece of gear. Now if you move any Parent Equipment, all Child Equipment moves too. <br>
+To add a Parent Equipment, simply add the Parent SN in the Parent field. The Rack location will be come unavailable and only the RU is set separately. When saving the Child Equipment the Rack location code from the parent replaces any that currently exists. <br>
+If you remove the Parent, the Parents rack location will remain but the field will no longer be disabled and you can move it anywhere you like.</p>
+
+<blockquote>
+  <p>Note: If you change the SN of a Parent, all Child Equipment Parent fields will be updated as well.</p>
+</blockquote>
+
+
+
+<h2 id="system-ports">System Ports</h2>
+
+
+
+<h3 id="port-type">Port Type</h3>
+
+<p>Although this allows a type in, please select from the list. There are actions keyed to these and if they are not correct, reports and scripts may not generate correctly.</p>
+
+
+
+<h3 id="port-name">Port Name</h3>
+
+<p>This is the name that makes the most sense from a physical point of view, not a internal system or OS perspective. Documenting this is meant to help re-cable the equipment in the case of replacement or emergency. Having some OS level name is not going to help with that, especially if that name is dynamic. If the port has an external label, use it. If not follow the convention for the type of port.</p>
+
+<h3 id="cable-path">Cable Path</h3>
+
+<p>For a simple, single cable, the cable serial number will suffice: <code>6002913</code> <br>
+We don’t count patch panels as devices because they are passive but we do want to document their use. We use <code>~</code> to represent the cable and a forward slash <code>/</code> to represent the panel. Like so: <code>6002914~a.03.2.17/~/c.05.2.17~6002915</code>  <br>
+In this example <code>a.03.2.17</code> is the host side patch port and <code>c.05.2.17</code> is the end point side patch port. </p>
+
+<blockquote>
+  <p>Note: Notice I am using cable serial numbers. I don’t recommend custom device/port to device/port cable labels because they generally end up wrong or left for later (in which case forgotten). Instead, all cables get a SN either by the vendor or when they come on the property so there is never an excuse not to have a label. Cost per label should be roughly $1.50, meanwhile, making/sicking your own is roughly 2:30 MM:SS which is roughly 40 cables per hour, do the math.</p>
+</blockquote>
+
+<h3 id="end-point">End Point</h3>
+
+<p>End Points are any active device or termination. These can be switches, routers, colo drop. First note that this is an autofill field. If you start typing a portion of the name of any System, they will start appearing below the box. Pick the appropriate switch from there. If the switch you want is not on the list, double check the name. Also make sure it is already in DCIT. If this is a fresh build and the End Point is not yet in DCIT, you can free type the name, just make sure the name is exactly as it will be when you add the End Point System later.</p>
+
+<h3 id="endpointpre">EndPointPre</h3>
+
+<p>This is used for Modules and Blades in larger equipment. For instance a 6509 will show have up to 9 blades, and each of those can have up to 48 ports. If we wanted to document blade 3, EndPointPre would be <code>3</code>.</p>
+
+<h3 id="endpointport">EndPointPort</h3>
+
+<p>This is the port number on the EndPoint.</p>
+
+<h3 id="options">Options</h3>
+
+<p>Options depend on the type of EndPoint. For instance, if it is a switch, you might enter <code>duplex full, speed auto</code>. This does not do anything but add this to the Server Port Config report below (this could change in the future is network scripts are added). One place it matters is for Avocent ACS6000. This is the <code>Cisco port type</code> option in the script reports below. If this port is a Cisco or Sun device (most but not all devices with an RJ45 port), than Options should be “yes”, if it is a normal x86 server (usually DB9 port with null modem adapter), then Options should be “no” </p>
+
+<h3 id="address">Address</h3>
+
+<p>IP Addresses should be entered here, these are used by the ILOM and ACS Baremetal Build reports.</p>
+
+<h3 id="url">URL</h3>
+
+<p>URL is for future use. It could be set to a System dashboard or status report.</p>

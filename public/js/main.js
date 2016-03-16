@@ -1,6 +1,27 @@
-// https://github.com/devbridge/jQuery-Autocomplete
+
+// to dissable location field if parent exists
+// var equipParent = document.getElementById('equipParent');
+// equipParent.onchange = function () {
+//   if (this.value !== '' || this.value.length > 0) {
+//     document.getElementById('equipLocationRack').disabled = true;
+//   } else {
+//     document.getElementById('equipLocationRack').disabled = false;
+//   }
+// };
 
 $(document).ready(function() {
+  // to dissable location on equipment if equipment has parent
+  $('#equipParent').blur(function(){
+    if ($('#equipParent').val().length > 0) {
+      $('#equipLocationRack').prop('disabled', true);
+      $('#list-equipLocationRu').focus();
+    } else {
+      $('#equipLocationRack').prop('disabled', false);
+      $('#equipLocationRack').focus();
+    }
+  });
+
+  // https://github.com/devbridge/jQuery-Autocomplete
   $('.autofillEquipSN').autocomplete({
     serviceUrl: '/autocomplete/allEquipSN',
     minChars: 3,
@@ -143,19 +164,12 @@ $(document).ready(function() {
       return false; // prevent normal form posting
     }
   });
+    $('input#timezone').val(jstz.determine().name());
+    $('.noEnterSubmit').keypress(function(e) {
+      if (e.which == 13) return false;
+    });
 });
 
-  $('input#timezone').val(jstz.determine().name());
-  $('.noEnterSubmit').keypress(function(e) {
-    if (e.which == 13) return false;
-  });
 
-// to dissable location field if parent exists
-var equipParent = document.getElementById('equipParent');
-equipParent.onchange = function () {
-  if (this.value !== '' || this.value.length > 0) {
-    document.getElementById('equipLocationRack').disabled = true;
-  } else {
-    document.getElementById('equipLocationRack').disabled = false;
-  }
-};
+
+

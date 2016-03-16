@@ -89,16 +89,22 @@ const equipmentSchema = mongoose.Schema({
 // Apply the uniqueValidator plugin to datacenterSchema
 equipmentSchema.plugin(uniqueValidator);
 
-equipmentSchema.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.' });
+// equipmentSchema.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.' });
 
 equipmentSchema.virtual('equipLocRack').get(function() {
-  var cutLine = this.equipLocation.lastIndexOf('_');
-  return this.equipLocation.substring(0, cutLine);
+  if (this.equipLocation) {
+    var cutLine = this.equipLocation.lastIndexOf('_');
+    return this.equipLocation.substring(0, cutLine);
+  }
+  return undefined;
 });
 
 equipmentSchema.virtual('equipLocRU').get(function() {
-  var cutLine = this.equipLocation.lastIndexOf('_');
-  return this.equipLocation.slice(cutLine + 1);
+  if (this.equipLocation) {
+    var cutLine = this.equipLocation.lastIndexOf('_');
+    return this.equipLocation.slice(cutLine + 1);
+  }
+  return undefined;
 });
 
 equipmentSchema.virtual('dcAbbr').get(function() {

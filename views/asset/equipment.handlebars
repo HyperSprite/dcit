@@ -5,7 +5,7 @@
             <li>
             <div class="row">
               <div class="col-md-4">
-                {{#if equipParent}} Parent: <a href="/equipment/{{equipParent}}"><strong>{{equipParent}}</strong></a><br>{{/if}}
+                {{#if equipParent}} Parent: <a href="/reports/multi-?searchIn=equipment~equipParent&searchFor={{equipParent}}"><strong>{{equipParent}}</strong></a><br>{{/if}}
                     Location: <strong><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
                     Ticket: {{{equipTicketNumberlit}}}<br>
                     Equipment Status: {{{equipStatuslit}}}<br>
@@ -71,8 +71,8 @@
                 {{#if equipPurchaseEnd}}End: {{equipPurchaseEnd}}<br>{{/if}}
                 <br>
                 {{#if equipNotes}}Notes: {{equipNotes}}<br>{{/if}}
-                {{#if createdBy}}Created By: {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
-                Modified: {{#if modifiedBy}}By: {{modifiedBy}}{{/if}}{{#if modifiedOn}} {{modifiedOn}}<br>{{/if}}
+                {{#if createdBy}}Created By:<br> {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
+                {{#if modifiedBy}}Modified By:<br> {{modifiedBy}}{{/if}}{{#if modifiedOn}} {{modifiedOn}}<br>{{/if}}
 
                 </div>
                 </div>

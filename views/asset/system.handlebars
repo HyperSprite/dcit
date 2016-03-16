@@ -1,26 +1,26 @@
 <div class="racks">
-    <h3>{{systemName}} </h3> 
-    
-    <ul id="eachUl"class="list-unstyled"> 
+    <h3>{{systemName}} </h3>
+
+    <ul id="eachUl"class="list-unstyled">
         <li>
         <div class="row">
-            
+
             <div class="col-md-4">
 
             <strong>System Details</strong> <br>
             {{#if systemAlias}}Alias: <strong>{{systemAlias}}</strong><br>{{/if}}
             {{#if systemParentId}}Parent: <strong>{{systemParentId}}</strong><br>{{/if}}
             Status: {{{systemStatusLit}}}<br>
-            
+
             {{#if systemEnviron}}Environment: <strong>{{systemEnviron}}</strong><br>{{/if}}
             {{#if systemRole}}Role: <strong>{{systemRole}}</strong><br>{{/if}}
             {{#if systemOwner}}Owner: <strong>{{systemOwner}}</strong><br>{{/if}}
         {{!--    {{#if systemImpact}}Impact: {{systemImpact}}<br>{{/if}}  --}}
             {{#if systemIsVirtual}}Is Virtual: <strong>{{systemIsVirtual}}</strong><br>{{/if}}
-            
+
             Ticket: {{{systemTicketLit}}}<br>
-            
-            
+
+
             </div>
             <div class="col-md-4">
 
@@ -30,10 +30,10 @@
             Location: <strong><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
             Equipment Status: <strong>{{equipStatus}}</strong><br>
             {{#if equipMake}}Make/Model: <strong>{{equipMake}}</strong>{{#if equipModel}} <strong>{{equipModel}}</strong>{{/if}}{{#if equipSubModel}} <strong>- {{equipSubModel}}</strong>{{/if}}{{#if equipAddOns}} <strong> with {{equipAddOns}}</strong>{{/if}}<br>{{/if}}
-            
+
             {{#if equipType}}{{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
             {{/if}}
-          
+
             </div>
             <div class="col-md-2">
             </div>
@@ -42,14 +42,14 @@
             </div>
         </div>
         <div class="row">
-            
+
 
             {{> assets/sysport-list}}
-         </div>   
+         </div>
          <div class="row">
-            
-            <div class="col-md-4">           
-            
+
+            <div class="col-md-4">
+
             {{#if systemIsVirual}} Is Virtual <br>{{/if}}
 
             <strong>OS and Software</strong><br>
@@ -61,38 +61,38 @@
             <br>
             </div>
 
-            <div class="col-md-4">         
+            <div class="col-md-4">
             <strong>Timing</strong><br>
             {{#if systemInstall}}Install Date: <strong>{{systemInstall}}</strong><br>{{/if}}
             {{#if systemStart}}Start Date: <strong>{{systemStart}}</strong><br>{{/if}}
             {{#if systemEnd}}End Date: <strong>{{systemEnd}}</strong><br>{{/if}}
             <br>
             {{#if systemNotes}}Notes: <strong>{{systemNotes}}</strong><br>{{/if}}
-            {{#if createdBy}}Created By: {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
+            {{#if createdBy}}Created By:<br> {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
 
-            {{#if modifiedOn}}Modified By: {{modifiedBy}} {{modifiedOn}}<br>{{/if}}
+            {{#if modifiedOn}}Modified By:<br> {{modifiedBy}} {{modifiedOn}}<br>{{/if}}
             </div>
             <div class="col-md-2">
-            
+
             </div>
             <div class="col-md-2">
-            
-            
 
 
-            
+
+
+
             </div>
             </div>
-        
+
         </li><br>
     </ul>
     <hr>
     <div class="row">
-        {{> assets/config-portconfig}}  
+        {{> assets/config-portconfig}}
         {{> assets/config-acs6k}}
         {{#if ilom}}          {{> assets/config-ilom}}        {{/if}}
         {{#if isServTechPDU}} {{> assets/config-servtechpdu}} {{/if}}
         {{#if isACS6000}}     {{> assets/config-bareACS6k}}   {{/if}}
-    </div>    
+    </div>
 </div>
 
