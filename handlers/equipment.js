@@ -19,9 +19,7 @@ var dcId ='';
 // ---------------------------------------------------------------------
 // ----------------------   Equipment List  ----------------------------
 // ---------------------------------------------------------------------
-/*
-this is the Equip List block. Looks for 'List' in the URL and returns list of Equipment.
-*/
+
 exports.dcEquipAll = (req, res) => {
     // logger.info('***********exports.dcEquipPages First >' +req.params.datacenter);
   var backURL = req.header('Referer') || '/';
@@ -69,10 +67,10 @@ exports.dcEquipAll = (req, res) => {
   });
 };
 
-/*------------------------------------------------------------------
----------------------  Create New Equipment   ---------------------------
-------------------------------------------------------------------------
-*/
+// ------------------------------------------------------------------------
+// ---------------------  Create New Equipment   --------------------------
+// ------------------------------------------------------------------------
+
 exports.dcEquipNew = (req, res, next) => {
   var funcName = 'dcEquipNew';
   var backURL = req.header('Referer') || '/';
@@ -294,21 +292,21 @@ exports.dcEquipEdit = (req, res, next) => {
       return next;
     }
     Models.Optionsdb.find({}, 'optListKey optListArray', (err, opt) => {
-      if (err) {
+      if (err || !opt) {
         logger.warn(`${funcName} Optionsdb \n${err}`);
         req.session.flash = strTgs.errMsg('There was an error processing your request.');
         res.redirect(backURL);
         return next;
       }
       Models.Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn', (err, sys) => {
-        if (err) {
+        if (err || !sys) {
           logger.warn(`${funcName} Systemdb \n${err}`);
           req.session.flash = strTgs.errMsg('There was an error processing your request.');
           res.redirect(backURL);
           return next;
         }
         Models.Rack.find({}, {'rUs': 1, 'rackUnique': 1, '_id': 0}, {sort: {rackUnique: 1} }, (err, rk) => {
-          if (err) {
+          if (err || !rk) {
             logger.warn(`${funcName} Rack \n${err}`);
             req.session.flash = strTgs.errMsg('There was an error processing your request.');
             res.redirect(backURL);

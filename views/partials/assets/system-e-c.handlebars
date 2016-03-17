@@ -1,6 +1,6 @@
-{{#if access.edit}}  
-    <a href="/system/edit-{{systemName}}" >
+{{#if access.edit}}
+    <a href="/system/{{systemName}}/edit" >
         <span class="glyphicon glyphicon-edit glyphicon-danger" accesskey="x"  title="Press Alt x to Edit {{systemName}}" ></span></a>
-    <a href="/system/edit~copy-{{systemName}}">
+    <a href="/system/{{systemName}}/copy">
         <span class="glyphicon glyphicon-plus-sign glyphicon-danger" accesskey="c" title="Press Alt c to Copy {{systemName}}"></span></a>
 {{/if}}

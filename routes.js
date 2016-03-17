@@ -87,17 +87,19 @@ module.exports = function(app) {
   app.post('/equipmentdelete/:datacenter', isLoggedIn, handlers.equipment.dcEquipDelete);
   app.post('/equipmentportdelete/:datacenter', isLoggedIn, handlers.equipment.equipSubDelete);
   // Systems
-  app.get('/systems', handlers.system.dcSystemPages);
-  app.get('/system/:datacenter', handlers.system.dcSystemPages);
-  app.get('/endpoint/:datacenter', handlers.system.findEndpoints);
+  app.get('/system', handlers.system.dcSystemAll);
+  app.get('/system/new', handlers.system.dcSystemNew);
+  app.get('/system/:data', handlers.system.dcSystemView);
+  app.get('/system/:data/copy', handlers.system.dcSystemCopy);
+  app.get('/system/:data/edit', handlers.system.dcSystemEdit);
+  app.get('/endpoint/:data', handlers.system.findEndpoints);
   app.get('/systemports-list', handlers.system.dcSystemPortPages);
-  app.get('/system-namechange/:datacenter', handlers.system.dcSystemNameChange);
-  app.post('/system-namechange/:datacenter', isLoggedIn, handlers.system.dcSystemNameChangePost);
-  app.post('/system/:datacenter', isLoggedIn, handlers.system.dcSystemPost);
-  app.post('/systemdelete/:datacenter', isLoggedIn, handlers.system.dcsystemDelete);
-  app.post('/systemportdelete/:datacenter', isLoggedIn, handlers.system.dcsystemSubDelete);
+  app.get('/system/:data/namechange', handlers.system.dcSystemNameChange);
+  app.post('/system/:data/namechange', isLoggedIn, handlers.system.dcSystemNameChangePost);
+  app.post('/system/:data', isLoggedIn, handlers.system.dcSystemPost);
+  app.post('/system/:data/delete', isLoggedIn, handlers.system.dcsystemDelete);
+  app.post('/system/:data/portdelete', isLoggedIn, handlers.system.dcsystemSubDelete);
 
-  // app.get('/reports', system.dcSystemCountbyEnv);
   app.get('/reports', handlers.report.dcReport);
   app.get('/reports/:datacenter', handlers.report.dcByEnvRole);
   app.get('/env-role-reports', handlers.report.dcByEnvRole);

@@ -1,25 +1,25 @@
     <h4>Change System Name for {{oldSystemName}}</h4>
-    
+
     {{#if access.delete}}
     <div>
-        <form id="datacenterForm" class="form-horizontal" role="form" action="/system-namechange/update" method="POST">
+        <form id="datacenterForm" class="form-horizontal" role="form" action="/system/{{oldSystemName}}/namechange" method="POST">
                 <input type="hidden" name="_csrf" value="{{_csrfToken}}">
                 <input type="hidden" name="oldSystemName" value="{{oldSystemName}}">
                 <input type="hidden" name="id" value="{{systemId}}">
             <div class="form-group">
                 <label for="field-systemName" class="col-sm-2 control-label">System Name</label>
-                <div class="col-sm-4">   
+                <div class="col-sm-4">
                     <input type="text" class="noEnterSubmit form-control" id="systemName" name="systemName" value="{{oldSystemName}}" placeholder="*Required" data-toggle="tooltip" required title="System Name is required, should be all lowercase and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only.  " aria-describedby="systemNameStatus">
                 </div>
-            </div>      
+            </div>
           <div class="form-group">
                     <button type="submit" class="btn btn-danger btn-xs assetFormSubmit" input accesskey="x" data-toggle="tooltip" title="Press Alt x to Update Serial Number" value="Submit"><span class="glyphicon glyphicon-save"></span> Update System Name</button>
                     <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
                     <a href="#" onclick="document.getElementById('cancelForm').submit();return false;">
                     <button type="button" class="btn btn-danger btn-xs">
                     <span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
-          </div>          
-        </form><form id="cancelForm" role="form" action="/system/edit-{{oldSystemName}}" method="GET"></form>
-    </div>    
-    
+          </div>
+        </form><form id="cancelForm" role="form" action="/system/{{oldSystemName}}/edit" method="GET"></form>
+    </div>
+
     {{/if}}

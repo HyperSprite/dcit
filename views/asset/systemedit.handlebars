@@ -39,7 +39,7 @@
                 <input type="hidden" name="systemName" value="{{systemName}}">
                 <p><strong>{{systemName}}</strong>
                 {{#if access.delete}}
-                  <a href="/system-namechange/{{systemName}}"
+                  <a href="/system/{{systemName}}/namechange"
                   <span class="glyphicon glyphicon-pencil glyphicon-danger" data-toggle="tooltip" data-delay='{"show":1500}' title="Click to edit the system name."></span>
                   </a>
                 {{/if}}
@@ -344,7 +344,7 @@
     </form>
     <form id="cancelForm" role="form" action="{{#if systemName}}/system/{{systemName}}{{else}}/system/{{wasCopy}}{{/if}}" method="GET"></form>
     {{#if access.delete}}
-    <form id="deleteForm" action="/systemdelete/{{systemName}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{systemName}}. This can not be undone!')">
+    <form id="deleteForm" action="/system/{{systemName}}/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete {{systemName}}. This can not be undone!')">
         <input type="hidden" name="equipLocationRack" value="{{equipLocationRack}}">
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="systemName" value="{{systemName}}">
@@ -356,7 +356,7 @@
 
         {{#if access.delete}}
         {{#each systemPorts}}
-            <form id="singlePortDelForm{{@index}}" action="/systemportdelete1/{{../systemName}}" data-confirm="Are you sure you want to delete this port?" method="POST">
+            <form id="singlePortDelForm{{@index}}" action="/system/{{../systemName}}/portdelete1" data-confirm="Are you sure you want to delete this port?" method="POST">
             <input type="hidden" name="_csrf" value="{{../_csrfToken}}">
             <input type="hidden" name="id" value="{{../systemId}}">
             <input type="hidden" name="abbreviation" value="{{../systemName}}">

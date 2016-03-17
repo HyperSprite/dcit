@@ -1,14 +1,4 @@
 
-// to dissable location field if parent exists
-// var equipParent = document.getElementById('equipParent');
-// equipParent.onchange = function () {
-//   if (this.value !== '' || this.value.length > 0) {
-//     document.getElementById('equipLocationRack').disabled = true;
-//   } else {
-//     document.getElementById('equipLocationRack').disabled = false;
-//   }
-// };
-
 $(document).ready(function() {
   // to dissable location on equipment if equipment has parent
   $('#equipParent').blur(function(){
