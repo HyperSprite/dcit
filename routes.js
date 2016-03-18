@@ -10,18 +10,18 @@ function isLoggedIn(req, res, next) {
   res.redirect('/');
 }
 
-module.exports = function(app) {
+module.exports = (app) => {
   app.post('/admin/uploadpost', isLoggedIn, handlers.admin.uploadPost);
 // cross-site request forgery protection
   app.use(require('csurf')());
-  app.use(function(req, res, next) {
+  app.use((req, res, next) => {
     res.locals._csrfToken = req.csrfToken();
     next();
   });
-  app.use(function(err, req, res, next) {
+  app.use((err, req, res, next) => {
     if (err.code !== 'EBADCSRFTOKEN') return next(err);
   // handle CSRF token errors here
-    logger.warn('crsf error req.csrfToken >' + req.csrfToken());
+    logger.warn(`crsf error req.csrfToken >${req.csrfToken()}`);
     logger.warn(req.hostname + req.originalUrl);
 
     res.status(403);
@@ -65,13 +65,15 @@ module.exports = function(app) {
   app.get('/location/network/:datacenter', isLoggedIn, handlers.location.datacenterNetworkPages);
   app.post('/location/network/:datacenter', isLoggedIn, handlers.location.datacenterNetworkPost);
 
-  app.get('/location/racks', handlers.rack.dcRackPages);
-  app.get('/location/rack', handlers.rack.dcRackPages);
-  app.get('/location/rack/:datacenter', handlers.rack.dcRackPages);
-  app.post('/location/rack/:datacenter', isLoggedIn, handlers.rack.dcRackPost);
-  app.post('/location/rackdelete/:datacenter', isLoggedIn, handlers.rack.rackDelete);
-  app.post('/location/rackpower/:datacenter', isLoggedIn, handlers.rack.dcRackPowPost);
-  app.post('/location/racksubdelete/:datacenter', isLoggedIn, handlers.rack.rackSubDelete);
+  app.get('/location/rack', handlers.rack.dcRackAll);
+  app.get('/location/rack/new', handlers.rack.dcRackNew);
+  app.get('/location/rack/:data', handlers.rack.dcRackView);
+  app.get('/location/rack/:data/copy', handlers.rack.dcRackCopy);
+  app.get('/location/rack/:data/edit', handlers.rack.dcRackPages);
+  app.post('/location/rack/:data', isLoggedIn, handlers.rack.dcRackPost);
+  app.post('/location/rackdelete/:data', isLoggedIn, handlers.rack.rackDelete);
+  app.post('/location/rackpower/:data', isLoggedIn, handlers.rack.dcRackPowPost);
+  app.post('/location/racksubdelete/:data', isLoggedIn, handlers.rack.rackSubDelete);
   // Equipment
   app.get('/equipment', handlers.equipment.dcEquipAll);
   app.get('/equipment/new', handlers.equipment.dcEquipNew);

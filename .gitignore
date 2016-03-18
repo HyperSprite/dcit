@@ -12,6 +12,8 @@ scraps2.html
 credentials.js
 
 # don't commit log files
+log*
+logs*
 
 # ignore uploaded data
 

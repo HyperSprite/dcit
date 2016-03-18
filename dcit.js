@@ -19,6 +19,7 @@ const FileStreamRotator = require('file-stream-rotator');
 const logConfig = require('./config/log');
 const accConfig = require('./config/access');
 const expressSanitizer = require('express-sanitizer');
+var accessLogStream;
 
 const app = express();
 
@@ -107,27 +108,6 @@ app.use((req, res, next) => {
   domain.run(next);
 });
 
-// setup the logger
-fs.existsSync(logConfig.logDirectory) || fs.mkdirSync(logConfig.logDirectory);
-
-switch (app.get('env')) {
-case 'development':
-  app.use(morgan('dev'));
-  break;
-case 'production':
-  var accessLogStream = FileStreamRotator.getStream({
-    filename: logConfig.logDirectory + 'access-%DATE%.log',
-    frequency: '24h',
-    verbose: false,
-  });
-  app.use(morgan('combined', {stream: accessLogStream}));
-  break;
-default:
-  throw new Error('Unknown execution environment: ' + app.get('env'));
-}
-
-logger.info('DCIT Log started');
-
 var options = {
   server: {
     socketOptions: { keepAlive: 1 },
@@ -156,6 +136,30 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true },
 }));
+
+// setup the logger
+// This says, use the logg dir, if not create the log dir
+// as specified in the logConfig file
+fs.existsSync(logConfig.logDirectory) || fs.mkdirSync(logConfig.logDirectory);
+
+switch (app.get('env')) {
+
+  case 'development':
+    app.use(morgan('dev'));
+    break;
+  case 'production':
+    accessLogStream = FileStreamRotator.getStream({
+      filename: `${logConfig.logDirectory}access-%DATE%.log`,
+      frequency: 'daily',
+      verbose: false,
+    });
+    app.use(morgan('combined', { stream: accessLogStream }));
+    break;
+  default:
+    throw new Error(`Unknown execution environment: ${app.get('env')}`);
+}
+
+logger.info('DCIT Log started');
 
 app.use(passport.initialize());
 app.use(passport.session());

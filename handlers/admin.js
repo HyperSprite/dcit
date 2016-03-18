@@ -202,7 +202,7 @@ module.exports.logviewer = (req, res) => {
 //
 //         File Manager
 //
-module.exports.filemanager = (req, res, next) => {
+module.exports.filemanager = (req, res) => {
   var context = {};
   var msg = 'Something went sideways, sorry';
   if (accConfig.accessCheck(req.user).root !== 1) {
@@ -725,6 +725,8 @@ module.exports.csvToDBPost = (req, res) => {
 ------------------------------------------------------------------------
 */
 module.exports.userDelete = (req, res) => {
+  var usrDelete;
+  var msg;
   if (accConfig.accessCheck(req.user).root !== 1) {
   req.session.flash = {
     type: 'danger',
@@ -733,7 +735,8 @@ module.exports.userDelete = (req, res) => {
   };
     return res.redirect(303, '/');
   }
-  res.abbreviation = req.body.email;
+  console.dir(req.body);
+  usrDelete = req.body.email;
   if (req.body.id) {
   // logger.info('delete got this far id >'+ req.body.id);
     Models.User.findById(req.body.id, (err, userToDelete) => {
@@ -743,22 +746,22 @@ module.exports.userDelete = (req, res) => {
         req.session.flash = strTgs.errMsg(msg);
         res.redirect('/');
       }
-      // return res.redirect(303 '/location/datacenter/'+res.abbreviation);
+      // return res.redirect(303 '/location/datacenter/'+usrToDelete);
       userToDelete.remove((err) => {
         if (err) {
           logger.warn(err);
           req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
-            message: `Something went wrong, ${res.abbreviation} was not deleted.`,
+            message: `Something went wrong, ${userToDelete.local.email} was not deleted.`,
           };
           return res.redirect(303, '/admin/useradmin');
         } else {
-          logger.info(`User Deleted ${res.abbreviation} by ${req.user.local.email}`);
+          logger.info(`USER DELETED : ${userToDelete.local.email} BY ${req.user.local.email}`);
           req.session.flash = {
             type: 'success',
             intro: 'Done!',
-            message: `User ${res.abbreviation} has been deleted.`,
+            message: `User ${userToDelete.local.email} has been deleted.`,
           };
           return res.redirect(303, '/admin/useradmin');
         }

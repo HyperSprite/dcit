@@ -11,7 +11,7 @@
 <div class="datacenter">
     <h4>Contacts</h4>
     {{#if access.edit}}<h6><a href="/location/datacenter/contact~{{id}}-new">New</a></h6>{{/if}}
-    <ul id="eachUl"class="list-unstyled"> 
+    <ul id="eachUl"class="list-unstyled">
         {{#each contacts}}
             <li>
             <div class="row">
@@ -33,7 +33,7 @@
                             {{#if conPho1Num}}{{conPho1Num}} - {{conPho1Typ}}<br>{{/if}}
                             {{#if conPho2Num}}{{conPho2Num}} - {{conPho2Typ}}<br>{{/if}}
                             {{#if conPho3Num}}{{conPho3Num}} - {{conPho3Typ}}<br>{{/if}}
-                            {{#if conPho4Num}}{{conPho4Num}} - {{conPho4Typ}}<br>{{/if}} 
+                            {{#if conPho4Num}}{{conPho4Num}} - {{conPho4Typ}}<br>{{/if}}
                         </div>
                         <div class="col-xs-8 col-sm-6">
                         {{#if conNotes}}<div class="col-md-6"> <strong>Notes:</strong> {{conNotes}}</div>{{/if}}
@@ -48,22 +48,22 @@
                     <input type="hidden" name="abbreviation" value="{{../abbreviation}}">
                     <input type="hidden" name="subId" value="{{conId}}">
                     <input type="hidden" name="subName" value="{{conName}}">
-                    
+
                     </form>
                     <form id=formEdit{{@index}}></form>{{!--this is for the edit button both button sit outside the forms so they do not conflict --}}
                     <input type='submit' class='btn btn-default btn-xs' formaction='/location/datacenter/contact~{{../id}}-{{conId}}' form="formEdit{{@index}}" formmethod="get" value='Edit'>
                     <button type="submit" class="btn btn-danger btn-xs" form="deleteform{{@index}}">Delete</button>
-                    
-                    
+
+
                 </address>
                 </div>
             </div>
             </li><br>
         {{/each}}
         </ul>
-    <hr>        
+    <hr>
     <h4><a href="/location/datacentercage/edit-{{id}}">Cages</a></h4>
-    <ul id="eachUl"class="list-unstyled"> 
+    <ul id="eachUl"class="list-unstyled">
 
         {{#each cages}}
             <li>
@@ -72,13 +72,13 @@
             {{#if cageInMeters}}Cage in Meters: {{cageInMeters}} - Feet: {{cageInFeet}}<br>{{/if}}
             {{#if cageWattPSM}}Watts Per Sq. Meter: {{cageWattPSM}} - Foot:{{cageWattPSF}}<br>{{/if}}
             {{#if cageNotes}}Notes:{{cageNotes}}<br>{{/if}}
-            <a href="/location/racks/new~{{../id}}-{{id}}">New rack</a>
+            <a href="/location/rack/new%3FdcId={{../id}}%26dcSubId={{id}}">New rack</a>
             </li><br>
         {{/each}}
     </ul>
     <hr>
     <h4><a href="/location/datacenterpower/edit-{{id}}">Power Mains</a></h4>
-    <ul id="powerUl" class="list-unstyled">    
+    <ul id="powerUl" class="list-unstyled">
         {{#each powerNames}}
         <li>
         <a href="/location/datacenterpower/show-{{this}}">{{this}}</a><br>
@@ -86,7 +86,7 @@
         {{/each}}
     </ul>
     Datacenter Created On: {{createdOn}}
-    
+
 </div>
 
 
