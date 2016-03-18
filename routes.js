@@ -115,8 +115,15 @@ module.exports = function(app) {
 
   // Admin
   app.get('/admin', isLoggedIn, handlers.admin.home);
-  app.get('/admin/:datacenter', isLoggedIn, handlers.admin.home);
-  app.get('/admin/optionsedit/:datacenter', isLoggedIn, handlers.admin.optionsEdit);
+  app.get('/admin/options', isLoggedIn, handlers.admin.options);
+  app.get('/admin/dbinsert', isLoggedIn, handlers.admin.dbinsert);
+  app.get('/admin/useradmin', isLoggedIn, handlers.admin.useradmin);
+  app.get('/admin/logs', isLoggedIn, handlers.admin.logs);
+  app.get('/admin/logviewer/:data', isLoggedIn, handlers.admin.logviewer);
+  app.get('/admin/filemanager', isLoggedIn, handlers.admin.filemanager);
+  app.get('/admin/joins', isLoggedIn, handlers.admin.joins);
+  app.get('/admin/models', isLoggedIn, handlers.admin.models);
+  app.get('/admin/optionsedit/:data', isLoggedIn, handlers.admin.optionsEdit);
   app.post('/admin/userprofileupdate', isLoggedIn, handlers.admin.userEditPost);
   app.post('/admin/optionspost', isLoggedIn, handlers.admin.optionsEditPost);
 

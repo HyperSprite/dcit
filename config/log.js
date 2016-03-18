@@ -1,5 +1,5 @@
 
-module.exports ={
+module.exports = {
   uploadDir: '../userdata/',
   logDirectory: '../log/',
   fileName: {
@@ -10,5 +10,5 @@ module.exports ={
   },
 };
 
-//var logconfig = require('../lib/logconfig.js');
+// var logconfig = require('../lib/logconfig.js');
 // logconfig.uploadDir
