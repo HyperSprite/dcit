@@ -6,292 +6,135 @@ const ObjectId = require('mongoose').Types.ObjectId;
 // Models
 const Models = require('../models');
 
-var start = '',
-  editLoad = 0,
-  dcabbr = '',
-  dcInfo = '',
-  dcInfoSplit = '',
-  dcSubId = '',
-  dcId = '';
-
 // ---------------------------------------------------------------------
 // ----------------------   Rack List  ---------------------------------
 // ---------------------------------------------------------------------
-/*
-this is the Rack List block. Looks for 'List' in the URL and returns list of datacenters with city and country from Main contact.
-*/
-module.exports.dcRackPages = (req, res, next) => {
+
+// app.get('/location/rack', handlers.rack.dcRackAll);
+module.exports.dcRackAll = (req, res, next) => {
+  var context;
+  var uber;
   if (accConfig.accessCheck(req.user).read !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
   } else {
-    // logger.info('***********exports.dcRackPages First >' +req.params.datacenter);
-    // logger.info('in List');
-    // this looks for 'list' as the / url. if it exists, it prints the datacenter list
     Models.Rack.find({}).sort('rackUnique').exec((err, racks) => {
       if (err) {
         logger.info(err);
       } else {
         Models.Datacenter.find({}, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
-          if (err) {
-            next(err);
-          } else {
-            var context = {
-              racks: racks.map((rack) => {
-                var uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
-                // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                // logger.info(rack);
-                if (uber) {
-                  return {
-                    menu1: 'Datacenters',
-                    menuLink1: '/location/datacenter/list',
-                    titleNow: 'Rack List',
-                    rackParentDC: rack.rackParentDC,
-                    abbreviation: uber.abbreviation,
-                    foundingCompany: uber.foundingCompany,
-                    cageAbbreviation: uber.cageAbbreviation,
-                    cageNickname: uber.cageNickname,
-                    cageName: uber.cageName,
-                    rackNickname: rack.rackNickname,
-                    rackName: rack.rackName,
-                    rackUnique: rack.rackUnique,
-                    rackParentCage: rack.rackParentCage,
-                    rackDescription: rack.rackDescription,
-                    rackSN: rack.rackSN,
-                    rackHeight: rack.rackHeight,
-                    rackWidth: rack.rackWidth,
-                    rackDepth: rack.rackDepth,
-                    rackLat: rack.rackLat,
-                    rackLon: rack.rackLon,
-                    rackRow: rack.rackRow,
-                    rackStatus: strTgs.trueFalseIcon(rack.rackStatus, rack.rackStatus),
-                    rackMake: rack.rackMake,
-                    rackModel: rack.rackModel,
-                    rUs: rack.rUs,
-                    createdBy: rack.createdBy,
-                    createdOn: strTgs.dateMod(rack.createdOn),
-                    modifiedOn: strTgs.dateMod(rack.modifiedOn),
-                  };
-                } else {
-                  return {
-                    menu1: 'Datacenters',
-                    menuLink1: '/location/datacenter/list',
-                    titleNow: 'Rack List',
-                    rackParentDC: rack.rackParentDC,
-                    rackNickname: rack.rackNickname,
-                    rackName: rack.rackName,
-                    rackUnique: rack.rackUnique,
-                    rackParentCage: rack.rackParentCage,
-                    rackDescription: rack.rackDescription,
-                    rackSN: rack.rackSN,
-                    rackHeight: rack.rackHeight,
-                    rackWidth: rack.rackWidth,
-                    rackDepth: rack.rackDepth,
-                    rackLat: rack.rackLat,
-                    rackLon: rack.rackLon,
-                    rackRow: rack.rackRow,
-                    rackStatus: strTgs.trueFalseIcon(rack.rackStatus, rack.rackStatus),
-                    rackMake: rack.rackMake,
-                    rackModel: rack.rackModel,
-                    rUs: rack.rUs,
-                    createdBy: rack.createdBy,
-                    createdOn: strTgs.dateMod(rack.createdOn),
-                    modifiedOn: strTgs.dateMod(rack.modifiedOn),
-                  }
-                }
-              }),
-            };
-            // the 'location/datacenter-list' is the view that will be called
-            // context is the data from above
-            res.render('location/rack-list', context);
-          }
+          if (err) return next(err);
+          context = {
+            racks: racks.map((rack) => {
+              uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
+              // rack.populate('rackParentDC', 'abbreviation cageNickname')
+              // logger.info(rack);
+              if (uber) {
+                return {
+                  menu1: 'Datacenters',
+                  menuLink1: '/location/datacenter/list',
+                  titleNow: 'Rack List',
+                  rackParentDC: rack.rackParentDC,
+                  abbreviation: uber.abbreviation,
+                  foundingCompany: uber.foundingCompany,
+                  cageAbbreviation: uber.cageAbbreviation,
+                  cageNickname: uber.cageNickname,
+                  cageName: uber.cageName,
+                  rackNickname: rack.rackNickname,
+                  rackName: rack.rackName,
+                  rackUnique: rack.rackUnique,
+                  rackParentCage: rack.rackParentCage,
+                  rackDescription: rack.rackDescription,
+                  rackSN: rack.rackSN,
+                  rackHeight: rack.rackHeight,
+                  rackWidth: rack.rackWidth,
+                  rackDepth: rack.rackDepth,
+                  rackLat: rack.rackLat,
+                  rackLon: rack.rackLon,
+                  rackRow: rack.rackRow,
+                  rackStatus: strTgs.trueFalseIcon(rack.rackStatus, rack.rackStatus),
+                  rackMake: rack.rackMake,
+                  rackModel: rack.rackModel,
+                  rUs: rack.rUs,
+                  createdBy: rack.createdBy,
+                  createdOn: strTgs.dateMod(rack.createdOn),
+                  modifiedOn: strTgs.dateMod(rack.modifiedOn),
+                };
+              }
+              return {
+                menu1: 'Datacenters',
+                menuLink1: '/location/datacenter/list',
+                titleNow: 'Rack List',
+                abbreviation: 'Unknown',
+                rackParentDC: rack.rackParentDC,
+                rackNickname: rack.rackNickname,
+                rackName: rack.rackName,
+                rackUnique: rack.rackUnique,
+                rackParentCage: rack.rackParentCage,
+                rackDescription: rack.rackDescription,
+                rackSN: rack.rackSN,
+                rackHeight: rack.rackHeight,
+                rackWidth: rack.rackWidth,
+                rackDepth: rack.rackDepth,
+                rackLat: rack.rackLat,
+                rackLon: rack.rackLon,
+                rackRow: rack.rackRow,
+                rackStatus: strTgs.trueFalseIcon(rack.rackStatus, rack.rackStatus),
+                rackMake: rack.rackMake,
+                rackModel: rack.rackModel,
+                rUs: rack.rUs,
+                createdBy: rack.createdBy,
+                createdOn: strTgs.dateMod(rack.createdOn),
+                modifiedOn: strTgs.dateMod(rack.modifiedOn),
+              };
+            }),
+          };
+          // the 'location/datacenter-list' is the view that will be called
+          // context is the data from above
+          res.render('location/rack-list', context);
         });
       }
     });
   }
 };
-      /*------------------------------------------------------------------
-      ----------------------- Create New Rack Power   --------------------
-      ------------------------------------------------------------------------
-      */
-module.exports.dcRackPages = (req, res, next) => {
-  if (req.params.datacenter.indexOf('circuit') != -1) {
-      // logger.info('else if (req.params.datacenter.indexOf ('circuit')');
-      // logger.info('rack '+req.params.datacenter);
-      start = req.params.datacenter.indexOf('~') + 1;
-      // logger.info('|start   >'+start);
-      dcInfo = req.params.datacenter.substring(start);
-      // logger.info('|dcInfo  >'+dcInfo);
-      dcSplit = dcInfo.indexOf('>');
-      // logger.info('|dcSplit >'+dcSplit);
-      dcSubId = dcInfo.substring(dcSplit + 1);
-      // logger.info('|dcSubId >'+dcSubId);
-      dcId = dcInfo.substring(0, dcSplit);
-      // logger.info('|dcId    >'+dcId);
 
 
+// ----------------------------------------------------------------------
+// ---------------------  Create New Rack   -------------------------------
+// ------------------------------------------------------------------------
+// link to this looks
+//  /location/rack/newrack~{{dcId}}-{{cageId}}
+//  /location/rack/newrack~5459a1b4310bed5b0c039b7a-5459a1b4310bed5b0c039b7b
+//  ------------------------------------------------------------------------
 
-      Models.Rack.findOne({ rackUnique: dcId }, (err, rk) => {
-        if (err) return next(err);
-        Models.Optionsdb.findOne({ optListKey: 'optEquipStatus' }, (err, opt) => {
+// app.get('/location/rack/new', handlers.rack.dcRackNew);
+module.exports.dcRackNew = (req, res, next) => {
+  var dcId = req.query.dcId;
+  var dcCageId = req.query.dcCageId;
+  var dc;
+  var context;
+  var thisSubDoc;
+  Models.Datacenter.findById(dcId, (err, datacenter) => {
+    if (err) return next(err);
+    Models.Optionsdb.findOne({ optListKey: 'optRackStatus' }, (err, opt) => {
+      if (err) return next(err);
+      // logger.info(opt);
+      if (!datacenter) {
+        // logger.info('Rack !datacenter');
+      } else {
+        // logger.info('Rack is datacenter');
+        thisSubDoc = datacenter.cages.id(dcCageId);
           if (err) return next(err);
-          // logger.info(opt);
-          Models.Datacenter.find({}, '_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
-            if (err) return next(err);
-
-            // New Rack Power (no existing)
-            var uber = strTgs.findCGParent(rk.rackParentCage, datacenter);
-            var context;
-            if (dcSubId === 'new') {
-              context = {
-                access: accConfig.accessCheck(req.user),
-                user: req.user,
-                requrl: req.url,
-                menu1: uber.abbreviation,
-                menuLink1: '/location/datacenter/' + uber.abbreviation,
-                menu2: 'Elevation',
-                menuLink2: '/elevation/' + rk.rackUnique,
-                menu3: 'Details',
-                menuLink3: '/equipment-systems/' + rk.rackUnique,
-                titleNow: rk.rackUnique,
-                optEquipStatus: opt.optListArray,
-                rackParentDC: rk.rackParentDC,
-                fullName: uber.fullName,
-                abbreviation: uber.abbreviation,
-                foundingCompany: uber.foundingCompany,
-                powerNames: uber.powerNames,
-                cageAbbreviation: uber.cageAbbreviation,
-                cageNickname: uber.cageNickname,
-                cageName: uber.cageName,
-                rackId: rk._id,
-                rackNickname: rk.rackNickname,
-                rackName: rk.rackName,
-                rackUnique: rk.rackUnique,
-                rackParentCage: rk.rackParentCage,
-              };
-              res.render('location/rackpower', context);
-
-            } else {
-
-              var thisSubDoc = rk.powers.id(dcSubId);
-
-              if (err) return next(err);
-              if (!rk) return next();
-              // New Rack Power from Copy
-              if (req.params.datacenter.indexOf('copy') != -1) {
-                // logger.info(rk);
-                context = {
-                  access: accConfig.accessCheck(req.user),
-                  user: req.user,
-                  requrl: req.url,
-                  titleNow: 'Copy ' + rk.rackUnique,
-                  optEquipStatus: opt.optListArray,
-                  rackParentDC: rk.rackParentDC,
-                  fullName: uber.fullName,
-                  abbreviation: uber.abbreviation,
-                  foundingCompany: uber.foundingCompany,
-                  powerNames: uber.powerNames,
-                  cageAbbreviation: uber.cageAbbreviation,
-                  cageNickname: uber.cageNickname,
-                  cageName: uber.cageName,
-                  rackId: rk._id,
-                  rackNickname: rk.rackNickname,
-                  rackName: rk.rackName,
-                  rackUnique: rk.rackUnique,
-                  rackParentCage: rk.rackParentCage,
-                  rackPowStatus: thisSubDoc.rackPowStatus,
-                  rackPowVolts: thisSubDoc.rackPowVolts,
-                  rackPowPhase: thisSubDoc.rackPowPhase,
-                  rackPowAmps: thisSubDoc.rackPowAmps,
-                  rackPowReceptacle: thisSubDoc.rackPowReceptacle,
-                };
-
-              } else {
-                // Edit Rack Power
-                // logger.info(rk);
-                context = {
-                  access: accConfig.accessCheck(req.user),
-                  user: req.user,
-                  requrl: req.url,
-                  titleNow: thisSubDoc.rackPowUnique,
-                  optEquipStatus: opt.optListArray,
-                  rackParentDC: rk.rackParentDC,
-                  fullName: uber.fullName,
-                  abbreviation: uber.abbreviation,
-                  foundingCompany: uber.foundingCompany,
-                  powerNames: uber.powerNames,
-                  cageAbbreviation: uber.cageAbbreviation,
-                  cageNickname: uber.cageNickname,
-                  cageName: uber.cageName,
-                  rackId: rk._id,
-                  rackNickname: rk.rackNickname,
-                  rackName: rk.rackName,
-                  rackUnique: rk.rackUnique,
-                  rackParentCage: rk.rackParentCage,
-                  rackPowId: thisSubDoc.id,
-                  rackPowMain: thisSubDoc.rackPowMain,
-                  rackPowCircuit: thisSubDoc.rackPowCircuit,
-                  rackPowUnique: thisSubDoc.rackPowUnique,
-                  rackPowStatus: thisSubDoc.rackPowStatus,
-                  rackPowVolts: thisSubDoc.rackPowVolts,
-                  rackPowPhase: thisSubDoc.rackPowPhase,
-                  rackPowAmps: thisSubDoc.rackPowAmps,
-                  rackPowReceptacle: thisSubDoc.rackPowReceptacle,
-                };
-              }
-              // logger.info(context);
-              res.render('location/rackpower', context);
-            }
-          });
-        });
-      });
-      /*----------------------------------------------------------------------
-      ---------------------  Create New Rack   -------------------------------
-      ------------------------------------------------------------------------
-      link to this looks
-       /location/rack/newrack~{{dcId}}-{{cageId}}
-       /location/rack/newrack~5459a1b4310bed5b0c039b7a-5459a1b4310bed5b0c039b7b
-       ------------------------------------------------------------------------
-      */
-
-
-    } else if (req.params.datacenter.indexOf('newrack') != -1) {
-      // logger.info('else if (req.params.datacenter.indexOf (newrack)');
-      // logger.info('datacenter '+req.params.datacenter);
-      start = req.params.datacenter.indexOf('~') + 1;
-      // logger.info('|start   >'+start);
-      dcInfo = req.params.datacenter.substring(start);
-      // logger.info('|dcInfo  >'+dcInfo);
-      dcSplit = dcInfo.indexOf('-');
-      // logger.info('|dcSplit >'+dcSplit);
-      dcSubId = dcInfo.substring(dcSplit + 1);
-      // logger.info('|dcSubId >'+dcSubId);
-      dcId = dcInfo.substring(0, dcSplit);
-      // logger.info('|dcId    >'+dcId);
-
-      Models.Datacenter.findById(dcId, (err, datacenter) => {
-        var dc = datacenter;
-        var context;
-        Models.Optionsdb.findOne({ optListKey: 'optRackStatus' }, (err, opt) => {
-          if (err) return next(err);
-          // logger.info(opt);
-          if (!datacenter) {
-            // logger.info('Rack !datacenter');
-          } else {
-            // logger.info('Rack is datacenter');
-            var thisSubDoc = datacenter.cages.id(dcSubId);
-            if (err) return next(err);
             // logger.info('datacener= '+datacenter);
             context = {
               access: accConfig.accessCheck(req.user),
-              user: req.user,
               requrl: req.url,
               optRackStatus: opt.optListArray,
-              id: dc._id,
-              fullName: dc.fullName,
-              abbreviation: dc.abbreviation,
-              createdOn: strTgs.dateMod(dc.createdOn),
-              foundingCompany: dc.foundingCompany,
+              id: datacenter._id,
+              fullName: datacenter.fullName,
+              abbreviation: datacenter.abbreviation,
+              createdOn: strTgs.dateMod(datacenter.createdOn),
+              foundingCompany: datacenter.foundingCompany,
               titleNow: 'New Rack',
               cageId: thisSubDoc.id,
               cageNickname: thisSubDoc.cageNickname,
@@ -303,154 +146,503 @@ module.exports.dcRackPages = (req, res, next) => {
           }
         });
       });
-
-    } else {
-      /*---------------------------------------------------------------------
-      -------------------------Rack Edit ------------------------------------
-                         /location/rack/edit~copy-
-      ------------------------------------------------------------------------
-      */
-
-      if (req.params.datacenter.indexOf('edit') != -1) {
-        // logger.info('else if (req.params.datacenter.indexOf (edit)');
-
-        start = req.params.datacenter.indexOf('-');
-        dcabbr = req.params.datacenter.substring(start + 1);
-        if (req.params.datacenter.indexOf('copy') != -1) {
-          editLoad = 5;
-          // logger.info('copy rack '+dcabbr);
-        } else {
-          editLoad = 3;
-          // logger.info('edit rack '+dcabbr);
-        }
-      } else {
-        editLoad = 1;
-        dcabbr = req.params.datacenter;
-        // logger.info('view rack '+dcabbr);
-      }
-
-
-      Models.Rack.findOne({ rackUnique: dcabbr }, (err, rack) => {
-        if (err) return next(err);
-        if (!rack) return next();
-        // logger.info(datacenter);
-
-        Models.Optionsdb.findOne({ optListKey: 'optRackStatus' }, (err, opt) => {
-          if (err) return next(err);
-          // logger.info(opt);
-          Models.Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
-            if (err) {
-              logger.info(err);
-            } else {
-              // logger.info ('Rack.findOne takes the id and displays the matching rack');
-              var uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
-              if (editLoad < 4) {
-                context = {
-                  access: accConfig.accessCheck(req.user),
-                  user: req.user,
-                  requrl: req.url,
-                  optRackStatus: opt.optListArray,
-                  titleNow: rack.rackUnique,
-                  menu1: uber.abbreviation,
-                  menuLink1: `/location/datacenter/${uber.abbreviation}`,
-                  menu2: 'Elevation',
-                  menuLink2: `/elevation/${rack.rackUnique}`,
-                  menu3: 'Details',
-                  menuLink3: `/equipment-systems/${rack.rackUnique}`,
-                  rackParentDC: rack.rackParentDC,
-                  fullName: uber.fullName,
-                  abbreviation: uber.abbreviation,
-                  rackParentCage: rack.rackParentCage,
-                  foundingCompany: uber.foundingCompany,
-                  cageAbbreviation: uber.cageAbbreviation,
-                  cageNickname: uber.cageNickname,
-                  cageName: uber.cageName,
-                  rackDescription: rack.rackDescription,
-                  rackHeight: rack.rackHeight,
-                  rackWidth: rack.rackWidth,
-                  rackDepth: rack.rackDepth,
-                  rackMake: rack.rackMake,
-                  rackModel: rack.rackModel,
-                  rUs: rack.rUs,
-                  rackNickname: rack.rackNickname,
-                  rackName: rack.rackName,
-                  rackUnique: rack.rackUnique,
-                  rackSN: rack.rackSN,
-                  rackLat: rack.rackLat,
-                  rackLon: rack.rackLon,
-                  rackRow: rack.rackRow,
-                  rackStatus: rack.rackStatus,
-                  rackNotes: rack.rackNotes,
-                  createdBy: rack.createdBy,
-                  createdOn: strTgs.dateMod(rack.createdOn),
-                  modifiedBy: rack.modifiedBy,
-                  modifiedOn: strTgs.dateMod(rack.modifiedOn),
-                  powers: rack.powers.map((rp) => {
-                    return {
-                      rackPowId: rp.id,
-                      rackPowUnique: rp.rackPowUnique,
-                      rackPowMain: rp.rackPowMain,
-                      rackPowCircuit: rp.rackPowCircuit,
-                      rackPowStatus: rp.rackPowStatus,
-                      rackPowVolts: rp.rackPowVolts,
-                      rackPowPhase: rp.rackPowPhase,
-                      rackPowAmps: rp.rackPowAmps,
-                      rackPowReceptacle: rp.rackPowReceptacle,
-                      rackPowNotes: rp.rackPowNotes,
-                      rackPowCreatedBy: rp.rackPowCreatedBy,
-                      rackPowCreatedOn: rp.rackPowCreatedOn,
-                      createdBy: rp.createdBy,
-                      createdOn: strTgs.dateMod(rp.createdOn),
-                      modifiedby: rp.modifiedbBy,
-                      modifiedOn: strTgs.dateMod(rp.modifiedOn),
-                    };
-                  }),
-                };
-              } else {
-                context = {
-                  access: accConfig.accessCheck(req.user),
-                  user: req.user,
-                  requrl: req.url,
-                  titleNow: 'Copy ' + rack.rackUnique,
-                  optRackStatus: opt.optListArray,
-                  wasCopy: rack.rackUnique,
-                  rackParentDC: rack.rackParentDC,
-                  fullName: uber.fullName,
-                  abbreviation: uber.abbreviation,
-                  rackParentCage: rack.rackParentCage,
-                  foundingCompany: uber.foundingCompany,
-                  cageAbbreviation: uber.cageAbbreviation,
-                  cageNickname: uber.cageNickname,
-                  cageName: uber.cageName,
-                  rackDescription: rack.rackDescription,
-                  rackHeight: rack.rackHeight,
-                  rackWidth: rack.rackWidth,
-                  rackDepth: rack.rackDepth,
-                  rackMake: rack.rackMake,
-                  rackModel: rack.rackModel,
-                  rUs: rack.rUs,
-                  rackStatus: rack.rackStatus,
-                };
-              }
-
-              // logger.info(context);
-              if (editLoad > 2) {
-                // logger.info('rackedit');
-                res.render('location/rackedit', context);
-              } else {
-                res.render('location/rack', context);
-              }
-            }
-          });
-        });
-      });
-    }
-
 };
+
+// -----------------------------------------------------------------------
+// -------------------------Rack View ------------------------------------
+// ------------------------------------------------------------------------
+
+// app.get('/location/rack/:data', handlers.rack.dcRackView);
+// app.get('/location/rack/:data/copy', handlers.rack.dcRackCopy);
+module.exports.dcRackView = (req, res, next) => {
+  var rackUnique = req.params.data;
+  var uber;
+  var context;
+  Models.Rack.findOne({ rackUnique: rackUnique }, (err, rack) => {
+    if (err || !rack) return next(err);
+    Models.Optionsdb.findOne({ optListKey: 'optRackStatus' }, (err, opt) => {
+      if (err) return next(err);
+      Models.Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
+        if (err) return next(err);
+        uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
+        if (uber) {
+          context = {
+            access: accConfig.accessCheck(req.user),
+            requrl: req.url,
+            optRackStatus: opt.optListArray,
+            titleNow: rack.rackUnique,
+            menu1: uber.abbreviation,
+            menuLink1: `/location/datacenter/${uber.abbreviation}`,
+            menu2: 'Elevation',
+            menuLink2: `/elevation/${rack.rackUnique}`,
+            menu3: 'Details',
+            menuLink3: `/equipment-systems/${rack.rackUnique}`,
+            rackParentDC: rack.rackParentDC,
+            fullName: uber.fullName,
+            abbreviation: uber.abbreviation,
+            rackParentCage: rack.rackParentCage,
+            foundingCompany: uber.foundingCompany,
+            cageAbbreviation: uber.cageAbbreviation,
+            cageNickname: uber.cageNickname,
+            cageName: uber.cageName,
+            rackDescription: rack.rackDescription,
+            rackHeight: rack.rackHeight,
+            rackWidth: rack.rackWidth,
+            rackDepth: rack.rackDepth,
+            rackMake: rack.rackMake,
+            rackModel: rack.rackModel,
+            rUs: rack.rUs,
+            rackNickname: rack.rackNickname,
+            rackName: rack.rackName,
+            rackUnique: rack.rackUnique,
+            rackSN: rack.rackSN,
+            rackLat: rack.rackLat,
+            rackLon: rack.rackLon,
+            rackRow: rack.rackRow,
+            rackStatus: rack.rackStatus,
+            rackNotes: rack.rackNotes,
+            createdBy: rack.createdBy,
+            createdOn: strTgs.dateMod(rack.createdOn),
+            modifiedBy: rack.modifiedBy,
+            modifiedOn: strTgs.dateMod(rack.modifiedOn),
+            powers: rack.powers.map((rp) => {
+              return {
+                rackPowId: rp.id,
+                rackPowUnique: rp.rackPowUnique,
+                rackPowMain: rp.rackPowMain,
+                rackPowCircuit: rp.rackPowCircuit,
+                rackPowStatus: rp.rackPowStatus,
+                rackPowVolts: rp.rackPowVolts,
+                rackPowPhase: rp.rackPowPhase,
+                rackPowAmps: rp.rackPowAmps,
+                rackPowReceptacle: rp.rackPowReceptacle,
+                rackPowNotes: rp.rackPowNotes,
+                rackPowCreatedBy: rp.rackPowCreatedBy,
+                rackPowCreatedOn: rp.rackPowCreatedOn,
+                createdBy: rp.createdBy,
+                createdOn: strTgs.dateMod(rp.createdOn),
+                modifiedby: rp.modifiedbBy,
+                modifiedOn: strTgs.dateMod(rp.modifiedOn),
+              };
+            }),
+          };
+        } else {
+          context = {
+            access: accConfig.accessCheck(req.user),
+            requrl: req.url,
+            optRackStatus: opt.optListArray,
+            titleNow: rack.rackUnique,
+            menu2: 'Elevation',
+            menuLink2: `/elevation/${rack.rackUnique}`,
+            menu3: 'Details',
+            menuLink3: `/equipment-systems/${rack.rackUnique}`,
+            rackParentDC: rack.rackParentDC,
+            abbreviation: 'unknown',
+            rackParentCage: rack.rackParentCage,
+            rackDescription: rack.rackDescription,
+            rackHeight: rack.rackHeight,
+            rackWidth: rack.rackWidth,
+            rackDepth: rack.rackDepth,
+            rackMake: rack.rackMake,
+            rackModel: rack.rackModel,
+            rUs: rack.rUs,
+            rackNickname: rack.rackNickname,
+            rackName: rack.rackName,
+            rackUnique: rack.rackUnique,
+            rackSN: rack.rackSN,
+            rackLat: rack.rackLat,
+            rackLon: rack.rackLon,
+            rackRow: rack.rackRow,
+            rackStatus: rack.rackStatus,
+            rackNotes: rack.rackNotes,
+            createdBy: rack.createdBy,
+            createdOn: strTgs.dateMod(rack.createdOn),
+            modifiedBy: rack.modifiedBy,
+            modifiedOn: strTgs.dateMod(rack.modifiedOn),
+            powers: rack.powers.map((rp) => {
+              return {
+                rackPowId: rp.id,
+                rackPowUnique: rp.rackPowUnique,
+                rackPowMain: rp.rackPowMain,
+                rackPowCircuit: rp.rackPowCircuit,
+                rackPowStatus: rp.rackPowStatus,
+                rackPowVolts: rp.rackPowVolts,
+                rackPowPhase: rp.rackPowPhase,
+                rackPowAmps: rp.rackPowAmps,
+                rackPowReceptacle: rp.rackPowReceptacle,
+                rackPowNotes: rp.rackPowNotes,
+                rackPowCreatedBy: rp.rackPowCreatedBy,
+                rackPowCreatedOn: rp.rackPowCreatedOn,
+                createdBy: rp.createdBy,
+                createdOn: strTgs.dateMod(rp.createdOn),
+                modifiedby: rp.modifiedbBy,
+                modifiedOn: strTgs.dateMod(rp.modifiedOn),
+              };
+            }),
+          };
+        }
+        res.render('location/rack', context);
+      });
+    });
+  });
+};
+
+// -----------------------------------------------------------------------
+// -------------------------Rack Copy ------------------------------------
+// ------------------------------------------------------------------------
+
+// app.get('/location/rack/:data', handlers.rack.dcRackView);
+// app.get('/location/rack/:data/copy', handlers.rack.dcRackCopy);
+module.exports.dcRackCopy = (req, res, next) => {
+  var backURL = req.header('Referer') || '/';
+  var rackUnique = req.params.data;
+  var uber;
+  var context;
+  Models.Rack.findOne({ rackUnique: rackUnique }, (err, rack) => {
+    if (err || !rack) return next(err);
+    Models.Optionsdb.findOne({ optListKey: 'optRackStatus' }, (err, opt) => {
+      if (err) return next(err);
+      Models.Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
+        if (err) return next(err);
+        uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
+        if (!uber) {
+          req.session.flash = strTgs.errMsg(`Can't copy racks that are not in a Data Center`);
+          res.redirect(backURL);
+        } else {
+          context = {
+            access: accConfig.accessCheck(req.user),
+            requrl: req.url,
+            titleNow: `Copy ${rack.rackUnique}`,
+            optRackStatus: opt.optListArray,
+            wasCopy: rack.rackUnique,
+            rackParentDC: rack.rackParentDC,
+            fullName: uber.fullName,
+            abbreviation: uber.abbreviation,
+            rackParentCage: rack.rackParentCage,
+            foundingCompany: uber.foundingCompany,
+            cageAbbreviation: uber.cageAbbreviation,
+            cageNickname: uber.cageNickname,
+            cageName: uber.cageName,
+            rackDescription: rack.rackDescription,
+            rackHeight: rack.rackHeight,
+            rackWidth: rack.rackWidth,
+            rackDepth: rack.rackDepth,
+            rackMake: rack.rackMake,
+            rackModel: rack.rackModel,
+            rUs: rack.rUs,
+            rackStatus: rack.rackStatus,
+          };
+          res.render('location/rackedit', context);
+        }
+      });
+    });
+  });
+};
+
+// -----------------------------------------------------------------------
+// -------------------------Rack Edit ------------------------------------
+// -----------------------------------------------------------------------
+
+// app.get('/location/rack/:data/edit', handlers.rack.dcRackPages);
+module.exports.dcRackEdit = (req, res, next) => {
+  var rackUnique = req.params.data;
+  var uber;
+  var context;
+  Models.Rack.findOne({ rackUnique: rackUnique }, (err, rack) => {
+    if (err || !rack) return next(err);
+    Models.Optionsdb.findOne({ optListKey: 'optRackStatus' }, (err, opt) => {
+      if (err) return next(err);
+      Models.Datacenter.findById(rack.rackParentDC, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
+        if (err) return next(err);
+        uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
+        if (uber) {
+          context = {
+            access: accConfig.accessCheck(req.user),
+            requrl: req.url,
+            optRackStatus: opt.optListArray,
+            titleNow: rack.rackUnique,
+            menu1: uber.abbreviation,
+            menuLink1: `/location/datacenter/${uber.abbreviation}`,
+            menu2: 'Elevation',
+            menuLink2: `/elevation/${rack.rackUnique}`,
+            menu3: 'Details',
+            menuLink3: `/equipment-systems/${rack.rackUnique}`,
+            rackParentDC: rack.rackParentDC,
+            fullName: uber.fullName,
+            abbreviation: uber.abbreviation,
+            rackParentCage: rack.rackParentCage,
+            foundingCompany: uber.foundingCompany,
+            cageAbbreviation: uber.cageAbbreviation,
+            cageNickname: uber.cageNickname,
+            cageName: uber.cageName,
+            rackDescription: rack.rackDescription,
+            rackHeight: rack.rackHeight,
+            rackWidth: rack.rackWidth,
+            rackDepth: rack.rackDepth,
+            rackMake: rack.rackMake,
+            rackModel: rack.rackModel,
+            rUs: rack.rUs,
+            rackNickname: rack.rackNickname,
+            rackName: rack.rackName,
+            rackUnique: rack.rackUnique,
+            rackSN: rack.rackSN,
+            rackLat: rack.rackLat,
+            rackLon: rack.rackLon,
+            rackRow: rack.rackRow,
+            rackStatus: rack.rackStatus,
+            rackNotes: rack.rackNotes,
+            createdBy: rack.createdBy,
+            createdOn: strTgs.dateMod(rack.createdOn),
+            modifiedBy: rack.modifiedBy,
+            modifiedOn: strTgs.dateMod(rack.modifiedOn),
+            powers: rack.powers.map((rp) => {
+              return {
+                rackPowId: rp.id,
+                rackPowUnique: rp.rackPowUnique,
+                rackPowMain: rp.rackPowMain,
+                rackPowCircuit: rp.rackPowCircuit,
+                rackPowStatus: rp.rackPowStatus,
+                rackPowVolts: rp.rackPowVolts,
+                rackPowPhase: rp.rackPowPhase,
+                rackPowAmps: rp.rackPowAmps,
+                rackPowReceptacle: rp.rackPowReceptacle,
+                rackPowNotes: rp.rackPowNotes,
+                rackPowCreatedBy: rp.rackPowCreatedBy,
+                rackPowCreatedOn: rp.rackPowCreatedOn,
+                createdBy: rp.createdBy,
+                createdOn: strTgs.dateMod(rp.createdOn),
+                modifiedby: rp.modifiedbBy,
+                modifiedOn: strTgs.dateMod(rp.modifiedOn),
+              };
+            }),
+          };
+        } else {
+          context = {
+            access: accConfig.accessCheck(req.user),
+            requrl: req.url,
+            optRackStatus: opt.optListArray,
+            titleNow: rack.rackUnique,
+            menu2: 'Elevation',
+            menuLink2: `/elevation/${rack.rackUnique}`,
+            menu3: 'Details',
+            menuLink3: `/equipment-systems/${rack.rackUnique}`,
+            rackParentDC: rack.rackParentDC,
+            abbreviation: 'unknown',
+            rackParentCage: rack.rackParentCage,
+            rackDescription: rack.rackDescription,
+            rackHeight: rack.rackHeight,
+            rackWidth: rack.rackWidth,
+            rackDepth: rack.rackDepth,
+            rackMake: rack.rackMake,
+            rackModel: rack.rackModel,
+            rUs: rack.rUs,
+            rackNickname: rack.rackNickname,
+            rackName: rack.rackName,
+            rackUnique: rack.rackUnique,
+            rackSN: rack.rackSN,
+            rackLat: rack.rackLat,
+            rackLon: rack.rackLon,
+            rackRow: rack.rackRow,
+            rackStatus: rack.rackStatus,
+            rackNotes: rack.rackNotes,
+            createdBy: rack.createdBy,
+            createdOn: strTgs.dateMod(rack.createdOn),
+            modifiedBy: rack.modifiedBy,
+            modifiedOn: strTgs.dateMod(rack.modifiedOn),
+            powers: rack.powers.map((rp) => {
+              return {
+                rackPowId: rp.id,
+                rackPowUnique: rp.rackPowUnique,
+                rackPowMain: rp.rackPowMain,
+                rackPowCircuit: rp.rackPowCircuit,
+                rackPowStatus: rp.rackPowStatus,
+                rackPowVolts: rp.rackPowVolts,
+                rackPowPhase: rp.rackPowPhase,
+                rackPowAmps: rp.rackPowAmps,
+                rackPowReceptacle: rp.rackPowReceptacle,
+                rackPowNotes: rp.rackPowNotes,
+                rackPowCreatedBy: rp.rackPowCreatedBy,
+                rackPowCreatedOn: rp.rackPowCreatedOn,
+                createdBy: rp.createdBy,
+                createdOn: strTgs.dateMod(rp.createdOn),
+                modifiedby: rp.modifiedbBy,
+                modifiedOn: strTgs.dateMod(rp.modifiedOn),
+              };
+            }),
+          };
+        }
+        res.render('location/rackedit', context);
+      });
+    });
+  });
+};
+
+// --------------------------------------------------------------------
+// ----------------------- Rack Power List  ---------------------------
+// --------------------------------------------------------------------
+// For future, basically report all power in a DC on the DC home page
+// app.get('/location/rackpower', handlers.rack.dcRackPowAll);
+module.exports.dcRackPowAll = (req, res, next) => {
+  var backURL = req.header('Referer') || '/';
+  req.session.flash = strTgs.errMsg(`Sorry, this feature not yet implemented`);
+  res.redirect(backURL);
+};
+
+// --------------------------------------------------------------------
+// ----------------------- New Rack Power   --------------------
+// --------------------------------------------------------------------
+// Note: there is no Rack Power View
+// because all of the information is in the parent Rack
+
+// app.get('/location/rackpower/:data/new', handlers.rack.dcRackPowNew);
+module.exports.dcRackPowNew = (req, res, next) => {
+  var rackUnique = req.params.data;
+  var uber;
+  var context;
+  Models.Rack.findOne({ rackUnique: rackUnique }, (err, rk) => {
+    if (err) return next(err);
+    Models.Optionsdb.findOne({ optListKey: 'optEquipStatus' }, (err, opt) => {
+      if (err) return next(err);
+      // logger.info(opt);
+      Models.Datacenter.find({}, '_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
+        if (err) return next(err);
+        uber = strTgs.findCGParent(rk.rackParentCage, datacenter);
+        context = {
+          access: accConfig.accessCheck(req.user),
+          requrl: req.url,
+          menu1: uber.abbreviation,
+          menuLink1: `/location/datacenter/${uber.abbreviation}`,
+          menu2: 'Elevation',
+          menuLink2: `/elevation/${rk.rackUnique}`,
+          menu3: 'Details',
+          menuLink3: `/equipment-systems/${rk.rackUnique}`,
+          titleNow: rk.rackUnique,
+          optEquipStatus: opt.optListArray,
+          rackParentDC: rk.rackParentDC,
+          fullName: uber.fullName,
+          abbreviation: uber.abbreviation,
+          foundingCompany: uber.foundingCompany,
+          powerNames: uber.powerNames,
+          cageAbbreviation: uber.cageAbbreviation,
+          cageNickname: uber.cageNickname,
+          cageName: uber.cageName,
+          rackId: rk._id,
+          rackNickname: rk.rackNickname,
+          rackName: rk.rackName,
+          rackUnique: rk.rackUnique,
+          rackParentCage: rk.rackParentCage,
+        };
+        res.render('location/rackpoweredit', context);
+      });
+    });
+  });
+};
+
+// app.get('/location/rackpower/:data/copy', handlers.rack.dcRackPowCopy);
+module.exports.dcRackPowCopy = (req, res, next) => {
+  var rackUnique = req.params.data;
+  var powerUnique = req.query.powerUnique;
+  var uber;
+  var context;
+  var thisSubDoc;
+  Models.Rack.findOne({ rackUnique: rackUnique }, (err, rk) => {
+    if (err) return next(err);
+    Models.Optionsdb.findOne({ optListKey: 'optEquipStatus' }, (err, opt) => {
+      if (err) return next(err);
+      // logger.info(opt);
+      Models.Datacenter.find({}, '_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
+        if (err) return next(err);
+        uber = strTgs.findCGParent(rk.rackParentCage, datacenter);
+        thisSubDoc = rk.powers.id(powerUnique);
+        if (err || !rk) return next(err);
+        // logger.info(rk);
+        context = {
+          access: accConfig.accessCheck(req.user),
+          requrl: req.url,
+          titleNow: `Copy ${rk.rackUnique}`,
+          optEquipStatus: opt.optListArray,
+          rackParentDC: rk.rackParentDC,
+          fullName: uber.fullName,
+          abbreviation: uber.abbreviation,
+          foundingCompany: uber.foundingCompany,
+          powerNames: uber.powerNames,
+          cageAbbreviation: uber.cageAbbreviation,
+          cageNickname: uber.cageNickname,
+          cageName: uber.cageName,
+          rackId: rk._id,
+          rackNickname: rk.rackNickname,
+          rackName: rk.rackName,
+          rackUnique: rk.rackUnique,
+          rackParentCage: rk.rackParentCage,
+          rackPowStatus: thisSubDoc.rackPowStatus,
+          rackPowVolts: thisSubDoc.rackPowVolts,
+          rackPowPhase: thisSubDoc.rackPowPhase,
+          rackPowAmps: thisSubDoc.rackPowAmps,
+          rackPowReceptacle: thisSubDoc.rackPowReceptacle,
+        };
+        // logger.info(context);
+        res.render('location/rackpoweredit', context);
+      });
+    });
+  });
+};
+
+// app.get('/location/rackpower/:data/edit', handlers.rack.dcRackPowEdit);
+module.exports.dcRackPowEdit = (req, res, next) => {
+  var rackUnique = req.params.data;
+  var powerUnique = req.query.powerUnique;
+  var uber;
+  var context;
+  var thisSubDoc;
+  Models.Rack.findOne({ rackUnique: rackUnique }, (err, rk) => {
+    if (err) return next(err);
+    Models.Optionsdb.findOne({ optListKey: 'optEquipStatus' }, (err, opt) => {
+      if (err) return next(err);
+      // logger.info(opt);
+      Models.Datacenter.find({}, '_id fullName abbreviation foundingCompany powerNames cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
+        if (err) return next(err);
+        uber = strTgs.findCGParent(rk.rackParentCage, datacenter);
+        thisSubDoc = rk.powers.id(powerUnique);
+        context = {
+          access: accConfig.accessCheck(req.user),
+          requrl: req.url,
+          titleNow: thisSubDoc.rackPowUnique,
+          optEquipStatus: opt.optListArray,
+          rackParentDC: rk.rackParentDC,
+          fullName: uber.fullName,
+          abbreviation: uber.abbreviation,
+          foundingCompany: uber.foundingCompany,
+          powerNames: uber.powerNames,
+          cageAbbreviation: uber.cageAbbreviation,
+          cageNickname: uber.cageNickname,
+          cageName: uber.cageName,
+          rackId: rk._id,
+          rackNickname: rk.rackNickname,
+          rackName: rk.rackName,
+          rackUnique: rk.rackUnique,
+          rackParentCage: rk.rackParentCage,
+          rackPowId: thisSubDoc.id,
+          rackPowMain: thisSubDoc.rackPowMain,
+          rackPowCircuit: thisSubDoc.rackPowCircuit,
+          rackPowUnique: thisSubDoc.rackPowUnique,
+          rackPowStatus: thisSubDoc.rackPowStatus,
+          rackPowVolts: thisSubDoc.rackPowVolts,
+          rackPowPhase: thisSubDoc.rackPowPhase,
+          rackPowAmps: thisSubDoc.rackPowAmps,
+          rackPowReceptacle: thisSubDoc.rackPowReceptacle,
+        };
+        // logger.info(context);
+        res.render('location/rackpoweredit', context);
+      });
+    });
+  });
+};
+
 /* ---------------------------------------------------------------------
------------------------   New Rack working   ---------------------------
+-----------------------   Rack  Post   ---------------------------------
 ------------------------------------------------------------------------
 */
+
 exports.dcRackPost = (req, res) => {
   if (accConfig.accessCheck(req.user).edit !== 1) {
     req.session.flash = strTgs.notAuth;
@@ -461,7 +653,7 @@ exports.dcRackPost = (req, res) => {
     // logger.info('dcRackPost abbreviation>'+res.abbreviation);
     // logger.info('rUs >'+req.body.rUs);
     // logger.info('rUs expanded >'+ strTgs.compUs(req.body.rUs));
-    // rackUniqe is created when making a new rack so it does not exist on new
+    // rackUnique is created when making a new rack so it does not exist on new
     // or copied racks
     res.lastRack = req.body.rackNickname;
     if (!req.body.rackUnique) {

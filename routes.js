@@ -69,7 +69,12 @@ module.exports = (app) => {
   app.get('/location/rack/new', handlers.rack.dcRackNew);
   app.get('/location/rack/:data', handlers.rack.dcRackView);
   app.get('/location/rack/:data/copy', handlers.rack.dcRackCopy);
-  app.get('/location/rack/:data/edit', handlers.rack.dcRackPages);
+  app.get('/location/rack/:data/edit', handlers.rack.dcRackEdit);
+  app.get('/location/rackpower', handlers.rack.dcRackPowAll);
+  app.get('/location/rackpower/:data/new', handlers.rack.dcRackPowNew);
+  app.get('/location/rackpower/:data/copy', handlers.rack.dcRackPowCopy);
+  app.get('/location/rackpower/:data/edit', handlers.rack.dcRackPowEdit);
+
   app.post('/location/rack/:data', isLoggedIn, handlers.rack.dcRackPost);
   app.post('/location/rackdelete/:data', isLoggedIn, handlers.rack.rackDelete);
   app.post('/location/rackpower/:data', isLoggedIn, handlers.rack.dcRackPowPost);

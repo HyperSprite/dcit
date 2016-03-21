@@ -12,7 +12,7 @@
                             {{#if rackNickname}}<li>Rack Nickname: {{rackNickname}}</li>{{/if}}
                             {{#if rackName}}<li>Facility Name: {{rackName}}</li>{{/if}}
                             {{#if rackStatus}}<li>Status: {{rackStatus}}<br>{{/if}}
-                            {{#if rUs}}<li>RUs: {{rUs}}</li>{{/if}}                
+                            {{#if rUs}}<li>RUs: {{rUs}}</li>{{/if}}
                             {{#if rackDescription}}<li>Description: {{rackDescription}}</li>{{/if}}
                         </ul>
                     </blockquote>
@@ -27,7 +27,7 @@
                             {{#if createdOn}}<li>Created On: {{createdOn}}</li>{{/if}}
                             {{#if modifiedBy}}<li>Modified By: {{modifiedBy}}</li>{{/if}}
                             {{#if modifiedOn}}<li>Modified On: {{modifiedOn}}</li>{{/if}}
-                        </ul>                
+                        </ul>
                     </blockquote>
                 </div>
                 <div class="col-md-4">
@@ -43,15 +43,15 @@
                             {{#if rackRow}}<li>Row: {{rackRow}}</li>{{/if}}
                             {{#if rackHeight}}<li>Height in CM: {{rackHeight}}</li>{{/if}}
                             {{#if rackWidth}}<li>Width in CM: {{rackWidth}}</li>{{/if}}
-                            {{#if rackDepth}}<li>Depth in CM: {{rackDepth}}</li>{{/if}}                
+                            {{#if rackDepth}}<li>Depth in CM: {{rackDepth}}</li>{{/if}}
                         </ul>
                     </blockquote>
                 </div>
                 <div class="col-md-2">
-                    {{#if access.edit}}  
-                        <a href="/location/rack/edit-{{rackUnique}}" >
+                    {{#if access.edit}}
+                        <a href="/location/rack/{{rackUnique}}/edit" >
                             <span class="glyphicon glyphicon-edit glyphicon-danger" accesskey="x"  title="Press Alt x to Edit {{rackUnique}}" ></span></a>
-                        <a href="/location/rack/edit~copy-{{rackUnique}}">
+                        <a href="/location/rack/{{rackUnique}}/copy">
                             <span class="glyphicon glyphicon-plus-sign glyphicon-danger" accesskey="c" title="Press Alt c to Copy {{rackUnique}}"></span></a>
                     {{/if}}
                 </div>
