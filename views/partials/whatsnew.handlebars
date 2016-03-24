@@ -2,16 +2,27 @@
 
 
 
+<h4 id="v0210">v0.2.10</h4>
+
+<ul>
+<li>Reworked System Port Upload. It now streams the CSV into an array of System objects and then pushes an array of System Port Objects into that. That is then uploaded into the database. This gets around the race condition it was having when multiple ports needed to be written to the same document</li>
+<li>Added router middleware for access checks to cut down on duplicate code</li>
+<li>General refactoring of Rack Route Handlers</li>
+<li>Cage edit pages now using the wider format and fixed the display bug for “Notes”</li>
+</ul>
+
 <h4 id="v0209">v0.2.09</h4>
 
 <ul>
 <li>General refactoring of Systems.js Route Handlers, rewired routes to follow the same model as Equipment (see v0.2.07 for that)  </li>
 </ul>
 
+
+
 <h4 id="v0208">v0.2.08</h4>
 
 <ul>
-<li>Added History back end. History is now being collected. Still need to build a view system for it (part of github issue #19). </li>
+<li>Added History back end. History is now being collected. Still need to build a view system for it (part of github issue #19)</li>
 <li>Fixed IPMI firmware not saving (github issue #20)</li>
 <li>Updated multiTrim for submission sanatizing</li>
 <li>More compact form entry pages</li>
@@ -21,15 +32,13 @@
 
 <ul>
 <li>Added Equipment Parent (github issue #9). This allows for child Equipment, such as blades in a chassis or nodes an full rack Engineered System, to move with the Parent. Update the Parent location and all children will be updated. RUs will remain unchanged.</li>
-<li>Fixed Received Date bug (github issue #17).</li>
+<li>Fixed Received Date bug (github issue #17)</li>
 <li>General refactoring of Equipment.js Route Handlers, including separating View, New, Edit and Copy modules. These now work with the following routes: <br>
 /equipment/equipSN to View <br>
 /equipment/new for new <br>
 /equipment/equipSN/edit to Edit <br>
 /equipment/equipSN/copy to Copy</li>
 </ul>
-
-
 
 <h4 id="v0204">v0.2.04</h4>
 
