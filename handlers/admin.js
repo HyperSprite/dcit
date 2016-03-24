@@ -11,6 +11,7 @@ const accConfig = require('../config/access');
 const logConfig = require('../config/log');
 const Fileinfo = require('../models/fileinfo.js');
 const addContext = require('contextualizer');
+const dates = require('../lib/dates.js');
 
 // Models
 const Models = require('../models');
@@ -20,10 +21,6 @@ const Models = require('../models');
 //
 module.exports.home = (req, res) => {
   var context = {};
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   context = {
     lastPage: '/admin',
     access: accConfig.accessCheck(req.user),
@@ -37,10 +34,6 @@ module.exports.home = (req, res) => {
 module.exports.options = (req, res) => {
   var context = {};
   var msg = 'Something went sideways, sorry';
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   // logger.info('called admin.options');
   Models.Optionsdb.find((err, opts) => {
     if (err) {
@@ -83,10 +76,6 @@ module.exports.options = (req, res) => {
 //
 module.exports.dbinsert = (req, res) => {
   var context = {};
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   context = {
     lastPage: '/admin/dbinsert',
     access: accConfig.accessCheck(req.user),
@@ -100,10 +89,6 @@ module.exports.dbinsert = (req, res) => {
 module.exports.useradmin = (req, res) => {
   var context = {};
   var msg = 'Something went sideways, sorry';
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   Models.User.find({}).sort({ access: 'desc' }).exec((err, usr) => {
     if (err) {
       msg = 'Something went wrong - err:Options ad109';
@@ -137,10 +122,6 @@ module.exports.useradmin = (req, res) => {
 module.exports.logs = (req, res) => {
   var context = {};
   var msg = 'Something went sideways, sorry';
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   fs.readdir(logConfig.logDirectory, (err, files) => {
     if (err) {
       msg = 'Something went wrong - err:Options ad109';
@@ -167,10 +148,6 @@ module.exports.logviewer = (req, res) => {
   var filename;
   var context = {};
   var msg = 'Something went sideways, sorry';
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   filename = req.params.data;
   // logger.info('|filename    >'+filename);
   fs.readFile(logConfig.logDirectory + filename, (err, datas) => {
@@ -194,7 +171,7 @@ module.exports.logviewer = (req, res) => {
         };
       }),
     };
-    res.render ('admin/logviewer', context);
+    res.render('admin/logviewer', context);
   });
 };
 
@@ -205,10 +182,6 @@ module.exports.logviewer = (req, res) => {
 module.exports.filemanager = (req, res) => {
   var context = {};
   var msg = 'Something went sideways, sorry';
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   Models.Optionsdb.find({}, 'optListKey optListArray', (err, opt) => {
     if (err) {
       msg = 'Something went wrong - err:Options ad109';
@@ -261,10 +234,6 @@ module.exports.filemanager = (req, res) => {
 module.exports.joins = (req, res) => {
   var context = {};
   var msg = 'Something went sideways, sorry';
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   context = {
     lastPage: '/admin/joins',
     access: accConfig.accessCheck(req.user),
@@ -278,10 +247,6 @@ module.exports.joins = (req, res) => {
 module.exports.models = (req, res) => {
   var context = {};
   var msg = 'Something went sideways, sorry';
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
   context = {
     lastPage: '/admin/models',
     access: accConfig.accessCheck(req.user),
@@ -292,14 +257,6 @@ module.exports.models = (req, res) => {
 
 module.exports.userEdit = (req, res) => {
   var context;
-  if (accConfig.accessCheck(req.user).root !== 1) {
-  req.session.flash = {
-    type: 'danger',
-    intro: 'Ooops!',
-    message: 'Not Authorized!',
-  };
-    return res.redirect(303, '/');
-  }
   Models.User.findOne({ _id: req.body.id }, (err, ur) => {
     if (err) {
       logger.warn(err);
@@ -326,20 +283,12 @@ var VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z
 
 module.exports.userEditPost = (req, res) => {
   var data;
-  if (accConfig.accessCheck(req.user).root !== 1) {
-  req.session.flash = {
-    type: 'danger',
-    intro: 'Ooops!',
-    message: 'Not Authorized!',
-  };
-    return res.redirect(303, '/');
-  }
   // logger.info('userEditPost >'+ req.body.id);
   data = req.body;
   Models.User.findOne({ _id: req.body.id }, (err, ur) => {
     if (err) {
       logger.warn(err);
-      res.redirect ('admin/useradmin');
+      res.redirect('admin/useradmin');
     } else if (!data.locEmail.match(VALID_EMAIL_REGEX)) {
       req.session.flash = {
         type: 'danger',
@@ -377,14 +326,6 @@ module.exports.optionsEdit = (req, res) => {
   var dcInfo;
   var context;
   var msg;
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
-    return res.redirect(303, '/');
-  }
   dcInfo = req.params.data;
   logger.info(`|dcInfo  > ${dcInfo}`);
   if (dcInfo === 'new') {
@@ -422,14 +363,6 @@ module.exports.optionsEdit = (req, res) => {
 module.exports.optionsEditPost = (req, res, err) => {
   var thisDoc;
   // logger.info('optionsEditPost >'+ req.body.id);
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
-    return res.redirect(303, '/');
-  }
   if (!req.body.id) {
     Models.Optionsdb.create({
       optListName: strTgs.csvCleanup(req.body.optListName),
@@ -439,7 +372,7 @@ module.exports.optionsEditPost = (req, res, err) => {
       createdBy:req.user,
     }, (err) => {
       if (err) {
-        console.error(err.stack);
+        logger.error(err.stack);
         req.session.flash = {
           type: 'danger',
           intro: 'Ooops!',
@@ -517,7 +450,7 @@ module.exports.uploadPost = (req, res) => {
     }
     Fileinfo.create({
       fileName: file.name,
-      filePath: './'+file.path,
+      filePath: './' + file.path,
       fileHRName: fileHRName,
       fileDescription: strTgs.csvCleanup(fields.fileDescription),
       fileType: fields.fileType,
@@ -549,14 +482,6 @@ module.exports.uploadPost = (req, res) => {
 module.exports.uploadDeletePost = (req, res) => {
   var bdy;
   var msg;
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
-  return res.redirect(303, '/');
-  }
   if (req.body.id) {
     bdy = req.body;
     // logger.info('delete got this far');
@@ -577,27 +502,26 @@ module.exports.uploadDeletePost = (req, res) => {
             message: `Something went wrong, ${bdy.fileHRName} was not deleted.`,
           };
           return res.redirect(303, '/admin/filemanager');
-        } else {
+        }
         // logger.info('path/file ./'+bdy.filePath);
-          fs.unlink(bdy.filePath, (err) => {
-            if (err) {
-            // logger.info(err);
-              req.session.flash = {
-                type: 'danger',
-                intro: 'Ooops!',
-                message: `Something went wrong, ${bdy.fileHRName} was not deleted.`,
-              };
-              return res.redirect(303, '/admin/filemanager');
-            }
-            logger.warn(`Uploaded File Deleted, ${bdy.fileHRName}`);
+        fs.unlink(bdy.filePath, (err) => {
+          if (err) {
+          // logger.info(err);
             req.session.flash = {
-              type: 'success',
-              intro: 'Done!',
-              message: `File ${bdy.fileHRName} has been deleted. Good luck with that one`,
+              type: 'danger',
+              intro: 'Ooops!',
+              message: `Something went wrong, ${bdy.fileHRName} was not deleted.`,
             };
             return res.redirect(303, '/admin/filemanager');
-          });
-        }
+          }
+          logger.warn(`Uploaded File Deleted, ${bdy.fileHRName}`);
+          req.session.flash = {
+            type: 'success',
+            intro: 'Done!',
+            message: `File ${bdy.fileHRName} has been deleted. Good luck with that one`,
+          };
+          return res.redirect(303, '/admin/filemanager');
+        });
       });
     });
   }
@@ -607,14 +531,6 @@ module.exports.uploadDeletePost = (req, res) => {
 //  ////////////////////////////////////////
 module.exports.logdelete = (req, res) => {
   var fileName;
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Ooops!',
-      message: 'Not Authorized!',
-    };
-    return res.redirect(303, '/');
-  }
   if (req.body.name) {
     fileName = logConfig.logDirectory + req.body.name;
     fs.unlink(fileName, (err) => {
@@ -626,19 +542,17 @@ module.exports.logdelete = (req, res) => {
           message: `Something went wrong, ${fileName} was not deleted.`,
         };
         return res.redirect(303, '/admin/logs');
-      } else {
-        logger.info(`Log File ${fileName} deleted by ${req.user.local.email}`);
-        req.session.flash = {
-          type: 'success',
-          intro: 'Done!',
-          message: `File ${fileName} has been deleted. Good luck with that one`,
-        };
-        return res.redirect(303, '/admin/logs');
       }
+      logger.info(`Log File ${fileName} deleted by ${req.user.local.email}`);
+      req.session.flash = {
+        type: 'success',
+        intro: 'Done!',
+        message: `File ${fileName} has been deleted. Good luck with that one`,
+      };
+      return res.redirect(303, '/admin/logs');
     });
   }
 };
-
 
 //
 //  CSV to DB
@@ -696,18 +610,33 @@ module.exports.csvToDBPost = (req, res) => {
         });
       break;
     case 'Systemdb.systemPorts':
+      var inputObj = [];
+      var inputData;
+      var i = 1;
       systemPortsStream = fs.createReadStream(req.body.file);
       csv
         .fromStream(systemPortsStream, { headers: true })
         .on('data', (data) => {
-          if (!strTgs.clTrim(data.systemName)) {
-          // logger.info('systemPortsStream Error on index '+data.index+' systemName not found');
+          i++;
+          if (data.systemName === '') {
+            logger.warn(`systemPortsStream Error on row ${i}, index: ${data.index} or not found`);
           } else {
-            systemdbCrud.systemdbPortsCreate(data, req);
+            inputData = data;
+            if (inputObj.findIndex(sN => sN.systemName === data.systemName) === -1) {
+              inputObj.push({
+                systemName: data.systemName,
+                systemPorts: [inputData],
+              });
+            } else {
+              var indx = inputObj.findIndex(sN => sN.systemName === data.systemName);
+              inputObj[indx].systemPorts.push(inputData);
+            }
           }
+          // logger.warn(`index : ${i}`);
+          // logger.warn(inputObj);
         })
         .on('end', () => {
-        // logger.info('done');
+          systemdbCrud.systemdbPortsCreate(inputObj, req);
         });
       break;
     default:
@@ -725,18 +654,7 @@ module.exports.csvToDBPost = (req, res) => {
 ------------------------------------------------------------------------
 */
 module.exports.userDelete = (req, res) => {
-  var usrDelete;
   var msg;
-  if (accConfig.accessCheck(req.user).root !== 1) {
-  req.session.flash = {
-    type: 'danger',
-    intro: 'Ooops!',
-    message: 'Not Authorized!',
-  };
-    return res.redirect(303, '/');
-  }
-  console.dir(req.body);
-  usrDelete = req.body.email;
   if (req.body.id) {
   // logger.info('delete got this far id >'+ req.body.id);
     Models.User.findById(req.body.id, (err, userToDelete) => {
@@ -756,15 +674,14 @@ module.exports.userDelete = (req, res) => {
             message: `Something went wrong, ${userToDelete.local.email} was not deleted.`,
           };
           return res.redirect(303, '/admin/useradmin');
-        } else {
-          logger.info(`USER DELETED : ${userToDelete.local.email} BY ${req.user.local.email}`);
-          req.session.flash = {
-            type: 'success',
-            intro: 'Done!',
-            message: `User ${userToDelete.local.email} has been deleted.`,
-          };
-          return res.redirect(303, '/admin/useradmin');
         }
+        logger.info(`USER DELETED : ${userToDelete.local.email} BY ${req.user.local.email}`);
+        req.session.flash = {
+          type: 'success',
+          intro: 'Done!',
+          message: `User ${userToDelete.local.email} has been deleted.`,
+        };
+        return res.redirect(303, '/admin/useradmin');
       });
     });
   }
@@ -772,70 +689,30 @@ module.exports.userDelete = (req, res) => {
 
 // These drop the whole DB, not just one
 module.exports.dropDatacenterGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   dcit.dropDatacenter(Models.Datacenter);
   logger.warn(`dropDatacenter by, ${req.user.local.email}`);
   return res.redirect(303, '/location/datacenter/list');
 };
 
 module.exports.dropRackGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   dcit.dropRack(Models.Rack);
   logger.warn(`dropRack by, ${req.user.local.email}`);
   return res.redirect(303, '/location/datacenter/list');
 };
 
 module.exports.dropOptionsdbGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   dcit.dropOptionsdb(Models.Optionsdb);
   logger.warn(`dropOptionsdb by,${req.user.local.email}`);
   return res.redirect(303, '/admin/options');
 };
 
 module.exports.dropEquipmentGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   dcit.dropEquipment(Models.Equipment);
   logger.warn(`dropEquipment by, ${req.user.local.email}`);
   return res.redirect(303, '/admin/options');
 };
 
 module.exports.dropSystemGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   dcit.dropSystem(Models.Systemdb);
   logger.warn(`dropSystem by,${req.user.local.email}`);
   return res.redirect(303, '/admin/options');
@@ -843,55 +720,23 @@ module.exports.dropSystemGet = (req, res) => {
 
 
 module.exports.seedDatacetnerGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   seedDataLoad.seedDatacenter(Models.Datacenter);
   logger.warn(`seedDatacetner by ${req.user.local.email}`);
   return res.redirect(303, '/location/datacenter/list');
 };
 
 module.exports.seedOptionsdbGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   seedDataLoad.seedOptionsDataBase(Models.Optionsdb);
   logger.warn(`seedOptionsdb by, ${req.user.local.email}`);
   return res.redirect(303, '/admin/options');
 };
 
 module.exports.seedEquipmentGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   seedDataLoad.seedEquipmentDataBase(Models.Equipment);
   logger.warn(`seedEquipment by, ${req.user.local.email}`);
   return res.redirect(303, '/admin/options');
 };
 module.exports.seedSystemGet = (req, res) => {
-  if (accConfig.accessCheck(req.user).root !== 1) {
-    req.session.flash = {
-      type: 'danger',
-      intro: 'Not Authorized!',
-      message: 'You are not authorized for this action.',
-    };
-    return res.redirect(303, '/home');
-  }
   seedDataLoad.seedSystemDataBase(Models.Systemdb);
   logger.warn(`seedSystem by,${req.user.local.email}`);
   return res.redirect(303, '/admin/options');

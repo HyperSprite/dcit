@@ -1,9 +1,6 @@
 <div>
 `{{#if access.edit}}
-    <form id="powerAddForm" role="form" action="/location/rack/circuit~{{rackUnique}}>new" method="GET"></form>
-        <a href="#" onclick="document.getElementById('powerAddForm').submit();return false;">
-                    <button type="button" class="btn btn-danger btn-sm">
-                    <span class="glyphicon glyphicon-edit"></span> Power</button></a>
+  <a href="/location/rackpower/{{rackUnique}}/new"><button class="btn btn-danger btn-sm"> Power</button></a>
         {{else}}<h4>Power</h4>{{/if}}
 
   <table {{> bootstrap-table}} >
@@ -23,13 +20,15 @@
     <tbody>
     {{#each powers}}
       <tr>
+      {{#if ../access.edit}}
         <td>
-          <a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}" >
+          <a href="/location/rackpower/{{../../rackUnique}}/edit?powerUnique={{rackPowId}}" >
           <span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
-          <a href="/location/rack/circuitcopy~{{../rackUnique}}>{{rackPowId}}">
+          <a href="/location/rackpower/{{../../rackUnique}}/copy?powerUnique={{rackPowId}}">
           <span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
         </td>
-        <td><a href="/location/rack/circuit~{{../rackUnique}}>{{rackPowId}}"  target="_blank">{{rackPowUnique}}</a></td>
+        {{/if}}
+        <td>{{rackPowUnique}}</td>
         <td>{{rackPowStatus}}</td>
         <td>{{rackPowVolts}}</td>
         <td>{{rackPowPhase}}</td>

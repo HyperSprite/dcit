@@ -19,8 +19,8 @@
             {{#each racks}}
                 <tr>
                     <td>{{#if ../access.edit}}
-                    <a href="/location/rack/edit-{{rackUnique}}" target="_blank"><span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
-                    <a href="/location/rack/edit~copy-{{rackUnique}}" target="_blank"><span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
+                    <a href="/location/rack/{{rackUnique}}/edit" target="_blank"><span class="glyphicon glyphicon-edit glyphicon-danger"></span></a>
+                    <a href="/location/rack/{{rackUnique}}/copy" target="_blank"><span class="glyphicon glyphicon-plus-sign glyphicon-danger"></span></a>
                     {{/if}} {{@index}}</td>
                     <td><a href="/elevation/{{rackUnique}}" target="_blank" title="View Rack Elevation"><span class="glyphicon glyphicon-align-justify glyphicon-danger"></span></a> <a href="/equipment-systems/{{rackUnique}}" target="_blank" title="View Rack Details"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span></a></td>
                     <td>{{#if abbreviation}}<a href="/location/datacenter/{{abbreviation}}" target="_blank">{{rackUnique}}</a>{{else}}{{rackUnique}}{{/if}}</td>

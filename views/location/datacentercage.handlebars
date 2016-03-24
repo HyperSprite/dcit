@@ -3,76 +3,81 @@
 
 
 <script>
-$('form#datacenterForm').serializeJSON();
+// $('form#datacenterForm').serializeJSON();
 </script>
 
 <div class="datacenter">
-    <div class="formContainer">
-        <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/datacentercage/{{abbreviation}}" enctype="application/x-www-form-urlencoded" method="POST">
-    		<input type="hidden" name="_csrf" value="{{_csrfToken}}">
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+  <div class="formContainer">
+    <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/datacentercage/{{abbreviation}}" enctype="application/x-www-form-urlencoded" method="POST">
+    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+    <input type="hidden" name="id" value="{{id}}">
+    <input type="hidden" name="abbreviation" value="{{abbreviation}}">
+    <ul id="eachUl"class="list-unstyled">
+      {{#if cages}}
+      {{#each cages}}
+      <div class="row">
+      <hr>
+        <div class="col-md-6">
+          <li id="eachLi-{{@index}}" class="eachLi">
 
-        <ul id="eachUl"class="list-unstyled">   
-            {{#if cages}}
-            {{#each cages}}
-            
-            <li id="eachLi-{{@index}}" class="eachLi">
-            <hr>
-            <input type="hidden" name="index[{{@index}}]" value="{{@index}}">
-            <input type="hidden" name="cageId[{{@index}}]" value="{{id}}">
-            <div class="form-group">
-                <label for="fieldcageNickname" class="col-sm-2 control-label">Nickname</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageNickname{{@index}}" name="cageNickname[{{@index}}]"  value="{{cageNickname}}" placeholder="What do you call it?" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Nicknamd is required. What is this cage typically called?">
-                </div>
-            </div>     
+          <input type="hidden" name="index[{{@index}}]" value="{{@index}}">
+          <input type="hidden" name="cageId[{{@index}}]" value="{{id}}">
+          <div class="form-group">
+            <label for="fieldcageNickname" class="col-md-4 control-label">Nickname</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="fieldcageNickname{{@index}}" name="cageNickname[{{@index}}]"  value="{{cageNickname}}" placeholder="What do you call it?" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Nicknamd is required. What is this cage typically called?">
+            </div>
+          </div>
             {{#if cageAbbreviation}}
             <div class="form-group">
-                <label for="fieldcageAbbreviation" class="col-sm-2 control-label">Code</label>
-                <div class="col-sm-4">
-                    {{cageAbbreviation}}
-                    <input type="hidden" name="cageAbbreviation[{{@index}}]" value="{{cageAbbreviation}}">
-                </div>
+              <label for="fieldcageAbbreviation" class="col-md-4 control-label">Code</label>
+              <div class="col-md-8">
+                {{cageAbbreviation}}
+                  <input type="hidden" name="cageAbbreviation[{{@index}}]" value="{{cageAbbreviation}}">
+              </div>
             </div>
-            {{else}}
+              {{else}}
             <div class="form-group">
-                <label for="fieldcageAbbreviation" class="col-sm-2 control-label">Code</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control"  id="fieldcageAbbreviation{{@index}}" name="cageAbbreviation[{{@index}}]"value="{{cageAbbreviation}}" placeholder="Shrot name like, 01" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Code is required and is used as part of the location code. Example “01” or A.">
-                </div>
+              <label for="fieldcageAbbreviation" class="col-md-4 control-label">Code</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control"  id="fieldcageAbbreviation{{@index}}" name="cageAbbreviation[{{@index}}]"value="{{cageAbbreviation}}" placeholder="Shrot name like, 01" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Code is required and is used as part of the location code. Example “01” or A.">
+              </div>
             </div>
             {{/if}}
             <div class="form-group">
-                <label for="fieldcageName" class="col-sm-2 control-label">Facility ID</label>
-                <div class="col-sm-4">
+                <label for="fieldcageName" class="col-md-4 control-label">Facility ID</label>
+                <div class="col-md-8">
                     <input type="text" class="form-control"  id="fieldcageName{{@index}}" name="cageName[{{@index}}]"value="{{cageName}}" placeholder="What does the facility call it?" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Facility ID is required. It is what the facility calls this cage.">
                 </div>
             </div>
             <div class="form-group">
-                <label for="cageInMeters" class="col-sm-2 control-label">Cage size in Meters</label>
-                <div class="col-sm-4">
+                <label for="cageInMeters" class="col-md-4 control-label">Cage size in Meters</label>
+                <div class="col-md-8">
                     <input type="text" class="form-control" id="fieldcageInMeters{{@index}}" name="cageInMeters[{{@index}}]"  value="{{cageInMeters}}" placeholder="Cage Size in Meters">
                 </div>
+              </div>
             </div>
-            <div class="form-group">
-                <label for="cageWattPSM" class="col-sm-2 control-label">Watts Per Square Meter</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageWattPSM{{@index}}" name="cageWattPSM[{{@index}}]"  value="{{cageWattPSM}}" placeholder="Watts sq. Meter">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="cageWattPSM" class="col-md-4 control-label">Watts Per Square Meter</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="fieldcageWattPSM{{@index}}" name="cageWattPSM[{{@index}}]"  value="{{cageWattPSM}}" placeholder="Watts sq. Meter">
                 </div>
+              </div>
+              <div class="form-group">
+                <label for="cageMap" class="col-md-4 control-label">Cage Map URL</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="fieldcageMap{{@index}}" name="cageMap[{{@index}}]"  value="{{cageMap}}" placeholder="http://">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cageNotes" class="col-md-4 control-label">Cage Notes</label>
+                <div class="col-md-8">
+                  <textarea rows="3" class="form-control" id="fieldcageNotes{{@index}}" name="cageNotes[{{@index}}]">{{cageNotes}}</textarea>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-                <label for="cageMap" class="col-sm-2 control-label">Cage Map URL</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageMap{{@index}}" name="cageMap[{{@index}}]"  value="{{cageMap}}" placeholder="http://">
-                </div>
-            </div>         
-            <div class="form-group">
-                <label for="cageNotes" class="col-sm-2 control-label">Cage Notes</label>
-                <div class="col-sm-4">
-                    <textarea rows="3" class="form-control" id="fieldcageNotes{{@index}}" name="cageNotes[{{@index}}]">{{cageNotes}}</textarea>
-                </div>
-            </div>
+          </div>
             {{#if ../access.delete}}
                 {{#if cageNickname}}
                     <button type="submit" class="btn btn-danger btn-xs" form="deleteForm{{@index}}"><span class="glyphicon glyphicon-trash"></span></button>
@@ -81,62 +86,67 @@ $('form#datacenterForm').serializeJSON();
             {{/each}}
             {{else}}
 
-            <li id="eachLi-0" class="eachLi">     
-            <input type="hidden" name="cageId[0]" value="new">     
-            <input type="hidden" name="index[0]" value=0><hr>            
-            <div class="form-group"><label for="fieldcageNickname" class="col-sm-2 control-label">Nickname</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageNickname0" name="cageNickname[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Nicknamd is required. What is this cage typically called?" placeholder="Known As 01 ">
-                </div>
-            </div>            
-            <div class="form-group"><label for="fieldcageAbbreviation" class="col-sm-2 control-label">Code</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageAbbreviation0" name="cageAbbreviation[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Code is required and is used as part of the location code. Example “01” or A." placeholder="Shrot name like, 01 ">
-                </div>
-            </div>          
-            <div class="form-group"><label for="fieldcageName" class="col-sm-2 control-label">Facility ID</label>
-                <div class="col-sm-4"> 
-                    <input type="text" class="form-control"  id="fieldcageName0" name="cageName[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Facility ID is required. It is what the facility calls this cage." placeholder="Facility ID *Required">
-                </div>
-            </div>         
-            <div class="form-group"><label for="cageInMeters" class="col-sm-2 control-label">Cage size in Meters</label>
-                <div class="col-sm-4">
+            <li id="eachLi-0" class="eachLi">
+            <input type="hidden" name="cageId[0]" value="new">
+            <input type="hidden" name="index[0]" value=0><hr>
+            <div class="row">
+            <hr>
+            <div class="col-md-6>"
+            <div class="form-group"><label for="fieldcageNickname" class="col-md-4 control-label">Nickname</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="fieldcageNickname0" name="cageNickname[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Nicknamd is required. What is this cage typically called?" placeholder="Known As 01 ">
+              </div>
+            </div>
+            <div class="form-group"><label for="fieldcageAbbreviation" class="col-md-4 control-label">Code</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="fieldcageAbbreviation0" name="cageAbbreviation[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Code is required and is used as part of the location code. Example “01” or A." placeholder="Shrot name like, 01 ">
+              </div>
+            </div>
+            <div class="form-group"><label for="fieldcageName" class="col-md-4 control-label">Facility ID</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control"  id="fieldcageName0" name="cageName[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Facility ID is required. It is what the facility calls this cage." placeholder="Facility ID *Required">
+              </div>
+            </div>
+            <div class="form-group"><label for="cageInMeters" class="col-md-4 control-label">Cage size in Meters</label>
+              <div class="col-md-8">
                     <input type="text" class="form-control" id="fieldcageInMeters0"name="cageInMeters[0]" value="" placeholder="Cage Size in Meters">
-                </div>         
+              </div>
             </div>
-            <div class="form-group"><label for="cageWattPSM" class="col-sm-2 control-label">Watts Per Square Meter</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageWattPSM0" name="cageWattPSM[0]" value="" placeholder="Watts sq. Meter">
-                </div>
-            </div>         
-            <div class="form-group"><label for="cageMap" class="col-sm-2 control-label">Cage Map URL</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldcageMap0"name="cageMap[0]" value="" placeholder="http://">
-                </div>
+          </div>
+          <div class="col-md-6>"
+            <div class="form-group"><label for="cageWattPSM" class="col-md-4 control-label">Watts Per Square Meter</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="fieldcageWattPSM0" name="cageWattPSM[0]" value="" placeholder="Watts sq. Meter">
+              </div>
             </div>
-            <div class="form-group"><label for="cageNotes" class="col-sm-2 control-label">Cage Notes</label>
-                <div class="col-sm-4">        
-                    <textarea rows="3" class="form-control" id="fieldcageNotes0" name="cageNotes[0]" value=""placeholder="Notes">
-                    </textarea>
-                </div>
+            <div class="form-group"><label for="cageMap" class="col-md-4 control-label">Cage Map URL</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="fieldcageMap0"name="cageMap[0]" value="" placeholder="http://">
+              </div>
             </div>
-            </li>
-            {{/if}}
-
+            <div class="form-group"><label for="cageNotes" class="col-md-4 control-label">Cage Notes</label>
+              <div class="col-md-8">
+                <textarea rows="3" class="form-control" id="fieldcageNotes0" name="cageNotes[0]" value=""placeholder="Notes">
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        </li>
+         {{/if}}
         </ul>
-             
-         <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-4">
-                            <button type="submit" class="btn btn-danger btn-xs assetFormSubmit" accesskey="x" title="Press Alt x to Save" ><span class="glyphicon glyphicon-save"></span> Save</button>
-                            <button type="button" class="btn btn-danger btn-xs" value="Add Another" onclick="addField('eachUl','eachLi-',10);"><span class="glyphicon glyphicon-plus"></span></button>
-                            <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
 
-                            <a href="{{menuLink1}}">
-                            <button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>                       
-                </div>
-            </div>
-     </form> 
-        {{#if access.delete}}    
+         <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+               <button type="submit" class="btn btn-danger btn-xs assetFormSubmit" accesskey="x" title="Press Alt x to Save" ><span class="glyphicon glyphicon-save"></span> Save</button>
+               <button type="button" class="btn btn-danger btn-xs" value="Add Another" onclick="addField('eachUl','eachLi-',10);"><span class="glyphicon glyphicon-plus"></span></button>
+               <button type="reset" class="btn btn-danger btn-xs"value="Reset"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+               <a href="{{menuLink1}}">
+               <button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-ban-circle"></span> Cancel</button></a>
+             </div>
+          </div>
+       </form>
+        {{#if access.delete}}
         {{#if cages}}
         {{#each cages}}
             <form id="deleteForm{{@index}}" action="/location/datacentersubdelete/{{../abbreviation}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{cageNickname}}')">
@@ -151,15 +161,15 @@ $('form#datacenterForm').serializeJSON();
         {{/each}}
         {{/if}}
         {{/if}}
+      </div>
     </div>
-</div>
 
 <script language="Javascript" type="text/javascript">
 <!--
 //Add more fields dynamically.
 function addField(area,field,limit) {
 	if(!document.getElementById) return;
-    var field_area = document.getElementById(area);  
+    var field_area = document.getElementById(area);
     var liList = document.getElementById(area).getElementsByTagName("li");
     var count = liList.length
 
@@ -168,13 +178,13 @@ function addField(area,field,limit) {
 	//If the maximum number of elements have been reached, exit the function.
 	//		If the given limit is lower than 0, infinite number of fields can be created.
 	if(count > limit && limit > 0) return;
- 	
-	if(document.createElement) { 
+
+	if(document.createElement) {
 		 //Older Method
-		field_area.insertAdjacentHTML('beforeend', '{{> location/datacentercagePlus1}}');
+		field_area.insertAdjacentHTML('beforeend', {{> location/datacentercagePlus1}});
 	}
-    
+
 }
 //-->
-</script> 
+</script>
 

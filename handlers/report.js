@@ -23,16 +23,15 @@ var dcId = '';
 
 var query;
 
-module.exports.dcReport = function fdcReport(req, res) {
-  if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  }
-  Models.Systemdb.distinct('systemEnviron').exec(function(err, env) {
+module.exports.dcReport = (req, res, next) => {
+  Models.Systemdb.distinct('systemEnviron').exec((err, env) => {
+    // if (err) return next(err);
     // logger.info(env);
-    Models.Systemdb.distinct('systemRole').exec(function(err, role) {
+    Models.Systemdb.distinct('systemRole').exec((err, role) => {
+      if (err) return next(err);
       // logger.info(role);
-      Models.Equipment.distinct('equipMake').exec(function(err, make) {
+      Models.Equipment.distinct('equipMake').exec((err, make) => {
+        if (err) return next(err);
         var context = {
           access: accConfig.accessCheck(req.user),
           titleNow: 'Reports',
@@ -47,7 +46,7 @@ module.exports.dcReport = function fdcReport(req, res) {
           drop3url: '/reports/make-',
           drop3each: make.sort(),
         };
-        res.render('asset/env-role-report', context);
+        return res.render('asset/env-role-report', context);
       });
     });
   });
@@ -62,143 +61,124 @@ function reduceRoles(element, index, array) {
         // console.dir(result);
 */
 // This report requires MongoDB 3.2 or higher for the $lookup (left join).
-module.exports.reportByInserviceEnv = function(req, res, next) {
-  if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  } else {
-    var findThis = (req.query.dcAbbr || 'rsys');
-    Models.Systemdb.aggregate([
+module.exports.reportByInserviceEnv = (req, res, next) => {
+  var findThis = (req.query.dcAbbr || 'rsys');
+  Models.Systemdb.aggregate([
+    {$match:
+      {$or: [
+        {'systemStatus': 'Production App'},
+        {'systemStatus': 'Production DB'},
+      ]},
+      },
+      {$lookup:
+        { from: 'equipment',
+          localField: 'systemEquipSN',
+          foreignField: 'equipSN',
+          as: 'equip',
+        },
+      },
       {$match:
-        {$or: [
-          {'systemStatus': 'Production App'},
-          {'systemStatus': 'Production DB'},
+        { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
+      },
+      },
+
+      {$match:
+        { $or: [
+          {'equip.equipStatus': 'In Service'},
+          {'equip.equipStatus': 'In Service with issues'},
         ]},
-        },
-        {$lookup:
-          { from: 'equipment',
-            localField: 'systemEquipSN',
-            foreignField: 'equipSN',
-            as: 'equip',
-          },
-        },
-        {$match:
-          { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
-        },
-        },
-
-        {$match:
-          { $or: [
-            {'equip.equipStatus': 'In Service'},
-            {'equip.equipStatus': 'In Service with issues'},
-          ]},
-        },
-        {$group:
-        {
-          _id: { env: '$systemEnviron', dcAbbr: '$dcAbbr'},
-          countApp: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production App' ]}, 1, 0]}},
-          countDb: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production DB' ]}, 1, 0]}},
-        },
-        },
-        {$sort:
-        {
-          '_id.env': 1,
-          'countApp': -1,
-          'countDb': -1,
-        },
-        },
-        { $project:
-        {
-          '_id': 0,
-          'env': '$_id.env',
-          'dcAbbr': '$_dc.dcAbbr',
-          'countApp': '$countApp',
-          'countDb': '$countDb',
-        },
-        },
-    ],
-    function(err, result) {
-      if (err) {
-        next(err);
-      } else {
-      //  result.forEach(reduceRoles);
-
-        res.json(result);
-      }
-    }
-  );
-  }
+      },
+      {$group:
+      {
+        _id: { env: '$systemEnviron', dcAbbr: '$dcAbbr'},
+        countApp: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production App' ]}, 1, 0]}},
+        countDb: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production DB' ]}, 1, 0]}},
+      },
+      },
+      {$sort:
+      {
+        '_id.env': 1,
+        'countApp': -1,
+        'countDb': -1,
+      },
+      },
+      { $project:
+      {
+        '_id': 0,
+        'env': '$_id.env',
+        'dcAbbr': '$_dc.dcAbbr',
+        'countApp': '$countApp',
+        'countDb': '$countDb',
+      },
+      },
+  ],
+  (err, result) => {
+    if (err) return next(err);
+    //  result.forEach(reduceRoles);
+    res.json(result);
+  });
 };
 
-module.exports.reportByInserviceEnvRole = function(req, res) {
-  if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  } else {
-    var inEnv = (req.query.inEnv || 'dc1');
-    var findThis = (req.query.dcAbbr || 'rsys');
-    Models.Systemdb.aggregate([
+module.exports.reportByInserviceEnvRole = (req, res, next) => {
+  var inEnv = (req.query.inEnv || 'dc1');
+  var findThis = (req.query.dcAbbr || 'rsys');
+  Models.Systemdb.aggregate([
+    {$match:
+      {$or: [
+        {'systemStatus': 'Production App'},
+        {'systemStatus': 'Production DB'},
+      ]},
+      },
+      {$lookup:
+        { from: 'equipment',
+          localField: 'systemEquipSN',
+          foreignField: 'equipSN',
+          as: 'equip',
+        },
+      },
       {$match:
-        {$or: [
-          {'systemStatus': 'Production App'},
-          {'systemStatus': 'Production DB'},
-        ]},
-        },
-        {$lookup:
-          { from: 'equipment',
-            localField: 'systemEquipSN',
-            foreignField: 'equipSN',
-            as: 'equip',
-          },
-        },
-        {$match:
-          { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
-        },
-        },
+        { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'},
+      },
+      },
 
-        {$match:
-          { $or: [
-            {'equip.equipStatus': 'In Service'},
-            {'equip.equipStatus': 'In Service with issues'},
-          ]},
-        },
-        {$match:
-          { 'systemEnviron': inEnv},
-        },
-        {$group:
-        {
-          _id: { env: '$systemEnviron', sysEnv: '$systemEnviron', sysRole: '$systemRole'},
-          countApp: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production App' ]}, 1, 0]}},
-          countDb: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production DB' ]}, 1, 0]}},
-        },
-        },
-        {$sort:
-        {
-          '_id.env': 1,
-          'countApp': -1,
-          'countDb': -1,
-        },
-        },
-        { $project:
-        {
-          '_id': 0,
-          'env': '$_id.env',
-          'role': '$_id.sysRole',
-          'countApp': '$countApp',
-          'countDb': '$countDb',
-        },
-        },
-    ],
-    function(err, result) {
-      if (err) {
-        next(err);
-      } else {
-        // console.dir(result);
-        res.json(result);
-      }
-    }
-  );
-  }
+      {$match:
+        { $or: [
+          {'equip.equipStatus': 'In Service'},
+          {'equip.equipStatus': 'In Service with issues'},
+        ]},
+      },
+      {$match:
+        { 'systemEnviron': inEnv},
+      },
+      {$group:
+      {
+        _id: { env: '$systemEnviron', sysEnv: '$systemEnviron', sysRole: '$systemRole'},
+        countApp: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production App' ]}, 1, 0]}},
+        countDb: {$sum: { $cond: [{$eq: [ '$systemStatus', 'Production DB' ]}, 1, 0]}},
+      },
+      },
+      {$sort:
+      {
+        '_id.env': 1,
+        'countApp': -1,
+        'countDb': -1,
+      },
+      },
+      { $project:
+      {
+        '_id': 0,
+        'env': '$_id.env',
+        'role': '$_id.sysRole',
+        'countApp': '$countApp',
+        'countDb': '$countDb',
+      },
+      },
+  ],
+  (err, result) => {
+    if (err) return next(err);
+    // console.dir(result);
+    res.json(result);
+  });
 };
 
 
@@ -215,7 +195,7 @@ function queryString(findThis, opt, searchIn) {
       });
       //        logger.info('query2'+query);
       break;
-    case 3: //by Role
+    case 3: // by Role
       query = Models.Systemdb.find({
         systemRole: findThis
       });
@@ -458,7 +438,7 @@ function queryString(findThis, opt, searchIn) {
 
 
         default:
-          //logger.info('no opt for queryString');
+          // logger.info('no opt for queryString');
           break;
       }
       break;
@@ -474,232 +454,207 @@ function queryString(findThis, opt, searchIn) {
 //           list by Env and Role env-role-reports
 // -------------------------------------------------------------
 
-module.exports.dcByEnvRole = function(req, res) {
-  if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
+module.exports.dcByEnvRole = (req, res, next) => {
+  var lastSearch;
+  var editLoad;
+  var searchDb;
+  var searchIn;
+  var searchFor;
+  if (!req.params.datacenter) {
+    editLoad = 1;
+    //            logger.info('none slected');
   } else {
-    //    logger.info('***********exports.dcSystembyEnv First >' +req.params.datacenter);
-
-    var lastSearch,
-      editLoad,
-      searchDb,
-      searchIn,
-      searchFor;
-
-    if (!req.params.datacenter) {
-      editLoad = 1;
-      //            logger.info('none slected');
-    } else {
-      lastSearch = searchIn; // .substring (req.params.datacenter.indexOf('~')+1);
-      start = req.params.datacenter.indexOf('-');
-      searchFor = req.params.datacenter.substring(start + 1);
-      if (req.params.datacenter.indexOf('env') != -1) {
-        editLoad = 2;
-
-      } else if (req.params.datacenter.indexOf('role') != -1) {
-        editLoad = 3;
-
-      } else if (req.params.datacenter.indexOf('system') != -1) {
-        editLoad = 4;
-        searchFor = strTgs.csTrim(req.query.systemName);
-
-      } else if (req.params.datacenter.indexOf('equipment') != -1) {
-        editLoad = 10;
-        searchFor = strTgs.cTrim(req.query.equipSN);
-
-      } else if (req.params.datacenter.indexOf('make') != -1) {
-        editLoad = 11;
-
-      } else if (req.params.datacenter.indexOf('homeless') != -1) {
-        editLoad = 12;
-
-      } else if (req.params.datacenter.indexOf('eqnis') != -1) {
-        editLoad = 13;
-
-      } else if (req.params.datacenter.indexOf('eol') != -1) {
-        editLoad = 14;
-
-      } else if (req.params.datacenter.indexOf('spares') != -1) {
-        editLoad = 15;
-
-      } else if (req.params.datacenter.indexOf('multi') != -1) {
-        lastSearch = req.query.searchIn;
-        searchIn = req.query.searchIn.substring(req.query.searchIn.indexOf('~') + 1);
-
-        //            logger.info('searchIn '+searchIn);
-        searchFor = req.query.searchFor;
-        //            logger.info('searchFor '+searchFor);
-        if (req.query.searchIn.indexOf('system') != -1) {
-          editLoad = 8;
-        } else if (req.query.searchIn.indexOf('equipment') != -1) {
-          editLoad = 18;
-        }
-      } else {
-        editLoad = 1;
-        //            logger.info('none slected');
+    lastSearch = searchIn; // .substring (req.params.datacenter.indexOf('~')+1);
+    start = req.params.datacenter.indexOf('-');
+    searchFor = req.params.datacenter.substring(start + 1);
+    if (req.params.datacenter.indexOf('env') != -1) {
+      editLoad = 2;
+    } else if (req.params.datacenter.indexOf('role') != -1) {
+      editLoad = 3;
+    } else if (req.params.datacenter.indexOf('system') != -1) {
+      editLoad = 4;
+      searchFor = strTgs.csTrim(req.query.systemName);
+    } else if (req.params.datacenter.indexOf('equipment') != -1) {
+      editLoad = 10;
+      searchFor = strTgs.cTrim(req.query.equipSN);
+    } else if (req.params.datacenter.indexOf('make') != -1) {
+      editLoad = 11;
+    } else if (req.params.datacenter.indexOf('homeless') != -1) {
+      editLoad = 12;
+    } else if (req.params.datacenter.indexOf('eqnis') != -1) {
+      editLoad = 13;
+    } else if (req.params.datacenter.indexOf('eol') != -1) {
+      editLoad = 14;
+    } else if (req.params.datacenter.indexOf('spares') != -1) {
+      editLoad = 15;
+    } else if (req.params.datacenter.indexOf('multi') != -1) {
+      lastSearch = req.query.searchIn;
+      searchIn = req.query.searchIn.substring(req.query.searchIn.indexOf('~') + 1);
+      // logger.info('searchIn '+searchIn);
+      searchFor = req.query.searchFor;
+      // logger.info('searchFor '+searchFor);
+      if (req.query.searchIn.indexOf('system') != -1) {
+        editLoad = 8;
+      } else if (req.query.searchIn.indexOf('equipment') != -1) {
+        editLoad = 18;
       }
+    } else {
+      editLoad = 1;
+      // logger.info('none slected');
     }
-    //        logger.info('page type selected >'+editLoad);
+  }
+  // logger.info('page type selected >'+editLoad);
 
-    Models.Systemdb.distinct('systemEnviron').exec(function(err, env) {
-      // logger.info(env);
-      Models.Systemdb.distinct('systemRole').exec(function(err, role) {
-        // logger.info(role);
-        Models.Equipment.distinct('equipMake').exec(function(err, make) {
-
-          if (editLoad > 1 && editLoad < 9) {
-
-            // this looks for 'list' as the / url. if it exists, it prints the datacenter list
-            query = queryString(searchFor, editLoad, searchIn);
-            query.sort({
-              'systemName': 'asc'
-            }).exec(function(err, sys) {
-              if (err) {
-                logger.warn('asc' + ' ' + err);
-              } else {
-                //        logger.info('2-9 >'+searchFor);
-                Models.Equipment.find({}, 'equipLocation equipSN equipParent equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', function(err, eqs) {
-
-                  // logger.info('system-list'+sys);
-                  var context = {
-                    titleNow: '.. ' + searchFor,
-                    equipsys: 'true',
-                    reportType: req.body.systemEnviron,
-                    drop1: 'Environment',
-                    drop1url: '/reports/env-',
-                    drop1each: env.sort(),
-                    drop2: 'Roles',
-                    drop2url: '/reports/role-',
-                    drop2each: role.sort(),
-                    drop3: 'Make',
-                    drop3url: '/reports/make-',
-                    drop3each: make.sort(),
-                    lastSearch: lastSearch,
-
-
-                    eqs: sys.map(function(sy) {
-                      var tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
-                      // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                      // logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
-                      return {
-                        systemName: sy.systemName,
-                        systemAlias: sy.systemAlias,
-                        systemParentId: sy.systemParentId,
-                        systemEquipSN: sy.systemEquipSN,
-                        systemEnviron: sy.systemEnviron,
-                        systemRole: sy.systemRole,
-                        systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus, sy.systemTicket),
-                        systemStatus: strTgs.trueFalseIcon(sy.systemStatus, sy.systemStatus),
-                        sysmodifiedOn: strTgs.dateMod(sy.modifiedOn),
-                        systemTicket: sy.systemTicket,
-                        systemNotes: sy.systemNotes,
-                        equipLocation: tempSys.equipLocation,
-                        equipLocationRack: strTgs.ruToLocation(tempSys.equipLocation),
-                        equipSN: tempSys.equipSN,
-                        equipStatus: tempSys.equipStatus,
-                        equipStatusLight: strTgs.trueFalseIcon(tempSys.equipStatus, tempSys.equipStatus),
-                        equipType: tempSys.equipType,
-                        equipMake: tempSys.equipMake,
-                        equipModel: tempSys.equipModel,
-                        equipSubModel: tempSys.equipSubModel,
-                        equipRUHieght: tempSys.equipRUHieght,
-                        equipAddOns: tempSys.equipAddOns,
-                        equipAcquisition: strTgs.dateMod(tempSys.equipAcquisition),
-                        equipWarrantyMo: strTgs.addAndCompDates(tempSys.equipAcquisition, tempSys.equipWarrantyMo),
-                        equipPONum: tempSys.equipPONum,
-                        equipInvoice: tempSys.equipInvoice,
-                        equipProjectNum: tempSys.equipProjectNum,
-                        equipNotes: tempSys.equipNotes,
-                        equipmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-                      };
-                    }),
+  Models.Systemdb.distinct('systemEnviron').exec((err, env) => {
+    if (err) return next(err);
+    // logger.info(env);
+    Models.Systemdb.distinct('systemRole').exec((err, role) => {
+      if (err) return next(err);
+      // logger.info(role);
+      Models.Equipment.distinct('equipMake').exec((err, make) => {
+        if (err) return next(err);
+        if (editLoad > 1 && editLoad < 9) {
+          // this looks for 'list' as the / url. if it exists, it prints the datacenter list
+          query = queryString(searchFor, editLoad, searchIn);
+          query.sort({
+            'systemName': 'asc',
+          }).exec((err, sys) => {
+            if (err) return next(err);
+            //        logger.info('2-9 >'+searchFor);
+            Models.Equipment.find({}, 'equipLocation equipSN equipParent equipStatus equipType equipMake equipModel equipSubModel equipRUHieght equipAddOns modifiedOn equipAcquisition equipEndOfLife equipWarrantyMo equipPONum equipInvoice equipProjectNum equipNotes', (err, eqs) => {
+              // logger.info('system-list'+sys);
+              var context = {
+                titleNow: `.. ${searchFor}`,
+                equipsys: 'true',
+                reportType: req.body.systemEnviron,
+                drop1: 'Environment',
+                drop1url: '/reports/env-',
+                drop1each: env.sort(),
+                drop2: 'Roles',
+                drop2url: '/reports/role-',
+                drop2each: role.sort(),
+                drop3: 'Make',
+                drop3url: '/reports/make-',
+                drop3each: make.sort(),
+                lastSearch: lastSearch,
+                eqs: sys.map((sy) => {
+                  var tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
+                  // rack.populate('rackParentDC', 'abbreviation cageNickname')
+                  // logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
+                  return {
+                    systemName: sy.systemName,
+                    systemAlias: sy.systemAlias,
+                    systemParentId: sy.systemParentId,
+                    systemEquipSN: sy.systemEquipSN,
+                    systemEnviron: sy.systemEnviron,
+                    systemRole: sy.systemRole,
+                    systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus, sy.systemTicket),
+                    systemStatus: strTgs.trueFalseIcon(sy.systemStatus, sy.systemStatus),
+                    sysmodifiedOn: strTgs.dateMod(sy.modifiedOn),
+                    systemTicket: sy.systemTicket,
+                    systemNotes: sy.systemNotes,
+                    equipLocation: tempSys.equipLocation,
+                    equipLocationRack: strTgs.ruToLocation(tempSys.equipLocation),
+                    equipSN: tempSys.equipSN,
+                    equipStatus: tempSys.equipStatus,
+                    equipStatusLight: strTgs.trueFalseIcon(tempSys.equipStatus, tempSys.equipStatus),
+                    equipType: tempSys.equipType,
+                    equipMake: tempSys.equipMake,
+                    equipModel: tempSys.equipModel,
+                    equipSubModel: tempSys.equipSubModel,
+                    equipRUHieght: tempSys.equipRUHieght,
+                    equipAddOns: tempSys.equipAddOns,
+                    equipAcquisition: strTgs.dateMod(tempSys.equipAcquisition),
+                    equipWarrantyMo: strTgs.addAndCompDates(tempSys.equipAcquisition, tempSys.equipWarrantyMo),
+                    equipPONum: tempSys.equipPONum,
+                    equipInvoice: tempSys.equipInvoice,
+                    equipProjectNum: tempSys.equipProjectNum,
+                    equipNotes: tempSys.equipNotes,
+                    equipmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
                   };
-                  // the 'location/datacenter-list' is the view that will be called
-                  // context is the data from above
-                  // console.dir(context);
-                  res.render('asset/env-role-report', context);
-                });
-              }
+                }),
+              };
+              // the 'location/datacenter-list' is the view that will be called
+              // context is the data from above
+              // console.dir(context);
+              res.render('asset/env-role-report', context);
             });
-          } else if (editLoad > 9) {
-            // this looks for 'list' as the / url. if it exists, it prints the datacenter list
-            query = queryString(searchFor, editLoad, searchIn);
-            query.sort({
-              'equipSN': 'asc',
-            }).exec(function(err, eqs) {
-              if (err) {
-                logger.warn(asc + ' ' + err);
-              } else {
-                // logger.info('>9 >'+searchFor);
-                Models.Systemdb.find({}, 'systemName systemAlias systemParentId systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn', function(err, sys) {
+          });
+        } else if (editLoad > 9) {
+          // this looks for 'list' as the / url. if it exists, it prints the datacenter list
+          query = queryString(searchFor, editLoad, searchIn);
+          query.sort({
+            'equipSN': 'asc',
+          }).exec((err, eqs) => {
+            if (err) return next (err);
+            // logger.info('>9 >'+searchFor);
+            Models.Systemdb.find({}, 'systemName systemAlias systemParentId systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn', function(err, sys) {
 
-                  // logger.info('system-list'+sys);
-                  var context = {
-                    titleNow: '.. ' + searchFor,
-                    equipsys: 'true',
-                    reportType: req.body.systemEnviron,
-                    drop1: 'Environment',
-                    drop1url: '/reports/env-',
-                    drop1each: env.sort(),
-                    drop2: 'Roles',
-                    drop2url: '/reports/role-',
-                    drop2each: role.sort(),
-                    drop3: 'Make',
-                    drop3url: '/reports/make-',
-                    drop3each: make.sort(),
-                    lastSearch: lastSearch,
+              // logger.info('system-list'+sys);
+              var context = {
+                titleNow: '.. ' + searchFor,
+                equipsys: 'true',
+                reportType: req.body.systemEnviron,
+                drop1: 'Environment',
+                drop1url: '/reports/env-',
+                drop1each: env.sort(),
+                drop2: 'Roles',
+                drop2url: '/reports/role-',
+                drop2each: role.sort(),
+                drop3: 'Make',
+                drop3url: '/reports/make-',
+                drop3each: make.sort(),
+                lastSearch: lastSearch,
 
-                    eqs: eqs.map(function(eq) {
-                      var tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
-                      // rack.populate('rackParentDC', 'abbreviation cageNickname')
-                      // logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
-                      return {
-                        systemName: tempSys.systemName,
-                        systemAlias: tempSys.systemAlias,
-                        systemParentId: tempSys.systemParentId,
-                        systemEquipSN: tempSys.systemEquipSN,
-                        systemEnviron: tempSys.systemEnviron,
-                        systemRole: tempSys.systemRole,
-                        systemTicketLit: strTgs.trueFalseIcon(tempSys.systemInventoryStatus, tempSys.systemTicket),
-                        systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus, tempSys.systemStatus),
-                        sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-                        systemTicket: tempSys.systemTicket,
-                        systemNotes: tempSys.systemNotes,
-                        equipLocation: eq.equipLocation,
-                        equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-                        equipSN: eq.equipSN,
-                        equipStatus: eq.equipStatus,
-                        equipStatusLight: strTgs.trueFalseIcon(eq.equipStatus, eq.equipStatus),
-                        equipType: eq.equipType,
-                        equipMake: eq.equipMake,
-                        equipModel: eq.equipModel,
-                        equipSubModel: eq.equipSubModel,
-                        equipAddOns: eq.equipAddOns,
-                        equipRUHieght: eq.equipRUHieght,
-                        equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
-                        equipWarrantyMo: strTgs.addAndCompDates(eq.equipAcquisition, eq.equipWarrantyMo),
-                        equipPONum: eq.equipPONum,
-                        equipInvoice: eq.equipInvoice,
-                        equipProjectNum: eq.equipProjectNum,
-                        equipNotes: eq.equipNotes,
-                        equipmodifiedOn: strTgs.dateMod(eq.modifiedOn),
-                      };
-                    }),
+                eqs: eqs.map(function(eq) {
+                  var tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
+                  // rack.populate('rackParentDC', 'abbreviation cageNickname')
+                  // logger.info('sy Map>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+sy);
+                  return {
+                    systemName: tempSys.systemName,
+                    systemAlias: tempSys.systemAlias,
+                    systemParentId: tempSys.systemParentId,
+                    systemEquipSN: tempSys.systemEquipSN,
+                    systemEnviron: tempSys.systemEnviron,
+                    systemRole: tempSys.systemRole,
+                    systemTicketLit: strTgs.trueFalseIcon(tempSys.systemInventoryStatus, tempSys.systemTicket),
+                    systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus, tempSys.systemStatus),
+                    sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
+                    systemTicket: tempSys.systemTicket,
+                    systemNotes: tempSys.systemNotes,
+                    equipLocation: eq.equipLocation,
+                    equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
+                    equipSN: eq.equipSN,
+                    equipStatus: eq.equipStatus,
+                    equipStatusLight: strTgs.trueFalseIcon(eq.equipStatus, eq.equipStatus),
+                    equipType: eq.equipType,
+                    equipMake: eq.equipMake,
+                    equipModel: eq.equipModel,
+                    equipSubModel: eq.equipSubModel,
+                    equipAddOns: eq.equipAddOns,
+                    equipRUHieght: eq.equipRUHieght,
+                    equipAcquisition: strTgs.dateMod(eq.equipAcquisition),
+                    equipWarrantyMo: strTgs.addAndCompDates(eq.equipAcquisition, eq.equipWarrantyMo),
+                    equipPONum: eq.equipPONum,
+                    equipInvoice: eq.equipInvoice,
+                    equipProjectNum: eq.equipProjectNum,
+                    equipNotes: eq.equipNotes,
+                    equipmodifiedOn: strTgs.dateMod(eq.modifiedOn),
                   };
-                  // the 'location/datacenter-list' is the view that will be called
-                  // context is the data from above
-                  // console.dir(context);
-                  res.render('asset/env-role-report', context);
-                });
-              }
+                }),
+              };
+              // the 'location/datacenter-list' is the view that will be called
+              // context is the data from above
+              // console.dir(context);
+              res.render('asset/env-role-report', context);
             });
-          }
-        });
+          });
+        }
       });
     });
-  }
+  });
 };
+
 
 
 // Custom CSV report ///////////////////////////////////////////
@@ -729,10 +684,12 @@ The route is based on the collection targeted.
 // };
 
 module.exports.systemsAggr = (req, res) => {
-  console.dir(req.body);
   var context = {};
   var data = req.params;
   var queryTest;
+  var findThis;
+  var matchTest;
+  var filename;
   if (!data.findIn) {
     data.findIn = req.body.findIn;
     data.findWhat = req.body.findWhat;
@@ -759,9 +716,9 @@ module.exports.systemsAggr = (req, res) => {
   // This says, if they are specific, do that, otherwise do rsys
 
   // This block does locations
- var findThis = (data.findWhat || 'rsys');
+  findThis = (data.findWhat || 'rsys');
 
-  var matchTest = {
+  matchTest = {
     equipLocation: { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'}},
     equipMake: { 'equip.equipMake': { '$regex': findThis, '$options': 'i'}},
     equipPONum: { 'equip.equipPONum': { '$regex': findThis, '$options': 'i'}},
@@ -795,72 +752,65 @@ module.exports.systemsAggr = (req, res) => {
       ]},
     },
   ],
-    function(err, result) {
-      if (err) {
-        console.log(err);
-      } else {
-        context = result.map(function(rslt) {
-          rslt.locCode = strTgs.locDest(rslt.equip[0].equipLocation);
-          rslt.equipModelWithSubs = rslt.equip[0].equipModel + ' ' + rslt.equip[0].equipSubModel + ' ' + rslt.equip[0].equipSubModel;
-          return {
-            systemName: rslt.systemName,
-            dcSite: rslt.locCode.dcSite,
-            dcCage: rslt.locCode.dcCage,
-            dcRack: rslt.locCode.dcRack,
-            dcRU: rslt.locCode.dcRU,
-            equipRUHieght: rslt.equip[0].equipRUHieght,
-            systemStatus: rslt.systemStatus,
-            systemEnviron: rslt.systemEnviron,
-            systemRole: rslt.systemRole,
-            equipSN: rslt.equip[0].equipSN,
-            equipStatus: rslt.equip[0].equipStatus,
-            equipMake: rslt.equip[0].equipMake,
-            equipModelWithSubs: rslt.equipModelWithSubs,
-            equipModel: rslt.equip[0].equipModel,
-            equipSubModel: rslt.equip[0].equipSubModel,
-            equipAddOns: rslt.equip[0].equipAddOns,
-            systemAlias: rslt.systemAlias,
-            systemParentId: rslt.systemParentId,
-            systemEquipSN: rslt.systemEquipSN,
-            sysmodifiedOn: rslt.modifiedOn,
-            systemTicket: rslt.systemTicket,
-            systemNotes: rslt.systemNotes,
-            systemOSType: rslt.systemOSType,
-            systemOSVersion: rslt.systemOSVersion,
-            equipLocation: rslt.equip[0].equipLocation,
-            equipStatusLight: rslt.equip[0].equipStatus,
-            equipType: rslt.equip[0].equipType,
-            equipAcquisition: rslt.equip[0].equipAcquisition,
-            equipPONum: rslt.equip[0].equipPONum,
-            equipInvoice: rslt.equip[0].equipInvoice,
-            equipProjectNum: rslt.equip[0].equipProjectNum,
-            equipMaintAgree: rslt.equip[0].equipMaintAgree,
-            equipNotes: rslt.equip[0].equipNotes,
-            equipmodifiedOn: rslt.equip[0].modifiedOn,
-            system_id: rslt._id,
-            equip_id: rslt.equip._id,
-          };
+    (err, result) => {
+      if (err) return next (err);
+      context = result.map((rslt) => {
+        rslt.locCode = strTgs.locDest(rslt.equip[0].equipLocation);
+        rslt.equipModelWithSubs = `${rslt.equip[0].equipModel} ${rslt.equip[0].equipSubModel} ${rslt.equip[0].equipSubModel}`;
+        return {
+          systemName: rslt.systemName,
+          dcSite: rslt.locCode.dcSite,
+          dcCage: rslt.locCode.dcCage,
+          dcRack: rslt.locCode.dcRack,
+          dcRU: rslt.locCode.dcRU,
+          equipRUHieght: rslt.equip[0].equipRUHieght,
+          systemStatus: rslt.systemStatus,
+          systemEnviron: rslt.systemEnviron,
+          systemRole: rslt.systemRole,
+          equipSN: rslt.equip[0].equipSN,
+          equipStatus: rslt.equip[0].equipStatus,
+          equipMake: rslt.equip[0].equipMake,
+          equipModelWithSubs: rslt.equipModelWithSubs,
+          equipModel: rslt.equip[0].equipModel,
+          equipSubModel: rslt.equip[0].equipSubModel,
+          equipAddOns: rslt.equip[0].equipAddOns,
+          systemAlias: rslt.systemAlias,
+          systemParentId: rslt.systemParentId,
+          systemEquipSN: rslt.systemEquipSN,
+          sysmodifiedOn: rslt.modifiedOn,
+          systemTicket: rslt.systemTicket,
+          systemNotes: rslt.systemNotes,
+          systemOSType: rslt.systemOSType,
+          systemOSVersion: rslt.systemOSVersion,
+          equipLocation: rslt.equip[0].equipLocation,
+          equipStatusLight: rslt.equip[0].equipStatus,
+          equipType: rslt.equip[0].equipType,
+          equipAcquisition: rslt.equip[0].equipAcquisition,
+          equipPONum: rslt.equip[0].equipPONum,
+          equipInvoice: rslt.equip[0].equipInvoice,
+          equipProjectNum: rslt.equip[0].equipProjectNum,
+          equipMaintAgree: rslt.equip[0].equipMaintAgree,
+          equipNotes: rslt.equip[0].equipNotes,
+          equipmodifiedOn: rslt.equip[0].modifiedOn,
+          system_id: rslt._id,
+          equip_id: rslt.equip._id,
+        };
+      });
+      //
+      if (data.resType === 'csv') {
+        filename = data.findWhat + data.resExt;
+        res.setHeader('Content-disposition', `attachment; filename=${filename}`);
+        res.setHeader('content-type', 'text/csv');
+        csv.writeToString(context, {
+          headers: true,
+          objectMode: true,
+        }, (err, contextCsv) => {
+          if (err) return next (err);
+          res.send(contextCsv);
         });
-        //
-        if (data.resType === 'csv') {
-          var filename = data.findWhat + data.resExt;
-          res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-          res.setHeader('content-type', 'text/csv');
-          csv.writeToString(context, {
-            headers: true,
-            objectMode: true,
-          }, function(err, contextCsv) {
-            if (err) {
-              console.log(err);
-            }
-            res.send(contextCsv);
-          });
-        } else {
-          res.json(context);
-        }
+      } else {
+        res.json(context);
       }
     }
   );
 };
-
-

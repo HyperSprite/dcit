@@ -1,8 +1,8 @@
 
-// adjust this to change default action.
+// adjust check.access for default action.
 // all permissions are additive.
-// 1 No read access without login.
-// 2 Read with no login.
+// 1 No read access without login. (best)
+// 2 Read with no login. (this is at least behind a VPN)
 // 3 Edit with no login (don't do this).
 // 4 Delete with no login (really don't do this)
 // 5 Root whith no login (don't even talk to me if you do this)

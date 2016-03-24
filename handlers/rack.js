@@ -14,59 +14,28 @@ const Models = require('../models');
 module.exports.dcRackAll = (req, res, next) => {
   var context;
   var uber;
-  if (accConfig.accessCheck(req.user).read !== 1) {
-    req.session.flash = strTgs.notAuth;
-    return res.redirect(303, '/');
-  } else {
-    Models.Rack.find({}).sort('rackUnique').exec((err, racks) => {
-      if (err) {
-        logger.info(err);
-      } else {
-        Models.Datacenter.find({}, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
-          if (err) return next(err);
-          context = {
-            racks: racks.map((rack) => {
-              uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
-              // rack.populate('rackParentDC', 'abbreviation cageNickname')
-              // logger.info(rack);
-              if (uber) {
-                return {
-                  menu1: 'Datacenters',
-                  menuLink1: '/location/datacenter/list',
-                  titleNow: 'Rack List',
-                  rackParentDC: rack.rackParentDC,
-                  abbreviation: uber.abbreviation,
-                  foundingCompany: uber.foundingCompany,
-                  cageAbbreviation: uber.cageAbbreviation,
-                  cageNickname: uber.cageNickname,
-                  cageName: uber.cageName,
-                  rackNickname: rack.rackNickname,
-                  rackName: rack.rackName,
-                  rackUnique: rack.rackUnique,
-                  rackParentCage: rack.rackParentCage,
-                  rackDescription: rack.rackDescription,
-                  rackSN: rack.rackSN,
-                  rackHeight: rack.rackHeight,
-                  rackWidth: rack.rackWidth,
-                  rackDepth: rack.rackDepth,
-                  rackLat: rack.rackLat,
-                  rackLon: rack.rackLon,
-                  rackRow: rack.rackRow,
-                  rackStatus: strTgs.trueFalseIcon(rack.rackStatus, rack.rackStatus),
-                  rackMake: rack.rackMake,
-                  rackModel: rack.rackModel,
-                  rUs: rack.rUs,
-                  createdBy: rack.createdBy,
-                  createdOn: strTgs.dateMod(rack.createdOn),
-                  modifiedOn: strTgs.dateMod(rack.modifiedOn),
-                };
-              }
+  Models.Rack.find({}).sort('rackUnique').exec((err, racks) => {
+    if (err) {
+      logger.info(err);
+    } else {
+      Models.Datacenter.find({}, '_id fullName abbreviation foundingCompany cages._id cages.cageNickname cages.cageAbbreviation cages.cageName', (err, datacenter) => {
+        if (err) return next(err);
+        context = {
+          racks: racks.map((rack) => {
+            uber = strTgs.findCGParent(rack.rackParentCage, datacenter);
+            // rack.populate('rackParentDC', 'abbreviation cageNickname')
+            // logger.info(rack);
+            if (uber) {
               return {
                 menu1: 'Datacenters',
                 menuLink1: '/location/datacenter/list',
                 titleNow: 'Rack List',
-                abbreviation: 'Unknown',
                 rackParentDC: rack.rackParentDC,
+                abbreviation: uber.abbreviation,
+                foundingCompany: uber.foundingCompany,
+                cageAbbreviation: uber.cageAbbreviation,
+                cageNickname: uber.cageNickname,
+                cageName: uber.cageName,
                 rackNickname: rack.rackNickname,
                 rackName: rack.rackName,
                 rackUnique: rack.rackUnique,
@@ -87,15 +56,41 @@ module.exports.dcRackAll = (req, res, next) => {
                 createdOn: strTgs.dateMod(rack.createdOn),
                 modifiedOn: strTgs.dateMod(rack.modifiedOn),
               };
-            }),
-          };
-          // the 'location/datacenter-list' is the view that will be called
-          // context is the data from above
-          res.render('location/rack-list', context);
-        });
-      }
-    });
-  }
+            }
+            return {
+              menu1: 'Datacenters',
+              menuLink1: '/location/datacenter/list',
+              titleNow: 'Rack List',
+              abbreviation: 'Unknown',
+              rackParentDC: rack.rackParentDC,
+              rackNickname: rack.rackNickname,
+              rackName: rack.rackName,
+              rackUnique: rack.rackUnique,
+              rackParentCage: rack.rackParentCage,
+              rackDescription: rack.rackDescription,
+              rackSN: rack.rackSN,
+              rackHeight: rack.rackHeight,
+              rackWidth: rack.rackWidth,
+              rackDepth: rack.rackDepth,
+              rackLat: rack.rackLat,
+              rackLon: rack.rackLon,
+              rackRow: rack.rackRow,
+              rackStatus: strTgs.trueFalseIcon(rack.rackStatus, rack.rackStatus),
+              rackMake: rack.rackMake,
+              rackModel: rack.rackModel,
+              rUs: rack.rUs,
+              createdBy: rack.createdBy,
+              createdOn: strTgs.dateMod(rack.createdOn),
+              modifiedOn: strTgs.dateMod(rack.modifiedOn),
+            };
+          }),
+        };
+        // the 'location/datacenter-list' is the view that will be called
+        // context is the data from above
+        res.render('location/rack-list', context);
+      });
+    }
+  });
 };
 
 
@@ -124,28 +119,28 @@ module.exports.dcRackNew = (req, res, next) => {
       } else {
         // logger.info('Rack is datacenter');
         thisSubDoc = datacenter.cages.id(dcCageId);
-          if (err) return next(err);
-            // logger.info('datacener= '+datacenter);
-            context = {
-              access: accConfig.accessCheck(req.user),
-              requrl: req.url,
-              optRackStatus: opt.optListArray,
-              id: datacenter._id,
-              fullName: datacenter.fullName,
-              abbreviation: datacenter.abbreviation,
-              createdOn: strTgs.dateMod(datacenter.createdOn),
-              foundingCompany: datacenter.foundingCompany,
-              titleNow: 'New Rack',
-              cageId: thisSubDoc.id,
-              cageNickname: thisSubDoc.cageNickname,
-              cageName: thisSubDoc.cageName,
-              cageAbbreviation: thisSubDoc.cageAbbreviation,
-            };
-            // logger.info(context);
-            res.render('location/rackedit', context);
-          }
-        });
-      });
+        if (err) return next(err);
+        // logger.info('datacener= '+datacenter);
+        context = {
+          access: accConfig.accessCheck(req.user),
+          requrl: req.url,
+          optRackStatus: opt.optListArray,
+          id: datacenter._id,
+          fullName: datacenter.fullName,
+          abbreviation: datacenter.abbreviation,
+          createdOn: strTgs.dateMod(datacenter.createdOn),
+          foundingCompany: datacenter.foundingCompany,
+          titleNow: 'New Rack',
+          cageId: thisSubDoc.id,
+          cageNickname: thisSubDoc.cageNickname,
+          cageName: thisSubDoc.cageName,
+          cageAbbreviation: thisSubDoc.cageAbbreviation,
+        };
+        // logger.info(context);
+        res.render('location/rackedit', context);
+      }
+    });
+  });
 };
 
 // -----------------------------------------------------------------------
@@ -153,7 +148,6 @@ module.exports.dcRackNew = (req, res, next) => {
 // ------------------------------------------------------------------------
 
 // app.get('/location/rack/:data', handlers.rack.dcRackView);
-// app.get('/location/rack/:data/copy', handlers.rack.dcRackCopy);
 module.exports.dcRackView = (req, res, next) => {
   var rackUnique = req.params.data;
   var uber;
@@ -291,7 +285,6 @@ module.exports.dcRackView = (req, res, next) => {
 // -------------------------Rack Copy ------------------------------------
 // ------------------------------------------------------------------------
 
-// app.get('/location/rack/:data', handlers.rack.dcRackView);
 // app.get('/location/rack/:data/copy', handlers.rack.dcRackCopy);
 module.exports.dcRackCopy = (req, res, next) => {
   var backURL = req.header('Referer') || '/';
@@ -647,125 +640,124 @@ exports.dcRackPost = (req, res) => {
   if (accConfig.accessCheck(req.user).edit !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
-  } else {
-    // this makes the abbreviation available for the URL
-    res.abbreviation = req.body.abbreviation;
-    // logger.info('dcRackPost abbreviation>'+res.abbreviation);
-    // logger.info('rUs >'+req.body.rUs);
-    // logger.info('rUs expanded >'+ strTgs.compUs(req.body.rUs));
-    // rackUnique is created when making a new rack so it does not exist on new
-    // or copied racks
-    res.lastRack = req.body.rackNickname;
-    if (!req.body.rackUnique) {
-      if (req.body.wasCopy) {
-        res.abbreviation = req.body.wasCopy;
-      }
-      // logger.info('new rack in DC '+req.body.id);
-      Models.Rack.create({
-        rackParentDC: req.body.id,
-        rackParentCage: req.body.cageId,
-        rackNickname: strTgs.cTrim(req.body.rackNickname),
-        rackName: strTgs.stTrim(req.body.rackName),
-        rackUnique: (req.body.abbreviation + '_' + req.body.cageAbbreviation + '_' + strTgs.clTrim(req.body.rackNickname)),
-        rackDescription: strTgs.uTrim(req.body.rackDescription),
-        rackSN: strTgs.cTrim(req.body.rackSN),
-        rackHeight: strTgs.sTrim(req.body.rackHeight),
-        rackWidth: strTgs.uTrim(req.body.rackWidth),
-        rackDepth: strTgs.uTrim(req.body.rackDepth),
-        rackLat: strTgs.cTrim(req.body.rackLat),
-        rackLon: strTgs.cTrim(req.body.rackLon),
-        rackRow: strTgs.cTrim(req.body.rackRow),
-        rackStatus: req.body.rackStatus,
-        rackMake: strTgs.uTrim(req.body.rackMake),
-        rackModel: strTgs.uTrim(req.body.rackModel),
-        rUs: strTgs.sTrim(req.body.rUs),
-        rackNotes: strTgs.uTrim(req.body.rackNotes),
-        createdOn: Date.now(),
-        createdBy: req.user.local.email,
+  }
+  // this makes the abbreviation available for the URL
+  res.abbreviation = req.body.abbreviation;
+  // logger.info('dcRackPost abbreviation>'+res.abbreviation);
+  // logger.info('rUs >'+req.body.rUs);
+  // logger.info('rUs expanded >'+ strTgs.compUs(req.body.rUs));
+  // rackUnique is created when making a new rack so it does not exist on new
+  // or copied racks
+  res.lastRack = req.body.rackNickname;
+  if (!req.body.rackUnique) {
+    if (req.body.wasCopy) {
+      res.abbreviation = req.body.wasCopy;
+    }
+    // logger.info('new rack in DC '+req.body.id);
+    Models.Rack.create({
+      rackParentDC: req.body.id,
+      rackParentCage: req.body.cageId,
+      rackNickname: strTgs.multiTrim(req.body.rackNickname, 9, 1),
+      rackName: strTgs.multiTrim(req.body.rackName, 3, 0),
+      rackUnique: (`${req.body.abbreviation}_${req.body.cageAbbreviation}_${strTgs.multiTrim(req.body.rackNickname, 2, 2)}`),
+      rackDescription: strTgs.multiTrim(req.body.rackDescription, 6, 0),
+      rackSN: strTgs.multiTrim(req.body.rackSN, 9, 1),
+      rackHeight: strTgs.multiTrim(req.body.rackHeight, 8, 0),
+      rackWidth: strTgs.multiTrim(req.body.rackWidth, 8, 0),
+      rackDepth: strTgs.multiTrim(req.body.rackDepth, 8, 0),
+      rackLat: strTgs.multiTrim(req.body.rackLat, 9, 1),
+      rackLon: strTgs.multiTrim(req.body.rackLon, 9, 1),
+      rackRow: strTgs.multiTrim(req.body.rackRow, 9, 1),
+      rackStatus: req.body.rackStatus,
+      rackMake: strTgs.multiTrim(req.body.rackMake, 5, 0),
+      rackModel: strTgs.multiTrim(req.body.rackModel, 5, 0),
+      rUs: strTgs.multiTrim(req.body.rUs, 8, 0),
+      rackNotes: strTgs.multiTrim(req.body.rackNotes, 6, 0),
+      createdOn: Date.now(),
+      createdBy: req.user.local.email,
 
-      }, (err) => {
+    }, (err) => {
+      if (err) {
+        console.error(err.stack);
+        if (err.stack.indexOf('matching') != -1) {
+          req.session.flash = {
+            type: 'danger',
+            intro: 'Duplicate!',
+            message: 'Looks like there is already a rack by that name.',
+          };
+
+        } else {
+          req.session.flash = {
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'There was an error processing your request.',
+          };
+        }
+        return res.redirect(303, '/location/rack');
+      }
+      if (!req.body.wasCopy) {
+        req.session.flash = {
+          type: 'success',
+          intro: 'Thank you!',
+          message: 'Your update has been made.',
+        };
+        return res.redirect(303, `/location/datacenter/${res.abbreviation}`);
+      } else {
+        req.session.flash = {
+          type: 'success',
+          intro: 'Thank you!',
+          message: 'Rack ' + res.lastRack + ' has been created!',
+        };
+        return res.redirect(303, `/location/rack/${res.abbreviation}/copy`);
+
+      }
+    });
+
+  } else {
+    Models.Rack.findOne({ rackUnique: req.body.rackUnique }, (err, rack) => {
+      res.abbreviation = req.body.rackUnique;
+      var thisDoc = rack;
+      // logger.info('existing id>'+thisDoc);
+      if (err) {
+        // logger.info(err);
+        res.redirect(`location/datacenter/${res.abbreviation}`);
+      } else {
+
+        thisDoc.rackName = strTgs.multiTrim(req.body.rackName, 3, 0);
+        thisDoc.rackDescription = strTgs.multiTrim(req.body.rackDescription, 6, 0);
+        thisDoc.rackSN = strTgs.multiTrim(req.body.rackSN, 9, 1);
+        thisDoc.rackHeight = strTgs.multiTrim(req.body.rackHeight, 8, 0);
+        thisDoc.rackWidth = strTgs.multiTrim(req.body.rackWidth, 8, 0);
+        thisDoc.rackDepth = strTgs.multiTrim(req.body.rackDepth, 8, 0);
+        thisDoc.rackLat = strTgs.multiTrim(req.body.rackLat, 9, 1);
+        thisDoc.rackLon = strTgs.multiTrim(req.body.rackLon, 9, 1);
+        thisDoc.rackRow = strTgs.multiTrim(req.body.rackRow, 9, 1);
+        thisDoc.rackStatus = req.body.rackStatus;
+        thisDoc.rackMake = strTgs.multiTrim(req.body.rackMake, 5, 0);
+        thisDoc.rackModel = strTgs.multiTrim(req.body.rackModel, 5, 0);
+        thisDoc.rackNotes = strTgs.multiTrim(req.body.rackNotes, 6, 0);
+        thisDoc.rUs = strTgs.multiTrim(req.body.rUs, 8, 0);
+        thisDoc.modifiedOn = Date.now();
+        thisDoc.modifiedBy = req.user.local.email;
+      }
+      rack.save((err) => {
         if (err) {
           console.error(err.stack);
-          if (err.stack.indexOf('matching') != -1) {
-            req.session.flash = {
-              type: 'danger',
-              intro: 'Duplicate!',
-              message: 'Looks like there is already a rack by that name.',
-            };
-
-          } else {
-            req.session.flash = {
-              type: 'danger',
-              intro: 'Ooops!',
-              message: 'There was an error processing your request.',
-            };
-          }
-          return res.redirect(303, '/location/rack');
-        }
-        if (!req.body.wasCopy) {
           req.session.flash = {
-            type: 'success',
-            intro: 'Thank you!',
-            message: 'Your update has been made.',
+            type: 'danger',
+            intro: 'Ooops!',
+            message: 'There was an error processing your request.',
           };
-          return res.redirect(303, '/location/datacenter/' + res.abbreviation);
-        } else {
-          req.session.flash = {
-            type: 'success',
-            intro: 'Thank you!',
-            message: 'Rack ' + res.lastRack + ' has been created!',
-          };
-          return res.redirect(303, '/location/rack/copy~edit-' + res.abbreviation);
-
+          return res.redirect(303, `location/rack/${res.abbreviation}`);
         }
+        req.session.flash = {
+          type: 'success',
+          intro: 'Thank you!',
+          message: 'Your update has been made.',
+        };
+        return res.redirect(303, `/location/rack/${res.abbreviation}`);
       });
-
-    } else {
-      Models.Rack.findOne({ rackUnique: req.body.rackUnique }, (err, rack) => {
-        res.abbreviation = req.body.rackUnique;
-        var thisDoc = rack;
-        // logger.info('existing id>'+thisDoc);
-        if (err) {
-          // logger.info(err);
-          res.redirect('location/datacenter/' + res.abbreviation);
-        } else {
-
-          thisDoc.rackName = strTgs.stCleanup(thisDoc.rackName, req.body.rackName);
-          thisDoc.rackDescription = strTgs.uCleanUp(thisDoc.rackDescription, req.body.rackDescription);
-          thisDoc.rackSN = strTgs.uCleanUp(thisDoc.rackSN, req.body.rackSN);
-          thisDoc.rackHeight = strTgs.uCleanUp(thisDoc.rackHeight, req.body.rackHeight);
-          thisDoc.rackWidth = strTgs.uCleanUp(thisDoc.rackWidth, req.body.rackWidth);
-          thisDoc.rackDepth = strTgs.uCleanUp(thisDoc.rackDepth, req.body.rackDepth);
-          thisDoc.rackLat = strTgs.cCleanUp(thisDoc.rackLat, req.body.rackLat);
-          thisDoc.rackLon = strTgs.cCleanUp(thisDoc.rackLon, req.body.rackLon);
-          thisDoc.rackRow = strTgs.cCleanUp(thisDoc.rackRow, req.body.rackRow);
-          thisDoc.rackStatus = strTgs.uCleanUp(thisDoc.rackStatus, req.body.rackStatus);
-          thisDoc.rackMake = strTgs.uCleanUp(thisDoc.rackMake, req.body.rackMake);
-          thisDoc.rackModel = strTgs.uCleanUp(thisDoc.rackModel, req.body.rackModel);
-          thisDoc.rackNotes = strTgs.uCleanUp(thisDoc.rackNotes, req.body.rackNotes);
-          thisDoc.rUs = strTgs.uCleanUp(thisDoc.rUs, req.body.rUs);
-          thisDoc.modifiedOn = Date.now();
-          thisDoc.modifiedBy = req.user.local.email;
-        }
-        rack.save((err) => {
-          if (err) {
-            console.error(err.stack);
-            req.session.flash = {
-              type: 'danger',
-              intro: 'Ooops!',
-              message: 'There was an error processing your request.',
-            };
-            return res.redirect(303, 'location/rack/' + res.abbreviation);
-          }
-          req.session.flash = {
-            type: 'success',
-            intro: 'Thank you!',
-            message: 'Your update has been made.',
-          };
-          return res.redirect(303, '/location/rack/' + res.abbreviation);
-        });
-      });
-    }
+    });
   }
 };
 
@@ -793,16 +785,16 @@ exports.rackDelete = (req, res) => {
               req.session.flash = {
                 type: 'danger',
                 intro: 'Ooops!',
-                message: 'Something went wrong, ' + req.body.subName + ' was not deleted.',
+                message: `Something went wrong, ${req.body.subName} was not deleted.`,
               };
-              return res.redirect(303, '/location/rack/' + res.rackUnique);
+              return res.redirect(303, `/location/rack/${res.rackUnique}`);
             } else {
               req.session.flash = {
                 type: 'success',
                 intro: 'Done!',
-                message: 'Contact ' + req.body.rackUnique + ' has been deleted. Good luck with that one',
+                message: `Contact ${req.body.rackUnique} has been deleted. Good luck with that one`,
               };
-              return res.redirect(303, '/location/datacenter/' + res.abbreviation);
+              return res.redirect(303, `/location/datacenter/${res.abbreviation}`);
             }
           });
         }
@@ -820,63 +812,62 @@ exports.dcRackPowPost = (req, res) => {
   if (accConfig.accessCheck(req.user).edit !== 1) {
     req.session.flash = strTgs.notAuth;
     return res.redirect(303, '/');
-  } else {
-    Models.Rack.findOne({ rackUnique: req.body.rackUnique }, (err, rk) => {
-      res.abbreviation = req.body.rackUnique;
-      // logger.info('Rack Power findOne '+rk);
-      // logger.info('dcRackPowPost abbreviation>'+res.abbreviation);
-      if (req.body.rackPowUnique === 'new') {
-        thisSubDoc = 'new';
-      } else {
-        thisSubDoc = rk.powers.id(req.body.rackPowId);
-      }
-      // logger.info('existing id>'+thisSubDoc);
-      if (err) {
-        logger.info(err);
-        res.redirect(`location/rack/${res.abbreviation}`);
-      } else if (thisSubDoc === 'new') {
-        rk.powers.push({
-          rackPowMain: req.body.rackPowMain,
-          rackPowCircuit: strTgs.cTrim(req.body.rackPowCircuit),
-          rackPowUnique: `${req.body.abbreviation}_${req.body.rackPowMain}_${strTgs.cTrim(req.body.rackPowCircuit)}`,
-          rackPowStatus: req.body.rackPowStatus,
-          rackPowVolts: strTgs.sTrim(req.body.rackPowVolts),
-          rackPowPhase: strTgs.sTrim(req.body.rackPowPhase),
-          rackPowAmps: strTgs.sTrim(req.body.rackPowAmps),
-          rackPowReceptacle: strTgs.cTrim(req.body.rackPowReceptacle),
-          rackPowCreatedBy: req.user.local.email,
-          rackPowCreatedOn: modifiedOn = Date.now(),
-          rackPowModifiedby: req.user.local.email,
-          rackPowModifiedOn: modifiedOn = Date.now(),
-        });
-      } else {
-        thisSubDoc.rackPowStatus = strTgs.uCleanUp(thisSubDoc.rackPowStatus, req.body.rackPowStatus);
-        thisSubDoc.rackPowVolts = strTgs.uCleanUp(thisSubDoc.rackPowVolts, req.body.rackPowVolts);
-        thisSubDoc.rackPowPhase = strTgs.uCleanUp(thisSubDoc.rackPowPhase, req.body.rackPowPhase);
-        thisSubDoc.rackPowAmps = strTgs.uCleanUp(thisSubDoc.rackPowAmps, req.body.rackPowAmps);
-        thisSubDoc.rackPowReceptacle = strTgs.uCleanUp(thisSubDoc.rackPowReceptacle, req.body.rackPowReceptacle);
-        thisSubDoc.modifiedOn = Date.now();
-        thisSubDoc.modifiedBy = req.user.local.email;
-      }
-      rk.save((err) => {
-        if (err) {
-          console.error(err.stack);
-          req.session.flash = {
-            type: 'danger',
-            intro: 'Ooops!',
-            message: 'There was an error processing your request.',
-          };
-          return res.redirect(303, 'location/rack/' + res.abbreviation);
-        }
-        req.session.flash = {
-          type: 'success',
-          intro: 'Thank you!',
-          message: 'Your update has been made.',
-        };
-        return res.redirect(303, '/location/rack/' + res.abbreviation);
-      });
-    });
   }
+  Models.Rack.findOne({ rackUnique: req.body.rackUnique }, (err, rk) => {
+    res.abbreviation = req.body.rackUnique;
+    // logger.info('Rack Power findOne '+rk);
+    // logger.info('dcRackPowPost abbreviation>'+res.abbreviation);
+    if (req.body.rackPowUnique === 'new') {
+      thisSubDoc = 'new';
+    } else {
+      thisSubDoc = rk.powers.id(req.body.rackPowId);
+    }
+    // logger.info('existing id>'+thisSubDoc);
+    if (err) {
+      logger.info(err);
+      res.redirect(`location/rack/${res.abbreviation}`);
+    } else if (thisSubDoc === 'new') {
+      rk.powers.push({
+        rackPowMain: req.body.rackPowMain,
+        rackPowCircuit: strTgs.multiTrim(req.body.rackPowCircuit, 2, 2),
+        rackPowUnique: `${req.body.abbreviation}_${req.body.rackPowMain}_${strTgs.multiTrim(req.body.rackPowCircuit, 2, 2)}`,
+        rackPowStatus: req.body.rackPowStatus,
+        rackPowVolts: strTgs.multiTrim(req.body.rackPowVolts, 8, 0),
+        rackPowPhase: strTgs.multiTrim(req.body.rackPowPhase, 8, 0),
+        rackPowAmps: strTgs.multiTrim(req.body.rackPowAmps, 8, 0),
+        rackPowReceptacle: strTgs.multiTrim(req.body.rackPowReceptacle, 9, 1),
+        rackPowCreatedBy: req.user.local.email,
+        rackPowCreatedOn: modifiedOn = Date.now(),
+        rackPowModifiedby: req.user.local.email,
+        rackPowModifiedOn: modifiedOn = Date.now(),
+      });
+    } else {
+      thisSubDoc.rackPowStatus = req.body.rackPowStatus;
+      thisSubDoc.rackPowVolts = strTgs.multiTrim(req.body.rackPowVolts, 8, 0);
+      thisSubDoc.rackPowPhase = strTgs.multiTrim(req.body.rackPowPhase, 8, 0);
+      thisSubDoc.rackPowAmps = strTgs.multiTrim(req.body.rackPowAmps, 8, 0);
+      thisSubDoc.rackPowReceptacle = strTgs.multiTrim(req.body.rackPowReceptacle, 9, 1);
+      thisSubDoc.modifiedOn = Date.now();
+      thisSubDoc.modifiedBy = req.user.local.email;
+    }
+    rk.save((err) => {
+      if (err) {
+        console.error(err.stack);
+        req.session.flash = {
+          type: 'danger',
+          intro: 'Ooops!',
+          message: 'There was an error processing your request.',
+        };
+        return res.redirect(303, `location/rack/${res.abbreviation}`);
+      }
+      req.session.flash = {
+        type: 'success',
+        intro: 'Thank you!',
+        message: 'Your update has been made.',
+      };
+      return res.redirect(303, `/location/rack/${res.abbreviation}`);
+    });
+  });
 };
 /* ---------------------------------------------------------------------
 -------------------    rackPow Delete   --------------------------------
@@ -902,16 +893,16 @@ exports.rackSubDelete = (req, res) => {
               req.session.flash = {
                 type: 'danger',
                 intro: 'Ooops!',
-                message: 'Something went wrong, ' + req.body.subName + ' was not deleted.',
+                message: `Something went wrong, ${req.body.subName} was not deleted.`,
               };
-              return res.redirect(303, '/location/rack/' + res.abbreviation);
+              return res.redirect(303, `/location/rack/${res.abbreviation}`);
             } else {
               req.session.flash = {
                 type: 'success',
                 intro: 'Done!',
-                message: 'Contact ' + req.body.subName + ' has been deleted.',
+                message: `Contact ${req.body.subName} has been deleted.`,
               };
-              return res.redirect(303, '/location/rack/' + res.abbreviation);
+              return res.redirect(303, `/location/rack/${res.abbreviation}`);
             }
           });
         }
