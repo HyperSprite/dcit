@@ -151,12 +151,12 @@ module.exports = (app) => {
   app.get('/reportByInserviceEnvRole.json', handlers.report.reportByInserviceEnvRole);
 
   app.get('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
-  app.post('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
-  // app.get('/reports/:inDB/:findIn/:findWhat', handlers.report.allAggr);
-  // app.post('/reports/systemsPost', handlers.report.systemsAggr);
-  // app.post('/reports/systemsPost', handlers.report.systemsAggrPost);
+  app.post('/report/systems/:findIn/:findWhat', handlers.report.systemsAggr);
+  app.get('/reports/equipment/:findIn/:findWhat', handlers.report.equipmentAggr);
+  app.post('/report/equipment/:findIn/:findWhat', handlers.report.equipmentAggr);
 
   // Admin
+
   app.get('/admin', accChecks, isLoggedIn, handlers.admin.home);
   app.get('/admin/options', accChecks, isLoggedIn, handlers.admin.options);
   app.get('/admin/dbinsert', accChecks, isLoggedIn, handlers.admin.dbinsert);
@@ -186,6 +186,7 @@ module.exports = (app) => {
   app.get('/admin/optionsadmin/seedSystem', accChecks, isLoggedIn, handlers.admin.seedSystemGet);
   // AJAX
   app.get('/go/input', handlers.ajax.get);
+  app.get('/utility', handlers.ajax.userCheck);
   app.get('/autocomplete/allSystemNames', accCheckr, handlers.ajax.allSystemNames);
   app.get('/autocomplete/allSystemRole', accCheckr, handlers.ajax.allSystemRole);
   app.get('/autocomplete/allSystemEnviron', accCheckr, handlers.ajax.allSystemEnviron);

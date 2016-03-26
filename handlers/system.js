@@ -113,14 +113,14 @@ module.exports.dcSystemView = (req, res, next) => {
         return next;
       }
       Models.Optionsdb.find({}, 'optListKey optListArray', (err, opt) => {
-        if (err || !opt) {
+        if (err) {
           logger.warn(`${funcName} Optionsdb find one \n${err}`);
           req.session.flash = strTgs.errMsg('Could not find Options');
           res.redirect(backURL);
           return next;
         }
         Models.Equipment.find({}, {'equipSN': 1, 'equipLocation': 1, 'equipMake': 1, 'equipModel': 1, 'equipSubModel': 1, 'equipStatus': 1, 'equipType': 1, 'equipRUHieght': 1, 'equipPorts': 1, 'equipAddOns': 1, '_id': 0}, {sort: {equipSN: 1}}, (err, eq) => {
-          if (err || !eq) {
+          if (err) {
             logger.warn(`${funcName} Equipment find all \n${err}`);
             req.session.flash = strTgs.errMsg('Could not find Equipment');
             res.redirect(backURL);
@@ -129,7 +129,7 @@ module.exports.dcSystemView = (req, res, next) => {
           thisEquip = strTgs.findThisInThatMulti(sy.systemEquipSN, eq, 'equipSN');
           dcabbr = strTgs.getDCfromLoc(thisEquip.equipLocation);
           Models.Datacenter.findOne({abbreviation: dcabbr}, {'networks': 1, '_id': 0}, (err, oneDC) => {
-            if (err || !oneDC) {
+            if (err) {
               logger.warn(`${funcName} Equipment find all \n${err}`);
               req.session.flash = strTgs.errMsg('Could not find Equipment');
               res.redirect(backURL);
@@ -339,7 +339,7 @@ module.exports.dcSystemEdit = (req, res, next) => {
         return next;
       }
       Models.Equipment.find({equipSN: sy.systemEquipSN}, {'equipSN': 1, 'equipLocation': 1, 'equipMake': 1, 'equipModel': 1, 'equipSubModel': 1, 'equipStatus': 1, 'equipType': 1, 'equipRUHieght': 1, 'equipPorts': 1, 'equipAddOns': 1, '_id': 0}, {sort: {equipSN: 1}}, (err, eq) => {
-        if (err || !eq) {
+        if (err) {
           logger.warn(`${funcName} Equipment find all \n${err}`);
           req.session.flash = strTgs.errMsg('Could not find Equipment');
           res.redirect(backURL);

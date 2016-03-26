@@ -18,9 +18,6 @@ body {
        url('/fonts/Roboto-regular/Roboto-regular.svg#Roboto') format('svg');
 }*/
 
-
-
-
 h1 {
     text-transform: uppercase;
     font-weight: lighter;
@@ -46,8 +43,11 @@ navbar navbar-fixed-top > li > a {
                  0px 18px 23px rgba(0,0,0,0.1);
 }
 
+.container-margin {
+  margin          : 0 5% 0 5%;
+}
+
 table {
-  width           : 100%;
   margin-bottom   : 10px;
   border-collapse : collapse;
   background      : #fff;

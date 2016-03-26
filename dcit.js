@@ -215,11 +215,9 @@ const secureServer = https.createServer({
   key: fs.readFileSync(__dirname + '/ssl/cdsuperg.pem'),
   cert: fs.readFileSync(__dirname + '/ssl/cdsuperg.crt'),
 }, app).listen(appPORTs, () => {
-  logger.info('DCIT: HTTPS ' + app.get('env') +
-      ' https://localhost:' + appPORTs);
+  logger.info(`DCIT: HTTPS ${app.get('env')} https://localhost:${appPORTs}`);
 });
 
 const insecureServer = http.createServer(app).listen(appPORT, () => {
-  logger.info('DCIT: HTTP ' + app.get('env') +
-      ' http://localhost:' + appPORT);
+  logger.info(`DCIT: HTTP ${app.get('env')} http://localhost:${appPORT}`);
 });

@@ -311,3 +311,12 @@ module.exports.distinct = function(req, res) {
   }
 };
 
+module.exports.userCheck = (req, res, next) => {
+  var data = {
+    user: {},
+  };
+  if (req.user) {
+    data.user = accConfig.accessCheck(req.user);
+  }
+  return res.json(data);
+};
