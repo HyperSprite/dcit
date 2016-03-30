@@ -1,7 +1,7 @@
 
 <div> <!-- part /report-from-json.part1 -->
   <table id="tblPendingRequests" {{> bootstrap-table}}
-    data-url="/reports/{{equipmentOrSystems}}/{{findIn}}/{{findWhat}}.json"
+    data-url="/reports/{{equipmentOrSystems}}/{{findIn}}/{{findWhat}}.json{{#if query}}?{{query}}{{/if}}"
     >
     <thead>
       <tr>
@@ -17,11 +17,11 @@
         <th data-sortable="true" data-field="systemNotes" data-visible="false">System Notes</th>
         <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">Modified On</th>
         <th data-sortable="true" data-field="equipSN" data-formatter="equipSNFormatter">Equipment SN</th>
-        <th data-sortable="true" data-field="equipStatus">Status</th>
+        <th data-sortable="true" data-field="equipStatus" data-formatter="equipStatusFormatter">Status</th>
         <th data-sortable="true" data-field="equipType" data-visible="false">Type</th>
-        <th data-sortable="true" data-field="equipModelWithSubs">Make - Model</th>
+        <th data-sortable="true" data-field="equipModelWithSubs" data-formatter="equipModelWithSubsFormatter">Make - Model</th>
         <th data-sortable="true" data-field="equipRUHieght" data-visible="false">RU Height</th>
-        <th data-sortable="true" data-field="equipAcquisition">Acquisition</th>
+        <th data-sortable="true" data-field="equipAcquisition" data-formatter="equipAcquisitionFormatter">Acquisition</th>
         <th data-sortable="true" data-field="equipPONum" data-formatter="equipPONumFormatter" data-visible="false">PO Number</th>
         <th data-sortable="true" data-field="equipInvoice" data-formatter="equipInvoiceFormatter" data-visible="false">Invoice</th>
         <th data-sortable="true" data-field="equipProjectNum" data-formatter="equipProjectNumFormatter" data-visible="false">Project Number</th>

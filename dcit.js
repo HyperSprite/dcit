@@ -11,15 +11,10 @@ const moment = require('moment');
 const flash = require('connect-flash');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const morgan = require('morgan');
 const helmet = require('helmet');
-const seedDataLoad = require('./seedDataLoad.js');
 const logger = require('./lib/logger.js');
-const FileStreamRotator = require('file-stream-rotator');
-const logConfig = require('./config/log');
 const accConfig = require('./config/access');
 const expressSanitizer = require('express-sanitizer');
-var accessLogStream;
 
 const app = express();
 
@@ -137,29 +132,9 @@ app.use(session({
   cookie: { secure: true },
 }));
 
-// setup the logger
-// This says, use the logg dir, if not create the log dir
-// as specified in the logConfig file
-fs.existsSync(logConfig.logDirectory) || fs.mkdirSync(logConfig.logDirectory);
+app.use(require('morgan')('tiny', { stream: logger.stream }));
 
-switch (app.get('env')) {
-
-  case 'development':
-    app.use(morgan('dev'));
-    break;
-  case 'production':
-    accessLogStream = FileStreamRotator.getStream({
-      filename: `${logConfig.logDirectory}access-%DATE%.log`,
-      frequency: 'daily',
-      verbose: false,
-    });
-    app.use(morgan('combined', { stream: accessLogStream }));
-    break;
-  default:
-    throw new Error(`Unknown execution environment: ${app.get('env')}`);
-}
-
-logger.info('DCIT Log started');
+logger.info(`DCIT: Started ${moment().format('YYYY[-]MM[-]DD HH:mm:ss')}`);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -171,6 +146,7 @@ app.use((req, res, next) => {
   res.locals.access = accConfig.accessCheck(req.user);
   res.locals.user = accConfig.userCheck(req.user);
   res.locals.requrl = req.url;
+
 
   // res.locals.accessLevel = accConfig.accessCheck(req.user);
   // res.locals.currentUser = req.user;
@@ -191,23 +167,31 @@ app.use((req, res, next) => {
 app.all('*', (req, res, next) => {
   if (req.secure) {
     return next();
-  } else {
-    res.redirect('https://' + req.hostname + ':' + appPORTs + req.url);
   }
+  res.redirect(`https://${req.hostname}:${appPORTs}${req.url}`);
 });
 
 // add routes
 require('./routes')(app);
 
+// Error handler
+app.use((err, req, res, next) => {
+  logger.error(`REQ.URL: ${req.url}`);
+  logger.error(`REQ.USER ${res.locals.user.local.email}`);
+  logger.error(err);
+  next();
+});
+
+
 // 404 catch-all handler (middleware)
 app.use((req, res) => {
-  console.warn('404 url: ' + req.url);
+  logger.warn(`404 url: ${req.url}`);
   res.status(404).render('404');
 });
 
 // 500 error handler (middleware)
 app.use((err, req, res) => {
-  console.error(err.stack);
+  logger.error(err.stack);
   res.status(500).render('500');
 });
 

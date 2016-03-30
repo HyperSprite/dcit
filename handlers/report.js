@@ -1,13 +1,14 @@
 const async = require('async');
-const logger = require('../lib/logger.js');
-const strTgs = require('../lib/stringThings.js');
+const logger = require('../lib/logger');
+const strTgs = require('../lib/stringThings');
 const accConfig = require('../config/access');
 const csv = require('fast-csv');
-const dates = require('../lib/dates.js');
+const dates = require('../lib/dates');
 const moment = require('moment');
 const ObjectId = require('mongoose').Types.ObjectId;
 const IpSubnetCalculator = require('ip-subnet-calculator');
 const addContext = require('contextualizer');
+const objToQString = require('../lib/obj-to-qstring');
 
 // Models
 const Models = require('../models');
@@ -686,15 +687,15 @@ The route is based on the collection targeted.
 module.exports.systemsAggr = (req, res, next) => {
   var context = {};
   var data = req.params;
-  var queryTest;
+  var queryTest1;
   var findThis;
-  var matchTest;
+  var matchTest1;
   var filename;
   if (!data.findIn) {
-    data.findIn = req.body.findIn;
-    data.findWhat = req.body.findWhat;
+    data.findIn = strTgs.multiTrim(req.body.findIn, 9, 0);
+    data.findWhat = req.sanitize(req.body.findWhat);
   }
-  // console.dir(data);
+  logger.info(`findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
@@ -719,7 +720,7 @@ module.exports.systemsAggr = (req, res, next) => {
   // This block does locations
   findThis = (data.findWhat || 'XXXXXX');
 
-  matchTest = {
+  matchTest1 = {
     equipLocation: { 'equip.equipLocation': { '$regex': findThis, '$options': 'i'}},
     equipMake: { 'equip.equipMake': { '$regex': findThis, '$options': 'i'}},
     equipPONum: { 'equip.equipPONum': { '$regex': findThis, '$options': 'i'}},
@@ -728,13 +729,13 @@ module.exports.systemsAggr = (req, res, next) => {
     systemEnviron: { 'systemEnviron': { '$regex': findThis, '$options': 'i'}},
   };
 
-  queryTest = matchTest.hasOwnProperty(data.findIn);
-  if (!queryTest) {
+  queryTest1 = matchTest1.hasOwnProperty(data.findIn);
+  if (!queryTest1) {
     console.warn('ERRORsystems-aggr Report - Incorrect findIn value');
     res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
     return;
   }
-  data.queryIn = matchTest[data.findIn];
+  data.queryIn = matchTest1[data.findIn];
 
   Models.Systemdb.aggregate([
     {$lookup:
@@ -764,6 +765,7 @@ module.exports.systemsAggr = (req, res, next) => {
           rslt.equipRUHieght = rslt.equip[0].equipRUHieght || '';
           rslt.equipSN = rslt.equip[0].equipSN || '';
           rslt.equipStatus = rslt.equip[0].equipStatus || '';
+          rslt.equipEOL = rslt.equip[0].equipEOL || '';
           rslt.equipMake = rslt.equip[0].equipMake || '';
           rslt.equipModelWithSubs = rslt.equipModelWithSubs || '';
           rslt.equipModel = rslt.equip[0].equipModel || '';
@@ -774,6 +776,7 @@ module.exports.systemsAggr = (req, res, next) => {
           rslt.equipStatusLight = rslt.equip[0].equipStatus || '';
           rslt.equipType = rslt.equip[0].equipType || '';
           rslt.equipAcquisition = rslt.equip[0].equipAcquisition || '';
+          rslt.equipWarrantyMo = rslt.equip[0].equipWarrantyMo || '';
           rslt.equipPONum = rslt.equip[0].equipPONum || '';
           rslt.equipInvoice = rslt.equip[0].equipInvoice || '';
           rslt.equipProjectNum = rslt.equip[0].equipProjectNum || '';
@@ -785,6 +788,7 @@ module.exports.systemsAggr = (req, res, next) => {
           rslt.equipRUHieght = '';
           rslt.equipSN = '';
           rslt.equipStatus = '';
+          rslt.equipEOL = '';
           rslt.equipMake = '';
           rslt.equipModelWithSubs = '';
           rslt.equipModel = '';
@@ -795,6 +799,7 @@ module.exports.systemsAggr = (req, res, next) => {
           rslt.equipStatusLight = '';
           rslt.equipType = '';
           rslt.equipAcquisition = '';
+          rslt.equipWarrantyMo = '';
           rslt.equipPONum = '';
           rslt.equipInvoice = '';
           rslt.equipProjectNum = '';
@@ -835,6 +840,7 @@ module.exports.systemsAggr = (req, res, next) => {
           equipStatusLight: rslt.equipStatus,
           equipType: rslt.equipType,
           equipAcquisition: rslt.equipAcquisition,
+          equipEOL: rslt.equipEOL,
           equipPONum: rslt.equipPONum,
           equipInvoice: rslt.equipInvoice,
           equipProjectNum: rslt.equipProjectNum,
@@ -867,15 +873,20 @@ module.exports.systemsAggr = (req, res, next) => {
 module.exports.equipmentAggr = (req, res, next) => {
   var context = {};
   var data = req.params;
-  var queryTest;
   var findThis;
-  var matchTest;
+  var matchTest1;
+  var queryTest1;
+  var matchTest2;
+  var queryTest2;
   var filename;
+  data.query = req.query;
   if (!data.findIn) {
     data.findIn = req.body.findIn;
     data.findWhat = req.body.findWhat;
   }
-  // console.dir(data);
+  data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
+  data.findWhat = req.sanitize(data.findWhat);
+  logger.info(`findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
@@ -890,6 +901,7 @@ module.exports.equipmentAggr = (req, res, next) => {
     data.resExt = '.json';
     data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
   } else {
+    data.query = objToQString(data.query);
     return res.render('asset/reports', data);
     // data.findWhat = data.findWhat;
   }
@@ -899,30 +911,53 @@ module.exports.equipmentAggr = (req, res, next) => {
   // This block does locations
   findThis = (data.findWhat || 'XXXXXX');
 
-  matchTest = {
-    equipSN: { 'equipSN': { '$regex': findThis, '$options': 'i'}},
-    equipParent: { 'equipParent': { '$regex': findThis, '$options': 'i'}},
-    equipLocation: { 'equipLocation': { '$regex': findThis, '$options': 'i'}},
-    equipMake: { 'equipMake': { '$regex': findThis, '$options': 'i'}},
-    equipPONum: { 'equipPONum': { '$regex': findThis, '$options': 'i'}},
-    equipInvoice: { 'equipInvoice': { '$regex': findThis, '$options': 'i'}},
-    equipProjectNum: { 'equipProjectNum': { '$regex': findThis, '$options': 'i'}},
-    systemName: { 'systm.systemName': { '$regex': findThis, '$options': 'i'}},
-    systemRole: { 'systm.systemRole': { '$regex': findThis, '$options': 'i'}},
-    systemEnviron: { 'systm.systemEnviron': { '$regex': findThis, '$options': 'i'}},
-    systemTicket: { 'systm.systemTicket': { '$regex': findThis, '$options': 'i'}},
-    systemParentId: { 'systm.systemParentId': { '$regex': findThis, '$options': 'i'}},
-    systemAlias: { 'systm.systemAlias': { '$regex': findThis, '$options': 'i'}},
+  // Matches req.param.findIn to a regex filter to be used in the $match
+  matchTest1 = {
+    equipSN: { 'equipSN': { '$regex': findThis, '$options': 'i' } },
+    equipParent: { 'equipParent': { '$regex': findThis, '$options': 'i' } },
+    equipLocation: { 'equipLocation': { '$regex': findThis, '$options': 'i' } },
+    equipStatus: { 'equipStatus' : { '$regex': findThis, '$options': 'i' } },
+    equipMake: { 'equipMake': { '$regex': findThis, '$options': 'i' } },
+    equipPONum: { 'equipPONum': { '$regex': findThis, '$options': 'i' } },
+    equipInvoice: { 'equipInvoice': { '$regex': findThis, '$options': 'i' } },
+    equipProjectNum: { 'equipProjectNum': { '$regex': findThis, '$options': 'i' } },
+    systemName: { 'systm.systemName': { '$regex': findThis, '$options': 'i' } },
+    systemRole: { 'systm.systemRole': { '$regex': findThis, '$options': 'i' } },
+    systemEnviron: { 'systm.systemEnviron': { '$regex': findThis, '$options': 'i' } },
+    systemTicket: { 'systm.systemTicket': { '$regex': findThis, '$options': 'i' } },
+    systemParentId: { 'systm.systemParentId': { '$regex': findThis, '$options': 'i' } },
+    systemAlias: { 'systm.systemAlias': { '$regex': findThis, '$options': 'i' } },
   };
 
-  queryTest = matchTest.hasOwnProperty(data.findIn);
-  if (!queryTest) {
-    console.warn('ERRORsystems-aggr Report - Incorrect findIn value');
+  queryTest1 = matchTest1.hasOwnProperty(data.findIn);
+  if (!queryTest1) {
+    console.warn('ERROR equipmentAggr Report - Incorrect findIn value');
     return res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
   }
-  data.queryIn = matchTest[data.findIn];
+  data.queryIn = matchTest1[data.findIn];
+
+  data.equipEOL = true;
+  if (data.query.equipEOL) {
+    data.equiEOL = data.query.equipEOL;
+  }
+  logger.info(`data.query.equipEOL: ${data.query.equipEOL}`);
+  logger.info(`data.equipEOL: ${data.equipEOL}`);
+
+  data.equipLocation = '_';
+  if (data.query.equipLocation) {
+    data.equipLocation = data.query.equipLocation;
+  }
+  logger.info(`data.query.equipEOL: ${data.query.equipEOL}`);
+  logger.info(`data.equipEOL: ${data.equipEOL}`);
+
 
   Models.Equipment.aggregate([
+    {
+      $match: { 'equipLocation': { '$regex': data.equipLocation, '$options': 'i' } },
+    },
+    {
+      $match: { 'equipEOL' : {$ne : data.equipEOL } },
+    },
     {
       $lookup: {
         from: 'systemdbs',
@@ -932,8 +967,9 @@ module.exports.equipmentAggr = (req, res, next) => {
       },
     },
     { $match: data.queryIn,
-    }], (err, result) => {
-    if (err) return next (err);
+    },
+    ], (err, result) => {
+    if (err) return next(err);
     context = result.map((rslt) => {
       rslt.locCode = strTgs.locDest(rslt.equipLocation);
       rslt.equipModelWithSubs = `${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipSubModel}`;
@@ -998,6 +1034,8 @@ module.exports.equipmentAggr = (req, res, next) => {
         equipLocation: rslt.equipLocation,
         equipType: rslt.equipType,
         equipAcquisition: rslt.equipAcquisition,
+        equipEOL: rslt.equipEOL,
+        equipWarrantyMo: rslt.equipWarrantyMo,
         equipPONum: rslt.equipPONum,
         equipInvoice: rslt.equipInvoice,
         equipProjectNum: rslt.equipProjectNum,

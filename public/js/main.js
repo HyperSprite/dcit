@@ -148,6 +148,7 @@ $(document).ready(function() {
 // There is also some CSS for .error that makes it look good
 //
 
+
   $('.assetFormSubmit').click(function() {
     if ($('#datacenterForm').valid()) {
       $('#datacenterForm').submit();

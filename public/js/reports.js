@@ -1,8 +1,12 @@
 // for reports formatting using Bootstrap-table
+// Note: this is browser side, don't 'update' to template strings
+// until project moved to babel transpiling.
 
-// need to work on this one
 function equipLocationFormatter(value) {
-  return '<a href="/reports/equipment/equipLocation/' + value.substring(0, value.length - 3) + '" target="_blank"> ' + value + '</a>';
+  if (value) {
+    return '<a href="/reports/equipment/equipLocation/' + value.substring(0, value.length - 3) + '" target="_blank"> ' + value + '</a>';
+  }
+  return '-';
 }
 
 function systemNameFormatter(value) {
@@ -44,6 +48,16 @@ function equipSNFormatter(value) {
   return equipDisp;
 }
 
+function equipStatusFormatter(value) {
+  if (value === 'In Service') {
+    return '<span class="glyphicon glyphicon-ok-circle glyphicon-success"></span> ' + value;
+  }
+  if (value === 'In Service with issues') {
+    return '<span class="glyphicon glyphicon-warning-sign glyphicon-warning"></span> ' + value;
+  }
+  return value;
+}
+
 function equipPONumFormatter(value) {
   return '<a href="/reports/equipment/equipPONum/' + value + '" target="_blank"> ' + value + '</a>';
 }
@@ -56,13 +70,27 @@ function equipInvoiceFormatter(value) {
 function equipProjectNumFormatter(value) {
   return '<a href="/reports//reports/equipment/equipProjectNum' + value + '" target="_blank"> ' + value + '</a>';
 }
-// equipLocationFormatter
-// systemParentIdFormatter
-// systemEnvironFormatter
-// systemRoleFormatter
-// systemTicketFormatter
-// equipSNFormatter
-// equipAcquisitionFormatter
-// equipPONumFormatter
-// equipInvoiceFormatter
-// equipProjectNumFormatter
+
+function equipModelWithSubsFormatter(value) {
+  var valMkMod = value;
+  if (value.length > 42) {
+    valMkMod = value.substring(0, 39) + '...';
+  }
+  return valMkMod;
+}
+
+function equipAcquisitionFormatter(value) {
+  var newVal = moment(value).format('YYYY[-]MM[-]DD');
+  var testVal30 = moment(value).add(30, 'months');
+  var testVal36 = moment(value).add(36, 'months');
+  if (newVal === 'Invalid date') {
+    return '-';
+  }
+  if (testVal36 < moment()) {
+    return '<span class="glyphicon glyphicon-exclamation-sign glyphicon-danger"></span><span class="text-danger"><strong> ' + newVal + '</strong></span>';
+  }
+  if (testVal30 < moment()) {
+    return '<span class="glyphicon glyphicon-warning-sign glyphicon-warning"></span><strong> ' + newVal + '</strong>';
+  }
+  return '<span class="glyphicon glyphicon-ok-circle glyphicon-success"></span> ' + newVal;
+}
