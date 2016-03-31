@@ -1,89 +1,83 @@
 <div class="racks">
-    <h4>Equipment SN: {{equipSN}}
-</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <h4>Equipment SN: <strong>{{equipSN}}</strong></h4>
+      {{#if equipEOL}}<h4><strong> End of Life: Equipment no longer in inventory</strong></h4>{{/if}}
+    </div>
+    <div class="col-md-4">
+      {{> assets/equipment-e-c}}
+    </div>
+  </div>
     <ul id="eachUl"class="list-unstyled">
-            <li>
-            <div class="row">
-              <div class="col-md-4">
-                {{#if equipParent}} Parent: <a href="/reports/multi-?searchIn=equipment~equipParent&searchFor={{equipParent}}"><strong>{{equipParent}}</strong></a><br>{{/if}}
+      <li>
+      <div class="row">
+        <div class="col-md-4">
+          {{#if equipParent}} Parent: <a href="/reports/multi-?searchIn=equipment~equipParent&searchFor={{equipParent}}"><strong>{{equipParent}}</strong></a><br>{{/if}}
                     Location: <strong><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
                     Ticket: {{{equipTicketNumberlit}}}<br>
                     Equipment Status: {{{equipStatuslit}}}<br>
                     {{#if equipAssetTag}}Asset Tag: {{equipAssetTag}}<br>{{/if}}
-                </div>
-                <div class="col-md-4">
+        </div>
+      <div class="col-md-4">
                     {{#if systemName}}System: <strong><a href="/system/{{systemName}}">{{systemName}} </a></strong><br>
                     System Status: {{{systemStatus}}}<br>{{/if}}
-                </div>
-                <div class="col-md-2">
-                </div>
-              <div class="col-md-2">
-                  {{> assets/equipment-e-c}}
-              </div>
-            </div>
-            <div class="row">
-                <hr>
+      </div>
+      <div class="col-md-4">
 
-                {{> assets/equipport-list}}
+      </div>
+    </div>
 
-                <hr>
-                <div class="row">
-                <div class="col-md-4">
-
-                {{#if equipIsVirtual}} Is Virtual {{/if}}
-                {{#if equipEOL}} Is EOL {{/if}}
-                {{#if equipMake}}{{equipMake}}<br>{{/if}}
-                {{#if equipModel}}{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}<br>{{/if}}
-                {{#if equipType}}Type: {{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
-                <br>
-                <strong>Hardware Details</strong><br>
-                {{#if equipFirmware}}Firmware: {{equipFirmware}}<br>{{/if}}
-                {{#if equipMobo}}Motherboard: {{equipMobo}}<br>{{/if}}
-                {{#if equipCPUCount}}CPU: {{equipCPUCount}} {{#if equipCPUCores}}x {{equipCPUCores}}{{/if}} {{#if equipCPUType}}: {{equipCPUType}}{{/if}}<br>{{/if}}
-                {{#if equipMemTotal}}Memory: {{equipMemTotal}}{{#if equipMemType}} : {{equipMemType}}{{/if}}<br>{{/if}}
-                {{#if equipRaidType}}Raid: {{equipRaidType}}{{#if equipRaidLayout}} : {{equipRaidLayout}}{{/if}}<br>{{/if}}
-                {{#if equipHDDCount}}HDD: {{equipHDDCount}}{{#if equipHDDType}} : {{equipHDDType}}{{/if}}<br>{{/if}}
-                {{#if equipNICCount}}NIC: {{equipNICCount}}{{#if equipNICType}} : {{equipNICType}}{{/if}}<br>{{/if}}
+    <div class="row">
+      <hr>
+      {{> assets/equipport-list}}
+      <hr>
+      <div class="row">
+        <div class="col-md-4">
+          {{#if equipIsVirtual}} Is Virtual {{/if}}
+          {{#if equipMake}}{{equipMake}}<br>{{/if}}
+          {{#if equipModel}}{{equipModel}}{{#if equipSubModel}} {{equipSubModel}}{{/if}}<br>{{/if}}
+          {{#if equipType}}Type: {{#if equipRUHieght}}{{equipRUHieght}}U {{/if}}{{equipType}}<br>{{/if}}
+          <br>
+          <strong>Hardware Details</strong><br>
+          {{#if equipFirmware}}Firmware: {{equipFirmware}}<br>{{/if}}
+          {{#if equipMobo}}Motherboard: {{equipMobo}}<br>{{/if}}
+          {{#if equipCPUCount}}CPU: {{equipCPUCount}} {{#if equipCPUCores}}x {{equipCPUCores}}{{/if}} {{#if equipCPUType}}: {{equipCPUType}}{{/if}}<br>{{/if}}
+          {{#if equipMemTotal}}Memory: {{equipMemTotal}}{{#if equipMemType}} : {{equipMemType}}{{/if}}<br>{{/if}}
+          {{#if equipRaidType}}Raid: {{equipRaidType}}{{#if equipRaidLayout}} : {{equipRaidLayout}}{{/if}}<br>{{/if}}
+          {{#if equipHDDCount}}HDD: {{equipHDDCount}}{{#if equipHDDType}} : {{equipHDDType}}{{/if}}<br>{{/if}}
+          {{#if equipNICCount}}NIC: {{equipNICCount}}{{#if equipNICType}} : {{equipNICType}}{{/if}}<br>{{/if}}
 
 
-                {{#if equipPSUCount}}PSU: {{equipPSUCount}}<br>{{/if}}
-                {{#if equipPSUDraw}} Draw: {{equipPSUDraw}}Watts<br>{{/if}}
-                {{#if equipAddOns}}Add On Items: {{equipAddOns}}<br>{{/if}}
-                <br>
-                </div>
-                <div class="col-md-4">
-                <strong>Timing</strong><br>
-                {{#if equipReceived}}Received: {{equipReceived}}<br>{{/if}}
-                {{#if equipAcquisition}}Acquisition: {{equipAcquisition}}<br>{{/if}}
-                {{#if equipInService}}In Service: {{equipInService}}<br>{{/if}}
-                {{#if equipEndOfLife}}End of Life: {{equipEndOfLife}}<br>{{/if}}
-                {{#if equipWarrantyMo}}Warranty in Months: {{equipWarrantyMo}}<br>{{/if}}
-                <br>
-                <strong>Purchasing</strong><br>
-                {{#if equipPONum}}PO: {{equipPONum}}<br>{{/if}}
-                {{#if equipInvoice}}Invoice: {{equipInvoice}}<br>{{/if}}
-                {{#if equipProjectNum}}Project: {{equipProjectNum}}<br>{{/if}}
-                {{#if equipLicense}}License: {{equipLicense}}<br>{{/if}}
-                {{#if equipMaintAgree}}Maintenance Agreement: {{equipMaintAgree}}<br>{{/if}}
-                {{#if equipPurchaseType}}Type: {{equipPurchaseType}}<br>{{/if}}
-                {{#if equipPurchaser}}Purchaser: {{equipPurchaser}}<br>{{/if}}
-                {{#if equipPurchaseTerms}}Terms: {{equipPurchaseTerms}}<br>{{/if}}
-                {{#if equipPurchaseEnd}}End: {{equipPurchaseEnd}}<br>{{/if}}
-                <br>
-                {{#if equipNotes}}Notes: {{equipNotes}}<br>{{/if}}
-                {{#if createdBy}}Created By:<br> {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
-                {{#if modifiedBy}}Modified By:<br> {{modifiedBy}}{{/if}}{{#if modifiedOn}} {{modifiedOn}}<br>{{/if}}
-
-                </div>
-                </div>
-            </div>
-            </li><br>
-        </ul>
-
-
-
-
-
+          {{#if equipPSUCount}}PSU: {{equipPSUCount}}<br>{{/if}}
+          {{#if equipPSUDraw}} Draw: {{equipPSUDraw}}Watts<br>{{/if}}
+          {{#if equipAddOns}}Add On Items: {{equipAddOns}}<br>{{/if}}
+          <br>
+          </div>
+          <div class="col-md-4">
+          <strong>Timing</strong><br>
+          {{#if equipReceived}}Received: {{equipReceived}}<br>{{/if}}
+          {{#if equipAcquisition}}Acquisition: {{equipAcquisition}}<br>{{/if}}
+          {{#if equipInService}}In Service: {{equipInService}}<br>{{/if}}
+          {{#if equipEndOfLife}}End of Life: {{equipEndOfLife}}<br>{{/if}}
+          {{#if equipWarrantyMo}}Warranty in Months: {{equipWarrantyMo}}<br>{{/if}}
+          <br>
+          <strong>Purchasing</strong><br>
+          {{#if equipPONum}}PO: {{equipPONum}}<br>{{/if}}
+          {{#if equipInvoice}}Invoice: {{equipInvoice}}<br>{{/if}}
+          {{#if equipProjectNum}}Project: {{equipProjectNum}}<br>{{/if}}
+          {{#if equipLicense}}License: {{equipLicense}}<br>{{/if}}
+          {{#if equipMaintAgree}}Maintenance Agreement: {{equipMaintAgree}}<br>{{/if}}
+          {{#if equipPurchaseType}}Type: {{equipPurchaseType}}<br>{{/if}}
+          {{#if equipPurchaser}}Purchaser: {{equipPurchaser}}<br>{{/if}}
+          {{#if equipPurchaseTerms}}Terms: {{equipPurchaseTerms}}<br>{{/if}}
+          {{#if equipPurchaseEnd}}End: {{equipPurchaseEnd}}<br>{{/if}}
+          <br>
+          {{#if equipNotes}}Notes: {{equipNotes}}<br>{{/if}}
+          {{#if createdBy}}Created By:<br> {{createdBy}}{{#if createdOn}} {{createdOn}}{{/if}}<br>{{/if}}
+          {{#if modifiedBy}}Modified By:<br> {{modifiedBy}}{{/if}}{{#if modifiedOn}} {{modifiedOn}}<br>{{/if}}
+        </div>
+      </div>
+    </div>
+      </li><br>
+    </ul>
 </div>
-
-

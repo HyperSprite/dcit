@@ -879,14 +879,22 @@ module.exports.equipmentAggr = (req, res, next) => {
   var matchTest2;
   var queryTest2;
   var filename;
+  logger.info(`req.body ${JSON.stringify(req.body)}`);
+  logger.info(`req.params ${JSON.stringify(req.params)}`);
+  logger.info(`data ${JSON.stringify(data)}`);
   data.query = req.query;
   if (!data.findIn) {
     data.findIn = req.body.findIn;
     data.findWhat = req.body.findWhat;
   }
+  if (req.body) {
+    data.equipEOL = req.body.equipEOL;
+    data.equipLocation = req.body.equipLocation;
+  }
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
   logger.info(`findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
+
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
@@ -936,10 +944,11 @@ module.exports.equipmentAggr = (req, res, next) => {
   }
   data.queryIn = matchTest1[data.findIn];
 
-  data.equipEOL = true;
-  if (data.query.equipEOL) {
-    data.equiEOL = data.query.equipEOL;
+  data.equipEOL = null;
+  if (data.query.equipEOL === 'true') {
+    data.equipEOL = true;
   }
+
   logger.info(`data.query.equipEOL: ${data.query.equipEOL}`);
   logger.info(`data.equipEOL: ${data.equipEOL}`);
 
@@ -947,16 +956,13 @@ module.exports.equipmentAggr = (req, res, next) => {
   if (data.query.equipLocation) {
     data.equipLocation = data.query.equipLocation;
   }
-  logger.info(`data.query.equipEOL: ${data.query.equipEOL}`);
-  logger.info(`data.equipEOL: ${data.equipEOL}`);
-
 
   Models.Equipment.aggregate([
     {
       $match: { 'equipLocation': { '$regex': data.equipLocation, '$options': 'i' } },
     },
     {
-      $match: { 'equipEOL' : {$ne : data.equipEOL } },
+      $match: { 'equipEOL' : data.equipEOL },
     },
     {
       $lookup: {
