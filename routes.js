@@ -144,6 +144,7 @@ module.exports = (app) => {
   app.post('/system/:data/portdelete', accCheckd, isLoggedIn, handlers.system.dcsystemSubDelete);
 
   app.get('/reports', handlers.report.dcReport);
+
   app.get('/reports/:datacenter', handlers.report.dcByEnvRole);
   app.get('/env-role-reports', handlers.report.dcByEnvRole);
   app.get('/env-role-report/:datacenter', handlers.report.dcByEnvRole);
@@ -152,8 +153,10 @@ module.exports = (app) => {
 
   app.get('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
   app.post('/report/systems/:findIn/:findWhat', handlers.report.systemsAggr);
+  app.get('/reports/equipment/noFilters', handlers.report.equipmentAggr);
+  app.get('/reports/equipment/:fileType', handlers.report.equipmentAggr);
   app.get('/reports/equipment/:findIn/:findWhat', handlers.report.equipmentAggr);
-  app.post('/report/equipment/:findIn/:findWhat', handlers.report.equipmentAggr);
+
 
   // Admin
 
@@ -194,6 +197,6 @@ module.exports = (app) => {
   app.get('/autocomplete/allEquipMake', accCheckr, handlers.ajax.allEquipMake);
   app.get('/autocomplete/allEquipModel', accCheckr, handlers.ajax.allEquipModel);
   app.get('/autocomplete/allLocationRack', accCheckr, handlers.ajax.allLocationRack);
-  app.get('/utility/distinct/:findIn/:findWhat', accCheckr, handlers.ajax.distinct);
+  app.get('/utility/distinct', handlers.ajax.distinct);
   app.post('/process/singleportdelete', accCheckd, isLoggedIn, handlers.ajax.singlePortDelete);
 };

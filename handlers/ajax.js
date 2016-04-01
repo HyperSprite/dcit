@@ -296,20 +296,29 @@ exports.equipStatusEdit = function(req, res) {
 };
 
 // json returns
-
-module.exports.distinct = function(req, res) {
-  if (req.params.findIn !== 'User') {
-    const query = Models[req.params.findIn].distinct(req.params.findWhat);
-    query.exec(function(err, data) {
+// app.get('/utility/distinct', handlers.ajax.distinct);
+// /utility/distinct?findIn=Systemdb&findWhat=systemRole
+module.exports.distinct = (req, res) => {
+  var clnData;
+  var findWhat = strTgs.multiTrim(req.query.findWhat, 9, 0);
+  var findIn = strTgs.multiTrim(req.query.findIn, 9, 0);
+  if (req.query.findIn !== 'User') {
+    const query = Models[findIn].distinct(findWhat, { findWhat: { $nin: [', null'] } });
+    query.exec((err, data) => {
       if (err) {
         console.warn(err);
-        res.send(`${req.params.findWhat} lookup error`);
-      } else {
-        res.json(data.sort());
+        return res.send(`${req.query.findWhat} lookup error`);
       }
+      clnData = data.filter(cln => {
+        return (cln !== '');
+      });
+      res.json(clnData.sort());
     });
   }
 };
+
+
+"gallery" , { "gallery" : { $nin : ["", null] } }
 
 module.exports.userCheck = (req, res, next) => {
   var data = {

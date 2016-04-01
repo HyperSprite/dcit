@@ -25,32 +25,18 @@ var dcId = '';
 var query;
 
 module.exports.dcReport = (req, res, next) => {
-  Models.Systemdb.distinct('systemEnviron').exec((err, env) => {
-    // if (err) return next(err);
-    // logger.info(env);
-    Models.Systemdb.distinct('systemRole').exec((err, role) => {
-      if (err) return next(err);
-      // logger.info(role);
-      Models.Equipment.distinct('equipMake').exec((err, make) => {
-        if (err) return next(err);
-        var context = {
-          access: accConfig.accessCheck(req.user),
-          titleNow: 'Reports',
-          reportType: req.body.systemEnviron,
-          drop1: 'Environment',
-          drop1url: '/reports/env-',
-          drop1each: env.sort(),
-          drop2: 'Roles',
-          drop2url: '/reports/role-',
-          drop2each: role.sort(),
-          drop3: 'Make',
-          drop3url: '/reports/make-',
-          drop3each: make.sort(),
-        };
-        return res.render('asset/env-role-report', context);
-      });
-    });
-  });
+  var context = {
+    access: accConfig.accessCheck(req.user),
+    titleNow: 'Reports',
+    reportType: req.body.systemEnviron,
+    drop1: 'Environment',
+    drop1each: '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>',
+    drop2: 'Role',
+    drop2each: '<ul class="dropdown-menu drop-columns pull-right" id="systemRoleDrop"></ul>',
+    drop3: 'Make',
+    drop3each: '<ul class="dropdown-menu drop-columns pull-right" id="equipMakeDrop"></ul>',
+  };
+  return res.render('asset/env-role-report', context);
 };
 
 /*
@@ -529,14 +515,11 @@ module.exports.dcByEnvRole = (req, res, next) => {
                 equipsys: 'true',
                 reportType: req.body.systemEnviron,
                 drop1: 'Environment',
-                drop1url: '/reports/env-',
-                drop1each: env.sort(),
-                drop2: 'Roles',
-                drop2url: '/reports/role-',
-                drop2each: role.sort(),
+                drop1each: '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>',
+                drop2: 'Role',
+                drop2each: '<ul class="dropdown-menu drop-columns pull-right" id="systemRoleDrop"></ul>',
                 drop3: 'Make',
-                drop3url: '/reports/make-',
-                drop3each: make.sort(),
+                drop3each: '<ul class="dropdown-menu drop-columns pull-right" id="equipMakeDrop"></ul>',
                 lastSearch: lastSearch,
                 eqs: sys.map((sy) => {
                   var tempSys = strTgs.findThisInThatMulti(sy.systemEquipSN, eqs, 'equipSN');
@@ -597,14 +580,11 @@ module.exports.dcByEnvRole = (req, res, next) => {
                 equipsys: 'true',
                 reportType: req.body.systemEnviron,
                 drop1: 'Environment',
-                drop1url: '/reports/env-',
-                drop1each: env.sort(),
-                drop2: 'Roles',
-                drop2url: '/reports/role-',
-                drop2each: role.sort(),
+                drop1each: '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>',
+                drop2: 'Role',
+                drop2each: '<ul class="dropdown-menu drop-columns pull-right" id="systemRoleDrop"></ul>',
                 drop3: 'Make',
-                drop3url: '/reports/make-',
-                drop3each: make.sort(),
+                drop3each: '<ul class="dropdown-menu drop-columns pull-right" id="equipMakeDrop"></ul>',
                 lastSearch: lastSearch,
 
                 eqs: eqs.map(function(eq) {
@@ -873,27 +853,22 @@ module.exports.systemsAggr = (req, res, next) => {
 module.exports.equipmentAggr = (req, res, next) => {
   var context = {};
   var data = req.params;
+  var fileType = req.params.fileType || '';
   var findThis;
   var matchTest1;
   var queryTest1;
-  var matchTest2;
-  var queryTest2;
   var filename;
-  logger.info(`req.body ${JSON.stringify(req.body)}`);
-  logger.info(`req.params ${JSON.stringify(req.params)}`);
-  logger.info(`data ${JSON.stringify(data)}`);
+  logger.info(`880 - req.body ${JSON.stringify(req.body)}`);
+  logger.info(`881 - req.params ${JSON.stringify(req.params)}`);
+  logger.info(`882 - data ${JSON.stringify(data)}`);
   data.query = req.query;
   if (!data.findIn) {
-    data.findIn = req.body.findIn;
-    data.findWhat = req.body.findWhat;
-  }
-  if (req.body) {
-    data.equipEOL = req.body.equipEOL;
-    data.equipLocation = req.body.equipLocation;
+    data.findIn = data.query.findIn;
+    data.findWhat = data.query.findWhat + fileType;
   }
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
-  logger.info(`findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
+  logger.info(`890 - findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
 
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
@@ -910,8 +885,13 @@ module.exports.equipmentAggr = (req, res, next) => {
     data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
   } else {
     data.query = objToQString(data.query);
+    data.drop1 = 'Environment';
+    data.drop1each = '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>';
+    data.drop2 = 'Role';
+    data.drop2each = '<ul class="dropdown-menu drop-columns pull-right" id="systemRoleDrop"></ul>';
+    data.drop3 = 'Make';
+    data.drop3each = '<ul class="dropdown-menu drop-columns pull-right" id="equipMakeDrop"></ul>';
     return res.render('asset/reports', data);
-    // data.findWhat = data.findWhat;
   }
   // What are we looking for, this can certainly get better with query strings
   // This says, if they are specific, do that, otherwise do rsys
@@ -929,40 +909,57 @@ module.exports.equipmentAggr = (req, res, next) => {
     equipPONum: { 'equipPONum': { '$regex': findThis, '$options': 'i' } },
     equipInvoice: { 'equipInvoice': { '$regex': findThis, '$options': 'i' } },
     equipProjectNum: { 'equipProjectNum': { '$regex': findThis, '$options': 'i' } },
-    systemName: { 'systm.systemName': { '$regex': findThis, '$options': 'i' } },
-    systemRole: { 'systm.systemRole': { '$regex': findThis, '$options': 'i' } },
-    systemEnviron: { 'systm.systemEnviron': { '$regex': findThis, '$options': 'i' } },
-    systemTicket: { 'systm.systemTicket': { '$regex': findThis, '$options': 'i' } },
-    systemParentId: { 'systm.systemParentId': { '$regex': findThis, '$options': 'i' } },
-    systemAlias: { 'systm.systemAlias': { '$regex': findThis, '$options': 'i' } },
+    equipTicketNumber: { 'equipTicketNumber': { '$regex': findThis, '$options': 'i' } },
+    equipModifiedBy: { 'modifiedBy': { '$regex': findThis, '$options': 'i' } },
+    equipPortsAddr: { 'equipPorts.equipPortsAddr': { '$regex': findThis, '$options': 'i' } },
+    systemName: { 'sys.systemName': { '$regex': findThis, '$options': 'i' } },
+    systemRole: { 'sys.systemRole': { '$regex': findThis, '$options': 'i' } },
+    systemEnviron: { 'sys.systemEnviron': { '$regex': findThis, '$options': 'i' } },
+    systemTicket: { 'sys.systemTicket': { '$regex': findThis, '$options': 'i' } },
+    systemParentId: { 'sys.systemParentId': { '$regex': findThis, '$options': 'i' } },
+    systemAlias: { 'sys.systemAlias': { '$regex': findThis, '$options': 'i' } },
+    systemModifiedBy: { 'sys.modifiedBy': { '$regex': findThis, '$options': 'i' } },
+    sysPortEndPoint: { 'sys.systemPorts.sysPortEndPoint': { '$regex': findThis, '$options': 'i' } },
+    sysPortAddress: { 'sys.systemPorts.sysPortAddress': { '$regex': findThis, '$options': 'i' } },
+    sysPortVlan: { 'sys.systemPorts.sysPortVlan': { '$regex': findThis, '$options': 'i' } },
+    sysPortCablePath: { 'sys.systemPorts.sysPortCablePath': { '$regex': findThis, '$options': 'i' } },
   };
 
   queryTest1 = matchTest1.hasOwnProperty(data.findIn);
   if (!queryTest1) {
+    data.queryIn = { 'noMatch' : null };
     console.warn('ERROR equipmentAggr Report - Incorrect findIn value');
-    return res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
+    // return res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
+  } else {
+    data.queryIn = matchTest1[data.findIn];
   }
-  data.queryIn = matchTest1[data.findIn];
-
-  data.equipEOL = null;
+  // for EOL reports. Set to true, returns only equipment that is no longer in inventory
+  data.preMatchEquipment = [{ $or: [{ 'equipEOL' : null }, { 'equipEOL' : false }] }];
   if (data.query.equipEOL === 'true') {
-    data.equipEOL = true;
+    data.preMatchEquipment = [{ 'equipEOL' : true }];
   }
+  if (data.query.equipLocation) {
+    data.preMatchEquipment.push({ 'equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' }});
+  }
+  if (data.query.equipMake) {
+    data.preMatchEquipment.push({ 'equipMake': { '$regex': data.query.equipMake, '$options': 'i' }});
+  }
+
 
   logger.info(`data.query.equipEOL: ${data.query.equipEOL}`);
-  logger.info(`data.equipEOL: ${data.equipEOL}`);
-
-  data.equipLocation = '_';
-  if (data.query.equipLocation) {
-    data.equipLocation = data.query.equipLocation;
-  }
+  logger.info(`data.preMatchEquipment: ${JSON.stringify(data.preMatchEquipment)}`);
+  // equipLocation '_' exists in all location fields.
+  // data.equipLocation = '_';
+  // if (data.query.equipLocation) {
+  //   data.equipLocation = data.query.equipLocation;
+  // }
 
   Models.Equipment.aggregate([
+    // {
+    //   $match: { 'equipLocation': { '$regex': data.equipLocation, '$options': 'i' } },
+    // },
     {
-      $match: { 'equipLocation': { '$regex': data.equipLocation, '$options': 'i' } },
-    },
-    {
-      $match: { 'equipEOL' : data.equipEOL },
+      $match: { $and: data.preMatchEquipment },
     },
     {
       $lookup: {

@@ -31,6 +31,15 @@ navbar navbar-fixed-top > li > a {
     margin-left: 5px;
 }
 
+/*.navbar .nav>li {
+  position: relative;
+  margin-left: 5px;
+}
+
+/*.drop-columns > li {
+  margin-left: 5px;
+}*/
+*/
 .jumbotron {
     color: #EEEEEE;
     height: 500px;

@@ -159,6 +159,48 @@ $(document).ready(function() {
     $('.noEnterSubmit').keypress(function(e) {
       if (e.which == 13) return false;
     });
+
+  function mySystemEnviron(dSE) {
+    var distSysEnviron = '';
+    dSE.forEach(function(sE) {
+      console.log(`systemEnviron ${sE}`);
+      distSysEnviron += `<li><a href="/reports/equipment/systemEnviron/${sE}">${sE}</a></li>`;
+    });
+    $("#systemEnvironDrop").append(distSysEnviron);
+  }
+  if ($("#systemEnvironDrop").length) {
+    $("#systemEnvironDrop").ready(function() {
+      $.get("/utility/distinct?findIn=Systemdb&findWhat=systemEnviron", mySystemEnviron);
+    });
+  }
+
+  function mySystemRole(dSR) {
+    var distSysRole = '';
+    dSR.forEach(function(sR) {
+      console.log(`systemRole ${sR}`);
+      distSysRole += `<li><a href="/reports/equipment/systemRole/${sR}">${sR}</a></li>`;
+    });
+    $("#systemRoleDrop").append(distSysRole);
+  }
+  if ($("#systemRoleDrop").length) {
+    $("#systemRoleDrop").ready(function() {
+      $.get("/utility/distinct?findIn=Systemdb&findWhat=systemRole", mySystemRole);
+    });
+  }
+
+  function myEquipMake(dEM) {
+    var distEquipMake = '';
+    dEM.forEach(function(eM) {
+      console.log(`equipMake ${eM}`);
+      distEquipMake += `<li><a href="/reports/equipment/equipMake/${eM}">${eM}</a></li>`;
+    });
+    $("#equipMakeDrop").append(distEquipMake);
+  }
+  if ($("#equipMakeDrop").length) {
+    $("#equipMakeDrop").ready(function() {
+      $.get("/utility/distinct?findIn=Equipment&findWhat=equipMake", myEquipMake);
+    });
+  }
 });
 
 

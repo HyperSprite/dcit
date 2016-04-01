@@ -1,6 +1,6 @@
-     {{#if access.read}}
+     {{#if access.root}}
 
-        <form id="report-json" class="" role="search" autocomplete="off" action="#" method="POST">
+        <form id="report-json" class="" role="search" autocomplete="off" action="/reports/equipment" method="GET">
           <div class="form-group col-sm-4"> <!-- topnav.formgroup1 -->
             <label class="sr-only" for="field-findIn">Search in</label>
             <select id="field-findIn" class="form-control" name="findIn">

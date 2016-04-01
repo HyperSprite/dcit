@@ -134,7 +134,7 @@ app.use(session({
 
 app.use(require('morgan')('tiny', { stream: logger.stream }));
 
-logger.info(`DCIT: Started ${moment().format('YYYY[-]MM[-]DD HH:mm:ss')}`);
+logger.warn(`DCIT: Started ${moment().format('YYYY[-]MM[-]DD HH:mm:ss')}`);
 
 app.use(passport.initialize());
 app.use(passport.session());

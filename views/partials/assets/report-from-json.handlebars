@@ -1,7 +1,7 @@
 
 <div> <!-- part /report-from-json.part1 -->
   <table id="tblPendingRequests" {{> bootstrap-table}}
-    data-url="/reports/{{equipmentOrSystems}}/{{findIn}}/{{findWhat}}.json{{#if query}}?{{query}}{{/if}}"
+    data-url="/reports/{{equipmentOrSystems}}/{{findIn}}{{#if findIn }}/{{/if}}{{findWhat}}.json{{#if query}}?{{query}}{{/if}}"
     >
     <thead>
       <tr>
