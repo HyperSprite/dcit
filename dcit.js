@@ -176,8 +176,9 @@ require('./routes')(app);
 
 // Error handler
 app.use((err, req, res, next) => {
-  logger.error(`REQ.URL: ${req.url}`);
-  logger.error(`REQ.USER ${res.locals.user.local.email}`);
+  logger.error(`ERR URL : ${req.url}`);
+  logger.error(`ERR IP  : ${req.ip}`);
+  logger.error(`ERR USER: ${req.user.local.email}`);
   logger.error(err);
   next();
 });
@@ -185,7 +186,9 @@ app.use((err, req, res, next) => {
 
 // 404 catch-all handler (middleware)
 app.use((req, res) => {
-  logger.warn(`404 url: ${req.url}`);
+  logger.warn(`404 URL : ${req.url}`);
+  logger.warn(`404 IP  : ${req.ip}`);
+  logger.warn(`404 USER: ${req.user.local.email}`);
   res.status(404).render('404');
 });
 

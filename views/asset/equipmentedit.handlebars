@@ -26,7 +26,6 @@
       <div class="row">
         <!-- section 1 row 1 -->
         <div class="col-md-6">
-          <p class="form-control-static"></p>
 
           {{#if equipSN}}
           <div class="form-group">
@@ -63,20 +62,22 @@
           <!-- equipLocation start -->
           <div class="form-group">
             <label for="equipLocationRack" class="col-sm-4 control-label" >Location</label>
-            <div class="col-sm-6 ui-widget">
-              <input type="text" id="equipLocationRack" class="noEnterSubmit form-control form-group-sm" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" data-toggle="tooltip" data-delay='{"show":1500}' title="format DC_Cage_Rack. Rack Location will Autofill. The quickest way is to type the rack number and select it from the list" {{#if equipParent}}disabled{{/if}}>
-            </div>
-            <div class="col-xs-2">
-              <input list="equipLocationRu" id="list-equipLocationRu" class="noEnterSubmit form-control  form-group-sm" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" maxlength="2" title="1.75 or 3 hole Units counted from bottom of rack">
-              <datalist id="equipLocationRu">
-                <option "0a" >0a</option>
-                <option "0b" >0b</option>
-                <option "0c" >0c</option>
-                <option "0d" >0d</option>
-                {{#each rackrUs}}
-                <option {{{this}}} >{{this}}</option>
-                {{/each}}
-              </select>
+            <div class="col-sm-8">
+              <div class="form-group col-sm-8 no-margin">
+                <input type="text" id="equipLocationRack" class="noEnterSubmit form-control" name="equipLocationRack" value="{{equipLocationRack}}" placeholder="Rack Name" autocomplete="off" data-toggle="tooltip" data-delay='{"show":1500}' title="format DC_Cage_Rack. Rack Location will Autofill. The quickest way is to type the rack number and select it from the list" {{#if equipParent}}disabled{{/if}}>
+              </div>
+              <div class="form-group col-sm-4 no-margin">
+                <input list="equipLocationRu" id="list-equipLocationRu" class="noEnterSubmit form-control" name="equipLocationRu" value="{{equipLocationRu}}" placeholder="RU number" autocomplete="off" maxlength="2" title="1.75 or 3 hole Units counted from bottom of rack">
+                <datalist id="equipLocationRu">
+                  <option "0a" >0a</option>
+                  <option "0b" >0b</option>
+                  <option "0c" >0c</option>
+                  <option "0d" >0d</option>
+                  {{#each rackrUs}}
+                  <option {{{this}}} >{{this}}</option>
+                  {{/each}}
+                </select>
+              </div>
             </div>
           </div>
           <!-- equipLocation end -->

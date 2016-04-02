@@ -43,6 +43,10 @@ navbar navbar-fixed-top > li > a {
                  0px 18px 23px rgba(0,0,0,0.1);
 }
 
+.no-margin {
+  margin: 0;
+}
+
 .container-margin {
   margin          : 0 5% 0 5%;
 }

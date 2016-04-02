@@ -789,7 +789,7 @@ module.exports.systemsAggr = (req, res, next) => {
           rslt.equip_id = '';
         }
         rslt.locCode = strTgs.locDest(rslt.equipLocation);
-        rslt.equipModelWithSubs = `${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipSubModel}`;
+        rslt.equipModelWithSubs = `${rslt.equipMake} ${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipAddOns}`;
         return {
           systemName: rslt.systemName,
           dcSite: rslt.locCode.dcSite,
@@ -975,7 +975,7 @@ module.exports.equipmentAggr = (req, res, next) => {
     if (err) return next(err);
     context = result.map((rslt) => {
       rslt.locCode = strTgs.locDest(rslt.equipLocation);
-      rslt.equipModelWithSubs = `${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipSubModel}`;
+      rslt.equipModelWithSubs = `${rslt.equipMake} ${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipAddOns}`;
       if (rslt.sys.length > 0) {
         rslt.systemName = rslt.sys[0].systemName || '';
         rslt.systemStatus = rslt.sys[0].systemStatus || '';

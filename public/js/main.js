@@ -163,7 +163,7 @@ $(document).ready(function() {
   function mySystemEnviron(dSE) {
     var distSysEnviron = '';
     dSE.forEach(function(sE) {
-      console.log(`systemEnviron ${sE}`);
+      // console.log(`systemEnviron ${sE}`);
       distSysEnviron += `<li><a href="/reports/equipment/systemEnviron/${sE}">${sE}</a></li>`;
     });
     $("#systemEnvironDrop").append(distSysEnviron);
@@ -177,7 +177,7 @@ $(document).ready(function() {
   function mySystemRole(dSR) {
     var distSysRole = '';
     dSR.forEach(function(sR) {
-      console.log(`systemRole ${sR}`);
+      // console.log(`systemRole ${sR}`);
       distSysRole += `<li><a href="/reports/equipment/systemRole/${sR}">${sR}</a></li>`;
     });
     $("#systemRoleDrop").append(distSysRole);
@@ -191,7 +191,7 @@ $(document).ready(function() {
   function myEquipMake(dEM) {
     var distEquipMake = '';
     dEM.forEach(function(eM) {
-      console.log(`equipMake ${eM}`);
+      // console.log(`equipMake ${eM}`);
       distEquipMake += `<li><a href="/reports/equipment/equipMake/${eM}">${eM}</a></li>`;
     });
     $("#equipMakeDrop").append(distEquipMake);

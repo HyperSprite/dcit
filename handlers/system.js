@@ -88,7 +88,7 @@ module.exports.dcSystemView = (req, res, next) => {
   var syName = req.params.data;
   var context;
   var dcabbr;
-  var thisEquip
+  var thisEquip;
   var thisEquipPortsMapped;
   var hasIlom;
   var makeMod;
@@ -128,7 +128,7 @@ module.exports.dcSystemView = (req, res, next) => {
           }
           thisEquip = strTgs.findThisInThatMulti(sy.systemEquipSN, eq, 'equipSN');
           dcabbr = strTgs.getDCfromLoc(thisEquip.equipLocation);
-          Models.Datacenter.findOne({abbreviation: dcabbr}, {'networks': 1, '_id': 0}, (err, oneDC) => {
+          Models.Datacenter.findOne({ abbreviation: dcabbr }, { 'networks': 1, '_id': 0 }, (err, oneDC) => {
             if (err) {
               logger.warn(`${funcName} Equipment find all \n${err}`);
               req.session.flash = strTgs.errMsg('Could not find Equipment');

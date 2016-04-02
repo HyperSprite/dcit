@@ -559,7 +559,7 @@ module.exports.logdelete = (req, res) => {
 //
 module.exports.csvToDBPost = (req, res) => {
   var equipmentStream;
-  var equipPortsStream;
+  var portsStream;
   var systemdbStream;
   var systemPortsStream;
   // logger.info('csvToDBPost >'+req.body.file);
@@ -580,19 +580,51 @@ module.exports.csvToDBPost = (req, res) => {
         });
       break;
     case 'Equipment.equipPorts':
-      equipPortsStream = fs.createReadStream(req.body.file);
+      // equipPortsStream = fs.createReadStream(req.body.file);
+      // csv
+      //   .fromStream(equipPortsStream, { headers: true })
+      //   .on('data', (data) => {
+      //     if (!data.equipSN) {
+      //     // logger.info('Equipment Port error');
+      //     } else {
+      //       equipmentCrud.equipmentPortCreate(data, req);
+      //     }
+      //   })
+      //   .on('end', () => {
+      //   // logger.info('done');
+      //   });
+
+      var thisName = 'equipSN';
+      var inputObj = [];
+      var inputData;
+      var i = 1;
+      portsStream = fs.createReadStream(req.body.file);
       csv
-        .fromStream(equipPortsStream, { headers: true })
+        .fromStream(portsStream, { headers: true })
         .on('data', (data) => {
-          if (!data.equipSN) {
-          // logger.info('Equipment Port error');
+          i++;
+          if (data[thisName] === '') {
+            logger.warn(`${thisName} portsStream Error on row ${i}, index: ${data.index} or not found`);
           } else {
-            equipmentCrud.equipmentPortCreate(data, req);
+            inputData = data;
+            if (inputObj.findIndex(sN => sN[thisName] === data[thisName]) === -1) {
+              inputObj.push({
+                equipSN: data[thisName],
+                equipPorts: [inputData],
+              });
+            } else {
+              var indx = inputObj.findIndex(sN => sN[thisName] === data[thisName]);
+              inputObj[indx].equipPorts.push(inputData);
+            }
           }
+          // logger.warn(`index : ${i}`);
+          // logger.warn(inputObj);
         })
         .on('end', () => {
-        // logger.info('done');
+          equipmentCrud.equipmentPortCreate(inputObj, req);
         });
+
+
       break;
     case 'Systemdb':
       systemdbStream = fs.createReadStream(req.body.file);
