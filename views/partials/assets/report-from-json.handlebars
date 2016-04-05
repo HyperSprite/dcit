@@ -5,6 +5,35 @@
     >
     <thead>
       <tr>
+      {{#if ugly}}
+        <th data-sortable="true" data-field="index">index</th>
+        <th data-sortable="true" data-field="equipLocation" data-formatter="equipLocationFormatter" data-order="asc">equipLocationRack</th>
+        <th data-sortable="true" data-field="dcRU">equipLocationRu</th>
+        <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">sysmodifiedOn</th>
+        <th data-sortable="true" data-field="systemName">systemName</th>
+        <th data-sortable="true" data-field="systemAlias">systemAlias</th>
+        <th data-sortable="true" data-field="systemParentId">systemParentId</th>
+        <th data-sortable="true" data-field="systemStatus">Status</th>
+        <th data-sortable="true" data-field="systemEnviron">systemEnviron</th>
+        <th data-sortable="true" data-field="systemRole">systemRole</th>
+        <th data-sortable="true" data-field="systemTicket" data-visible="false">systemTicket</th>
+        <th data-sortable="true" data-field="systemNotes" data-visible="false">systemNotes</th>
+        <th data-sortable="true" data-field="equipmodifiedOn" data-visible="false">equipmodifiedOn</th>
+        <th data-sortable="true" data-field="equipSN">equipSN</th>
+        <th data-sortable="true" data-field="equipStatus">equipStatus</th>
+        <th data-sortable="true" data-field="equipType">equipType</th>
+        <th data-sortable="true" data-field="equipMake">equipMake</th>
+        <th data-sortable="true" data-field="equipMake" data-visible="false">equipModel</th>
+        <th data-sortable="true" data-field="equipMake" data-visible="false">equipSubModel</th>
+        <th data-sortable="true" data-field="equipRUHieght" data-visible="false">equipRUHieght</th>
+        <th data-sortable="true" data-field="equipAcquisition">equipAcquisition</th>
+        <th data-sortable="true" data-field="equipPONum" data-visible="false"></th>
+        <th data-sortable="true" data-field="equipInvoice" data-visible="false">equipInvoice</th>
+        <th data-sortable="true" data-field="equipProjectNum">equipProjectNum</th>
+        <th data-sortable="true" data-field="equipNotes" data-visible="false">equipNotes</th>
+
+        {{else}}
+
         <th data-sortable="true" data-field="index" data-visible="false">Index</th>
         <th data-sortable="true" data-field="equipLocation" data-formatter="equipLocationFormatter" data-order="asc">DC_Cage_Rack_RU</th>
         <th data-sortable="true" data-field="systemName" data-formatter="systemNameFormatter">System Name</th>
@@ -27,6 +56,7 @@
         <th data-sortable="true" data-field="equipProjectNum" data-formatter="equipProjectNumFormatter" data-visible="false">Project Number</th>
         <th data-sortable="true" data-field="equipNotes" data-visible="false">Notes</th>
         <th data-sortable="true" data-field="equipmodifiedOn" data-visible="false">Modified On</th>
+      {{/if}}
       </tr>
     </thead>
   </table>

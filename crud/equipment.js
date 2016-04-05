@@ -8,13 +8,15 @@ exports.equipmentCreate = function (data, req) {
     if (err) next(err);
     if (!eq) {
       Equipment.create({
-        equipLocation: strTgs.locComb(data.equipLocationRack,data.equipLocationRu),
+        equipLocation: strTgs.locComb(data.equipLocationRack, data.equipLocationRu),
         equipSN: strTgs.cTrim(data.equipSN),
         equipAssetTag: strTgs.sTrim(data.equipAssetTag),
         equipTicketNumber: strTgs.cTrim(data.equipTicketNumber),
         equipInventoryStatus: strTgs.uTrim(data.equipInventoryStatus),
         equipStatus: strTgs.uTrim(data.equipStatus),
         equipIsVirtual: data.equipIsVirtual,
+        equipEOL: data.equipEOL,
+        equipLOB: strTgs.multiTrim(data.equipLOB, 5, 0),
         equipType: strTgs.uTrim(data.equipType),
         equipMake: strTgs.uTrim(data.equipMake),
         equipModel: strTgs.uTrim(data.equipModel),
@@ -90,6 +92,12 @@ exports.equipmentCreate = function (data, req) {
         }
         if (data.equipIsVirtual) {
           thisDoc.equipIsVirtual = strTgs.uTrim(data.equipIsVirtual);
+        }
+        if (data.equipEOL) {
+          thisDoc.equipEOL = data.equipEOL;
+        }
+        if (data.equipLOB) {
+          thisDoc.equipLOB = strTgs.multiTrim(data.equipLOB, 5, 0);
         }
         if (data.equipType) {
           thisDoc.equipType = strTgs.uTrim(data.equipType);
@@ -236,7 +244,7 @@ exports.equipmentPortCreate = function (data, req) {
         portData.equipPorts.forEach((sPortData) => {
           var thisSubDoc;
           if (!sPortData.equipPortType) {
-            logger.info(`csvUpload, eqPortCreate Failed: No Port Found Issue`);
+            logger.warn(`csvUpload, eqPortCreate Failed: No Port Found Issue`);
           } else if (portArray.indexOf(sPortData.equipPortName) === -1) {
             eq.equipPorts.push({
               equipPortType: strTgs.multiTrim(sPortData.equipPortType, 7, 0),
@@ -256,6 +264,9 @@ exports.equipmentPortCreate = function (data, req) {
               if (sPortData.equipPortType) {
                 thisSubDoc.equipPortType = strTgs.multiTrim(sPortData.equipPortType, 7, 0);
               }
+              if (sPortData.equipPortName) {
+                thisSubDoc.equipPortName = strTgs.multiTrim(sPortData.equipPortName, 9, 2);
+              }
               if (sPortData.equipPortsAddr) {
                 thisSubDoc.equipPortsAddr = strTgs.multiTrim(sPortData.equipPortsAddr, 10, 0);
               }
@@ -269,12 +280,12 @@ exports.equipmentPortCreate = function (data, req) {
         });
         eq.save((err) => {
           if (err) {
-            logger.warn(`csvUpload, eqPortUpdate Failed, ${err}, ${data.index}, ${strTgs.cTrim(data.equipSN)}`);
+            logger.warn(`csvUpload, eqPortUpdate Failed, ${err}, ${strTgs.multiTrim(portData.equipSN, 9, 1)}`);
           } else {
-            logger.info(`csvUpload, eqPortUpdate Sucessful write, ${data.index}, ${data.equipSN}, ${data.equipPortName}`);
+            logger.info(`csvUpload, eqPortUpdate Sucessful write, ${strTgs.multiTrim(portData.equipSN, 9, 1)}`);
             return ('done');
           }
-            logger.warn(`csvUpload, eqPortUpdate Failed CSV modifiedOn date older, ${data.index}, ${data.equipSN}`);
+          logger.warn(`csvUpload, eqPortUpdate Failed CSV modifiedOn date older, ${strTgs.multiTrim(portData.equipSN, 9, 1)}`);
         });
       }
     });

@@ -868,8 +868,8 @@ module.exports.equipmentAggr = (req, res, next) => {
   }
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
+  data.ugly = req.query.ugly;
   logger.info(`890 - findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
-
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
@@ -884,6 +884,7 @@ module.exports.equipmentAggr = (req, res, next) => {
     data.resExt = '.json';
     data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
   } else {
+    logger.info(`data ${data}`);
     data.query = objToQString(data.query);
     data.drop1 = 'Environment';
     data.drop1each = '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>';

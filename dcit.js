@@ -109,14 +109,14 @@ var options = {
   },
 };
 switch (app.get('env')) {
-case 'development':
-  mongoose.connect(credentials.mongo.development.connectionString, options);
-  break;
-case 'production':
-  mongoose.connect(credentials.mongo.production.connectionString, options);
-  break;
-default:
-  throw new Error('Unknown execution environment: ' + app.get('env'));
+  case 'development':
+    mongoose.connect(credentials.mongo.development.connectionString, options);
+    break;
+  case 'production':
+    mongoose.connect(credentials.mongo.production.connectionString, options);
+    break;
+  default:
+    throw new Error(`Unknown execution environment: ${app.get('env')}`);
 }
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());

@@ -469,7 +469,7 @@ module.exports.uploadPost = (req, res) => {
       req.session.flash = {
         type: 'success',
         intro: 'Awesome!',
-        message: `File  ${fileHRName} uploaded.}`,
+        message: `File  ${fileHRName} uploaded.`,
       };
       return res.redirect(303, '/admin/filemanager');
     });
@@ -499,7 +499,7 @@ module.exports.uploadDeletePost = (req, res) => {
           req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
-            message: `Something went wrong, ${bdy.fileHRName} was not deleted.`,
+            message: `Something went wrong, ${fileToDelete.fileHRName} was not deleted.`,
           };
           return res.redirect(303, '/admin/filemanager');
         }
@@ -510,15 +510,15 @@ module.exports.uploadDeletePost = (req, res) => {
             req.session.flash = {
               type: 'danger',
               intro: 'Ooops!',
-              message: `Something went wrong, ${bdy.fileHRName} was not deleted.`,
+              message: `Something went wrong, ${fileToDelete.fileHRName} was not deleted.`,
             };
             return res.redirect(303, '/admin/filemanager');
           }
-          logger.warn(`Uploaded File Deleted, ${bdy.fileHRName}`);
+          logger.warn(`Uploaded File Deleted, ${fileToDelete.fileHRName}`);
           req.session.flash = {
             type: 'success',
             intro: 'Done!',
-            message: `File ${bdy.fileHRName} has been deleted. Good luck with that one`,
+            message: `File ${fileToDelete.fileHRName} has been deleted. Good luck with that one`,
           };
           return res.redirect(303, '/admin/filemanager');
         });

@@ -14,31 +14,32 @@ const equipRMASchema = mongoose.Schema({
   createdBy: String,
   modifiedBy: String,
 },
-  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
+  { timestamps: { createdAt: 'createdOn', updatedAt: 'modifiedOn' },
 });
 
 const equipPortSchema = mongoose.Schema({
   equipPortType: String,
-  equipPortsAddr: {type: String, unique: true, sparse: true},
+  equipPortsAddr: { type: String, unique: true, sparse: true },
   equipPortName: String,
   equipPortsOpt: String,
   createdBy: String,
   modifiedBy: String,
 },
-  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
+  { timestamps: { createdAt: 'createdOn', updatedAt: 'modifiedOn' },
 });
 
 const equipmentSchema = mongoose.Schema({
-  equipLocation: {type: String, index: 1},
-  equipSN: {type: String, unique: true, index: 1, sparse: true, required: true},
+  equipLocation: { type: String, index: 1 },
+  equipSN: { type: String, unique: true, index: 1, sparse: true, required: true},
   equipAssetTag: String,
   equipRMAs: [equipRMASchema],
-  equipPorts:[equipPortSchema],
+  equipPorts: [equipPortSchema],
   equipTicketNumber: String,
   equipInventoryStatus: { type: Boolean, default: true },
   equipStatus: String,
   equipIsVirtual: { type: Boolean, default: false },
   equipEOL: { type: Boolean, default: false, index: 1 },
+  equipLOB: { type: String, index: 1 },
   equipType: String,
   equipMake: { type: String, index: 1 },
   equipModel: String,
@@ -65,7 +66,7 @@ const equipmentSchema = mongoose.Schema({
   equipPSUCount: Number,
   equipPSUDraw: Number,
   equipAddOns: String,
-  equipReceived: {type: Date},
+  equipReceived: { type: Date },
   equipAcquisition: Date,
   equipInService: Date,
   equipEndOfLife: Date,
@@ -83,7 +84,7 @@ const equipmentSchema = mongoose.Schema({
   createdBy: String,
   modifiedBy: String,
 },
-  {timestamps: {createdAt: 'createdOn', updatedAt: 'modifiedOn'},
+  { timestamps: { createdAt: 'createdOn', updatedAt: 'modifiedOn' },
 });
 
 // Apply the uniqueValidator plugin to datacenterSchema
