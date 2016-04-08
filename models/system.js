@@ -31,6 +31,7 @@ const systemdbSchema = mongoose.Schema({
   systemEnviron: { type: String, index: 1 },
   systemRole: { type: String, index: 1 },
   systemInventoryStatus: { type: Boolean, default: false },
+  systemTemplate: Boolean,
   systemTicket: String,
   systemStatus: String,
   systemOwner: String,

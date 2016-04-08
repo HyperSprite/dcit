@@ -40,6 +40,7 @@ const equipmentSchema = mongoose.Schema({
   equipIsVirtual: { type: Boolean, default: false },
   equipEOL: { type: Boolean, default: false, index: 1 },
   equipLOB: { type: String, index: 1 },
+  equipTemplate: Boolean,
   equipType: String,
   equipMake: { type: String, index: 1 },
   equipModel: String,

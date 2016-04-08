@@ -649,7 +649,7 @@ exports.dcSystemPost = (req, res) => {
             sysPortEndPointPre: strTgs.multiTrim(bd.sysPortEndPointPre[i], 9, 2),
             sysPortEndPointPort: strTgs.multiTrim(bd.sysPortEndPointPort[i], 9, 2),
             sysPortVlan: strTgs.multiTrim(bd.sysPortVlan[i], 7, 0),
-            sysPortOptions: strTgs.multiTrim(bd.sysPortOptions[i], 4, 2),
+            sysPortOptions: strTgs.multiTrim(bd.sysPortOptions[i], 6, 2),
             sysPortURL: req.sanitize(bd.sysPortURL[i]),
             // sysPortCrossover: bd.sysPortCrossover[i],
           });
@@ -745,7 +745,7 @@ exports.dcSystemPost = (req, res) => {
               sysPortEndPointPre: strTgs.multiTrim(bd.sysPortEndPointPre[i], 9, 2),
               sysPortEndPointPort: strTgs.multiTrim(bd.sysPortEndPointPort[i], 9, 2),
               sysPortVlan: strTgs.multiTrim(bd.sysPortVlan[i], 7, 0),
-              sysPortOptions: strTgs.multiTrim(bd.sysPortOptions[i], 4, 2),
+              sysPortOptions: strTgs.multiTrim(bd.sysPortOptions[i], 6, 2),
               sysPortURL: req.sanitize(bd.sysPortURL[i]),
               /*            sysPortCrossover: strTgs.doCheckbox(bd.sysPortCrossover[i]),  future*/
             });

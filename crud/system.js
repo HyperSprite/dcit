@@ -164,7 +164,7 @@ module.exports.systemdbPortsCreate = (data, req) => {
               sysPortEndPointPre: strTgs.multiTrim(sDataSysPort.sysPortEndPointPre, 9, 2),
               sysPortEndPointPort: strTgs.multiTrim(sDataSysPort.sysPortEndPointPort, 9, 2),
               sysPortVlan: strTgs.multiTrim(sDataSysPort.sysPortVlan, 7, 0),
-              sysPortOptions: strTgs.multiTrim(sDataSysPort.sysPortOptions, 4, 2),
+              sysPortOptions: strTgs.multiTrim(sDataSysPort.sysPortOptions, 6, 2),
               sysPortURL: req.sanitize(sDataSysPort.sysPortURL),
               modifiedOn: sDataSysPort.modifiedOn,
               /*            sysPortCrossover: strTgs.doCheckbox(bd.sysPortCrossover[i]),  future*/
@@ -201,7 +201,7 @@ module.exports.systemdbPortsCreate = (data, req) => {
                 thisSubDoc.sysPortVlan = strTgs.multiTrim(sDataSysPort.sysPortVlan, 7, 0);
               }
               if (sDataSysPort.sysPortOptions) {
-                thisSubDoc.sysPortOptions = strTgs.multiTrim(sDataSysPort.sysPortOptions, 4, 2);
+                thisSubDoc.sysPortOptions = strTgs.multiTrim(sDataSysPort.sysPortOptions, 6, 2);
               }
               if (sDataSysPort.sysPortURL) {
                 thisSubDoc.sysPortURL = req.sanitize(sDataSysPort.sysPortURL);

@@ -54,6 +54,7 @@ module.exports = (app) => {
     res.locals._csrfToken = req.csrfToken();
     next();
   });
+
   app.use((err, req, res, next) => {
     if (err.code !== 'EBADCSRFTOKEN') return next(err);
   // handle CSRF token errors here
@@ -63,7 +64,6 @@ module.exports = (app) => {
     res.status(403);
     res.send('session has expired or form tampered with');
   });
-
 
   // miscellaneous routes
   app.get('/', handlers.main.home);
@@ -145,6 +145,8 @@ module.exports = (app) => {
 
   app.get('/reports', handlers.report.dcReport);
 
+  app.get('/reports/query', accCheckr, handlers.report.queryAggr);
+
   app.get('/reports/:datacenter', handlers.report.dcByEnvRole);
   app.get('/env-role-reports', handlers.report.dcByEnvRole);
   app.get('/env-role-report/:datacenter', handlers.report.dcByEnvRole);
@@ -156,7 +158,9 @@ module.exports = (app) => {
   app.get('/reports/equipment/noFilters', handlers.report.equipmentAggr);
   app.get('/reports/equipment/:fileType', handlers.report.equipmentAggr);
   app.get('/reports/equipment/:findIn/:findWhat', handlers.report.equipmentAggr);
-
+  // app.get('/reports/query/noFilters', accCheckr, handlers.report.queryAggr);
+  // app.get('/reports/query/:fileType', accCheckr, handlers.report.queryAggr);
+  // app.get('/reports/query/:findIn/:findWhat', accCheckr, handlers.report.queryAggr);
 
   // Admin
 

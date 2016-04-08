@@ -188,7 +188,7 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
   logger.warn(`404 URL : ${req.url}`);
   logger.warn(`404 IP  : ${req.ip}`);
-  logger.warn(`404 USER: ${req.user.local.email}`);
+  // logger.warn(`404 USER: ${if (req.user.local.email || 'No locals')}`);
   res.status(404).render('404');
 });
 
