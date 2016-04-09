@@ -9,7 +9,13 @@
 <li><a href="#other-searches">Other searches:</a></li>
 <li><a href="#main-menu-reports">Main Menu Reports</a></li>
 <li><a href="#system-based-csv-and-json-report-builder-added-in-v0202">System Based CSV and JSON report builder (added in v0.2.02)</a></li>
-<li><a href="#equipment-based-csv-and-json-report-builder-added-in-v0215">Equipment Based CSV and JSON report builder (added in v0.2.15)</a></li>
+<li><a href="#equipment-based-csv-and-json-report-builder-added-in-v0215">Equipment Based CSV and JSON report builder (added in v0.2.15)</a><ul>
+<li><ul>
+<li><a href="#report-advanced-options">Report Advanced Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#eol-end-of-life-equipment-option-added-in-v0215">EOL ( End of Life) Equipment option (added in v0.2.15)</a></li>
 <li><a href="#parent-equipment-added-in-v-0207">Parent Equipment (added in v 0.2.07)</a></li>
 <li><a href="#system-ports">System Ports</a><ul>
@@ -47,7 +53,7 @@
 <h2 id="other-searches">Other searches:</h2>
 
 <ul>
-<li>Ticket Number: The Jira ticket number the System was requested with.</li>
+<li>Ticket Number: The install ticket number the System was requested with.</li>
 <li>Modified by: Last person to edit that System or Equipment. </li>
 <li>EndPoint: All Systems attached to an end point or loop. </li>
 <li>Cable Number: A cable serial number. </li>
@@ -58,9 +64,7 @@
 <li>vlan: vlan seachs are the exact match type. Searching for “2” will only return vlan: 2 and not vlan: 32 or vlan: 23.</li>
 </ul>
 
-
-
-<h2 id="main-menu-reports">Main Menu Reports</h2>
+<h2 id="nav-menu-reports">Nav Menu Reports</h2>
 
 <p>Using the DCIT drop down menu on the top left, select reports. From here you can select Environment, Role and Make reports. These are all displayed using the same tabled format with Location, System Name, Equipment SN and a few other vitals.</p>
 
@@ -70,11 +74,75 @@
 <li>Make: This will find all Equipment from that Make</li>
 </ul>
 
+<h2 id="query-report-builder-added-in-v0218">Query report builder (added in v0.2.18)</h2>
+
+<blockquote>
+  <p>Note: This report system supersedes the reports below. While they still exist, the Query Report system drives them and is far more intuitive. </p>
+</blockquote>
+
+<p>This is the base URL, it returns all Equipment, not including EOL Retired:</p>
+
+<p><a href="/reports/query">/reports/query</a>  </p>
+
+<p>This is the reporting system driving the Nav Menu Reports described above so the results are the same using the defaults. This information can be used to build more advanced reports. The <strong>findWhat</strong> is the same values you use in the Nav Menu Search box. The following are the keys for the <strong>findIn</strong> field:</p>
+
+<ul>
+<li>equipSN</li>
+<li>equipParent</li>
+<li>equipLocation</li>
+<li>equipStatus</li>
+<li>equipMake</li>
+<li>equipPONum</li>
+<li>equipInvoice</li>
+<li>equipProjectNum</li>
+<li>equipTicketNumber</li>
+<li>equipModifiedBy</li>
+<li>equipPortsAddr</li>
+<li>systemName</li>
+<li>systemRole</li>
+<li>systemEnviron</li>
+<li>systemTicket</li>
+<li>systemParentId</li>
+<li>systemAlias</li>
+<li>systemModifiedBy</li>
+<li>sysPortEndPoint</li>
+<li>sysPortAddress</li>
+<li>sysPortVlan</li>
+<li>sysPortCablePath</li>
+</ul>
+
+<h3 id="direct-download">Direct Download</h3>
+
+<p>The report returned will give you an idea of what the data will look like. At the top of the page you will see links for JSON and CSV, use these links to download the information directly system consumption. They have been tested in Chrome and curl (with the “-k” flag) and wget (with the “–no-check-certificate” flag). </p>
+
+<h3 id="report-advanced-options">Report Advanced Options</h3>
+
+<p>The Equipment report also adds query string support but adding a “?” and using “&amp;” key=value separators at the end of the URL and can be used independently or in combination with any of the searches above. </p>
 
 
-<h2 id="system-based-csv-and-json-report-builder-added-in-v0202">System Based CSV and JSON report builder (added in v0.2.02)</h2>
 
-<p>A new addition to DCIT is CSV and JSON reporting. This was designed as a API for reporting and is less useful to humans than machines. </p>
+<h4 id="supported-query-string-options-are">Supported query string options are:</h4>
+
+<ul>
+<li>equipEOL=true : shows only EOL Equipment, defaults to false showing no EOL equipment. An example in the app is the “Equipment EOL Retired” report. <a href="/reports/query?equipEOL=true">/reports/query?equipEOL=true</a></li>
+<li>equipLocation=(some location partial) : limit results to specific locations</li>
+<li>equipMake=(equipment manufacturer) : limit results to specific manufacturer</li>
+<li>ugly=true : table header row matches collection field names (json and CSV reports are ugly style)</li>
+<li>filterOn is an advanced <strong>OR</strong> filter. You can see it in operation in the <strong>Spares</strong> report. You can use it to filter to either Systems or Equipment Fields but it takes some finesse. If you are Searching and Filtering on the same collection the field can be used ass is. If you are Searching on one collection and filtering on the other, you need to preface the filter with the appropriate prefix.  <br>
+<ul><li>If searching on Equipment and filtering on a System field, prefix the <strong>filterOn</strong> with “sys.”</li>
+<li>If searching on Systems and filtering on a Equipment field, prefix the <strong>filterOn</strong> with “equip.” . This filter runs before the $lookup filter, so using this could significantly reduce report page load times depending on your database size. Currently 5k items are returned in under 500ms. on an unremarkable server, your millage may vary.</li>
+<li>filterOn can be any collection field but is placed after the $lookup.</li>
+<li>filterArr is an array of comma separated values you want to find. An example can be found in the Spares report <br>
+<a href="/reports/query?filterOn=equipStatus&amp;filterArr=ordered,in%20transit,received,spare,assigned">/reports/query?filterOn=equipStatus&amp;filterArr=ordered,in%20transit,received,spare,assigned</a></li>
+<li>filterNor=1 option flips it into a Nor filter, returns results that do not contain your values. An example of this report can be found in the Equipment Not In Service report.  <br>
+<a href="/reports/query?filterOn=equipStatus&amp;filterArr=service&amp;filterNor=1">/reports/query?filterOn=equipStatus&amp;filterArr=service&amp;filterNor=1</a></li></ul></li>
+</ul>
+
+<h3 id="system-based-csv-and-json-report-builder-added-in-v0202">System Based CSV and JSON report builder (added in v0.2.02)</h3>
+
+<blockquote>
+  <p>The following is for reference, the Query report creates the same report. </p>
+</blockquote>
 
 <p>The URL for this is: </p>
 
@@ -83,28 +151,25 @@
 <pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">hostname</span>&gt;</span>/reports/systems/(findIn)/(findWhat)</code></pre>
 
 <p><strong>findIn</strong> options are: <br>
- - equipLocation <br>
- - equipMake <br>
- - equipPONum <br>
- - systemEnviron <br>
- - systemName <br>
- - systemRole <br>
-<strong>findWhat</strong> is similar to the top bar search. </p>
+-  systemName <br>
+-  systemRole <br>
+-  systemEnviron <br>
+-  systemTicket <br>
+-  systemParentId <br>
+-  systemAlias <br>
+-  systemModifiedBy <br>
+-  sysPortEndPoint <br>
+-  sysPortAddress <br>
+-  sysPortVlan <br>
+-  sysPortCablePath</p>
 
-<p>The report returned will give you an idea of what the data will look like. Now, looking at the URL, if you add “.csv”, it will prompt you to download a csv file. If you add “.json” it will download a JSON array. This has been tested on Chrome, curl (with the “-k” flag) and wget (with the “–no-check-certificate” flag).</p>
+<p><strong>findWhat</strong> is similar to the top bar search. As a matter of fact, the top bar search is now based on this report type where possible.</p>
 
-
-
-<h2 id="equipment-based-csv-and-json-report-builder-added-in-v0215">Equipment Based CSV and JSON report builder (added in v0.2.15)</h2>
-
-<p>This is similar to the System Based reporting above but more useful. </p>
+<h3 id="equipment-based-csv-and-json-report-builder-added-in-v0215">Equipment Based CSV and JSON report builder (added in v0.2.15)</h3>
 
 <blockquote>
-  <p>Note: Some of the new features below may be back ported to the Systems reports if there is a need for them there. </p>
+  <p>The following is for reference, the Query report creates the same report. </p>
 </blockquote>
-
-<p>With Equipment Based reports we have far more options for pulling out data. There are also different ways to use the URL, depending on how you need to get the data. <br>
-The URL for this is: </p>
 
 
 
@@ -119,45 +184,12 @@ The URL for this is: </p>
 <li>equipPONum</li>
 <li>equipInvoice</li>
 <li>equipProjectNum</li>
-<li>systemName</li>
-<li>systemRole</li>
-<li>systemEnviron</li>
-<li>systemTicket</li>
-<li>systemParentId</li>
-<li>systemAlias</li>
+<li>equipTicketNumber</li>
+<li>equipModifiedBy</li>
+<li>equipPortsAddr</li>
 </ul>
 
 <p><strong>findWhat</strong> is similar to the top bar search. As a matter of fact, the top bar search is now based on this report type where possible.</p>
-
-<p>The Equipment report also adds query string support but adding a “?” and using “&amp;” key=value separators at the end of the URL. Supported query string options are:</p>
-
-<ul>
-<li>equipEOL=true : defaults to false, so EOL equipment is not shown by default</li>
-<li>equipLocation=(some location partial)</li>
-<li>equipMake=(equipment manufacturere)</li>
-</ul>
-
-<p>So given that, lets say we want to find all Systems with a Role of “webhost”, made by “super micro” in data center “nj02”. The URL would be:</p>
-
-
-
-<pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">hostname</span>&gt;</span>/reports/equipment/systemRole/webhost?equipLocation=nj02&amp;equipMake=super micro</code></pre>
-
-<p>(all on one line)</p>
-
-<p>Another option is the “noFilters” option. This will return everything except EOL that matches the query string value. For the most part, the “noFilters” option is not necessary and speed may be impacted if you are trying to get an everything, everywhere type of report.   </p>
-
-<p>Conversely, if you did want to find all of the End of Life gear, you could use the following:</p>
-
-
-
-<pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">hostname</span>&gt;</span>/reports/equipment/noFilters?equipEOL=true</code></pre>
-
-<blockquote>
-  <p>Note: The Equipment report is generally more useful except in the rare case where you have Systems with no Equipment assigned. The reason for this is Equipment Based reports will not display Systems that do not have any Equipment Serial Number assigned. Likewise, System based reports will not show unassigned Equipment. The occurrence of Systems without Equipment is low and these are generally decommissioned or abandon.</p>
-</blockquote>
-
-
 
 <h2 id="eol-end-of-life-equipment-option-added-in-v0215">EOL ( End of Life) Equipment option (added in v0.2.15)</h2>
 
