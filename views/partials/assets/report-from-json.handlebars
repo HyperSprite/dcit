@@ -1,12 +1,13 @@
 
 <div> <!-- part /report-from-json.part1 -->
   <table id="tblPendingRequests" {{> bootstrap-table}}
-    data-url="/reports/{{equipmentOrSystems}}/{{findIn}}{{#if findIn }}/{{/if}}{{findWhat}}.json{{#if query}}?{{query}}{{/if}}"
+    data-url="/reports/{{collection}}/{{#if findIn }}{{findIn}}/{{/if}}{{#if findWhat}}{{findWhat}}{{/if}}.json{{#if query}}?{{query}}{{/if}}"
     >
     <thead>
       <tr>
       {{#if ugly}}
         <th data-sortable="true" data-field="index">index</th>
+        <th data-sortable="true" data-field="equipEOL">equipEOL</th>
         <th data-sortable="true" data-field="equipLocation" data-formatter="equipLocationFormatter" data-order="asc">equipLocationRack</th>
         <th data-sortable="true" data-field="dcRU">equipLocationRu</th>
         <th data-sortable="true" data-field="sysmodifiedOn" data-visible="false">sysmodifiedOn</th>
@@ -33,8 +34,8 @@
         <th data-sortable="true" data-field="equipNotes" data-visible="false">equipNotes</th>
 
         {{else}}
-
         <th data-sortable="true" data-field="index" data-visible="false">Index</th>
+        <th data-sortable="true" data-field="equipEOL" data-visible="false">EOL</th>
         <th data-sortable="true" data-field="equipLocation" data-formatter="equipLocationFormatter" data-order="asc">DC_Cage_Rack_RU</th>
         <th data-sortable="true" data-field="systemName" data-formatter="systemNameFormatter">System Name</th>
         <th data-sortable="true" data-field="systemAlias" data-visible="false">Alias</th>
@@ -61,8 +62,3 @@
     </thead>
   </table>
 </div> <!-- part /report-from-json.part1 -->
-
-<div>
-<a href="/reports/{{equipmentOrSystems}}/{{findIn}}{{#if findIn }}/{{/if}}{{findWhat}}.json{{#if query}}?{{query}}{{/if}}">JSON version</a><br>
-<a href="/reports/{{equipmentOrSystems}}/{{findIn}}{{#if findIn }}/{{/if}}{{findWhat}}.csv{{#if query}}?{{query}}{{/if}}">CSV version</a>
-</div>

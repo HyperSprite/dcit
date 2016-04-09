@@ -145,7 +145,8 @@ module.exports = (app) => {
 
   app.get('/reports', handlers.report.dcReport);
 
-  app.get('/reports/query', accCheckr, handlers.report.queryAggr);
+  app.get('/reports/query', accCheckr, accCheckr, handlers.report.queryAggr);
+  app.get('/reports/:collection/:findIn/:findWhat', handlers.report.multiAggr);
 
   app.get('/reports/:datacenter', handlers.report.dcByEnvRole);
   app.get('/env-role-reports', handlers.report.dcByEnvRole);
@@ -153,17 +154,7 @@ module.exports = (app) => {
   app.get('/reportByInserviceEnv.json', handlers.report.reportByInserviceEnv);
   app.get('/reportByInserviceEnvRole.json', handlers.report.reportByInserviceEnvRole);
 
-  app.get('/reports/systems/:findIn/:findWhat', handlers.report.systemsAggr);
-  app.post('/report/systems/:findIn/:findWhat', handlers.report.systemsAggr);
-  app.get('/reports/equipment/noFilters', handlers.report.equipmentAggr);
-  app.get('/reports/equipment/:fileType', handlers.report.equipmentAggr);
-  app.get('/reports/equipment/:findIn/:findWhat', handlers.report.equipmentAggr);
-  // app.get('/reports/query/noFilters', accCheckr, handlers.report.queryAggr);
-  // app.get('/reports/query/:fileType', accCheckr, handlers.report.queryAggr);
-  // app.get('/reports/query/:findIn/:findWhat', accCheckr, handlers.report.queryAggr);
-
   // Admin
-
   app.get('/admin', accChecks, isLoggedIn, handlers.admin.home);
   app.get('/admin/options', accChecks, isLoggedIn, handlers.admin.options);
   app.get('/admin/dbinsert', accChecks, isLoggedIn, handlers.admin.dbinsert);

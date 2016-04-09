@@ -540,7 +540,7 @@ exports.findEndpoints = (req, res, next) => {
     //    logger.info('findEndpoints >'+fEndPoint);
 
     Models.Systemdb.find({
-      'systemPorts.sysPortEndPoint': fEndPoint
+      'systemPorts.sysPortEndPoint': fEndPoint,
     }, 'systemName systemPorts.sysPortName systemPorts.sysPortCablePath systemPorts.sysPortEndPoint systemPorts.sysPortEndPointPre systemPorts.sysPortEndPointPort systemPorts.sysPortVlan systemPorts.sysPortOptions systemPorts.sysPortAddress systemPorts.sysPortType', (err, sys) => {
       if (err) return next(err);
       // logger.info('sys > '+sys);

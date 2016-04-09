@@ -2,7 +2,7 @@
   {{#if access.read}}
     <li><a href="/location/datacenter/list"><span class="glyphicon glyphicon-globe glyphicon-danger"></span> Datacenters</a></li>
     <li><a href="/reports"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Reports</a></li>
-    <li><a href="/reports/spares-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Spares</a></li>
+    <li><a href="/reports/query?filterOn=equipStatus&filterArr=ordered,in transit,received,spare,assigned"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Spares</a></li>
     <li><a href="/macadder/mactest.html" class="popup"><span class="glyphicon glyphicon-star glyphicon-danger"></span> MAC Adder</a></li>
   {{/if}}
     <li><a href="/help"><span class="glyphicon glyphicon-info-sign  glyphicon-danger"></span> Help</a></li>
@@ -11,17 +11,20 @@
     <li><a href="/equipment/new"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New Equipment</a></li>
     <li><a href="/system/new"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New System</a></li>
     <li><a href="/location/rack"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Racks All</a></li>
-    <li><a href="/reports/eqnis-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Not in Service</a></li>
-    <li><a href="/reports/homeless-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment w/ no Location</a></li>
+    <li><a href="/reports/query?filterOn=equipStatus&filterArr=service&filterNor=1"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Not in Service</a></li>
+    <li><a href="/reports/query?equipLocNull=1"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment w/ no Location</a></li>
+
   {{/if}}
   {{#if access.delete}}
     <li class="divider"></li>
+    <li><a href="/reports/query?filterOn=equipStatus&filterArr=life,decomm,missing,damaged"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment End of Life</a></li>
+    <li><a href="/reports/query?equipEOL=true"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment EOL Retired</a></li>
+    <li><a href="/reports/query"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment All</a></li>
     <li><a href="/reports/eol-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment End of Life (old style)</a></li>
-    <li><a href="/reports/query?equipEOL=true"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment End of Life</a></li>
-    <li><a href="/reports/equipment/noFilters"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment All</a></li>
-    <li><a href="/system"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Systems All (Old Style)</a></li>
-    <li><a href="/systemports-list"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Systems Ports All (Old Style)</a></li>
-    <li><a href="/equipment-systems"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment & Systems All (Old Style)</a></li>
+    <li><a href="/reports/spares-"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Spares (old style)</a></li>
+    <li><a href="/system"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Systems All (old style)</a></li>
+    <li><a href="/systemports-list"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Systems Ports All (old style)</a></li>
+    <li><a href="/equipment-systems"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment & Systems All (old style)</a></li>
   {{/if}}
   {{#if access.root}}
     <li class="divider"></li>
@@ -33,3 +36,5 @@
     <li><a href="/admin/filemanager">Upload Manager</a></li>
     <li><a href="/admin/logs">Logs</a></li>
   {{/if}}
+
+

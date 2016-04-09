@@ -88,6 +88,17 @@ const equipmentSchema = mongoose.Schema({
   { timestamps: { createdAt: 'createdOn', updatedAt: 'modifiedOn' },
 });
 
+equipmentSchema.pre('save', function (next) {
+  var currentDate = new Date();
+  if (this.equipEOL === true) {
+    this.equipLocation = null;
+    if (!this.equipEndOfLife) {
+      this.equipEndOfLife = currentDate;
+    }
+  }
+  next();
+});
+
 // Apply the uniqueValidator plugin to datacenterSchema
 equipmentSchema.plugin(uniqueValidator);
 

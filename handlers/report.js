@@ -636,43 +636,14 @@ module.exports.dcByEnvRole = (req, res, next) => {
   });
 };
 
-
-
-// Custom CSV report ///////////////////////////////////////////
-/*
-I never had any intention of writing a direct to CSV report but
-consumers were not ready for a JSON api and needed CSV so this
-is what I came up with to try and get the most utility out of
-this request.
-
-The route is based on the collection targeted.
-
-
-*/
-
-// /reports/systems/:findIn/:findWhat
-
-// /reports/systems/dcSite/rsys-dc01.csv
-// /reports/systems/dcSite/rsys-dc01
-// /reports/systems/systemRole/launch.csv
-// /reports/systems/systemEnviron/ri4
-// req.params.findIn
-// req.params.findWhat
-// module.exports.systemsAggrPost = (req, res) => {
-//   var prms = req.body;
-//   // console.dir(req.body);
-//   res.redirect(`/reports/systems/${prms.findIn}/${prms.findWhat}`);
-// };
+// ////////////////////////////////////////////////////////////////////////////
+//                             New reports
+// ////////////////////////////////////////////////////////////////////////////
 
 module.exports.queryAggr = (req, res, next) => {
   logger.info(`queryAggr REQ.PATH\n${req.path}`);
-  var context = {};
   var data = req.params;
   var fileType = req.params.fileType || '';
-  var findThis;
-  var matchTest1;
-  var queryTest1;
-  var filename;
   logger.info(`queryAggr 861\nreq.body ${JSON.stringify(req.body)}`);
   logger.info(`queryAggr 862\nreq.params ${JSON.stringify(req.params)}`);
   logger.info(`queryAggr 863\ndata ${JSON.stringify(data)}`);
@@ -681,6 +652,10 @@ module.exports.queryAggr = (req, res, next) => {
   if (!data.findIn) {
     data.findIn = data.query.findIn;
     data.findWhat = data.query.findWhat + fileType;
+  }
+  if (!data.findIn) {
+    data.findIn = 'equipNull';
+    data.findWhat = `all${fileType}`;
   }
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
@@ -691,9 +666,9 @@ module.exports.queryAggr = (req, res, next) => {
   data.resExt = '';
   // redirects to the system or equipment JSON and CSV reports
   if (data.findIn && data.findIn.indexOf('sys') === 0) {
-    data.equipmentOrSystems = 'systems';
+    data.collection = 'systems';
   } else {
-    data.equipmentOrSystems = 'equipment';
+    data.collection = 'equipment';
   }
   // set to CSV or JSON
   logger.info(`887 - data ${data}`);
@@ -705,9 +680,9 @@ module.exports.queryAggr = (req, res, next) => {
   data.drop3 = 'Make';
   data.drop3each = '<ul class="dropdown-menu drop-columns pull-right" id="equipMakeDrop"></ul>';
   data.menu1 = 'JSON';
-  data.menuLink1 = `/reports/${data.equipmentOrSystems}/${data.findIn}/${data.findWhat}.json?${data.query}`;
+  data.menuLink1 = `/reports/${data.collection}/${data.findIn}/${data.findWhat}.json?${data.query}`;
   data.menu2 = 'CSV';
-  data.menuLink2 = `/reports/${data.equipmentOrSystems}/${data.findIn}/${data.findWhat}.csv?${data.query}`;
+  data.menuLink2 = `/reports/${data.collection}/${data.findIn}/${data.findWhat}.csv?${data.query}`;
   return res.render('asset/reports', data);
 };
 
@@ -717,7 +692,7 @@ module.exports.queryAggr = (req, res, next) => {
 // Still to hash out is how to do report options.
 // Also, do we have a super search, using {$or [blah, blah]} for system or alias.
 
-module.exports.equipmentAggr = (req, res, next) => {
+module.exports.multiAggr = (req, res, next) => {
   var context = {};
   var data = req.params;
   var fileType = req.params.fileType || '';
@@ -729,8 +704,10 @@ module.exports.equipmentAggr = (req, res, next) => {
   var aggPipeLookup;
   var aggPipePostLookup;
   var aggPipePostFilter;
-  var filterTest1;
   var aggPipeline;
+  var filterResArr = [];
+  var filterNor = 0;
+  var modCollection;
   logger.info(`880 - req.body ${JSON.stringify(req.body)}`);
   logger.info(`881 - req.params ${JSON.stringify(req.params)}`);
   logger.info(`882 - data ${JSON.stringify(data)}`);
@@ -739,14 +716,22 @@ module.exports.equipmentAggr = (req, res, next) => {
     data.findIn = data.query.findIn;
     data.findWhat = data.query.findWhat + fileType;
   }
+  // filterNor sets the filter to $nor insetad of $or
+  if (data.query.filterNor) {
+    filterNor = 1;
+  }
+  // ugly sets the table to use field names instead of friendly names
+  if (req.query) {
+    data.ugly = req.query.ugly;
+  }
+
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
-  data.ugly = req.query.ugly;
+
   logger.info(`890 - findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
-  data.equipmentOrSystems = 'equipment';
   // set to CSV or JSON
   if ((/.csv$/).test(data.findWhat)) {
     data.resType = 'csv';
@@ -765,24 +750,19 @@ module.exports.equipmentAggr = (req, res, next) => {
     data.drop2each = '<ul class="dropdown-menu drop-columns pull-right" id="systemRoleDrop"></ul>';
     data.drop3 = 'Make';
     data.drop3each = '<ul class="dropdown-menu drop-columns pull-right" id="equipMakeDrop"></ul>';
+    data.menu1 = 'JSON';
+    data.menuLink1 = `/reports/${data.collection}/${data.findIn}/${data.findWhat}.json?${data.query}`;
+    data.menu2 = 'CSV';
+    data.menuLink2 = `/reports/${data.collection}/${data.findIn}/${data.findWhat}.csv?${data.query}`;
     return res.render('asset/reports', data);
   }
-  // What are we looking for, this can certainly get better with query strings
-  // This says, if they are specific, do that, otherwise do rsys
 
   // This block does locations
   findThis = (data.findWhat || 'XXXXXX');
 
-  // equipStatusGroupEOL = { $match: { $or [
-  //     {'equipStatus': { '$regex': 'End of Life', '$options': 'i' } },
-  //     {'equipStatus': { '$regex': 'Decomm', '$options': 'i' } },
-  //     {'equipStatus': { '$regex': 'Missing', '$options': 'i' } },
-  //     {'equipStatus': { '$regex': 'Dammaged', '$options': 'i' } },
-  //     {'equipStatus': { '$regex': 'RMA', '$options': 'i' } },
-  //   ] } };
-
   // Matches req.param.findIn to a regex filter to be used in the $match
   matchTest1 = {
+    equipNull: { $match: { 'equipNull': null } },
     equipSN: { $match: { 'equipSN': { '$regex': findThis, '$options': 'i' } } },
     equipParent: { $match: { 'equipParent': { '$regex': findThis, '$options': 'i' } } },
     equipLocation: { $match: { 'equipLocation': { '$regex': findThis, '$options': 'i' } } },
@@ -794,116 +774,179 @@ module.exports.equipmentAggr = (req, res, next) => {
     equipTicketNumber: { $match: { 'equipTicketNumber': { '$regex': findThis, '$options': 'i' } } },
     equipModifiedBy: { $match: { 'modifiedBy': { '$regex': findThis, '$options': 'i' } } },
     equipPortsAddr: { $match: { 'equipPorts.equipPortsAddr': { '$regex': findThis, '$options': 'i' } } },
+    systemName: { 'systemName': { '$regex': findThis, '$options': 'i' } },
+    systemRole: { 'systemRole': { '$regex': findThis, '$options': 'i' } },
+    systemEnviron: { 'systemEnviron': { '$regex': findThis, '$options': 'i' } },
+    systemTicket: { 'systemTicket': { '$regex': findThis, '$options': 'i' } },
+    systemParentId: { 'systemParentId': { '$regex': findThis, '$options': 'i' } },
+    systemAlias: { 'systemAlias': { '$regex': findThis, '$options': 'i' } },
+    systemModifiedBy: { 'modifiedBy': { '$regex': findThis, '$options': 'i' } },
+    sysPortEndPoint: { 'systemPorts.sysPortEndPoint': { '$regex': findThis, '$options': 'i' } },
+    sysPortAddress: { 'systemPorts.sysPortAddress': { '$regex': findThis, '$options': 'i' } },
+    sysPortVlan: { 'systemPorts.sysPortVlan': { '$regex': findThis, '$options': 'i' } },
+    sysPortCablePath: { 'systemPorts.sysPortCablePath': { '$regex': findThis, '$options': 'i' } },
   };
-
+  // generic
+  // return res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
   queryTest1 = matchTest1.hasOwnProperty(data.findIn);
   if (!queryTest1) {
     data.queryIn = { 'noMatch' : null };
     console.warn('ERROR equipmentAggr Report - Incorrect findIn value');
-    // return res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
   } else {
     data.queryIn = matchTest1[data.findIn];
   }
+  // preMatch reduces the number of $lookup that needs to happen
   // for EOL reports. Set to true, returns only equipment that is no longer in inventory
-  data.preMatchEquipment = [{ $or: [{ 'equipEOL' : null }, { 'equipEOL' : false }] }];
+  if (data.collection === 'systems') {
+    modCollection = 'Systemdb';
+    aggPipePreLookup = { $match: data.queryIn };
+    aggPipeLookup = {
+      $lookup:
+        { from: 'equipment',
+          localField: 'systemEquipSN',
+          foreignField: 'equipSN',
+          as: 'equip',
+        },
+    };
+  } else {
+    modCollection = 'Equipment';
+    // removing EOL
+    data.preMatchEquipment = [{ $or: [{ 'equipEOL' : null }, { 'equipEOL' : false }] }];
+    if (data.query.equipEOL === 'true') {
+      data.preMatchEquipment = [{ 'equipEOL' : true }];
+    }
+    // focus on location
+    if (data.query.equipLocation) {
+      data.preMatchEquipment.unshift({ 'equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' } });
+    }
+    if (data.query.equipLocNull) {
+      data.preMatchEquipment.unshift({ 'equipLocation': '' });
+    }
+    // focus on particular Make
+    if (data.query.equipMake) {
+      data.preMatchEquipment.push({ 'equipMake': { '$regex': data.query.equipMake, '$options': 'i' } });
+    }
 
-  // perMatch reduces the number of $lookup that needs to happen
-  if (data.query.equipEOL === 'true') {
-    data.preMatchEquipment = [{ 'equipEOL' : true }];
+    aggPipePreLookup = { $match: { $and: data.preMatchEquipment } };
+
+    aggPipeLookup = {
+      $lookup:
+      {
+        from: 'systemdbs',
+        localField: 'equipSN',
+        foreignField: 'systemEquipSN',
+        as: 'sys',
+      },
+    };
+    aggPipePostLookup = data.queryIn;
   }
-  if (data.query.equipLocation) {
-    data.preMatchEquipment.unshift({ 'equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' }});
+  aggPipeline = [aggPipePreLookup, aggPipeLookup];
+  if (aggPipePostLookup) {
+    aggPipeline.push(aggPipePostLookup);
   }
-  if (data.query.equipMake) {
-    data.preMatchEquipment.push({ 'equipMake': { '$regex': data.query.equipMake, '$options': 'i' }});
-  }
-
-  // maybe use the hasOwnProperty(data.whatever) to push things into the array. Although, order is important
-  // in order to get the best results.
-
-
-  logger.info(`data.query.equipEOL: ${data.query.equipEOL}`);
-  logger.info(`data.preMatchEquipment: ${JSON.stringify(data.preMatchEquipment)}`);
-
-  aggPipePreLookup = { $match: { $and: data.preMatchEquipment } };
-
-  aggPipeLookup = {
-    $lookup:
-    {
-      from: 'systemdbs',
-      localField: 'equipSN',
-      foreignField: 'systemEquipSN',
-      as: 'sys',
-    },
-  };
-
-  aggPipePostLookup = data.queryIn;
-
-
-
-  // aggPipePostLookup.push
-
-  aggPipeline = [aggPipePreLookup, aggPipeLookup, aggPipePostLookup];
-
-  filterTest1 = {
-    equipStatus: {equipStatus: 'In Service'}
-    // (arr) => {
-      // var result = [];
-      // arr.map((ar) => {
-      //   result.push({ 'equipStatus': ar });
-      // });
-      // return result;
-    // },
-  };
-
-  data.filterOn = filterTest1.hasOwnProperty(data.query.filterOn);
-
-
-  if (data.query.equipStatus) {
-    aggPipePostFilter = { $match: { $or: filterTest1.hasOwnProperty(data.query.equipStatus) }};
+  // generic aggPipePostFilter
+  if (data.query && data.query.filterOn) {
+    data.filterOn = data.query.filterOn;
+    data.filterArr = data.query.filterArr.split(',');
+    data.filterArr.forEach((fArr) => {
+      filterResArr.push({ [data.filterOn]: { '$regex': fArr, '$options': 'i' } });
+    });
+    if (filterNor === 1) {
+      aggPipePostFilter = { $match: { $nor: filterResArr } };
+    } else {
+      aggPipePostFilter = { $match: { $or: filterResArr } };
+    }
     aggPipeline.push(aggPipePostFilter);
   }
-
-
   logger.info(`aggPipeline ${JSON.stringify(aggPipeline)}`);
 
-  Models.Equipment.aggregate(aggPipeline, (err, result) => {
+  Models[modCollection].aggregate(aggPipeline, (err, result) => {
     if (err) return next(err);
     context = result.map((rslt) => {
+      if (data.collection === 'systems') {
+        if (rslt.equip.length > 0) {
+          rslt.equipRUHieght = rslt.equip[0].equipRUHieght || '';
+          rslt.equipSN = rslt.equip[0].equipSN || '';
+          rslt.equipStatus = rslt.equip[0].equipStatus || '';
+          rslt.equipEOL = rslt.equip[0].equipEOL || '';
+          rslt.equipMake = rslt.equip[0].equipMake || '';
+          rslt.equipModelWithSubs = rslt.equipModelWithSubs || '';
+          rslt.equipModel = rslt.equip[0].equipModel || '';
+          rslt.equipSubModel = rslt.equip[0].equipSubModel || '';
+          rslt.equipAddOns = rslt.equip[0].equipAddOns || '';
+          rslt.equipParent = rslt.equip[0].equipParent || '';
+          rslt.equipLocation = rslt.equip[0].equipLocation || '';
+          rslt.equipStatusLight = rslt.equip[0].equipStatus || '';
+          rslt.equipType = rslt.equip[0].equipType || '';
+          rslt.equipAcquisition = rslt.equip[0].equipAcquisition || '';
+          rslt.equipWarrantyMo = rslt.equip[0].equipWarrantyMo || '';
+          rslt.equipPONum = rslt.equip[0].equipPONum || '';
+          rslt.equipInvoice = rslt.equip[0].equipInvoice || '';
+          rslt.equipProjectNum = rslt.equip[0].equipProjectNum || '';
+          rslt.equipMaintAgree = rslt.equip[0].equipMaintAgree || '';
+          rslt.equipNotes = rslt.equip[0].equipNotes || '';
+          rslt.equipmodifiedOn = rslt.equip[0].modifiedOn || '';
+          rslt.equip_id = rslt.equip[0]._id || '';
+        } else {
+          rslt.equipRUHieght = '';
+          rslt.equipSN = '';
+          rslt.equipStatus = '';
+          rslt.equipEOL = '';
+          rslt.equipMake = '';
+          rslt.equipModelWithSubs = '';
+          rslt.equipModel = '';
+          rslt.equipSubModel = '';
+          rslt.equipAddOns = '';
+          rslt.equipParent = '';
+          rslt.equipLocation = '';
+          rslt.equipStatusLight = '';
+          rslt.equipType = '';
+          rslt.equipAcquisition = '';
+          rslt.equipWarrantyMo = '';
+          rslt.equipPONum = '';
+          rslt.equipInvoice = '';
+          rslt.equipProjectNum = '';
+          rslt.equipMaintAgree = '';
+          rslt.equipNotes = '';
+          rslt.equipmodifiedOn = '';
+          rslt.equip_id = '';
+        }
+        rslt.sys_id = rslt._id;
+      }
+      if (data.collection === 'equipment') {
+        if (rslt.sys.length > 0) {
+          rslt.systemName = rslt.sys[0].systemName || '';
+          rslt.systemStatus = rslt.sys[0].systemStatus || '';
+          rslt.systemEnviron = rslt.sys[0].systemEnviron || '';
+          rslt.systemRole = rslt.sys[0].systemRole || '';
+          rslt.systemAlias = rslt.sys[0].systemAlias || '';
+          rslt.systemParentId = rslt.sys[0].systemParentId || '';
+          rslt.systemEquipSN = rslt.sys[0].systemEquipSN || '';
+          rslt.modifiedOn = rslt.sys[0].modifiedOn || '';
+          rslt.systemTicket = rslt.sys[0].systemTicket || '';
+          rslt.systemNotes = rslt.sys[0].systemNotes || '';
+          rslt.systemOSType = rslt.sys[0].systemOSType || '';
+          rslt.systemOSVersion = rslt.sys[0].systemOSVersion || '';
+          rslt.sys_id = rslt.sys[0]._id || '';
+        } else {
+          rslt.systemName = '';
+          rslt.systemStatus = '';
+          rslt.systemEnviron = '';
+          rslt.systemRole = '';
+          rslt.systemAlias = '';
+          rslt.systemParentId = '';
+          rslt.systemEquipSN = '';
+          rslt.modifiedOn = '';
+          rslt.systemTicket = '';
+          rslt.systemNotes = '';
+          rslt.systemOSType = '';
+          rslt.systemOSVersion = '';
+          rslt.sys_id = '';
+        }
+        rslt.equip_id = rslt._id;
+      }
       rslt.locCode = strTgs.locDest(rslt.equipLocation);
       rslt.equipModelWithSubs = `${rslt.equipMake} ${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipAddOns}`;
-      if (rslt.sys.length > 0) {
-        rslt.systemName = rslt.sys[0].systemName || '';
-        rslt.systemStatus = rslt.sys[0].systemStatus || '';
-        rslt.systemEnviron = rslt.sys[0].systemEnviron || '';
-        rslt.systemRole = rslt.sys[0].systemRole || '';
-        rslt.systemAlias = rslt.sys[0].systemAlias || '';
-        rslt.systemParentId = rslt.sys[0].systemParentId || '';
-        rslt.systemEquipSN = rslt.sys[0].systemEquipSN || '';
-        rslt.modifiedOn = rslt.sys[0].modifiedOn || '';
-        rslt.systemTicket = rslt.sys[0].systemTicket || '';
-        rslt.systemNotes = rslt.sys[0].systemNotes || '';
-        rslt.systemOSType = rslt.sys[0].systemOSType || '';
-        rslt.systemOSVersion = rslt.sys[0].systemOSVersion || '';
-        rslt.sys_id = rslt.sys[0]._id || '';
-      } else {
-        rslt.systemName = '';
-        rslt.systemStatus = '';
-        rslt.systemEnviron = '';
-        rslt.systemRole = '';
-        rslt.systemAlias = '';
-        rslt.systemParentId = '';
-        rslt.systemEquipSN = '';
-        rslt.modifiedOn = '';
-        rslt.systemTicket = '';
-        rslt.systemNotes = '';
-        rslt.systemOSType = '';
-        rslt.systemOSVersion = '';
-        rslt.sys_id = '';
-      }
-      // I know this seems like a bit of redundancy but
-      // there is a requirement to return these in this order
-      // so there it is.
       return {
         systemName: rslt.systemName,
         dcSite: rslt.locCode.dcSite,
@@ -942,205 +985,10 @@ module.exports.equipmentAggr = (req, res, next) => {
         equipNotes: rslt.equipNotes,
         equipmodifiedOn: rslt.modifiedOn,
         system_id: rslt.sys_id,
-        equip_id: rslt._id,
-      };
-    });
-
-    if (data.resType === 'csv') {
-      filename = data.findWhat + data.resExt;
-      res.setHeader('Content-disposition', `attachment; filename=${filename}`);
-      res.setHeader('content-type', 'text/csv');
-      csv.writeToString(context, {
-        headers: true,
-        objectMode: true,
-      }, (err, contextCsv) => {
-        if (err) return next(err);
-        res.send(contextCsv);
-      });
-    } else {
-      res.json(context);
-    }
-  });
-};
-
-module.exports.systemsAggr = (req, res, next) => {
-  var context = {};
-  var data = req.params;
-  var queryTest1;
-  var findThis;
-  var matchTest1;
-  var filename;
-  var aggPipePreLookup;
-  var aggPipeLookup;
-  var aggPipePostLookup;
-  var aggPipeline;
-  if (!data.findIn) {
-    data.findIn = strTgs.multiTrim(req.body.findIn, 9, 0);
-    data.findWhat = req.sanitize(req.body.findWhat);
-  }
-  logger.info(`findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
-  // setting some defaults if they don't pick have a file type
-  data.resType = 'view';
-  data.resExt = '';
-  data.equipmentOrSystems = 'systems';
-  // set to CSV or JSON
-  if ((/.csv$/).test(data.findWhat)) {
-    data.resType = 'csv';
-    data.resExt = '.csv';
-    data.findWhat = data.findWhat.substring(0, data.findWhat.length - 4);
-  } else if ((/.json/g).test(data.findWhat)) {
-    data.resType = 'json';
-    data.resExt = '.json';
-    data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
-  } else {
-    res.render('asset/reports', data);
-    // data.findWhat = data.findWhat;
-    return;
-  }
-  // What are we looking for, this can certainly get better with query strings
-  // This says, if they are specific, do that, otherwise do rsys
-
-  // This block does locations
-  findThis = (data.findWhat || 'XXXXXX');
-
-  matchTest1 = {
-    equipLocation: { 'equip.equipLocation': { '$regex': findThis, '$options': 'i' } }, // for legacy
-    equipMake: { 'equip.equipMake': { '$regex': findThis, '$options': 'i' } }, // for legacy
-    equipPONum: { 'equip.equipPONum': { '$regex': findThis, '$options': 'i' } }, // for legacy
-    systemName: { 'systemName': { '$regex': findThis, '$options': 'i' } },
-    systemRole: { 'systemRole': { '$regex': findThis, '$options': 'i' } },
-    systemEnviron: { 'systemEnviron': { '$regex': findThis, '$options': 'i' } },
-    systemTicket: { 'systemTicket': { '$regex': findThis, '$options': 'i' } },
-    systemParentId: { 'systemParentId': { '$regex': findThis, '$options': 'i' } },
-    systemAlias: { 'systemAlias': { '$regex': findThis, '$options': 'i' } },
-    systemModifiedBy: { 'modifiedBy': { '$regex': findThis, '$options': 'i' } },
-    sysPortEndPoint: { 'systemPorts.sysPortEndPoint': { '$regex': findThis, '$options': 'i' } },
-    sysPortAddress: { 'systemPorts.sysPortAddress': { '$regex': findThis, '$options': 'i' } },
-    sysPortVlan: { 'systemPorts.sysPortVlan': { '$regex': findThis, '$options': 'i' } },
-    sysPortCablePath: { 'systemPorts.sysPortCablePath': { '$regex': findThis, '$options': 'i' } },
-  };
-
-  queryTest1 = matchTest1.hasOwnProperty(data.findIn);
-  if (!queryTest1) {
-    console.warn('ERRORsystems-aggr Report - Incorrect findIn value');
-    res.status(404).send(`Check your URL, ${data.findIn} may not be a proper search field`);
-    return;
-  }
-  data.queryIn = matchTest1[data.findIn];
-
-  // aggPipePreLookup = { $match: { $and: data.preMatch } };
-
-  aggPipeLookup = {
-    $lookup:
-      { from: 'equipment',
-        localField: 'systemEquipSN',
-        foreignField: 'equipSN',
-        as: 'equip',
-      },
-  };
-
-  aggPipePostLookup = { $match: data.queryIn };
-
-  aggPipeline = [aggPipeLookup, aggPipePostLookup];
-
-  Models.Systemdb.aggregate(aggPipeline, (err, result) => {
-    if (err) return next(err);
-    context = result.map((rslt) => {
-      // while it is not normal to have an equipment without a system,
-      // and in the current config, because we check for "In Service" on
-      // the equipment it can't happen, in the future this may be an option
-      // and I don't want it breaking then.
-      if (rslt.equip.length > 0) {
-        rslt.equipRUHieght = rslt.equip[0].equipRUHieght || '';
-        rslt.equipSN = rslt.equip[0].equipSN || '';
-        rslt.equipStatus = rslt.equip[0].equipStatus || '';
-        rslt.equipEOL = rslt.equip[0].equipEOL || '';
-        rslt.equipMake = rslt.equip[0].equipMake || '';
-        rslt.equipModelWithSubs = rslt.equipModelWithSubs || '';
-        rslt.equipModel = rslt.equip[0].equipModel || '';
-        rslt.equipSubModel = rslt.equip[0].equipSubModel || '';
-        rslt.equipAddOns = rslt.equip[0].equipAddOns || '';
-        rslt.equipParent = rslt.equip[0].equipParent || '';
-        rslt.equipLocation = rslt.equip[0].equipLocation || '';
-        rslt.equipStatusLight = rslt.equip[0].equipStatus || '';
-        rslt.equipType = rslt.equip[0].equipType || '';
-        rslt.equipAcquisition = rslt.equip[0].equipAcquisition || '';
-        rslt.equipWarrantyMo = rslt.equip[0].equipWarrantyMo || '';
-        rslt.equipPONum = rslt.equip[0].equipPONum || '';
-        rslt.equipInvoice = rslt.equip[0].equipInvoice || '';
-        rslt.equipProjectNum = rslt.equip[0].equipProjectNum || '';
-        rslt.equipMaintAgree = rslt.equip[0].equipMaintAgree || '';
-        rslt.equipNotes = rslt.equip[0].equipNotes || '';
-        rslt.equipmodifiedOn = rslt.equip[0].modifiedOn || '';
-        rslt.equip_id = rslt.equip[0]._id || '';
-      } else {
-        rslt.equipRUHieght = '';
-        rslt.equipSN = '';
-        rslt.equipStatus = '';
-        rslt.equipEOL = '';
-        rslt.equipMake = '';
-        rslt.equipModelWithSubs = '';
-        rslt.equipModel = '';
-        rslt.equipSubModel = '';
-        rslt.equipAddOns = '';
-        rslt.equipParent = '';
-        rslt.equipLocation = '';
-        rslt.equipStatusLight = '';
-        rslt.equipType = '';
-        rslt.equipAcquisition = '';
-        rslt.equipWarrantyMo = '';
-        rslt.equipPONum = '';
-        rslt.equipInvoice = '';
-        rslt.equipProjectNum = '';
-        rslt.equipMaintAgree = '';
-        rslt.equipNotes = '';
-        rslt.equipmodifiedOn = '';
-        rslt.equip_id = '';
-      }
-      rslt.locCode = strTgs.locDest(rslt.equipLocation);
-      rslt.equipModelWithSubs = `${rslt.equipMake} ${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipAddOns}`;
-      return {
-        systemName: rslt.systemName,
-        dcSite: rslt.locCode.dcSite,
-        dcCage: rslt.locCode.dcCage,
-        dcRack: rslt.locCode.dcRack,
-        dcRU: rslt.locCode.dcRU,
-        equipRUHieght: rslt.equipRUHieght,
-        systemStatus: rslt.systemStatus,
-        systemEnviron: rslt.systemEnviron,
-        systemRole: rslt.systemRole,
-        equipSN: rslt.equipSN,
-        equipStatus: rslt.equipStatus,
-        equipMake: rslt.equipMake,
-        equipModelWithSubs: rslt.equipModelWithSubs,
-        equipModel: rslt.equipModel,
-        equipSubModel: rslt.equipSubModel,
-        equipAddOns: rslt.equipAddOns,
-        systemAlias: rslt.systemAlias,
-        systemParentId: rslt.systemParentId,
-        systemEquipSN: rslt.systemEquipSN,
-        sysmodifiedOn: rslt.modifiedOn,
-        systemTicket: rslt.systemTicket,
-        systemNotes: rslt.systemNotes,
-        systemOSType: rslt.systemOSType,
-        systemOSVersion: rslt.systemOSVersion,
-        equipParent: rslt.equipParent,
-        equipLocation: rslt.equipLocation,
-        equipStatusLight: rslt.equipStatus,
-        equipType: rslt.equipType,
-        equipAcquisition: rslt.equipAcquisition,
-        equipEOL: rslt.equipEOL,
-        equipPONum: rslt.equipPONum,
-        equipInvoice: rslt.equipInvoice,
-        equipProjectNum: rslt.equipProjectNum,
-        equipMaintAgree: rslt.equipMaintAgree,
-        equipNotes: rslt.equipNotes,
-        equipmodifiedOn: rslt.modifiedOn,
-        system_id: rslt._id,
         equip_id: rslt.equip_id,
       };
     });
-    //
+
     if (data.resType === 'csv') {
       filename = data.findWhat + data.resExt;
       res.setHeader('Content-disposition', `attachment; filename=${filename}`);
