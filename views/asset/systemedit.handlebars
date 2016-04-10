@@ -31,7 +31,7 @@
       <p class="form-control-static"></p>
 
       <div class="row"> <!-- div row 2 -->
-        <div class="col-md-6"> <!-- div row 2.1 -->
+        <div class="col-md-6"> <!-- div row 2.a -->
           <div class="form-group">
             <label for="field-systemName" class="col-sm-4 control-label">System Name</label>
             <div class="col-sm-8">
@@ -39,81 +39,88 @@
                 <input type="hidden" name="systemName" value="{{systemName}}">
                 <p><strong>{{systemName}}</strong>
                 {{#if access.delete}}
-                  <a href="/system/{{systemName}}/namechange"
-                  <span class="glyphicon glyphicon-pencil glyphicon-danger" data-toggle="tooltip" data-delay='{"show":1500}' title="Click to edit the system name."></span>
-                  </a>
+                <a href="/system/{{systemName}}/namechange"
+                <span class="glyphicon glyphicon-pencil glyphicon-danger" data-toggle="tooltip" data-delay='{"show":1500}' title="Click to edit the system name."></span></a>
                 {{/if}}
                 </p>
                 {{else}}
-                  <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" data-toggle="tooltip" data-delay='{"show":1500}'required title="System Name is required, should be all lowercase and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." placeholder="*Required">
-                {{/if}}
-              </div>
+                <input type="text" class="form-control" id="systemName" name="systemName" value="{{systemName}}" data-toggle="tooltip" data-delay='{"show":1500}'required title="System Name is required, should be all lowercase and be ‘a-z’, ‘1-0’, ‘-’ and ‘_’ characters only." placeholder="*Required">
+              {{/if}}
             </div>
-            <div class="form-group">
-              <label for="field-systemAlias" class="col-sm-4 control-label" >Alias</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" id="systemAlias" name="systemAlias"  value="{{systemAlias}}" placeholder="AKA?" data-toggle="tooltip" data-delay='{"show":1500}'  title="Also known as, for use with systems with more than one name.">
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="field-systemAlias" class="col-sm-4 control-label" >Alias</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="systemAlias" name="systemAlias"  value="{{systemAlias}}" placeholder="AKA?" data-toggle="tooltip" data-delay='{"show":1500}'  title="Also known as, for use with systems with more than one name.">
             </div>
-            <div class="form-group">
-              <label for="field-systemParentId" class="col-sm-4 control-label" >System Parent</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control autofillSystemName" id="systemParentId" name="systemParentId"  value="{{systemParentId}}" data-toggle="tooltip" data-delay='{"show":1500}' title="Autofill will preset System Names, use a comma to separate multiple parents. System Parent is for Systems that are slaves to another System, such as a Cisco FEX">
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="field-systemParentId" class="col-sm-4 control-label" >System Parent</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control autofillSystemName" id="systemParentId" name="systemParentId"  value="{{systemParentId}}" data-toggle="tooltip" data-delay='{"show":1500}' title="Autofill will preset System Names, use a comma to separate multiple parents. System Parent is for Systems that are slaves to another System, such as a Cisco FEX">
             </div>
-            <div class="form-group">
-              <label for="systemEquipSN" class="col-sm-4 control-label" >Equipment SN</label>
-              <div class="col-sm-8">
-                <input type="text" id="systemEquipSN" class="autofillEquipSN noEnterSubmit form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" data-toggle="tooltip" data-delay='{"show":1500}' title="Autofill will present matching Equipment Serial Numbers as you type.">
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="systemEquipSN" class="col-sm-4 control-label" >Equipment SN</label>
+            <div class="col-sm-8">
+              <input type="text" id="systemEquipSN" class="autofillEquipSN noEnterSubmit form-control form-group-sm col-xs-3" name="systemEquipSN" value="{{systemEquipSN}}" data-toggle="tooltip" data-delay='{"show":1500}' title="Autofill will present matching Equipment Serial Numbers as you type.">
             </div>
-          </div> <!-- div row 2.1 -->
-          <div class="col-md-6"> <!-- div row 2.2 -->
-            <div class="form-group">
+          </div>
+        </div>                <!-- /div row 2.a -->
+        <div class="col-md-6"> <!-- div row 2.b -->
+          <div class="form-group">
             <label for="field-systemStatus" class="col-sm-4 control-label" >Status</label>
-              <div class="col-sm-8">
+            <div class="col-sm-8">
               <select id="systemStatus" name="systemStatus" class="form-control" data-toggle="tooltip" data-delay='{"show":1500}' required title="System Status is the General Classification this system belongs to. If unsure, check other systems of the same type for their Status.">
               <option ""></option>
               {{#each optSystStatus}}
                 <option {{{selOption this ../systemStatus}}} >{{this}}</option>
               {{/each}}
               </select>
-              </div>
             </div>
-            <div class="form-group">
+          </div>
+          <div class="form-group">
             <label for="field-systemTicket" class="col-sm-4 control-label" >Ticket</label>
-              <div class="col-sm-8">
+            <div class="col-sm-8">
               <input type="text" class="form-control" id="systemTicket" name="systemTicket"  value="{{systemTicket}}" placeholder="Case requesting this System?" data-toggle="tooltip" data-delay='{"show":1500}' title="Ticket is any case number associated with this system. multiple cases can be added using comma separation.">
+            </div>
+          </div>
+          <div class="row"> <!-- div row 2.1 -->
+            <div class="col-sm-6"> <!-- div row 2.1.a -->
+              <div>
+                {{#if equipLocation}}
+                <div class="form-group">
+                <label for="field-equipLocation" class="col-lg-4 control-label">Location </label>
+                  <div class="col-lg-8">
+                  {{equipLocation}}
+                  </div>
+                </div>
+                {{/if}}
               </div>
-            </div>
-            <div class="row"> <!-- div row 2 -->
-              <div class="col-sm-6"> <!-- div row 2.1 -->
-                <div class="form-group">
-                  <label for="field-systemInventoryStatus" class="col-sm-8 control-label"  >Inventory Status</label>
-                  <div class="col-sm-4">
-                    <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} data-toggle="tooltip" data-delay='{"show":1500}' title="Check this box if this page is complete">
-                  </div>
+              <div class="form-group">
+                <label for="field-systemInventoryStatus" class="col-lg-4 control-label"  >Complete </label>
+                  <div class="col-lg-4">
+                  <input type="checkbox" name="systemInventoryStatus" value="true" {{systemInventoryStatusChecked}} data-toggle="tooltip" data-delay='{"show":1500}' title="Check this box if this page is complete">
                 </div>
-              </div> <!-- div row 2.1 -->
-              <div class="col-md-6"> <!-- div row 2.2 -->
-                <div class="form-group">
-                <label for="field-systemIsVirtual" class="col-sm-8 control-label"  >Is Virtual</label>
-                  <div class="col-sm-4">
-                    <input type="checkbox" name="systemIsVirtual" value="true" {{systemIsVirtualChecked}} data-toggle="tooltip" data-delay='{"show":1500}' title="Is this system a VM?">
-                  </div>
+              </div>
+            </div>                <!-- /div row 2.1.a -->
+            <div class="col-md-6"> <!-- div row 2.1.b -->
+              <div class="form-group">
+                <label for="field-systemIsVirtual" class="col-lg-4 control-label">Virtual </label>
+                <div class="col-lg-4">
+                  <input type="checkbox" name="systemIsVirtual" value="true" {{systemIsVirtualChecked}} data-toggle="tooltip" data-delay='{"show":1500}' title="Is this system a VM?">
                 </div>
-              </div> <!-- div row 2.2 -->
-            </div>
-            {{#if equipLocation}}
-                <div class="form-group">
-                  <label for="field-equipLocation" class="col-sm-4 control-label">Location</label>
-                  <div class="col-sm-8">
-                    {{equipLocation}}
-                  </div>
+              </div>
+              <div class="form-group">
+                <label for="field-systemTemplate" class="col-lg-4 control-label">Template </label>
+                <div class="col-lg-4">
+                  <input type="checkbox" name="systemTemplate" value="true" {{systemTemplatechecked}} data-toggle="tooltip" data-delay='{"show":1500}' title="Is this a system template?">
                 </div>
-              {{/if}}
-          </div> <!-- div row 2 -->
-        </div> <!-- div row 1 -->
+              </div>
+            </div>                <!-- /div row 2.1.b -->
+          </div>           <!-- /div row 2.1 -->
+        </div>                <!-- /div row 2.b -->
+      </div>           <!-- /div row 2 -->
         <table id="portsTable" class="table table-condensed">
           <thead>
           <tr>

@@ -39,8 +39,8 @@ const equipmentSchema = mongoose.Schema({
   equipStatus: String,
   equipIsVirtual: { type: Boolean, default: false },
   equipEOL: { type: Boolean, default: false, index: 1 },
+  equipTemplate: { type: Boolean, default: false },
   equipLOB: { type: String, index: 1 },
-  equipTemplate: Boolean,
   equipType: String,
   equipMake: { type: String, index: 1 },
   equipModel: String,
@@ -104,7 +104,7 @@ equipmentSchema.plugin(uniqueValidator);
 
 // equipmentSchema.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.' });
 
-equipmentSchema.virtual('equipLocRack').get(function() {
+equipmentSchema.virtual('equipLocRack').get(function () {
   if (this.equipLocation) {
     var cutLine = this.equipLocation.lastIndexOf('_');
     return this.equipLocation.substring(0, cutLine);
@@ -112,7 +112,7 @@ equipmentSchema.virtual('equipLocRack').get(function() {
   return undefined;
 });
 
-equipmentSchema.virtual('equipLocRU').get(function() {
+equipmentSchema.virtual('equipLocRU').get(function () {
   if (this.equipLocation) {
     var cutLine = this.equipLocation.lastIndexOf('_');
     return this.equipLocation.slice(cutLine + 1);

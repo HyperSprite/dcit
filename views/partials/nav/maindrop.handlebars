@@ -9,7 +9,10 @@
   {{#if access.edit}}
     <li class="divider"></li>
     <li><a href="/equipment/new"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New Equipment</a></li>
+
+    <li><a href="/reports/query?findIn=equipTemplate&findWhat=true"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Templates</a></li>
     <li><a href="/system/new"><span class="glyphicon glyphicon-plus glyphicon-danger"></span> New System</a></li>
+    <li><a href="/reports/query?findIn=systemTemplate&findWhat=true"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> System Templates</a></li>
     <li><a href="/location/rack"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Racks All</a></li>
     <li><a href="/reports/query?filterOn=equipStatus&filterArr=service&filterNor=1"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment Not in Service</a></li>
     <li><a href="/reports/query?equipLocNull=1"><span class="glyphicon glyphicon-list-alt glyphicon-danger"></span> Equipment w/ no Location</a></li>

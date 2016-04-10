@@ -71,6 +71,11 @@ function equipProjectNumFormatter(value) {
   return '<a href="/reports//reports/equipment/equipProjectNum' + value + '" target="_blank"> ' + value + '</a>';
 }
 
+function equipMakeFormatter(value) {
+  return '<a href="/reports//reports/equipment/equipMake' + value + '" target="_blank"> ' + value + '</a>';
+}
+
+
 function equipModelWithSubsFormatter(value) {
   var valMkMod = value;
   if (value.length > 42) {

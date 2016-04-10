@@ -52,7 +52,12 @@
           </div>
           <p id="empty-message"></p>
           {{/if}}
-
+          <div class="form-group">
+            <label for="field-equipLOB" class="col-sm-4 control-label" >Line of Business</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="equipLOB" name="equipLOB"  value="{{equipLOB}}" placeholder="Group or Division">
+            </div>
+          </div>
           <div class="form-group">
             <label for="field-equipParent" class="col-sm-4 control-label" >Parent</label>
             <div class="col-sm-8 ui-widget">
@@ -106,16 +111,13 @@
           </div>
           <!-- section 1 row 2 subrow 1-->
           <div class="row">
-
-            <div class="col-sm-4">
+          <div class="col-md-6">
               <div class="form-group">
                 <label for="field-equipInventoryStatus" class="col-sm-9 control-label"  title="Check if inventory is complete">Complete</label>
                 <div class="col-sm-3">
                   <input type="checkbox" name="equipInventoryStatus" value="true" {{equipInventoryStatusChecked}}>
                 </div>
               </div>
-            </div>
-            <div class="col-sm-4">
               <div class="form-group">
                 <label for="field-equipIsVirtual" class="col-sm-9 control-label" title="Is this a virtual machine?" >Virtual</label>
                 <div class="col-sm-3">
@@ -123,21 +125,26 @@
                 </div>
               </div>
             </div>
-              <div class="col-sm-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label for="field-equipEOL" class="col-sm-9 control-label"  title="Check if inventory is End of Life">End of Life</label>
                 <div class="col-sm-3">
                   <input type="checkbox" name="equipEOL" value="true" {{equipEOLChecked}}>
                 </div>
               </div>
-
+              <div class="form-group">
+                <label for="field-equipTemplate" class="col-sm-9 control-label"  title="Check if Equipment Template">Template</label>
+                <div class="col-sm-3">
+                  <input type="checkbox" name="equipTemplate" value="true" {{equipTemplateChecked}}>
+                </div>
+              </div>
             </div>
           </div>
-          <!-- section 1 row 2 subrow 1 end -->
+            <!-- section 1 row 2 subrow 1 end -->
         </div>
-        <!-- section 1 row 2 end -->
+          <!-- section 1 row 2 end -->
       </div>
-      <!-- section 1 row -->
+        <!-- section 1 row -->
 
       <!-- table 1 -->
       <table id="portsTable" class="table table-condensed">

@@ -14,9 +14,11 @@
         <div class="col-md-4">
           {{#if equipParent}} Parent: <a href="/reports/multi-?searchIn=equipment~equipParent&searchFor={{equipParent}}"><strong>{{equipParent}}</strong></a><br>{{/if}}
                     Location: <strong><a href="/equipment-systems/{{equipLocationRack}}">{{equipLocation}}</a></strong><br>
+                    Line of Business: {{equipLOB}}<br>
                     Ticket: {{{equipTicketNumberlit}}}<br>
                     Equipment Status: {{{equipStatuslit}}}<br>
                     {{#if equipAssetTag}}Asset Tag: {{equipAssetTag}}<br>{{/if}}
+                    Template: <input type="checkbox" {{#if equipTemplate}}checked{{/if}} disabled><br>
         </div>
       <div class="col-md-4">
                     {{#if systemName}}System: <strong><a href="/system/{{systemName}}">{{systemName}} </a></strong><br>

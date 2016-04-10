@@ -644,11 +644,11 @@ module.exports.queryAggr = (req, res, next) => {
   logger.info(`queryAggr REQ.PATH\n${req.path}`);
   var data = req.params;
   var fileType = req.params.fileType || '';
-  logger.info(`queryAggr 861\nreq.body ${JSON.stringify(req.body)}`);
-  logger.info(`queryAggr 862\nreq.params ${JSON.stringify(req.params)}`);
-  logger.info(`queryAggr 863\ndata ${JSON.stringify(data)}`);
-  data.query = req.query;
+  logger.info(`queryAggr 010\nreq.body ${JSON.stringify(req.body)}`);
+  logger.info(`queryAggr 020\nreq.params ${JSON.stringify(req.params)}`);
 
+  data.query = req.query;
+  logger.info(`queryAggr 030\ndata ${JSON.stringify(data)}`);
   if (!data.findIn) {
     data.findIn = data.query.findIn;
     data.findWhat = data.query.findWhat + fileType;
@@ -660,7 +660,7 @@ module.exports.queryAggr = (req, res, next) => {
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
   data.ugly = req.query.ugly;
-  logger.info(`queryAggr 872\nfindIn: ${data.findIn} / findWhat: ${data.findWhat}`);
+  logger.info(`queryAggr 040\nfindIn: ${data.findIn} / findWhat: ${data.findWhat}`);
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
@@ -671,7 +671,7 @@ module.exports.queryAggr = (req, res, next) => {
     data.collection = 'equipment';
   }
   // set to CSV or JSON
-  logger.info(`887 - data ${data}`);
+  logger.info(`queryAggr 050 - data ${data}`);
   data.query = objToQString(data.query);
   data.drop1 = 'Environment';
   data.drop1each = '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>';
@@ -708,9 +708,8 @@ module.exports.multiAggr = (req, res, next) => {
   var filterResArr = [];
   var filterNor = 0;
   var modCollection;
-  logger.info(`880 - req.body ${JSON.stringify(req.body)}`);
-  logger.info(`881 - req.params ${JSON.stringify(req.params)}`);
-  logger.info(`882 - data ${JSON.stringify(data)}`);
+  logger.info(`multiAggr 010 - req.body ${JSON.stringify(req.body)}`);
+  logger.info(`multiAggr 020 - req.params ${JSON.stringify(req.params)}`);
   data.query = req.query;
   if (!data.findIn) {
     data.findIn = data.query.findIn;
@@ -727,11 +726,10 @@ module.exports.multiAggr = (req, res, next) => {
 
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
-
-  logger.info(`890 - findIn: ${data.findIn} / findWhat: ${data.findWhat}`);
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
+  logger.info(`multiAggr 030\ndata ${JSON.stringify(data)}`);
   // set to CSV or JSON
   if ((/.csv$/).test(data.findWhat)) {
     data.resType = 'csv';
@@ -742,7 +740,6 @@ module.exports.multiAggr = (req, res, next) => {
     data.resExt = '.json';
     data.findWhat = data.findWhat.substring(0, data.findWhat.length - 5);
   } else {
-    logger.info(`data ${data}`);
     data.query = objToQString(data.query);
     data.drop1 = 'Environment';
     data.drop1each = '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>';
@@ -766,7 +763,10 @@ module.exports.multiAggr = (req, res, next) => {
     equipSN: { $match: { 'equipSN': { '$regex': findThis, '$options': 'i' } } },
     equipParent: { $match: { 'equipParent': { '$regex': findThis, '$options': 'i' } } },
     equipLocation: { $match: { 'equipLocation': { '$regex': findThis, '$options': 'i' } } },
-    equipStatus: { $match: { 'equipStatus' : { '$regex': findThis, '$options': 'i' } } },
+    equipStatus: { $match: { 'equipStatus': { '$regex': findThis, '$options': 'i' } } },
+    equipTemplate: { $match: { 'equipTemplate': Boolean(findThis) } },
+    equipInventoryStatus: { $match: { 'equipInventoryStatus': Boolean(findThis) } },
+    equipLOB: { $match: { 'equipStatus': { '$regex': findThis, '$options': 'i' } } },
     equipMake: { $match: { 'equipMake': { '$regex': findThis, '$options': 'i' } } },
     equipPONum: { $match: { 'equipPONum': { '$regex': findThis, '$options': 'i' } } },
     equipInvoice: { $match: { 'equipInvoice': { '$regex': findThis, '$options': 'i' } } },
@@ -780,6 +780,7 @@ module.exports.multiAggr = (req, res, next) => {
     systemTicket: { 'systemTicket': { '$regex': findThis, '$options': 'i' } },
     systemParentId: { 'systemParentId': { '$regex': findThis, '$options': 'i' } },
     systemAlias: { 'systemAlias': { '$regex': findThis, '$options': 'i' } },
+    systemTemplate: { 'systemTemplate': Boolean(findThis) },
     systemModifiedBy: { 'modifiedBy': { '$regex': findThis, '$options': 'i' } },
     sysPortEndPoint: { 'systemPorts.sysPortEndPoint': { '$regex': findThis, '$options': 'i' } },
     sysPortAddress: { 'systemPorts.sysPortAddress': { '$regex': findThis, '$options': 'i' } },
@@ -808,6 +809,9 @@ module.exports.multiAggr = (req, res, next) => {
           as: 'equip',
         },
     };
+    if (data.query.equipLocation) {
+      aggPipePostLookup = { $match: { 'equip.equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' } } };
+    }
   } else {
     modCollection = 'Equipment';
     // removing EOL
@@ -840,7 +844,9 @@ module.exports.multiAggr = (req, res, next) => {
     };
     aggPipePostLookup = data.queryIn;
   }
+  // Build the pipline with preLookup and lookup
   aggPipeline = [aggPipePreLookup, aggPipeLookup];
+  // Add postLookup if exists
   if (aggPipePostLookup) {
     aggPipeline.push(aggPipePostLookup);
   }
@@ -869,6 +875,7 @@ module.exports.multiAggr = (req, res, next) => {
           rslt.equipSN = rslt.equip[0].equipSN || '';
           rslt.equipStatus = rslt.equip[0].equipStatus || '';
           rslt.equipEOL = rslt.equip[0].equipEOL || '';
+          rslt.equipLOB = rslt.equip[0].equipLOB || '';
           rslt.equipMake = rslt.equip[0].equipMake || '';
           rslt.equipModelWithSubs = rslt.equipModelWithSubs || '';
           rslt.equipModel = rslt.equip[0].equipModel || '';
@@ -892,6 +899,7 @@ module.exports.multiAggr = (req, res, next) => {
           rslt.equipSN = '';
           rslt.equipStatus = '';
           rslt.equipEOL = '';
+          rslt.equipLOB = '';
           rslt.equipMake = '';
           rslt.equipModelWithSubs = '';
           rslt.equipModel = '';
@@ -946,7 +954,7 @@ module.exports.multiAggr = (req, res, next) => {
         rslt.equip_id = rslt._id;
       }
       rslt.locCode = strTgs.locDest(rslt.equipLocation);
-      rslt.equipModelWithSubs = `${rslt.equipMake} ${rslt.equipModel} ${rslt.equipSubModel} ${rslt.equipAddOns}`;
+      rslt.equipModelWithSubs = rslt.equipModel + ' ' + rslt.equipSubModel + ' ' + rslt.equipAddOns;
       return {
         systemName: rslt.systemName,
         dcSite: rslt.locCode.dcSite,
@@ -964,6 +972,7 @@ module.exports.multiAggr = (req, res, next) => {
         equipModel: rslt.equipModel,
         equipSubModel: rslt.equipSubModel,
         equipAddOns: rslt.equipAddOns,
+        equipLOB: rslt.equipLOB,
         systemAlias: rslt.systemAlias,
         systemParentId: rslt.systemParentId,
         systemEquipSN: rslt.systemEquipSN,

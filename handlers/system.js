@@ -185,6 +185,8 @@ module.exports.dcSystemView = (req, res, next) => {
               systemRole: sy.systemRole,
               systemInventoryStatus: sy.systemInventoryStatus,
               systemInventoryStatusChecked: strTgs.setCheckBox(sy.systemInventoryStatus),
+              systemTemplate: sy.systemTemplate,
+              systemTemplateChecked: strTgs.setCheckBox(sy.systemTemplate),
               systemTicket: sy.systemTicket,
               systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus, sy.systemTicket),
               systemStatus: sy.systemStatus,
@@ -362,6 +364,8 @@ module.exports.dcSystemEdit = (req, res, next) => {
           systemRole: sy.systemRole,
           systemInventoryStatus: sy.systemInventoryStatus,
           systemInventoryStatusChecked: strTgs.setCheckBox(sy.systemInventoryStatus),
+          systemTemplate: sy.systemTemplate,
+          systemTemplateChecked: strTgs.setCheckBox(sy.systemTemplate),
           systemTicket: sy.systemTicket,
           systemTicketLit: strTgs.trueFalseIcon(sy.systemInventoryStatus, sy.systemTicket),
           systemStatus: sy.systemStatus,
@@ -666,6 +670,7 @@ exports.dcSystemPost = (req, res) => {
       systemEnviron: strTgs.multiTrim(bd.systemEnviron, 9, 2),
       systemRole: strTgs.multiTrim(bd.systemRole, 9, 2),
       systemInventoryStatus: bd.systemInventoryStatus,
+      systemTemplate: bd.systemTemplate,
       systemTicket: strTgs.multiTrim(bd.systemTicket, 6, 2),
       systemStatus: bd.systemStatus,
       systemOwner: strTgs.multiTrim(bd.systemOwner, 5, 0),
@@ -773,6 +778,7 @@ exports.dcSystemPost = (req, res) => {
         thisDoc.systemInventoryStatus = bd.systemInventoryStatus;
         thisDoc.systemTicket = strTgs.multiTrim(bd.systemTicket, 6, 2);
         thisDoc.systemStatus = bd.systemStatus;
+        thisDoc.systemTemplate = bd.systemTemplate;
         thisDoc.systemOwner = strTgs.multiTrim(bd.systemOwner, 5, 0);
         //    thisDoc.systemImpact= bd.systemImpact;
         thisDoc.systemIsVirtual = bd.systemIsVirtual;

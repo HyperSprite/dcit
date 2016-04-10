@@ -180,6 +180,9 @@ module.exports.dcEquipView = (req, res, next) => {
             equipInventoryStatus: eq.equipInventoryStatus,
             equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus, eq.equipStatus),
             equipInventoryStatusChecked: strTgs.setCheckBox(eq.equipInventoryStatus),
+            equipTemplate: eq.equipTemplate,
+            equipTemplateChecked: strTgs.setCheckBox(eq.equipTemplate),
+            equipLOB: eq.equipLOB,
             equipStatus: eq.equipStatus,
             equipIsVirtual: eq.equipIsVirtual,
             equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
@@ -345,6 +348,9 @@ module.exports.dcEquipEdit = (req, res, next) => {
             equipInventoryStatus: eq.equipInventoryStatus,
             equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus, eq.equipStatus),
             equipInventoryStatusChecked: strTgs.setCheckBox(eq.equipInventoryStatus),
+            equipTemplate: eq.equipTemplate,
+            equipTemplateChecked: strTgs.setCheckBox(eq.equipTemplate),
+            equipLOB: eq.equipLOB,
             equipStatus: eq.equipStatus,
             equipIsVirtual: eq.equipIsVirtual,
             equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
@@ -500,6 +506,8 @@ module.exports.dcEquipCopy = (req, res, next) => {
             equipTicketNumber: eq.equipTicketNumber,
             equipTicketNumberlit: strTgs.trueFalseIcon(eq.equipInventoryStatus, eq.equipTicketNumber),
             equipInventoryStatus: eq.equipInventoryStatus,
+            equipTemplate: eq.equipTemplate,
+            equipLOB: eq.equipLOB,
             equipStatuslit: strTgs.trueFalseIcon(eq.equipStatus, eq.equipStatus),
             equipStatus: eq.equipStatus,
             equipIsVirtualChecked: strTgs.setCheckBox(eq.equipIsVirtual),
@@ -612,6 +620,8 @@ module.exports.dcEquipmentPost = (req, res) => {
         equipInventoryStatus: data.equipInventoryStatus,
         equipStatus: strTgs.multiTrim(data.equipStatus, 5, 0),
         equipEOL: data.equipEOL,
+        equipTemplate: data.equipTemplate,
+        equipLOB: strTgs.multiTrim(data.equipLOB, 5, 0),
         equipIsVirtual: data.equipIsVirtual,
         equipType: strTgs.multiTrim(data.equipType, 5, 0),
         equipMake: strTgs.multiTrim(data.equipMake, 5, 0),
@@ -738,6 +748,8 @@ module.exports.dcEquipmentPost = (req, res) => {
           thisDoc.equipStatus = strTgs.multiTrim(data.equipStatus, 5, 0);
           thisDoc.equipIsVirtual = data.equipIsVirtual;
           thisDoc.equipEOL = data.equipEOL;
+          thisDoc.equipTemplate = data.equipTemplate;
+          thisDoc.equipLOB = strTgs.multiTrim(data.equipLOB, 5, 0);
           thisDoc.equipType = strTgs.multiTrim(data.equipType, 5, 0);
           thisDoc.equipMake = strTgs.multiTrim(data.equipMake, 5, 0);
           thisDoc.equipModel = strTgs.multiTrim(data.equipModel, 5, 0);
