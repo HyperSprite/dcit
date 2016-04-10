@@ -708,6 +708,8 @@ module.exports.multiAggr = (req, res, next) => {
   var filterResArr = [];
   var filterNor = 0;
   var modCollection;
+  var sortField;
+  var aggPipePostSort;
   logger.info(`multiAggr 010 - req.body ${JSON.stringify(req.body)}`);
   logger.info(`multiAggr 020 - req.params ${JSON.stringify(req.params)}`);
   data.query = req.query;
@@ -812,6 +814,7 @@ module.exports.multiAggr = (req, res, next) => {
     if (data.query.equipLocation) {
       aggPipePostLookup = { $match: { 'equip.equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' } } };
     }
+    aggPipePostSort = { $sort: { 'systemEnviron': 1, 'systemRole':1, 'systemName': 1 } };
   } else {
     modCollection = 'Equipment';
     // removing EOL
@@ -843,6 +846,7 @@ module.exports.multiAggr = (req, res, next) => {
       },
     };
     aggPipePostLookup = data.queryIn;
+    aggPipePostSort = { $sort: { 'equipMake': 1, 'equipModel': 1, 'equipSubModel': 1 } };
   }
   // Build the pipline with preLookup and lookup
   aggPipeline = [aggPipePreLookup, aggPipeLookup];
@@ -864,6 +868,18 @@ module.exports.multiAggr = (req, res, next) => {
     }
     aggPipeline.push(aggPipePostFilter);
   }
+  // generic sort formatted like &sortField={"systemEnviron":1,"equip.equipMake":1}
+  // or &sortField={%22systemEnviron%22:1,%22systemRole%22:1,%22systemName%22:1}
+  // the sort needs to match the collection to work
+  // defaults to equipLocation if nothing is given
+
+
+  if (data.query && data.query.sortField) {
+    logger.info(`multiAggr 040\njson.parse ${JSON.stringify(JSON.parse(data.query.sortField))}`);
+    sortField = JSON.parse(data.query.sortField);
+    aggPipePostSort = { $sort: sortField };
+  }
+  aggPipeline.push(aggPipePostSort);
   logger.info(`aggPipeline ${JSON.stringify(aggPipeline)}`);
 
   Models[modCollection].aggregate(aggPipeline, (err, result) => {

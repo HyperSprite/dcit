@@ -178,8 +178,14 @@ require('./routes')(app);
 app.use((err, req, res, next) => {
   logger.error(`ERR URL : ${req.url}`);
   logger.error(`ERR IP  : ${req.ip}`);
-  logger.error(`ERR USER: ${req.user.local.email}`);
+  if (req.user && req.user.locals) {
+    logger.error(`ERR USER: ${req.user.local.email}`);
+  } else {
+    logger.error('ERR USER  : No Locals');
+  }
+  logger.error('ERR < start err > _______________________________ ');
   logger.error(err);
+  logger.error('ERR ________________________________ < /end err > ');
   next();
 });
 

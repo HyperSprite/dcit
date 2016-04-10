@@ -7,15 +7,22 @@
 <li><a href="#welcome-to-dcit-help">WELCOME TO DCIT HELP</a><ul>
 <li><a href="#search-from-the-the-header-bar">Search from the the header bar</a></li>
 <li><a href="#other-searches">Other searches:</a></li>
-<li><a href="#main-menu-reports">Main Menu Reports</a></li>
+<li><a href="#nav-menu-reports">Nav Menu Reports</a></li>
+<li><a href="#query-report-builder-added-in-v0218">Query report builder (added in v0.2.18)</a><ul>
+<li><a href="#direct-download">Direct Download</a></li>
+<li><a href="#advanced-report-options">Advanced Report Options</a><ul>
+<li><a href="#supported-query-string-options-are">Supported query string options are:</a><ul>
+<li><a href="#search-modifiers-refining-search-results">Search Modifiers - refining search results</a></li>
+<li><a href="#search-sorting-how-the-results-are-arranged">Search Sorting - how the results are arranged</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#system-based-csv-and-json-report-builder-added-in-v0202">System Based CSV and JSON report builder (added in v0.2.02)</a></li>
-<li><a href="#equipment-based-csv-and-json-report-builder-added-in-v0215">Equipment Based CSV and JSON report builder (added in v0.2.15)</a><ul>
-<li><ul>
-<li><a href="#report-advanced-options">Report Advanced Options</a></li>
+<li><a href="#equipment-based-csv-and-json-report-builder-added-in-v0215">Equipment Based CSV and JSON report builder (added in v0.2.15)</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li><a href="#templates-for-equipment-and-systems-added-in-v0218">Templates for Equipment and Systems (added in v0.2.18)</a></li>
 <li><a href="#eol-end-of-life-equipment-option-added-in-v0215">EOL ( End of Life) Equipment option (added in v0.2.15)</a></li>
 <li><a href="#parent-equipment-added-in-v-0207">Parent Equipment (added in v 0.2.07)</a></li>
 <li><a href="#system-ports">System Ports</a><ul>
@@ -42,8 +49,6 @@
   <p>Note: This site has only been tested on the latest Chrome. It uses HTML5 extensively and many features are still not available in other browsers. Sorry, I just don’t have time to test more than one at this time.</p>
 </blockquote>
 
-
-
 <h2 id="search-from-the-the-header-bar">Search from the the header bar</h2>
 
 <p>Search from the header bar is your friend, it is always available and can use partials. For instance a System Name search for “pache” will return all systems with some part of “pache” in the name. So apache01, apache2, apacheproxy01 etc would all be returned. At this time you can not use wildcards in the middle of the word “ap*che” will not return results. Your search results tab label will start with “..” and then your search phrase. So as in the example above, a search for “pache”, the tab label will be .. pache. This can be handy for keeping track of the tab with your search in it.</p>
@@ -64,6 +69,8 @@
 <li>vlan: vlan seachs are the exact match type. Searching for “2” will only return vlan: 2 and not vlan: 32 or vlan: 23.</li>
 </ul>
 
+
+
 <h2 id="nav-menu-reports">Nav Menu Reports</h2>
 
 <p>Using the DCIT drop down menu on the top left, select reports. From here you can select Environment, Role and Make reports. These are all displayed using the same tabled format with Location, System Name, Equipment SN and a few other vitals.</p>
@@ -74,7 +81,9 @@
 <li>Make: This will find all Equipment from that Make</li>
 </ul>
 
-<h2 id="query-report-builder-added-in-v0218">Query report builder (added in v0.2.18)</h2>
+
+
+<h2 id="query-report-builder">Query report builder</h2>
 
 <blockquote>
   <p>Note: This report system supersedes the reports below. While they still exist, the Query Report system drives them and is far more intuitive. </p>
@@ -91,6 +100,7 @@
 <li>equipParent</li>
 <li>equipLocation</li>
 <li>equipStatus</li>
+<li>equipLOB</li>
 <li>equipMake</li>
 <li>equipPONum</li>
 <li>equipInvoice</li>
@@ -115,38 +125,48 @@
 
 <p>The report returned will give you an idea of what the data will look like. At the top of the page you will see links for JSON and CSV, use these links to download the information directly system consumption. They have been tested in Chrome and curl (with the “-k” flag) and wget (with the “–no-check-certificate” flag). </p>
 
-<h3 id="report-advanced-options">Report Advanced Options</h3>
+
+
+<h3 id="advanced-report-options">Advanced Report Options</h3>
 
 <p>The Equipment report also adds query string support but adding a “?” and using “&amp;” key=value separators at the end of the URL and can be used independently or in combination with any of the searches above. </p>
 
-
-
 <h4 id="supported-query-string-options-are">Supported query string options are:</h4>
 
+
+
+<h5 id="search-modifiers-refining-search-results">Search Modifiers - refining search results</h5>
+
+<p>-<code>equipEOL=true</code> : shows only EOL Equipment, defaults to false showing no EOL equipment. An example in the app is the “Equipment EOL Retired” report. <a href="/reports/query?equipEOL=true">/reports/query?equipEOL=true</a> <br>
+ - <code>equipLocation=(some location partial)</code> : limit results to specific locations. With an Equipment based search, this is a prefilter, takeing place before the Lookup combines the results with Systems. For System based lookups, this is a postfilter that is inserted after the Lookup operation. <br>
+ - <code>equipMake=(equipment manufacturer)</code> : limit results to specific manufacturer <br>
+ - <code>ugly=true</code> : table header row matches collection field names (json and CSV reports are ugly style) <br>
+ - filterOn is an advanced <strong>OR</strong> filter. You can see it in operation in the <strong>Spares</strong> report. You can use it to filter to either Systems or Equipment Fields but it takes some finesse. If you are Searching and Filtering on the same collection the field can be used ass is. If you are Searching on one collection and filtering on the other, you need to preface the filter with the appropriate prefix.  <br>
+     - If searching on Equipment and filtering on a System field, prefix the <strong>filterOn</strong> with <code>"sys."</code> <br>
+     - If searching on Systems and filtering on a Equipment field, prefix the <strong>filterOn</strong> with <code>"equip."</code> . This filter runs before the <script type="math/tex" id="MathJax-Element-6">lookup filter, so using this could significantly reduce report page load times depending on your database size. Currently 5k items are returned in under 500ms. on an unremarkable server, your millage may vary.
+     - filterOn can be any collection field but is placed after the </script>lookup. <br>
+     - filterArr is an array of comma separated values you want to find. An example can be found in the Spares report <br>
+      <a href="/reports/query?filterOn=equipStatus&amp;filterArr=ordered,in%20transit,received,spare,assigned">/reports/query?filterOn=equipStatus&amp;filterArr=ordered,in%20transit,received,spare,assigned</a> <br>
+     - <code>filterNor=1</code> option flips it into a Nor filter, returns results that do not contain your values. An example of this report can be found in the Equipment Not In Service report.  <br>
+     <a href="/reports/query?filterOn=equipStatus&amp;filterArr=service&amp;filterNor=1">/reports/query?filterOn=equipStatus&amp;filterArr=service&amp;filterNor=1</a></p>
+
+<h5 id="search-sorting-how-the-results-are-arranged">Search Sorting - how the results are arranged</h5>
+
 <ul>
-<li>equipEOL=true : shows only EOL Equipment, defaults to false showing no EOL equipment. An example in the app is the “Equipment EOL Retired” report. <a href="/reports/query?equipEOL=true">/reports/query?equipEOL=true</a></li>
-<li>equipLocation=(some location partial) : limit results to specific locations</li>
-<li>equipMake=(equipment manufacturer) : limit results to specific manufacturer</li>
-<li>ugly=true : table header row matches collection field names (json and CSV reports are ugly style)</li>
-<li>filterOn is an advanced <strong>OR</strong> filter. You can see it in operation in the <strong>Spares</strong> report. You can use it to filter to either Systems or Equipment Fields but it takes some finesse. If you are Searching and Filtering on the same collection the field can be used ass is. If you are Searching on one collection and filtering on the other, you need to preface the filter with the appropriate prefix.  <br>
-<ul><li>If searching on Equipment and filtering on a System field, prefix the <strong>filterOn</strong> with “sys.”</li>
-<li>If searching on Systems and filtering on a Equipment field, prefix the <strong>filterOn</strong> with “equip.” . This filter runs before the $lookup filter, so using this could significantly reduce report page load times depending on your database size. Currently 5k items are returned in under 500ms. on an unremarkable server, your millage may vary.</li>
-<li>filterOn can be any collection field but is placed after the $lookup.</li>
-<li>filterArr is an array of comma separated values you want to find. An example can be found in the Spares report <br>
-<a href="/reports/query?filterOn=equipStatus&amp;filterArr=ordered,in%20transit,received,spare,assigned">/reports/query?filterOn=equipStatus&amp;filterArr=ordered,in%20transit,received,spare,assigned</a></li>
-<li>filterNor=1 option flips it into a Nor filter, returns results that do not contain your values. An example of this report can be found in the Equipment Not In Service report.  <br>
-<a href="/reports/query?filterOn=equipStatus&amp;filterArr=service&amp;filterNor=1">/reports/query?filterOn=equipStatus&amp;filterArr=service&amp;filterNor=1</a></li></ul></li>
+<li>sortField takes JSON formatted, comma separated query strings. Because they work postLookup, you need to be aware of the collection the report is based on and the need for proper prefixes. For instance to sort a report based on a System collection lookup on Environment, then Equipment Make, you would add the following query string <code>&amp;sortField={"systemEnviron":1,"equip.equipMake":1}</code>  <br>
+<code>- 1</code> for ascending, <code>-1</code> for descending  <br>
+By default,  <br>
+System searches are sorted by Environment, Roll, Name <br>
+Equipment searches are sorted by Make, Model, SubModel</li>
 </ul>
 
-<h3 id="system-based-csv-and-json-report-builder-added-in-v0202">System Based CSV and JSON report builder (added in v0.2.02)</h3>
+<h3 id="system-based-csv-and-json-report-builder">System Based CSV and JSON report builder</h3>
 
 <blockquote>
   <p>The following is for reference, the Query report creates the same report. </p>
 </blockquote>
 
 <p>The URL for this is: </p>
-
-
 
 <pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">hostname</span>&gt;</span>/reports/systems/(findIn)/(findWhat)</code></pre>
 
@@ -165,13 +185,13 @@
 
 <p><strong>findWhat</strong> is similar to the top bar search. As a matter of fact, the top bar search is now based on this report type where possible.</p>
 
-<h3 id="equipment-based-csv-and-json-report-builder-added-in-v0215">Equipment Based CSV and JSON report builder (added in v0.2.15)</h3>
+
+
+<h3 id="equipment-based-csv-and-json-report-builder">Equipment Based CSV and JSON report builder</h3>
 
 <blockquote>
   <p>The following is for reference, the Query report creates the same report. </p>
 </blockquote>
-
-
 
 <pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">hostname</span>&gt;</span>/reports/equipment/(findIn)/(findWhat)</code></pre>
 
@@ -180,6 +200,7 @@
 <li>equipParent</li>
 <li>equipLocation</li>
 <li>equipStatus</li>
+<li>equipLOB</li>
 <li>equipMake</li>
 <li>equipPONum</li>
 <li>equipInvoice</li>
@@ -191,13 +212,15 @@
 
 <p><strong>findWhat</strong> is similar to the top bar search. As a matter of fact, the top bar search is now based on this report type where possible.</p>
 
-<h2 id="eol-end-of-life-equipment-option-added-in-v0215">EOL ( End of Life) Equipment option (added in v0.2.15)</h2>
+<h2 id="templates-for-equipment-and-systems">Templates for Equipment and Systems</h2>
+
+<p>Templates can be thought of as a reference entry or first of class. As an example, if you received a new server type, you would enter all the details of that server type, processors, memory etc. and mark it as a template. Then when more of this same server type arrive, you can find this template in the Equipment Template report and make a copy and update the relevant information like dates, PO numbers, Invoices etc. </p>
+
+<h2 id="eol-end-of-life-equipment-soft-delete">EOL ( End of Life) Equipment Soft Delete</h2>
 
 <p>The End of Life option removes that Equipment from reporting. It is basically a soft delete for future audits. These can essentially be left this way since they are excluded from any reporting at the database level. Remember to update the Equipment Status, End of Life date and Notes before checking the box.</p>
 
-
-
-<h2 id="parent-equipment-added-in-v-0207">Parent Equipment (added in v 0.2.07)</h2>
+<h2 id="parent-equipment">Parent Equipment</h2>
 
 <p>Parent Equipment is an Equipment that holds other tracked Equipment. This includes Engineered Systems, such as an EMC Storage cabinet or an Exadata, it also includes chassis type equipment like Cisco Nexus 9000 with blades. </p>
 
@@ -208,8 +231,6 @@ If you remove the Parent, the Parents rack location will remain but the field wi
 <blockquote>
   <p>Note: If you change the SN of a Parent, all Child Equipment Parent fields will be updated as well.</p>
 </blockquote>
-
-
 
 <h2 id="system-ports">System Ports</h2>
 

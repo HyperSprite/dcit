@@ -1,5 +1,5 @@
-      {{#if user}}
       <ul class="nav navbar-nav navbar-right">
+      {{#if user}}
         <li class="dropdown">
         <a href="#" class="dropdown-toggle " data-toggle="dropdown">
         <span class="glyphicon glyphicon-user glyphicon-danger" title="{{user.local.email}}"></a>
@@ -8,25 +8,28 @@
           <li class="text-right"><a href="/user/logout">Log out  <span class="glyphicon glyphicon-log-out glyphicon-danger"></span></a></li>
         </ul>
         </li>
-      </ul>
-        {{else}}
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <form class="navbar-form navbar-right" role="login" action="/user/login" method="post">
-          <div class="form-group"> <!-- topnav.formgroup3 -->
-            <label class="sr-only" for="userEmail">Email address</label>
-            <input type="email" class="form-control" id="userEmail" name="email" pattern=".{10,}" required placeholder="Enter email">
-          </div> <!-- /topnav.formgroup3 -->
-          <div class="form-group"> <!-- /topnav.formgroup4 -->
-            <label class="sr-only" for="userPassword">Password</label>
-            <input type="password" class="form-control" id="userPassword" name="password" pattern=".{8,}" required placeholder="Password">
-          </div> <!-- /topnav.formgroup4 -->
-            <input type="hidden" name="_csrf" value="{{_csrfToken}}">
-            <input type="hidden" name="timezone" id="timezone">
-            <input type="hidden" name="requrl" value="{{requrl}}">
-            <button type="submit" class="btn btn-default btn-danger" title="Login"><span class="glyphicon glyphicon-log-in"></span></button>
-            <a href="/user/signup" >Signup</a>
-          </form>
-        </li>
-      </ul>
+      {{else}}
+        <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sign in <span class="glyphicon glyphicon-danger glyphicon-exclamation-sign"></span></a>
+          <ul class="dropdown-menu drop-columns login-drop">
+            <li>
+              <form class="form-inline" role="login" action="/user/login" method="post">
+                <div class="form-group"> <!-- topnav.formgroup3 -->
+                  <label class="sr-only" for="userEmail">Email address</label>
+                  <input type="email" class="form-control" id="userEmail" name="email" pattern=".{10,}" required placeholder="Enter email">
+                </div> <!-- /topnav.formgroup3 -->
+                <div class="form-group"> <!-- /topnav.formgroup4 -->
+                  <label class="sr-only" for="userPassword">Password</label>
+                  <input type="password" class="form-control" id="userPassword" name="password" pattern=".{8,}" required placeholder="Password">
+                </div> <!-- /topnav.formgroup4 -->
+                  <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+                  <input type="hidden" name="timezone" id="timezone">
+                  <input type="hidden" name="requrl" value="{{requrl}}">
+                  <button type="submit" class="btn btn-default btn-danger" title="Login"><span class="glyphicon glyphicon-log-in"></span></button>
+                  <a class="btn btn-default btn-danger" href="/user/signup" >Register</a>
+              </form>
+            </li>
+          </ul>
+          </li>
       {{/if}}
+      </ul>
