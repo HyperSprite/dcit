@@ -210,14 +210,14 @@ svg {
 
 .drop-columns {
   padding: 5px 10px 5px 10px;
-  overflow:hidden;
+
 }
 
 /* for dropdown drop-columns in top-bar */
 @media screen and (max-width: 899px){
     .drop-columns{
         height: 200px;
-        overflow:scroll;
+        /*overflow:scroll;*/
     }
 }
 
@@ -235,7 +235,8 @@ svg {
         -moz-column-count:1; /* Firefox */
         -webkit-column-count:1; /* Safari and Chrome */
         column-count:1;
-        width: 508px;
+        width: 560px;
+        overflow:hidden;
     }
 }
 
