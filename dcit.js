@@ -115,6 +115,9 @@ switch (app.get('env')) {
   case 'production':
     mongoose.connect(credentials.mongo.production.connectionString, options);
     break;
+  case 'test':
+    mongoose.connect(credentials.mongo.test.connectionString, options);
+    break;
   default:
     throw new Error(`Unknown execution environment: ${app.get('env')}`);
 }

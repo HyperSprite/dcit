@@ -646,8 +646,9 @@ module.exports.queryAggr = (req, res, next) => {
   var fileType = req.params.fileType || '';
   logger.info(`queryAggr 010\nreq.body ${JSON.stringify(req.body)}`);
   logger.info(`queryAggr 020\nreq.params ${JSON.stringify(req.params)}`);
-
+  logger.info(`queryAggr 025\nreq.query $JSON.stringify(req.query}`);
   data.query = req.query;
+  //data.query = strTgs._compact(req.query);
   logger.info(`queryAggr 030\ndata ${JSON.stringify(data)}`);
   if (!data.findIn) {
     data.findIn = data.query.findIn;
@@ -659,7 +660,7 @@ module.exports.queryAggr = (req, res, next) => {
   }
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
   data.findWhat = req.sanitize(data.findWhat);
-  data.ugly = req.query.ugly;
+  data.ugly = data.query.ugly;
   logger.info(`queryAggr 040\nfindIn: ${data.findIn} / findWhat: ${data.findWhat}`);
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
@@ -671,7 +672,7 @@ module.exports.queryAggr = (req, res, next) => {
     data.collection = 'equipment';
   }
   // set to CSV or JSON
-  logger.info(`queryAggr 050 - data ${data}`);
+  logger.info(`queryAggr 050 - data ${JSON.stringify(data)}`);
   data.query = objToQString(data.query);
   data.drop1 = 'Environment';
   data.drop1each = '<ul class="dropdown-menu drop-columns pull-right" id="systemEnvironDrop"></ul>';
@@ -702,7 +703,7 @@ module.exports.multiAggr = (req, res, next) => {
   var filename;
   var aggPipePreLookup;
   var aggPipeLookup;
-  var aggPipePostLookup;
+  var aggPipePostLookup = [];
   var aggPipePostFilter;
   var aggPipeline;
   var filterResArr = [];
@@ -710,20 +711,21 @@ module.exports.multiAggr = (req, res, next) => {
   var modCollection;
   var sortField;
   var aggPipePostSort;
-  logger.info(`multiAggr 010 - req.body ${JSON.stringify(req.body)}`);
-  logger.info(`multiAggr 020 - req.params ${JSON.stringify(req.params)}`);
+  logger.info(`multiAggr 010\nreq.body ${JSON.stringify(req.body)}`);
+  logger.info(`multiAggr 020\nreq.params ${JSON.stringify(req.params)}`);
+  logger.info(`multiAggr 025\nreq.query ${JSON.stringify(req.query)}`);
   data.query = req.query;
   if (!data.findIn) {
     data.findIn = data.query.findIn;
     data.findWhat = data.query.findWhat + fileType;
   }
   // filterNor sets the filter to $nor insetad of $or
-  if (data.query.filterNor) {
+  if (data.query.filterNor === '1') {
     filterNor = 1;
   }
   // ugly sets the table to use field names instead of friendly names
-  if (req.query) {
-    data.ugly = req.query.ugly;
+  if (data.query) {
+    data.ugly = data.query.ugly;
   }
 
   data.findIn = strTgs.multiTrim(data.findIn, 9, 0);
@@ -731,7 +733,7 @@ module.exports.multiAggr = (req, res, next) => {
   // setting some defaults if they don't pick have a file type
   data.resType = 'view';
   data.resExt = '';
-  logger.info(`multiAggr 030\ndata ${JSON.stringify(data)}`);
+  logger.info(`multiAggr 030\ndata ${JSON.stringify(data)}\n`);
   // set to CSV or JSON
   if ((/.csv$/).test(data.findWhat)) {
     data.resType = 'csv';
@@ -811,8 +813,13 @@ module.exports.multiAggr = (req, res, next) => {
           as: 'equip',
         },
     };
+    logger.info(`S - equipLocation ${data.query.equipLocation}`);
     if (data.query.equipLocation) {
-      aggPipePostLookup = { $match: { 'equip.equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' } } };
+      aggPipePostLookup.push({ $match: { 'equip.equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' } } });
+    }
+    logger.info(`S - equipType ${data.query.equipType}`);
+    if (data.query.equipType) {
+      aggPipePostLookup.push({ $match: { 'equip.equipType': { '$regex': data.query.equipType, '$options': 'i' } } });
     }
     aggPipePostSort = { $sort: { 'systemEnviron': 1, 'systemRole':1, 'systemName': 1 } };
   } else {
@@ -823,13 +830,16 @@ module.exports.multiAggr = (req, res, next) => {
       data.preMatchEquipment = [{ 'equipEOL' : true }];
     }
     // focus on location
+    logger.info(`E - equipLocation ${data.query.equipLocation}`);
     if (data.query.equipLocation) {
       data.preMatchEquipment.unshift({ 'equipLocation': { '$regex': data.query.equipLocation, '$options': 'i' } });
     }
+    logger.info(`E - equipLocNull ${data.query.equipLocNull}`);
     if (data.query.equipLocNull) {
       data.preMatchEquipment.unshift({ 'equipLocation': '' });
     }
     // focus on particular Make
+    logger.info(`E - equipMake: ${data.query.equipMake}`);
     if (data.query.equipMake) {
       data.preMatchEquipment.push({ 'equipMake': { '$regex': data.query.equipMake, '$options': 'i' } });
     }
@@ -845,14 +855,18 @@ module.exports.multiAggr = (req, res, next) => {
         as: 'sys',
       },
     };
-    aggPipePostLookup = data.queryIn;
+    aggPipePostLookup = [data.queryIn];
     aggPipePostSort = { $sort: { 'equipMake': 1, 'equipModel': 1, 'equipSubModel': 1 } };
   }
   // Build the pipline with preLookup and lookup
   aggPipeline = [aggPipePreLookup, aggPipeLookup];
   // Add postLookup if exists
+
   if (aggPipePostLookup) {
-    aggPipeline.push(aggPipePostLookup);
+    logger.info(`aPPL`);
+    aggPipePostLookup.forEach((aPPL) => {
+      aggPipeline.push(aPPL);
+    });
   }
   // generic aggPipePostFilter
   if (data.query && data.query.filterOn) {
@@ -880,7 +894,7 @@ module.exports.multiAggr = (req, res, next) => {
     aggPipePostSort = { $sort: sortField };
   }
   aggPipeline.push(aggPipePostSort);
-  logger.info(`aggPipeline ${JSON.stringify(aggPipeline)}`);
+  logger.info(`aggPipeline \n${JSON.stringify(aggPipeline)}\n`);
 
   Models[modCollection].aggregate(aggPipeline, (err, result) => {
     if (err) return next(err);

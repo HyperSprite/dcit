@@ -1,6 +1,6 @@
 body {
-    padding-top: 4px;
-    padding-bottom: 14px;
+  padding-top: 4px;
+  padding-bottom: 14px;
 }
 
 /*The font is local for users with no internet access*/
@@ -19,28 +19,28 @@ body {
 }*/
 
 h1 {
-    text-transform: uppercase;
-    font-weight: lighter;
+  text-transform: uppercase;
+  font-weight: lighter;
 }
 
 navbar navbar-fixed-top > li > a {
-    color: #EEEEEE;
+  color: #EEEEEE;
 }
 
 .navbar-brand {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .jumbotron {
-    color: #EEEEEE;
-    height: 500px;
-    /*background-color: */
-    background-image: url("../img/jumbotron_bg.png");
-    background-size: cover;
-    padding-top: 30px;
-    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
-                 0px 8px 13px rgba(0,0,0,0.1),
-                 0px 18px 23px rgba(0,0,0,0.1);
+  color: #EEEEEE;
+  height: 500px;
+  /*background-color: */
+  background-image: url("../img/jumbotron_bg.png");
+  background-size: cover;
+  padding-top: 30px;
+  text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+               0px 8px 13px rgba(0,0,0,0.1),
+               0px 18px 23px rgba(0,0,0,0.1);
 }
 
 .no-margin {
@@ -48,19 +48,19 @@ navbar navbar-fixed-top > li > a {
 }
 
 .container-margin {
-  margin          : 0 5% 0 5%;
+  margin: 0 5% 0 5%;
 }
 
 table {
-  margin-bottom   : 10px;
-  border-collapse : collapse;
-  background      : #fff;
-  box-shadow      : 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 th {
-  font-weight        : 300;
-  color              : #fff;
+  font-weight: 300;
+  color: #fff;
   background-image   : -webkit-linear-gradient(bottom,rgb(189,39,33), rgb(207,22,19) );
   background-image   :    -moz-linear-gradient(bottom,rgb(189,39,33), rgb(207,22,19) );
   background-image   :     -ms-linear-gradient(bottom,rgb(189,39,33), rgb(207,22,19) );
@@ -73,14 +73,14 @@ th {
 }
 
 td {
-  font-weight    : 300;
-  vertical-align : top;
+  font-weight: 300;
+  vertical-align: top;
 }
 
 td,th {
-  padding     : 0 10px;
-  font-size   : 13px;
-  line-height : 32px;
+  padding: 0 10px;
+  font-size: 13px;
+  line-height: 32px;
 }
 
 tbody tr:nth-child(even) {
@@ -95,103 +95,103 @@ tbody tr:nth-child(even) {
 }
 
 .footer, .push {
-    height: 50px;
+  height: 50px;
 }
 
 input.form-fixer {
-    padding: 1px;
-    height: 28px;
+  padding: 1px;
+  height: 28px;
 }
 textarea.form-fixer {
-    padding: 1px;
-    height: 28px;
+  padding: 1px;
+  height: 28px;
 }
 div.marginRow {
-   margin-bottom:0px !important;
+  margin-bottom:0px !important;
 }
 code {
-white-space: normal;
+  white-space: normal;
 }
 /* this is for Rack Elevations */
 svg {
-    background-color: lightgray;
+  background-color: lightgray;
 }
 .rackcontainer {
-    float:left;
-    width:100%;
+  float:left;
+  width:100%;
 }
 .rackcol {
-    float:left;
+  float:left;
 }
 .autocomplete-suggestions {
-    background-color: #F5F5F7;
-    overflow: hidden;
+  background-color: #F5F5F7;
+  overflow: hidden;
 }
 .autocomplete-selected {
-    background: #FCBBBB;
+  background: #FCBBBB;
 }
 .autocomplete-suggestions strong {
-    font-weight: bold;
-    color: #800000;
+  font-weight: bold;
+  color: #800000;
 }
 .autocomplete-group {
-    padding: 2px 5px;
+  padding: 2px 5px;
 }
 .autocomplete-group strong {
-    display: block;
-    border-bottom: 1px solid #000;
+  display: block;
+  border-bottom: 1px solid #000;
 }
 .autocomplete-nofound {
-    font-size: 120%;
-    font-weight: bold;
-    color: #800000;
-    font-family: 'Roboto';
+  font-size: 120%;
+  font-weight: bold;
+  color: #800000;
+  font-family: 'Roboto';
 }
 .glyphicon-ok {
-    font-size: 120%;
-    font-weight: bold;
-    color: #008000;
+  font-size: 120%;
+  font-weight: bold;
+  color: #008000;
 }
 .glyphicon-remove {
-    font-size: 120%;
-    font-weight: bold;
-    color: #BA0000;
+  font-size: 120%;
+  font-weight: bold;
+  color: #BA0000;
 }
 .glyphicon-danger {
-    color: #BA0000;
-    font-size: 120%;
-    vertical-align: middle;
+  color: #BA0000;
+  font-size: 120%;
+  vertical-align: middle;
 }
 .glyphicon-warning {
-    color: #c09853;
-    font-size: 120%;
-    vertical-align: middle;
+  color: #c09853;
+  font-size: 120%;
+  vertical-align: middle;
 }
 .glyphicon-info {
-    color: #3a87ad;
-    font-size: 120%;
-    vertical-align: middle;
+  color: #3a87ad;
+  font-size: 120%;
+  vertical-align: middle;
 }
 .glyphicon-success {
-    color: #468847;
-    font-size: 120%;
-    vertical-align: middle;
+  color: #468847;
+  font-size: 120%;
+  vertical-align: middle;
 }
 .glyphicon-primary {
-    color: #324c53;
-    font-size: 120%;
-    vertical-align: middle;
+  color: #324c53;
+  font-size: 120%;
+  vertical-align: middle;
 }
 
 /* Form validation display block */
 #datacenterForm .error {
-    font-weight: bold;
-    color: #BA0000;
-    background: #FFD6D6;
-    padding: 3px 5px;
-    line-height: 1.7;
-    border-radius: 3px;
-    border-color: #b94a48;
+  font-weight: bold;
+  color: #BA0000;
+  background: #FFD6D6;
+  padding: 3px 5px;
+  line-height: 1.7;
+  border-radius: 3px;
+  border-color: #b94a48;
 }
 
 .tooltip.top .tooltip.bottom .tooltip-arrow {
@@ -214,30 +214,39 @@ svg {
 }
 
 /* for dropdown drop-columns in top-bar */
-@media screen and (max-width: 899px){
-    .drop-columns{
-        height: 200px;
-        /*overflow:scroll;*/
-    }
+/*@media screen and (max-width: 899px){
+  .drop-columns{
+    height: 200px;
+  }
+}*/
+
+@media screen and (min-width: 900px){
+  .drop-columns{
+    -moz-column-count:    4; /* Firefox */
+    -webkit-column-count: 4; /* Safari and Chrome */
+    column-count:         4;
+    width: 600px;
+  }
 }
 
 @media screen and (min-width: 900px){
-    .drop-columns{
-        -moz-column-count:4; /* Firefox */
-        -webkit-column-count:4; /* Safari and Chrome */
-        column-count:4;
-        width: 600px;
-    }
+  .login-drop{
+    -moz-column-count:    1; /* Firefox */
+    -webkit-column-count: 1; /* Safari and Chrome */
+    column-count:         1;
+    width: 560px;
+    overflow: hidden;
+  }
 }
 
-@media screen and (min-width: 900px){
-    .login-drop{
-        -moz-column-count:1; /* Firefox */
-        -webkit-column-count:1; /* Safari and Chrome */
-        column-count:1;
-        width: 560px;
-        overflow:hidden;
-    }
+@media screen and (min-width: 600px){
+  .option-drop{
+    -moz-column-count:    1; /* Firefox */
+    -webkit-column-count: 1; /* Safari and Chrome */
+    column-count:         1;
+    width: 500px;
+    overflow: hidden;
+    padding: 5px 10px 5px 10px;
+    margin-right: -70px;
+  }
 }
-
-

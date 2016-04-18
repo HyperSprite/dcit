@@ -204,4 +204,10 @@ $(document).ready(function() {
       $.get("/utility/distinct?findIn=Equipment&findWhat=equipMake", myEquipMake);
     });
   }
+  // for nav search options dorp down
+  $('.keep-open').on({
+    "shown.bs.dropdown": function() { this.closable = false; },
+    "click":             function() { this.closable = true; },
+    "hide.bs.dropdown":  function() { return this.closable; }
+  });
 });

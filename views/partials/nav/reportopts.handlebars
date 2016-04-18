@@ -1,0 +1,60 @@
+<!-- nav/reportopts -->
+          <ul class="nav navbar-nav" role="menu" aria-labelledby="dLabel">
+            <li class="dropdown keep-open">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                <ul class="dropdown-menu option-drop pull-right form-horizontal">
+                  <li><h4>Search Toolbox</h4></li>
+                  <li>
+                    <div class="form-group">
+                      <label for="field-equipLocation" class="col-sm-4 control-label" >Equipment Location</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="field-equipLocation" name="equipLocation"  placeholder="Location" data-toggle="tooltip" data-delay='{"show":1500}'  title="Filter results based on location.">
+                      </div>
+                    </div>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <div class="row">
+                      <div class="col-sm-9">
+
+                        <div class="form-group">
+                          <label for="field-filterOn" class="col-sm-4 control-label" >Filter On</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="field-filterOn" name="filterOn"  placeholder="Feild Name" data-toggle="tooltip" data-delay='{"show":1500}'  title="FilterOn uses ugly collection names.">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="field-filterArr" class="col-sm-4  control-label" >Filter Array</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="field-filterArr" name="filterArr"  placeholder="equip. and sys. may be needed" data-toggle="tooltip" data-delay='{"show":1500}'  title="Comma seperated array.">
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="col-sm-3">
+
+                        <div class="radio">
+                          <label><input type="radio" name="filterNor" id="field-filterNor0" value="0" checked>OR</label>
+                        </div>
+                        <div class="radio">
+                          <label><input type="radio" name="filterNor" id="field-filterNo1" value="1">NOT</label>
+                        </div>
+
+                      </div>
+                    </div>
+                  </li>
+                  <li class="divider"></li>
+                   <li>
+                    <div class="form-group">
+                      <label for="field-sortField" class="col-sm-3 control-label" >Sort</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="field-sortField" name="sortField"  placeholder='{"systemEnviron":1,"equip.equipMake":1}' data-toggle="tooltip" data-delay='{"show":1500}'  title="JSON format, -1 for desc.">
+                      </div>
+                    </div>
+                  </li>
+                  <li class="divider"></li>
+                  <button type="submit" class="btn btn-danger" value='Submit'>Submit</button>
+                </ul>
+              </li>
+            </ul>
+<!-- /nav/reportopts -->

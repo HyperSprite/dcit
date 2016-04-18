@@ -1,5 +1,5 @@
-     {{#if access.read}}
-      <ul class="nav navbar-nav navbar-left">
+  {{#if access.read}}
+    <ul class="nav navbar-nav navbar-left">
       <li>
         <form id="multiForm" class="navbar-form navbar-left" role="search" autocomplete="off" action="/reports/query" method="get">
           <div class="form-group"> <!-- topnav.formgroup1 -->
@@ -32,11 +32,13 @@
           <div class="form-group"> <!-- topnav.formgroup2 -->
             <label class="sr-only" for="field-multiText">Search for</label>
             <input id="field-multiText" type="text" class="form-control" pattern=".{1,}" required name="findWhat" placeholder="? (3 char min)">
-          </div>
-          <!-- /topnav.formgroup2 -->
-          <button type="submit" class="sr-only btn btn-primary" value='Submit'>Submit</button>
+          </div><!-- /topnav.formgroup2 -->
+        </li>
+        <li>
+         {{> nav/reportopts}}
+        </li>
         </form>
-      </li>
+        {{!-- </ul> --}}
 
       {{#if drop1}}
       <li class="dropdown">
@@ -68,3 +70,4 @@
       {{/if}}
       </ul>
       {{/if}}
+
