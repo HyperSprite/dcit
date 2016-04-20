@@ -35,7 +35,7 @@ const equipmentSchema = mongoose.Schema({
   equipRMAs: [equipRMASchema],
   equipPorts: [equipPortSchema],
   equipTicketNumber: String,
-  equipInventoryStatus: { type: Boolean, default: true },
+  equipInventoryStatus: { type: Boolean },
   equipStatus: String,
   equipIsVirtual: { type: Boolean, default: false },
   equipEOL: { type: Boolean, default: false, index: 1 },
