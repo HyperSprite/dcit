@@ -208,8 +208,8 @@ app.use((err, req, res) => {
 });
 
 const secureServer = https.createServer({
-  key: fs.readFileSync(__dirname + '/ssl/cdsuperg.pem'),
-  cert: fs.readFileSync(__dirname + '/ssl/cdsuperg.crt'),
+  key: fs.readFileSync(__dirname + '/ssl/cert.pem'),
+  cert: fs.readFileSync(__dirname + '/ssl/cert.crt'),
 }, app).listen(appPORTs, () => {
   logger.info(`DCIT: HTTPS ${app.get('env')} https://localhost:${appPORTs}`);
 });
