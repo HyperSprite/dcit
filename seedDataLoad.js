@@ -55,7 +55,7 @@ exports.seedDatacenter = (function(Datacenter){
     new Datacenter({
         fullName: 'Test Center',
         abbreviation: 'test-cent',
-        foundingCompany:'Oracle, Inc',
+        foundingCompany:'dataomatic.com',
         contacts:[{
             contactCnt:1,
             conGuid:'1234Test Center',

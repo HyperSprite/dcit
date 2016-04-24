@@ -1,7 +1,7 @@
 <h2>{{fullName}} - <a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></h2>
 {{#if foundingCompany}}{{foundingCompany}}{{/if}}<br>
 
-<div class="datacenter"> 
+<div class="datacenter">
 
 <div class="formContainer">
     <form id="datacenterForm"class="form-horizontal datacenterForm" role="form" action="/location/rack/{{abbreviation}}" method="POST">
@@ -20,12 +20,12 @@
             <input type="hidden" name="id" value="{{id}}">
             <input type="hidden" name="cageId" value="{{cageId}}">
         {{/if}}
-   
-    <ul id="eachUl"class="list-unstyled">    
+
+    <ul id="eachUl"class="list-unstyled">
         <li id="eachLi" class="eachLi">
         <hr>
         <input type="hidden" name="rackId" value="{{rackId}}">
-        
+
         {{#if rackUnique}}
         <div class="form-group">
             <label for="fieldrackUnique" class="col-sm-2 control-label">Rack ID</label>
@@ -37,21 +37,21 @@
         {{/if}}
         {{#if rackNickname}}
         <div class="form-group">
-            <label for="fieldrackNickname" class="col-sm-2 control-label">Nickname</label>
+            <label for="fieldrackNickname" class="col-sm-2 control-label">Code</label>
             <div class="col-sm-4">
                 {{rackNickname}}<br>
             </div>
         </div>
         {{else}}
         <div class="form-group">
-            <label for="fieldNickname" class="col-sm-2 control-label"  >Nickname</label>
+            <label for="fieldNickname" class="col-sm-2 control-label"  >Code</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="fieldNickname" name="rackNickname"  value="{{rackNickname}}" placeholder="Rack Nickname?" data-toggle="tooltip" data-delay='{"show":1500}' required title="Rack Nickname is required. Keep this short and unique, normally a rack number. May be 'a-z' and '1-0'. '-' and '_' are not permitted.">
             </div>
         </div>
         {{/if}}
          <div class="form-group">
-            <label for="fieldrackName" class="col-sm-2 control-label"  >Name</label>
+            <label for="fieldrackName" class="col-sm-2 control-label"  >Facility Name</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="fieldrackName" name="rackName"  value="{{rackName}}" placeholder="Facility Rack Name?" data-toggle="tooltip" data-delay='{"show":1500}' required title="Facility Rack Name is required. This is what the facility calls this rack. It may or maynot be the same as the nickname.">
             </div>
@@ -62,8 +62,8 @@
             <div class="col-sm-4">
                 <input type="number" max="99" class="form-control" id="fieldrUs" name="rUs" value="{{rUs}}" placeholder="Total Rack Us" data-toggle="tooltip" data-delay='{"show":1500}' required title="Total Rack U count is required. This is the count of usable RU positions in the rack.">
             </div>
-        </div> 
-     
+        </div>
+
         <div class="form-group">
             <label for="fieldStatus" class="col-sm-2 control-label" >Status</label>
             <div class="col-sm-4">
@@ -74,13 +74,13 @@
                     {{/each}}
 				</select>
             </div>
-        </div>        
+        </div>
          <div class="form-group">
             <label for="fieldrackDescription" class="col-sm-2 control-label"  >Description</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="fieldrackDescription" name="rackDescription" value="{{rackDescription}}" placeholder="Description?">
             </div>
-        </div>        
+        </div>
          <div class="form-group">
             <label for="fieldrackSN" class="col-sm-2 control-label" >SN</label>
             <div class="col-sm-4">
@@ -98,7 +98,7 @@
             <div class="col-sm-4">
                 <input type="number" class="form-control" id="fieldrackWidth" name="rackWidth" value="{{rackWidth}}" placeholder="Width in CM">
             </div>
-        </div>        
+        </div>
          <div class="form-group">
             <label for="fieldrackDepth" class="col-sm-2 control-label" >Rack Depth</label>
             <div class="col-sm-4">
@@ -143,9 +143,9 @@
                 <textarea rows="3" class="form-control" id="fieldrackNotes" name="rackNotes">{{rackNotes}}</textarea>
             </div>
         </div>
-        
 
-    </ul>    
+
+    </ul>
     <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                 {{#if access.edit}}
@@ -159,15 +159,15 @@
                 {{/if}}{{/if}}{{/if}}
             </div>
         </div>
-    </form><form id="cancelForm" role="form" action="{{#if rackUnique}}/location/rack/{{rackUnique}}{{else}}/location/datacenter/{{abbreviation}}{{/if}}" method="GET"></form> 
-    
+    </form><form id="cancelForm" role="form" action="{{#if rackUnique}}/location/rack/{{rackUnique}}{{else}}/location/datacenter/{{abbreviation}}{{/if}}" method="GET"></form>
+
     {{#if access.delete}}
     <form id="deleteForm" action="/location/rackdelete/{{rackUnique}}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{rackUnique}}')">
             <input type="hidden" name="_csrf" value="{{_csrfToken}}">
             <input type="hidden" name="id" value="{{id}}">
             <input type="hidden" name="abbreviation" value="{{abbreviation}}">
             <input type="hidden" name="rackUnique" value="{{rackUnique}}">
-            </form>       
+            </form>
      {{/if}}
 </div>
 </div>
