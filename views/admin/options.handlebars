@@ -19,6 +19,7 @@
 <div>
 
 <hr>
+{{#if env}}
     <h4>Seed Data - Here be dragons!</h4>
   <form>
     <input type='submit' class='btn btn-success btn-xs' formaction='/admin/optionsadmin/seedOptionsdb' formmethod="get" novalidate value='Seed Options'>
@@ -44,4 +45,5 @@
     <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropSystem' formmethod="get" novalidate value='Drop Systems'>
     <br>
   </form>
+{{/if}}
 </div>

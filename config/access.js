@@ -1,22 +1,12 @@
-
-// adjust check.access for default action.
-// all permissions are additive.
-// 1 No read access without login. (best)
-// 2 Read with no login. (this is at least behind a VPN)
-// 3 Edit with no login (don't do this).
-// 4 Delete with no login (really don't do this)
-// 5 Root whith no login (don't even talk to me if you do this)
-
-// Read level - if (accConfig.accessCheck(req.user).read !== 1)
-// Edit level - if (accConfig.accessCheck(req.user).edit !== 1)
-// Delete level - if (accConfig.accessCheck(req.user).delete !== 1)
-// Root Level - if (accConfig.accessCheck(req.user).root !== 1)
+const credentials = require('../credentials.js');
+// See the wiki for directions under User Permissions
+// for configuring the default options.
 
 module.exports.accessCheck = (check) => {
 var access = {};
   if (!check) {
     check = {};
-    check.access = 2;
+    check.access = credentials.checkAccess;
   }
   if (check.access > 4) {access.root = 1;}
   if (check.access > 3) {access.delete = 1;}
@@ -51,6 +41,3 @@ module.exports.userCheck = (check) => {
   };
   return cleanUser;
 };
-
-
-

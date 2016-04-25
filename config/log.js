@@ -1,7 +1,8 @@
+const credentials = require('../credentials.js');
 
 module.exports = {
-  uploadDir: '../userdata/',
-  logDirectory: '../log/',
+  uploadDir: credentials.uploadDir,
+  logDirectory: credentials.logDirectory,
   fileName: {
     accessLog: 'accessLog',
     appMainLog: 'appMainLog',

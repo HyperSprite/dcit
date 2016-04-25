@@ -14,7 +14,11 @@ const MongoStore = require('connect-mongo')(session);
 const helmet = require('helmet');
 const logger = require('./lib/logger.js');
 const accConfig = require('./config/access');
+const seedDataLoad = require('./seedDataLoad.js');
 const expressSanitizer = require('express-sanitizer');
+
+// Models
+const Models = require('./models');
 
 const app = express();
 
@@ -22,6 +26,8 @@ const appPORT = process.env.PORT || 3080;
 const appPORTs = process.env.PORT || 3000;
 const credentials = require('./credentials.js');
 const emailService = require('./lib/email.js')(credentials);
+
+var envVar = {};
 
 require('./config/passport')(passport);
 
@@ -111,16 +117,70 @@ var options = {
 switch (app.get('env')) {
   case 'development':
     mongoose.connect(credentials.mongo.development.connectionString, options);
+    envVar.targetDatabase = credentials.mongo.development.dbName;
+    envVar.env = 'development';
     break;
   case 'production':
     mongoose.connect(credentials.mongo.production.connectionString, options);
+    envVar.targetDatabase = credentials.mongo.production.dbName;
+    envVar.env = '';
     break;
   case 'test':
     mongoose.connect(credentials.mongo.test.connectionString, options);
+    envVar.targetDatabase = credentials.mongo.test.dbName;
+    envVar.env = 'test';
     break;
   default:
     throw new Error(`Unknown execution environment: ${app.get('env')}`);
 }
+
+module.exports.envVar = envVar;
+
+Models.Optionsdb.find((err, opts) => {
+  if(opts.length) return;
+  seedDataLoad.seedOptionsDataBase(Models.Optionsdb);
+  logger.warn(`seedOptionsdb by on Startup`);
+});
+
+exports.dropDatacenter = (function(Datacenter){
+  // Datacenter.find(function(err, datacenters){
+  //   if(datacenters.length) mongoose.connection.collections.datacenters.drop( function(err) {
+  //     logger.info('Datacenters collection dropped');
+  //   });
+  // });
+});
+exports.dropRack = (function(Rack){
+  Rack.find(function(err, racks){
+    if(racks.length) mongoose.connection.collections.racks.drop(function(err) {
+      logger.info('Racks collection dropped');
+    });
+  });
+});
+
+exports.dropOptionsdb = (function(Optionsdb){
+  Optionsdb.find(function(err, optionsdbs){
+    if(optionsdbs.length) mongoose.connection.collections.optionsdbs.drop(function(err) {
+      logger.info('Optionsdbs collection dropped');
+    });
+  });
+});
+
+exports.dropEquipment = (function(Equipment){
+  Equipment.find(function(err, equipment){
+    if(equipment.length) mongoose.connection.collections.equipment.drop(function(err) {
+      logger.info('Equipment collection dropped');
+    });
+  });
+});
+
+exports.dropSystem = (function(Systemdb){
+  Systemdb.find(function(err, systemdb){
+    if(systemdb.length) mongoose.connection.collections.systemdbs.drop(function(err) {
+      logger.info('Systemdb collection dropped');
+    });
+  });
+});
+
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -134,6 +194,9 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true },
 }));
+
+fs.existsSync(credentials.logDirectory) || fs.mkdirSync(credentials.logDirectory);
+fs.existsSync(credentials.uploadDir) || fs.mkdirSync(credentials.uploadDir);
 
 app.use(require('morgan')('tiny', { stream: logger.stream }));
 
@@ -149,6 +212,7 @@ app.use((req, res, next) => {
   res.locals.access = accConfig.accessCheck(req.user);
   res.locals.user = accConfig.userCheck(req.user);
   res.locals.requrl = req.url;
+  res.locals.env = envVar.env;
 
 
   // res.locals.accessLevel = accConfig.accessCheck(req.user);

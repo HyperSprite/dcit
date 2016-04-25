@@ -16,6 +16,9 @@ const dates = require('../lib/dates.js');
 // Models
 const Models = require('../models');
 
+var targetDatabase = dcit.envVar.targetDatabase;
+logger.warn(`DCIT: database: ${targetDatabase}`);
+
 //
 //         Admin Home page
 //
@@ -749,7 +752,6 @@ module.exports.dropSystemGet = (req, res) => {
   logger.warn(`dropSystem by,${req.user.local.email}`);
   return res.redirect(303, '/admin/options');
 };
-
 
 module.exports.seedDatacetnerGet = (req, res) => {
   seedDataLoad.seedDatacenter(Models.Datacenter);
