@@ -1,7 +1,7 @@
 {
   "name": "dcit",
-  "version": "2.1.1",
-  "description": "DCIT is for saving Data Center Informantion Transcript.",
+  "version": "0.2.25",
+  "description": "DCIT is for saving Data Center Informantion Tracking.",
   "main": "dcit.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
