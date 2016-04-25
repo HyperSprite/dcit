@@ -1,7 +1,7 @@
 
 # DCIT is for Data Center Information Tracking
 
-I built DCIT because I wanted documenting data center life cycle to benefit the people doing the work.
+I built DCIT because I wanted documenting the data center life cycle to benefit the people doing the work.
 
 ##Goals
 
