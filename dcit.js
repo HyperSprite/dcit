@@ -137,45 +137,45 @@ switch (app.get('env')) {
 module.exports.envVar = envVar;
 
 Models.Optionsdb.find((err, opts) => {
-  if(opts.length) return;
+  if (opts.length) return;
   seedDataLoad.seedOptionsDataBase(Models.Optionsdb);
   logger.warn(`seedOptionsdb by on Startup`);
 });
 
-exports.dropDatacenter = (function(Datacenter){
+exports.dropDatacenter = ((Datacenter) => {
   // Datacenter.find(function(err, datacenters){
   //   if(datacenters.length) mongoose.connection.collections.datacenters.drop( function(err) {
   //     logger.info('Datacenters collection dropped');
   //   });
   // });
 });
-exports.dropRack = (function(Rack){
-  Rack.find(function(err, racks){
-    if(racks.length) mongoose.connection.collections.racks.drop(function(err) {
+exports.dropRack = ((Rack) => {
+  Rack.find((err, racks) => {
+    if (racks.length) mongoose.connection.collections.racks.drop((err) => {
       logger.info('Racks collection dropped');
     });
   });
 });
 
-exports.dropOptionsdb = (function(Optionsdb){
-  Optionsdb.find(function(err, optionsdbs){
-    if(optionsdbs.length) mongoose.connection.collections.optionsdbs.drop(function(err) {
+exports.dropOptionsdb = Optionsdb => {
+  Optionsdb.find((err, optionsdbs) => {
+    if (optionsdbs.length) mongoose.connection.collections.optionsdbs.drop((err) => {
       logger.info('Optionsdbs collection dropped');
     });
   });
-});
+};
 
-exports.dropEquipment = (function(Equipment){
-  Equipment.find(function(err, equipment){
-    if(equipment.length) mongoose.connection.collections.equipment.drop(function(err) {
+exports.dropEquipment = ((Equipment) => {
+  Equipment.find((err, equipment) => {
+    if (equipment.length) mongoose.connection.collections.equipment.drop((err) => {
       logger.info('Equipment collection dropped');
     });
   });
 });
 
-exports.dropSystem = (function(Systemdb){
-  Systemdb.find(function(err, systemdb){
-    if(systemdb.length) mongoose.connection.collections.systemdbs.drop(function(err) {
+exports.dropSystem = ((Systemdb) => {
+  Systemdb.find((err, systemdb) => {
+    if (systemdb.length) mongoose.connection.collections.systemdbs.drop((err) => {
       logger.info('Systemdb collection dropped');
     });
   });

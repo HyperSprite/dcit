@@ -138,6 +138,9 @@ $(document).ready(function() {
 
     })
   });
+  // add click event to show this, also add modalsignup partial to main page.
+  // $('#memberModal').modal('show');
+
 
 // form validation
 //
