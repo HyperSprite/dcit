@@ -1,3 +1,34 @@
+{{#if env}}
+<h3>Drop and Seed Test Data</h3>
+<form>
+<div class="row">
+  <div class="col-md-2">
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/seedOptionsdb' formmethod="get" novalidate value='Seed Options'>
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/dropOptionsdb' formmethod="get" novalidate value='Drop Options'>
+  </div>
+  <div class="col-md-2">
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/seedDatacenter' formmethod="get" novalidate value='Seed Datacenter'>
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/dropDatacenter' formmethod="get" novalidate value='Drop Datacenter'>
+  </div>
+  <div class="col-md-2">
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/seedRacks' formmethod="get" novalidate value='Seed Rack'>
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/dropRack' formmethod="get" novalidate value='Drop Rack'>
+  </div>
+  <div class="col-md-2">
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/seedEquipment' formmethod="get" novalidate value='Seed Equipment'>
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/dropEquipment' formmethod="get" novalidate value='Drop Equipment'>
+  </div>
+  <div class="col-md-2">
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/seedSystem' formmethod="get" novalidate value='Seed Systems'>
+    <input type='submit' class='btn btn-danger btn-block btn-xs' formaction='/admin/optionsadmin/dropSystem' formmethod="get" novalidate value='Drop Systems '>
+  </div>
+  <div class="col-md-2">
+
+  </div>
+    <br>
+  </div>
+</form>
+{{/if}}
 <div>
   <h3>Options</h3> {{#each optList}}
   <div>
@@ -16,34 +47,4 @@
   <form id="newList">
     <input type='submit' class='btn btn-success btn-xs' formaction='/admin/optionsedit/new' formmethod="get" novalidate value='New List'>
   </form>
-<div>
 
-<hr>
-{{#if env}}
-    <h4>Seed Data - Here be dragons!</h4>
-  <form>
-    <input type='submit' class='btn btn-success btn-xs' formaction='/admin/optionsadmin/seedOptionsdb' formmethod="get" novalidate value='Seed Options'>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropOptionsdb' formmethod="get" novalidate value='Drop Options'>
-    <br>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/seedDatacenter' formmethod="get" novalidate value='Seed Datacenter'>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropDatacenter' formmethod="get" novalidate value='Drop Datacenter'>
-    <br>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropRack' formmethod="get" novalidate value='Drop Rack'>
-    <br>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/seedEquipment' formmethod="get" novalidate value='Seed Equipment'>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropEquipment' formmethod="get" novalidate value='Drop Equipment'>
-    <br>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/seedSystem' formmethod="get" novalidate value='Seed Systems'>
-    <br>
-    <input type='submit' class='btn btn-danger btn-xs' formaction='/admin/optionsadmin/dropSystem' formmethod="get" novalidate value='Drop Systems'>
-    <br>
-  </form>
-{{/if}}
-</div>

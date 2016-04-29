@@ -145,7 +145,7 @@ module.exports = (app) => {
 
   app.get('/reports', handlers.report.dcReport);
 
-  app.get('/reports/query', accCheckr, accCheckr, handlers.report.queryAggr);
+  app.get('/reports/query', accCheckr, handlers.report.queryAggr);
   app.get('/reports/:collection/:findIn/:findWhat', handlers.report.multiAggr);
 
   app.get('/reports/:datacenter', handlers.report.dcByEnvRole);
@@ -179,6 +179,7 @@ module.exports = (app) => {
   app.get('/admin/optionsadmin/dropEquipment', accChecks, isLoggedIn, handlers.admin.dropEquipmentGet);
   app.get('/admin/optionsadmin/dropSystem', accChecks, isLoggedIn, handlers.admin.dropSystemGet);
   app.get('/admin/optionsadmin/seedDatacenter', accChecks, isLoggedIn, handlers.admin.seedDatacetnerGet);
+  app.get('/admin/optionsadmin/seedRacks', accChecks, isLoggedIn, handlers.admin.seedRacksGet);
   app.get('/admin/optionsadmin/seedOptionsdb', accChecks, isLoggedIn, handlers.admin.seedOptionsdbGet);
   app.get('/admin/optionsadmin/seedEquipment', accChecks, isLoggedIn, handlers.admin.seedEquipmentGet);
   app.get('/admin/optionsadmin/seedSystem', accChecks, isLoggedIn, handlers.admin.seedSystemGet);

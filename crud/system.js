@@ -45,7 +45,7 @@ module.exports.systemdbCreate = (data, req, next) => {
         modifiedOn: strTgs.compareDates(data.modifiedOn, req.session.ses.timezone),
       }, (err) => {
         if (err) {
-          logger.info(`sysCreate Failed, ${data.index},${data.systemName}`);
+          logger.warn(`sysCreate Failed, ${data.index},${data.systemName}`);
         }
         logger.info(`sysCreate Sucessful,${data.index},${data.systemName}`);
         return req.done;

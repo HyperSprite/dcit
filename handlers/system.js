@@ -666,7 +666,7 @@ exports.dcSystemPost = (req, res) => {
       systemPorts: varPortsNew(bd),
       systemName: strTgs.multiTrim(bd.systemName, 9, 2),
       systemEquipSN: strTgs.multiTrim(bd.systemEquipSN, 9, 1),
-      systemAlias: strTgs.multiTrim(bd.systemAlias, 9, 2),
+      systemAlias: strTgs.multiTrim(bd.systemAlias, 3, 2),
       systemEnviron: strTgs.multiTrim(bd.systemEnviron, 9, 2),
       systemRole: strTgs.multiTrim(bd.systemRole, 9, 2),
       systemInventoryStatus: bd.systemInventoryStatus,
@@ -772,7 +772,7 @@ exports.dcSystemPost = (req, res) => {
         }
         thisDoc.systemName = strTgs.multiTrim(bd.systemName, 9, 2);
         thisDoc.systemEquipSN = strTgs.multiTrim(bd.systemEquipSN, 9, 1);
-        thisDoc.systemAlias = strTgs.multiTrim(bd.systemAlias, 9, 1);
+        thisDoc.systemAlias = strTgs.multiTrim(bd.systemAlias, 3, 2);
         thisDoc.systemEnviron = strTgs.multiTrim(bd.systemEnviron, 9, 2);
         thisDoc.systemRole = strTgs.multiTrim(bd.systemRole, 9, 2);
         thisDoc.systemInventoryStatus = bd.systemInventoryStatus;

@@ -753,10 +753,22 @@ module.exports.dropSystemGet = (req, res) => {
   return res.redirect(303, '/admin/options');
 };
 
-module.exports.seedDatacetnerGet = (req, res) => {
-  seedDataLoad.seedDatacenter(Models.Datacenter);
-  logger.warn(`seedDatacetner by ${req.user.local.email}`);
-  return res.redirect(303, '/location/datacenter/list');
+module.exports.seedDatacetnerGet = (req, res, next) => {
+  Models.Datacenter.collection.insert(seedDataLoad.seedDatacenter, onInsertDatacenter);
+  function onInsertDatacenter(err) {
+    if (err) return next(err);
+    logger.warn(`seedDatacenter by ${req.user.local.email}`);
+    return res.redirect(303, '/location/datacenter/list');
+  }
+};
+
+module.exports.seedRacksGet = (req, res, next) => {
+  Models.Rack.collection.insert(seedDataLoad.seedRacks, onInsertRacks);
+  function onInsertRacks(err) {
+    if (err) return next(err);
+    logger.warn(`seedRacks by ${req.user.local.email}`);
+    return res.redirect(303, '/location/datacenter/list');
+  }
 };
 
 module.exports.seedOptionsdbGet = (req, res) => {

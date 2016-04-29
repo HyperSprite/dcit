@@ -139,16 +139,16 @@ module.exports.envVar = envVar;
 Models.Optionsdb.find((err, opts) => {
   if (opts.length) return;
   seedDataLoad.seedOptionsDataBase(Models.Optionsdb);
-  logger.warn(`seedOptionsdb by on Startup`);
+  logger.warn(`init Optionsdb on empty collection`);
 });
 
-exports.dropDatacenter = ((Datacenter) => {
-  // Datacenter.find(function(err, datacenters){
-  //   if(datacenters.length) mongoose.connection.collections.datacenters.drop( function(err) {
-  //     logger.info('Datacenters collection dropped');
-  //   });
-  // });
-});
+exports.dropDatacenter = Datacenter => {
+  Datacenter.find((err, datacenters) => {
+    if (datacenters.length) mongoose.connection.collections.datacenters.drop(err => {
+      logger.info('Datacenters collection dropped');
+    });
+  });
+};
 exports.dropRack = ((Rack) => {
   Rack.find((err, racks) => {
     if (racks.length) mongoose.connection.collections.racks.drop((err) => {
