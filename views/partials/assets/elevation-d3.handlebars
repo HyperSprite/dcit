@@ -1,90 +1,179 @@
-<div class="rackcol"> 
-<h4>{{#if rackView}}Rack <a href="/location/rack/{{rackView}}">{{rackView}}</a> - {{/if}}</h4>
-        Description: {{rackDescription}}<br>
-        Status: {{rackStatus}}<br>
-    <div id="rack">
+<div class="rackcol">
+   <div id="rack">
+  </div>
+
+</div>
+    <style type="text/css">
+
+      rect:hover {
+        fill: red;
+      }
+
+      #tooltip {
+        position: absolute;
+        width: 300px;
+        height: auto;
+        padding: 10px;
+        background-color: white;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+      }
+
+      #tooltip.hidden {
+        display: none;
+      }
+
+      #tooltip p {
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 16px;
+        line-height: 20px;
+      }
+
+    </style>
+    <div id="tooltip" class="hidden">
+      <div id="value1"></div>
     </div>
-    </div>
-    <script type="text/javascript">
+  <script type="text/javascript">
+    var data; // a global
+    d3.json("/utility/elevation/{{rackUnique}}.json", function(error, json) {
+      if (error) return console.warn(error);
+      data = json;
 
-            //Create SVG element
-            var u =22;
-            var svg = d3.select("#rack")
-                    .append("svg")
-                    .attr("width", {{rackWidth}}*5)
-                    .attr("height", u*{{rUs}});
-                    //.attr("height", ({{rackHeight}}*4.69));
+    // console.log(data);
+    // Create SVG element
+    var u =22;
+    var svg = d3.select("#rack")
+                .append("svg")
+                .attr("width", data.rackWidth * 5)
+                .attr("height", u * data.rUs + 10);
+                //.attr("height", ({{rackHeight}}*4.69));
+    var j=1;
+    for(i = data.rUs; i > 0; i--) {
+      svg.append("text")
+         .attr("x", 6)
+				 .attr("y", ((i + .2) * u) - 8)
+				 .attr("fill", "black")
+				 .attr("font-size", 12)
+				 .text(j);
+      j++;
+    };
+    data.eqs.map(function (eq) {
+      // console.log(eq.equipLocationRu);
+      var rc = u * (data.rUs - eq.equipLocationRu);  //stretch that to fit
+      // console.log('rc :' + rc);
+      var ht = u * eq.equipRUHieght;
+      // var rf = rc - ht;  //subtract the total hight so it fits
+      var ru = u + ((rc - ht) + 6) ;
+      // console.log('ru :' + ru);
+      var rw = data.rackWidth * 5;
+      // console.log('rw :' + rw)
+      var ct = (rw-222.5)/2;
+      var wt = 222.5;
+      var bc = "black";
+      var fc = eq.equipTypeColor;
+      var fnt = 12;
+      var sx = ct+15;
+      var sy = ru+15;
+      var sc = "black";
+      var ex = ct+218;
+      var ey = ru+15;
+      var ec = "black";
+      var cx = ct+8;
+      var cy = ru+12;
+      var cc = eq.equipStatusLight;
+      var cr = 4;
+      var opc = eq.fullRack;
+      var tooltipString = '';
+      if (eq.systemName) {
+        tooltipString = '<strong>System Name:</strong> ' + eq.systemName + '<br>';
+      }
+      if (eq.systemEnviron) {
+        tooltipString += '<strong>Environment: </strong>' + eq.systemEnviron + '<br>';
+      }
+      if (eq.systemRole) {
+        tooltipString += '<strong>Role: </strong>' + eq.systemRole + '<br>';
+      }
+      if (eq.equipSN) {
+        tooltipString += '<strong>SN: </strong>' + eq.equipSN + '<br>';
+      }
+      if (eq.equipMake) {
+        tooltipString += '<strong>Make Model:</strong> '+ eq.equipMake + ' ' + eq.equipModel + '<br>';
+      }
+      if (eq.equipStatus) {
+        tooltipString += '<strong>Status: </strong>' + eq.equipStatus + '<br>';
+      }
+      if (eq.equipProjectNum) {
+        tooltipString += '<strong>Project No.:</strong> ' + eq.equipProjectNum;
+      }
 
-            var j=1;           
-            for(i={{rUs}};i>0;i--){
-                
-            svg.append("text")
-				.attr("x", 6)
-				.attr("y", (i*u)-8)
-				.attr("fill", "black")
-				.attr("font-size", 12)
-				.text(j);
-                j++;
-            };        
 
-            {{#each eqs}}
-              
-                var rl = {{../rUs}}-{{equipLocationRu}};  //find the location by on ru
-                var rc = rl*u;  //stretch that to fit
-                var ht = u*{{equipRUHieght}};
-                var rf = rc-ht;  //subtract the total hight so it fits
-                var ru = rf+u;
-                var rw = {{../rackWidth}}*5;
-                var ct = (rw-222.5)/2;
-                var wt = 222.5;
-                var bc = "black";
-                var fc = "{{equipTypeColor}}";
-                var fnt = 12;
-                var sx = ct+15;
-                var sy = ru+15;
-                var sc = "black";
-                var ex = ct+218;
-                var ey = ru+15;
-                var ec = "black";
-                var cx = ct+8;
-                var cy = ru+12;
-                var cc = "{{equipStatusLight}}";
-                var cr = 4; 
-{{#if fullRack}}var opc = {{fullRack}};{{/if}}
-                
-                svg.append("rect")
-                    .attr("x", ct)
-                    .attr("y", ru)
-                    .attr("width", wt)
-                    .attr("height", ht)
-                    .attr("stroke", "black")
-{{#if fullRack}}                .attr("fill-opacity", opc){{/if}}                  
-                    .attr("fill", fc);
-   
-                svg.append("text")
-                    .attr("x", sx)
-                    .attr("y", sy)
-                    .attr("fill", sc)
-                    .attr("font-size", fnt)
-                    .text("{{systemName}}")
-                    .on("click", function() { window.open("/system/{{systemName}}"); });
+      // console.log()
 
-                svg.append("text")
-                    .attr("x", ex)
-                    .attr("y", ey)
-                    .attr("fill", ec)
-                    .attr("font-size", fnt)
-                    .text("{{equipSN}}")
-                    .attr("text-anchor","end")
-                    .on("click", function() { window.open("/equipment/{{equipSN}}"); });
-                
-                svg.append("circle")
-                    .attr("cx", cx)
-                    .attr("cy", cy)
-                    .attr("r", cr)
-                    .attr("fill", cc)
-                    .append("title")
-                    .text("{{equipStatus}}");
-             {{/each}}
-		</script>
-        
+      svg.append("rect")
+          .attr("x", ct)
+          .attr("y", ru)
+          .attr("width", wt)
+          .attr("height", ht)
+          .attr("stroke", "black")
+          .attr("fill-opacity", opc)
+          .attr("fill", fc)
+        // Start mouseover
+        .on("mouseover", function(d) {
+
+                  //x/y values, then augment for the tooltip
+                  var xPosition = parseFloat(d3.select(this).attr("x"));
+                  var yPosition = parseFloat(d3.select(this).attr("y"));
+
+                  //Update the tooltip position and value
+                  d3.select("#tooltip")
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px")
+                    .select("#value1")
+                    .html(tooltipString);
+
+                  //Show the tooltip
+                  d3.select("#tooltip").classed("hidden", false);
+
+                 })
+                 .on("mouseout", function() {
+
+                  //Hide the tooltip
+                  d3.select("#tooltip").classed("hidden", true);
+
+                 })
+
+      svg.append("text")
+          .attr("x", sx)
+          .attr("y", sy)
+          .attr("fill", sc)
+          .attr("font-size", fnt)
+          .text(eq.systemName)
+          .on("click", function() { window.open('/system/' + eq.systemName ); });
+
+      svg.append("text")
+          .attr("x", ex)
+          .attr("y", ey)
+          .attr("fill", ec)
+          .attr("font-size", fnt)
+          .text(eq.equipSN)
+          .attr("text-anchor","end")
+          .on("click", function() { window.open('/equipment/' + eq.equipSN ); });
+
+      svg.append("circle")
+          .attr("cx", cx)
+          .attr("cy", cy)
+          .attr("r", cr)
+          .attr("fill", cc)
+          .append("title")
+          .text(eq.equipStatus)
+
+    });
+  });
+</script>
+

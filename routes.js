@@ -123,7 +123,7 @@ module.exports = (app) => {
   app.get('/equipment/:data/edit', accChecke, handlers.equipment.dcEquipEdit);
   app.get('/equipment-systems', accCheckr, handlers.equipment.dcEquipSysPages);
   app.get('/equipment-systems/:datacenter', accCheckr, handlers.equipment.dcEquipSysPages);
-  app.get('/elevation/:datacenter', accCheckr, handlers.equipment.dcRackElevationPage);
+  app.get('/elevation/:rack', accCheckr, handlers.equipment.dcRackElevationPage);
   app.get('/equipment-snchange/:datacenter', accCheckd, handlers.equipment.dcEquipSNChange);
   app.post('/equipment-snchange/:datacenter', accCheckd, isLoggedIn, handlers.equipment.dcEquipSNChangePost);
   app.post('/equipment/:datacenter', accChecke, isLoggedIn, handlers.equipment.dcEquipmentPost);
@@ -194,5 +194,7 @@ module.exports = (app) => {
   app.get('/autocomplete/allEquipModel', accCheckr, handlers.ajax.allEquipModel);
   app.get('/autocomplete/allLocationRack', accCheckr, handlers.ajax.allLocationRack);
   app.get('/utility/distinct', handlers.ajax.distinct);
+  app.get('/utility/elevation/:rack', accCheckr, handlers.ajax.dcRackElevation);
   app.post('/process/singleportdelete', accCheckd, isLoggedIn, handlers.ajax.singlePortDelete);
+
 };

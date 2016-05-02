@@ -329,3 +329,100 @@ module.exports.userCheck = (req, res, next) => {
   }
   return res.json(data);
 };
+
+module.exports.dcRackElevation = (req, res, next) => {
+  var context = {};
+  var tempSys;
+  var re;
+  var test;
+  var fullRack;
+  var theRack = req.params.rack.substring(0, req.params.rack.length - 5);
+  logger.info(`ajax.dcRackElevation > ${req.params.rack}`);
+  // little regex to get the contains rack location
+    re = new RegExp(theRack, 'i');
+    Models.Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation: 1}).exec((err, eqs) => {
+      if (err || !eqs) return next(err);
+      // logger.info('eqs'+eqs);
+      Models.Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn', (err, sys) => {
+        if (err || !sys) return next(err);
+        // logger.info('SYS >>>>>>>>>>>'+sys);
+        Models.Rack.findOne({ rackUnique: { $regex: re } }, 'rackUnique rackDescription rackHeight rackWidth rackDepth rackLat rackLon rackRow rackStatus rUs', (err, rk) => {
+          if (err || !rk) return next(err);
+          // logger.info('rk >>>>>>>>>>>'+rk);
+          // logger.info('rk.rackUnique>'+rk.rackUnique);
+          context = {
+            rackView: theRack,
+            rackUnique: rk.rackUnique,
+            rackDescription: rk.rackDescription,
+            rackHeight: rk.rackHeight,
+            rackWidth: rk.rackWidth,
+            rackDepth: rk.rackDepth,
+            rackLat: rk.rackLat,
+            rackLon: rk.rackLon,
+            rackRow: rk.rackRow,
+            rackStatus: rk.rackStatus,
+            rUs: rk.rUs,
+            menu1: rk.rackUnique,
+            menuLink1: `/location/rack/${rk.rackUnique}`,
+            titleNow: rk.rackUnique,
+            eqs: eqs.map((eq) => {
+              tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
+              test = strTgs.ruElevation(eq.equipLocation);
+              if (isNaN(test) === true) {
+                eq.equipLocation = 1;
+              }
+              if (eq.equipType === 'Full Rack') {
+                fullRack = 0.8;
+                logger.info(`fullRack 1 ${fullRack}`);
+              }
+              return {
+                fullRack: fullRack,
+                equipLocation: eq.equipLocation,
+                equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
+                equipLocationRu: strTgs.ruElevation(eq.equipLocation),
+                equipSN: eq.equipSN,
+                equipRUHieght: strTgs.checkNull(eq.equipRUHieght),
+                equipTicketNumber: eq.equipticketNumber,
+                equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipticketNumber),
+                equipStatus: eq.equipStatus,
+                equipStatusLight: strTgs.trueFalseD3(eq.equipStatus,eq.equipStatus),
+                equipIsVirtual: eq.equipIsVirtual,
+                equipType: eq.equipType,
+                equipTypeColor: strTgs.equipTypeColor(eq.equipType),
+                equipMake: eq.equipMake,
+                equipModel: eq.equipModel,
+                equipSubModel: eq.equipSubModel,
+                equipReceived: strTgs.dateMod(eq.equipReceived),
+                equipPONum: eq.equipPONum,
+                equipProjectNum: eq.equipProjectNum,
+                createdOn: strTgs.dateMod(eq.createdOn),
+                modifiedOn: strTgs.dateMod(eq.modifiedOn),
+                equipPorts: eq.equipPorts.map((ep) => {
+                  return {
+                    equipPortsId: ep.id,
+                    equipPortType: ep.equipPortType,
+                    equipPortsAddr: ep.equipPortsAddr,
+                    equipPortName: ep.equipPortName,
+                    equipPortsOpt: ep.equipPortsOpt,
+                    createdBy: ep.createdBy,
+                    createdOn: strTgs.dateMod(ep.createdOn),
+                    modifiedby: ep.modifiedbBy,
+                    modifiedOn: strTgs.dateMod(ep.modifiedOn),
+                  };
+                }),
+                systemName: tempSys.systemName,
+                systemEnviron: tempSys.systemEnviron,
+                systemRole: tempSys.systemRole,
+                systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
+                sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
+              };
+            }),
+          };
+          // logger.info('context Rack >>>>>> '+context.rackUnique);
+          // the 'location/datacenter-list' is the view that will be called
+          // context is the data from above
+          res.json(context);
+        });
+      });
+    });
+};

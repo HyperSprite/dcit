@@ -977,171 +977,25 @@ module.exports.dcEquipSysPages = (req, res, next) => {
 //            first half does table version, second half does SVG version
 // ---------------------------------------------------------------------
 
+// Note: Moving the work to the AJAX handler.
+
 module.exports.dcRackElevationPage = (req, res, next) => {
-  var context = {};
-  var tempSys;
-  var re;
-  var test;
-  var fullRack;
-  // logger.info('***********exports.dcRackElevationPage First >' +req.params.datacenter);
-  if (!req.params.datacenter) {
-  // logger.info('in EquipSysPages - List');
-  // this looks for 'list' as the / url. if it exists, it prints the datacenter list
-    Models.Equipment.find({}).exec((err, eqs) => {
-      if (err) return next(err);
-      if (!eqs) return next();
-      // logger.info(eqs);
-      Models.Systemdb.find({}, 'systemName systemEquipSN systemEnviron systemRole systemInventoryStatus systemTicket systemNotes systemStatus modifiedOn', (err, sys) => {
-        if (err || !sys) return next(err);
-        // logger.info('SYS >>>>>>>>>>>'+sys);
-        context = {
-          eqs: eqs.map((eq) => {
-            tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
-            return {
-              equipLocation: eq.equipLocation,
-              equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-              equipSN: eq.equipSN,
-              equipTicketNumber: eq.equipticketNumber,
-              equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus, eq.equipticketNumber),
-              equipStatus: eq.equipStatus,
-              equipStatusLight: strTgs.trueFalseIcon(eq.equipStatus, eq.equipStatus),
-              equipType: eq.equipType,
-              equipMake: eq.equipMake,
-              equipModel: eq.equipModel,
-              equipSubModel: eq.equipSubModel,
-              equipAddOns: eq.equipAddOns,
-              equipReceived: strTgs.dateMod(eq.equipReceived),
-              equipPONum: eq.equipPONum,
-              equipProjectNum: eq.equipProjectNum,
-              createdOn: strTgs.dateMod(eq.createdOn),
-              modifiedOn: strTgs.dateMod(eq.modifiedOn),
-              equipPorts: eq.equipPorts.map((ep) => {
-                return {
-                  equipPortsId: ep.id,
-                  equipPortType: ep.equipPortType,
-                  equipPortsAddr: ep.equipPortsAddr,
-                  equipPortName: ep.equipPortName,
-                  equipPortsOpt: ep.equipPortsOpt,
-                  createdBy: ep.createdBy,
-                  createdOn: strTgs.dateMod(ep.createdOn),
-                  modifiedby: ep.modifiedbBy,
-                  modifiedOn: strTgs.dateMod(ep.modifiedOn),
-                };
-              }),
-              systemName: tempSys.systemName,
-              systemEnviron: tempSys.systemEnviron,
-              systemRole: tempSys.systemRole,
-              systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
-              sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-            };
-          }),
-        };
-        // logger.info('context List >>>>>> '+context.toString());
-        // the 'location/datacenter-list' is the view that will be called
-        // context is the data from above
-        res.render('asset/elevation', context);
-      });
-    });
-  } else {
-  // little regex to get the contains rack location
-    re = new RegExp(req.params.datacenter, 'i');
-    Models.Equipment.find({equipLocation:  { $regex: re }}).sort({equipLocation: 1}).exec((err, eqs) => {
-      if (err || !eqs) return next(err);
-      // logger.info('eqs'+eqs);
-      Models.Systemdb.find({}, 'systemEquipSN systemName systemEnviron systemRole systemStatus modifiedOn', (err, sys) => {
-        if (err || !sys) return next(err);
-        // logger.info('SYS >>>>>>>>>>>'+sys);
-        Models.Rack.findOne({rackUnique: { $regex: re }}, 'rackUnique rackDescription rackHeight rackWidth rackDepth rackLat rackLon rackRow rackStatus rUs',(err, rk) => {
-          // logger.info('rk >>>>>>>>>>>'+rk);
-          // logger.info('rk.rackUnique>'+rk.rackUnique);
-          context = {
-            rackView: req.params.datacenter,
-            rackUnique: rk.rackUnique,
-            rackDescription: rk.rackDescription,
-            rackHeight: rk.rackHeight,
-            rackWidth: rk.rackWidth,
-            rackDepth: rk.rackDepth,
-            rackLat: rk.rackLat,
-            rackLon: rk.rackLon,
-            rackRow: rk.rackRow,
-            rackStatus: rk.rackStatus,
-            rUs: rk.rUs,
-            menu1: rk.rackUnique,
-            menuLink1: `/location/rack/${rk.rackUnique}`,
-            titleNow: rk.rackUnique,
-            eqs: eqs.map((eq) => {
-              tempSys = strTgs.findThisInThatMulti(eq.equipSN, sys, 'systemEquipSN');
-              test = strTgs.ruElevation(eq.equipLocation);
-              if (isNaN(test) === true) {
-                eq.equipLocation = 1;
-              }
-              if (eq.equipType === 'Full Rack') {
-                fullRack = 0.8;
-                logger.info('fullRack 1 '+ fullRack);
-              }
-              return {
-                fullRack : fullRack,
-                equipLocation: eq.equipLocation,
-                equipLocationRack: strTgs.ruToLocation(eq.equipLocation),
-                equipLocationRu: strTgs.ruElevation(eq.equipLocation),
-                equipSN: eq.equipSN,
-                equipRUHieght: strTgs.checkNull(eq.equipRUHieght),
-                equipTicketNumber: eq.equipticketNumber,
-                equipInventoryStatus: strTgs.trueFalseIcon(eq.equipInventoryStatus,eq.equipticketNumber),
-                equipStatus: eq.equipStatus,
-                equipStatusLight: strTgs.trueFalseD3(eq.equipStatus,eq.equipStatus),
-                equipIsVirtual: eq.equipIsVirtual,
-                equipType: eq.equipType,
-                equipTypeColor: strTgs.equipTypeColor(eq.equipType),
-                equipMake: eq.equipMake,
-                equipModel: eq.equipModel,
-                equipSubModel: eq.equipSubModel,
-                equipReceived: strTgs.dateMod(eq.equipReceived),
-                equipPONum: eq.equipPONum,
-                equipProjectNum: eq.equipProjectNum,
-                createdOn: strTgs.dateMod(eq.createdOn),
-                modifiedOn: strTgs.dateMod(eq.modifiedOn),
-                equipPorts: eq.equipPorts.map((ep) => {
-                  return {
-                    equipPortsId: ep.id,
-                    equipPortType: ep.equipPortType,
-                    equipPortsAddr: ep.equipPortsAddr,
-                    equipPortName: ep.equipPortName,
-                    equipPortsOpt: ep.equipPortsOpt,
-                    createdBy: ep.createdBy,
-                    createdOn: strTgs.dateMod(ep.createdOn),
-                    modifiedby: ep.modifiedbBy,
-                    modifiedOn: strTgs.dateMod(ep.modifiedOn),
-                  };
-                }),
-                systemName: tempSys.systemName,
-                systemEnviron: tempSys.systemEnviron,
-                systemRole: tempSys.systemRole,
-                systemStatus: strTgs.trueFalseIcon(tempSys.systemStatus,tempSys.systemStatus),
-                sysmodifiedOn: strTgs.dateMod(tempSys.modifiedOn),
-              };
-            }),
-          };
-          // logger.info('context Rack >>>>>> '+context.rackUnique);
-          // the 'location/datacenter-list' is the view that will be called
-          // context is the data from above
-          res.render('asset/elevation', context);
-        });
-      });
-    });
-  }
+  var context = {
+    rack: req.params.rack,
+  };
+  res.render('asset/elevation', context);
 };
 
-/*---------------------------------------------------------------------
----------------------------- Equipment SN Change ----------------------
------------------------------------------------------------------------
-*/
+// ---------------------------------------------------------------------
+// -------------------------- Equipment SN Change ----------------------
+// ---------------------------------------------------------------------
+
 
 module.exports.dcEquipSNChange = (req, res, next) => {
   var context;
   var tempSys;
   // logger.info('req.params.datacenter >>>>>> '+req.params.datacenter);
-  Models.Equipment.findOne({equipSN: req.params.datacenter}, (err, eq) => {
+  Models.Equipment.findOne({ equipSN: req.params.datacenter }, (err, eq) => {
     if (err) return next(err);
     if (!eq) return next(err);
     Models.Systemdb.find({}, 'systemEquipSN systemName', (err, sys) => {
@@ -1167,7 +1021,7 @@ module.exports.dcEquipSNChangePost = (req, res) => {
   if (req.body.oldEquipSN) {
     async.waterfall([
       (callback) => {
-        Models.Equipment.findOne({equipSN: res.oldEquipSN}, (err, equipSNtoChange) => {
+        Models.Equipment.findOne({ equipSN: res.oldEquipSN }, (err, equipSNtoChange) => {
           if (err) {
             logger.info(err);
             callback(null);

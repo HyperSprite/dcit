@@ -1,65 +1,75 @@
+<div class="racks">
 
-<h2>{{fullName}} - <a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></h2>
-{{#if foundingCompany}}{{foundingCompany}}{{/if}}
+  <div class="row">
+
+    <div class="col-md-8">
+
+        <ul class="list-unstyled">
+          <h2>{{fullName}} - <a href="/location/datacenter/{{abbreviation}}">{{abbreviation}}</a></h2>
+          <div class="row">
+            <div class="col-md-8">
+            {{#if foundingCompany}}{{foundingCompany}}{{/if}}
+            </div>
+            <div class="col-md-4">
+              {{#if access.edit}}
+              <a href="/location/rack/{{rackUnique}}/edit" >
+                <span class="glyphicon glyphicon-edit glyphicon-danger" accesskey="x"  title="Press Alt x to Edit {{rackUnique}}" ></span>
+              </a>
+              <a href="/location/rack/{{rackUnique}}/copy">
+                <span class="glyphicon glyphicon-plus-sign glyphicon-danger" accesskey="c" title="Press Alt c to Copy {{rackUnique}}"></span>
+              </a>
+              {{/if}}
+            </div>
+          </div>
+          <blockquote>
+
+          <h4>Rack ID: {{rackUnique}}</h4>
+          {{#if rackNickname}}<li>Rack Code: {{rackNickname}}</li>{{/if}}
+          {{#if rackName}}<li>Facility Name: {{rackName}}</li>{{/if}}
+          {{#if rackStatus}}<li>Status: {{rackStatus}}<br>{{/if}}
+          {{#if rUs}}<li>RUs: {{rUs}}</li>{{/if}}
+          {{#if rackDescription}}<li>Description: {{rackDescription}}</li>{{/if}}
+        </ul>
+      </blockquote>
+      <h5>Location and Dimentions</h5>
+      <blockquote>
+        <ul class="list-unstyled">
+          {{#if fullName}}<li>Datacenter: {{fullName}} - {{abbreviation}}</li>{{/if}}
+          {{#if cageNickname}}<li>Cage Nickname: {{cageNickname}}</li>{{/if}}
+          {{#if cageAbbreviation}}<li>Cage Code: {{cageAbbreviation}}</li>{{/if}}
+          {{#if cageName}}<li>Facility Cage ID: {{cageName}}</li>{{/if}}
+          {{#if rackLat}}<li>X: {{rackLat}}</li>{{/if}}
+          {{#if rackLon}}<li>Y: {{rackLon}}</li>{{/if}}
+          {{#if rackRow}}<li>Row: {{rackRow}}</li>{{/if}}
+          {{#if rackHeight}}<li>Height in CM: {{rackHeight}}</li>{{/if}}
+          {{#if rackWidth}}<li>Width in CM: {{rackWidth}}</li>{{/if}}
+          {{#if rackDepth}}<li>Depth in CM: {{rackDepth}}</li>{{/if}}
+        </ul>
+      </blockquote>
+      <h5>Details</h5>
+      <blockquote>
+        <ul class="list-unstyled">
+          {{#if rackMake}}<li>Make: {{rackMake}}</li>{{/if}}
+          {{#if rackModel}}<li>Model: {{rackModel}}</li>{{/if}}
+          {{#if rackSN}}<li>Serial Number: {{rackSN}}</li>{{/if}}
+          {{#if rackNotes}}<li>Notes: {{rackNotes}}</li>{{/if}}
+          {{#if createdBy}}<li>Created By: {{createdBy}}</li>{{/if}}
+          {{#if createdOn}}<li>Created On: {{createdOn}}</li>{{/if}}
+          {{#if modifiedBy}}<li>Modified By: {{modifiedBy}}</li>{{/if}}
+          {{#if modifiedOn}}<li>Modified On: {{modifiedOn}}</li>{{/if}}
+        </ul>
+      </blockquote>
+
+    </div>
+    <div class="col-md-4">
+      <script src="{{static '/vendor/js/d3.v3.js'}}"></script>
+        {{> assets/elevation-d3}}
+    </div>
+  </div>
+</div>
 <br>
 <hr>
-<div class="racks">
-    <h4>Rack ID: {{rackUnique}}</h4>
-            <div class="row">
-                <div class="col-md-4">
-                    <blockquote>
-                        <ul class="list-unstyled">
-                            {{#if rackNickname}}<li>Rack Code: {{rackNickname}}</li>{{/if}}
-                            {{#if rackName}}<li>Facility Name: {{rackName}}</li>{{/if}}
-                            {{#if rackStatus}}<li>Status: {{rackStatus}}<br>{{/if}}
-                            {{#if rUs}}<li>RUs: {{rUs}}</li>{{/if}}
-                            {{#if rackDescription}}<li>Description: {{rackDescription}}</li>{{/if}}
-                        </ul>
-                    </blockquote>
-                <h5>Details</h5>
-                    <blockquote>
-                        <ul class="list-unstyled">
-                            {{#if rackMake}}<li>Make: {{rackMake}}</li>{{/if}}
-                            {{#if rackModel}}<li>Model: {{rackModel}}</li>{{/if}}
-                            {{#if rackSN}}<li>Serial Number: {{rackSN}}</li>{{/if}}
-                            {{#if rackNotes}}<li>Notes: {{rackNotes}}</li>{{/if}}
-                            {{#if createdBy}}<li>Created By: {{createdBy}}</li>{{/if}}
-                            {{#if createdOn}}<li>Created On: {{createdOn}}</li>{{/if}}
-                            {{#if modifiedBy}}<li>Modified By: {{modifiedBy}}</li>{{/if}}
-                            {{#if modifiedOn}}<li>Modified On: {{modifiedOn}}</li>{{/if}}
-                        </ul>
-                    </blockquote>
-                </div>
-                <div class="col-md-4">
-                <h5>Location and Dimentions</h5>
-                    <blockquote>
-                        <ul class="list-unstyled">
-                            {{#if fullName}}<li>Datacenter: {{fullName}} - {{abbreviation}}</li>{{/if}}
-                            {{#if cageNickname}}<li>Cage Nickname: {{cageNickname}}</li>{{/if}}
-                            {{#if cageAbbreviation}}<li>Cage Code: {{cageAbbreviation}}</li>{{/if}}
-                            {{#if cageName}}<li>Facility Cage ID: {{cageName}}</li>{{/if}}
-                            {{#if rackLat}}<li>X: {{rackLat}}</li>{{/if}}
-                            {{#if rackLon}}<li>Y: {{rackLon}}</li>{{/if}}
-                            {{#if rackRow}}<li>Row: {{rackRow}}</li>{{/if}}
-                            {{#if rackHeight}}<li>Height in CM: {{rackHeight}}</li>{{/if}}
-                            {{#if rackWidth}}<li>Width in CM: {{rackWidth}}</li>{{/if}}
-                            {{#if rackDepth}}<li>Depth in CM: {{rackDepth}}</li>{{/if}}
-                        </ul>
-                    </blockquote>
-                </div>
-                <div class="col-md-2">
-                    {{#if access.edit}}
-                        <a href="/location/rack/{{rackUnique}}/edit" >
-                            <span class="glyphicon glyphicon-edit glyphicon-danger" accesskey="x"  title="Press Alt x to Edit {{rackUnique}}" ></span></a>
-                        <a href="/location/rack/{{rackUnique}}/copy">
-                            <span class="glyphicon glyphicon-plus-sign glyphicon-danger" accesskey="c" title="Press Alt c to Copy {{rackUnique}}"></span></a>
-                    {{/if}}
-                </div>
-            </div>
-        </div>
-        <br>
-        <hr>
-        {{> location/power-list}}
+{{> location/power-list}}
 
 
 
