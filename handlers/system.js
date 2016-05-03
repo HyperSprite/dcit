@@ -721,7 +721,7 @@ exports.dcSystemPost = (req, res) => {
           intro: 'Saved!',
           message: `<a href="/system/${res.abbreviation}">${res.abbreviation}</a> has been created.`,
         };
-        return res.redirect(303, `/system/${res.abbreviation}/edit`);
+        return res.redirect(303, `/system/${res.abbreviation}/copy`);
       }
     });
   } else {

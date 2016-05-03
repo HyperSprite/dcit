@@ -770,7 +770,7 @@ module.exports.multiAggr = (req, res, next) => {
     equipStatus: { $match: { 'equipStatus': { '$regex': findThis, '$options': 'i' } } },
     equipTemplate: { $match: { 'equipTemplate': Boolean(findThis) } },
     equipInventoryStatus: { $match: { 'equipInventoryStatus': Boolean(findThis) } },
-    equipLOB: { $match: { 'equipStatus': { '$regex': findThis, '$options': 'i' } } },
+    equipLOB: { $match: { 'equipLOB': { '$regex': findThis, '$options': 'i' } } },
     equipMake: { $match: { 'equipMake': { '$regex': findThis, '$options': 'i' } } },
     equipPONum: { $match: { 'equipPONum': { '$regex': findThis, '$options': 'i' } } },
     equipInvoice: { $match: { 'equipInvoice': { '$regex': findThis, '$options': 'i' } } },
@@ -802,6 +802,12 @@ module.exports.multiAggr = (req, res, next) => {
   }
   // preMatch reduces the number of $lookup that needs to happen
   // for EOL reports. Set to true, returns only equipment that is no longer in inventory
+
+  // this is for old api compatability.
+  if (data.collection === 'systems' && data.findIn === 'equipLocation') {
+    data.collection = 'equipment';
+  }
+
   if (data.collection === 'systems') {
     modCollection = 'Systemdb';
     aggPipePreLookup = { $match: data.queryIn };
