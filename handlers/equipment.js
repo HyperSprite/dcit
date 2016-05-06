@@ -682,7 +682,7 @@ module.exports.dcEquipmentPost = (req, res) => {
           req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
-            message: 'There was an error processing your request.',
+            message: 'Sorry, there was an error processing your request.',
           };
           return res.redirect(303, '/');
         }
@@ -705,7 +705,7 @@ module.exports.dcEquipmentPost = (req, res) => {
           req.session.flash = {
             type: 'danger',
             intro: 'Ooops!',
-            message: 'There was an error processing your request.',
+            message: 'There seems to be an issue processing your request.',
           };
           res.redirect(`location/datacenter/${res.abbreviation}`);
         } else {

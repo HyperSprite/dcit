@@ -30,7 +30,7 @@ const equipPortSchema = mongoose.Schema({
 
 const equipmentSchema = mongoose.Schema({
   equipLocation: { type: String, index: 1 },
-  equipSN: { type: String, unique: true, index: 1, sparse: true, required: true},
+  equipSN: { type: String, unique: true, index: 1, sparse: true, required: true },
   equipAssetTag: String,
   equipRMAs: [equipRMASchema],
   equipPorts: [equipPortSchema],

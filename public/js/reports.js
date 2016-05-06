@@ -4,7 +4,7 @@
 
 function equipLocationFormatter(value) {
   if (value) {
-    return '<a href="/reports/equipment/equipLocation/' + value.substring(0, value.length - 3) + '" target="_blank"> ' + value + '</a>';
+    return '<a href="/equipment-systems/' + value.substring(0, value.length - 3) + '" target="_blank"> ' + value + '</a>';
   }
   return '-';
 }
