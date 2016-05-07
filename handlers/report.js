@@ -842,7 +842,7 @@ module.exports.multiAggr = (req, res, next) => {
     }
     logger.info(`E - equipLocNull ${data.query.equipLocNull}`);
     if (data.query.equipLocNull) {
-      data.preMatchEquipment.unshift({ 'equipLocation': '' });
+      data.preMatchEquipment.unshift({ $or:[{ 'equipLocation': null }, { 'equipLocation': false }, { 'equipLocation': '' }] });
     }
     // focus on particular Make
     logger.info(`E - equipMake: ${data.query.equipMake}`);

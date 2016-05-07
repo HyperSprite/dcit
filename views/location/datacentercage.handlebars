@@ -16,7 +16,6 @@
       {{#if cages}}
       {{#each cages}}
       <div class="row">
-      <hr>
         <div class="col-md-6">
           <li id="eachLi-{{@index}}" class="eachLi">
 
@@ -88,32 +87,33 @@
 
             <li id="eachLi-0" class="eachLi">
             <input type="hidden" name="cageId[0]" value="new">
-            <input type="hidden" name="index[0]" value=0><hr>
+            <input type="hidden" name="index[0]" value=0>
+
             <div class="row">
             <hr>
-            <div class="col-md-6>"
-            <div class="form-group"><label for="fieldcageNickname" class="col-md-4 control-label">Nickname</label>
-              <div class="col-md-8">
-                <input type="text" class="form-control" id="fieldcageNickname0" name="cageNickname[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Nicknamd is required. What is this cage typically called?" placeholder="Known As 01 ">
+            <div class="col-md-6">
+              <div class="form-group"><label for="fieldcageNickname" class="col-md-4 control-label">Nickname</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="fieldcageNickname0" name="cageNickname[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Nicknamd is required. What is this cage typically called?" placeholder="Known As 01 ">
+                </div>
+              </div>
+              <div class="form-group"><label for="fieldcageAbbreviation" class="col-md-4 control-label">Code</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="fieldcageAbbreviation0" name="cageAbbreviation[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Code is required and is used as part of the location code. Example “01” or A." placeholder="Shrot name like, 01 ">
+                </div>
+              </div>
+              <div class="form-group"><label for="fieldcageName" class="col-md-4 control-label">Facility ID</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control"  id="fieldcageName0" name="cageName[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Facility ID is required. It is what the facility calls this cage." placeholder="Facility ID *Required">
+                </div>
+              </div>
+              <div class="form-group"><label for="cageInMeters" class="col-md-4 control-label">Cage size in Meters</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="fieldcageInMeters0"name="cageInMeters[0]" value="" placeholder="Cage Size in Meters">
+                </div>
               </div>
             </div>
-            <div class="form-group"><label for="fieldcageAbbreviation" class="col-md-4 control-label">Code</label>
-              <div class="col-md-8">
-                <input type="text" class="form-control" id="fieldcageAbbreviation0" name="cageAbbreviation[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Code is required and is used as part of the location code. Example “01” or A." placeholder="Shrot name like, 01 ">
-              </div>
-            </div>
-            <div class="form-group"><label for="fieldcageName" class="col-md-4 control-label">Facility ID</label>
-              <div class="col-md-8">
-                <input type="text" class="form-control"  id="fieldcageName0" name="cageName[0]" value="" data-toggle="tooltip" data-delay='{"show":1500}' required title="A Facility ID is required. It is what the facility calls this cage." placeholder="Facility ID *Required">
-              </div>
-            </div>
-            <div class="form-group"><label for="cageInMeters" class="col-md-4 control-label">Cage size in Meters</label>
-              <div class="col-md-8">
-                    <input type="text" class="form-control" id="fieldcageInMeters0"name="cageInMeters[0]" value="" placeholder="Cage Size in Meters">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6>"
+          <div class="col-md-6">
             <div class="form-group"><label for="cageWattPSM" class="col-md-4 control-label">Watts Per Square Meter</label>
               <div class="col-md-8">
                 <input type="text" class="form-control" id="fieldcageWattPSM0" name="cageWattPSM[0]" value="" placeholder="Watts sq. Meter">

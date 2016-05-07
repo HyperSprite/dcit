@@ -18,7 +18,7 @@
               {{/if}}
               {{#if conPho1Num}}
               <li><a href="tel:{{conPho1Num}}">{{conPho1Num}}</a> - {{conPho1Typ}}</li>
-              {{/if}} 
+              {{/if}}
               {{#if conPho2Num}}
               <li><a href="tel:{{conPho2Num}}">{{conPho2Num}}</a> - {{conPho2Typ}}</li>
               {{/if}} {{#if conPho3Num}}
@@ -28,8 +28,8 @@
               {{/if}} {{#if conEmail}}
               <li><a href="mailto:{{conEmail}}" target="_top">{{conEmail}}</a></li>{{/if}} {{#if conNotes}}
               <li>
-              <div> 
-                <strong>Notes:</strong> 
+              <div>
+                <strong>Notes:</strong>
                 {{conNotes}}
               </div>
               <li>{{/if}} {{#if address1}}
@@ -39,7 +39,7 @@
               <li>{{address4}}</li>{{/if}} {{#if city}}
               <li>{{city}}, {{state}} {{zip}}</li>{{/if}} {{#if country}}
               <li>{{country}}</li>{{/if}} {{#if lat}}
-              <li><a href="https://www.google.com/maps/place/{{lat}},{{lon}}">Map</a></li>{{/if}}
+              <li><a href="https://www.google.com/maps/place/{{lat}},{{lon}}" target="blank">Map</a></li>{{/if}}
               </ul>
               </address>
               </blockquote>
