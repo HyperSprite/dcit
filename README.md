@@ -1,5 +1,9 @@
+![Massive machines, wheels of a steam locomotive](https://raw.githubusercontent.com/HyperSprite/dcit/master/public/img/jumbotron_bg.png)
 
 # DCIT is for Data Center Information Tracking
+
+
+
 
 I built DCIT because I wanted documenting the data center life cycle to benefit the people doing the work.
 
@@ -25,6 +29,16 @@ There is a lot more to do with DCIT. For instance:
  - Project management module to keep track of new builds.
  - Small Parts inventory module to keep track on existing spare parts/cables and build BOMs for new build and replenishment.
 
-## Installation
-See the Wiki for installation instructions.
+##Installation
+See the [Wiki](https://github.com/HyperSprite/dcit/wiki) for installation instructions.
 
+##About Development
+
+DCIT was originally based on the book "Web Development with Node & Express by [Ethan Brown](https://github.com/EthanRBrown/web-development-with-node-and-express). There is probably a little bit of that code left lurking in the shadows but probably not much, although the folder structure and route file was retained.
+
+Somewhere along the way I stopped following the book and started building DCIT. As the sole developer, the work has been on my free time, nights and weekends since I began.
+
+###Technologies
+DCIT uses the following core technologies. Nodejs, Express, Mongodb, Mongoose, Handlebars, Boootstrap, jQuery, HTML and CSS.
+
+For simplicity, the original app was strictly a server side rendering model. Slowly, AJAX has been added to various parts to make it more interactive and speed up the user interface but there is still a lot more to do.
