@@ -1,3 +1,4 @@
+new Clipboard('.btn');
 
 $(document).ready(function() {
   // to dissable location on equipment if equipment has parent

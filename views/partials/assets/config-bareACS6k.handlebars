@@ -11,7 +11,7 @@
 <li>Update the firmware and reset to factory settings by connecting to the console port and running the following. This will remove any previous settings.</li>
 <li>To determine the current version, run the following from the cli-> prompt:
     <code>
-        <ul class="list-unstyled"> 
+        <ul class="list-unstyled">
         <li>show system/information</li>
         </ul>
     </code>
@@ -27,12 +27,12 @@
     </code>
     </ul>
 </li>
-<li> ACS Upgrades 
+<li> ACS Upgrades
 <ul  class="list-unstyled">
 <li>Run this code from the preboot environment for <strong>unconfigured or broken</strong> ACS to update to latest version.<br>
 <strong>Cation: this will reset the ACS to factory defaults:</strong>
     <code>
-        <ul class="list-unstyled"> 
+        <ul class="list-unstyled">
             <li>setenv ipaddr <strong>{{sysPortAddress}}</strong>;setenv subnetmask <strong>{{netMask}}</strong>;setenv gateway <strong>{{dcNet.dcNetGateway}}</strong>;setenv bootfile <strong>{{dcNet.dcNetACSFilePath}}</strong>;setenv serverip <strong>{{dcNet.dcNetTftpHost}}</strong>;setenv bootcmd net_boot;printenv</li><br>
             <li>net_boot factory_default</li><br>
         </ul>
@@ -59,7 +59,7 @@
         <li>cli</li>
         <li>show /system/information</li>
         <li>show /system/boot_configuration</li>
-        
+
         <li>exit</li>
         <li>tftp <strong>{{dcNet.dcNetTftpHost}}</strong> -g -r <strong>{{dcNet.dcNetACSFilePath}}</strong> -l /tmp/update.bin</li><br>
         <li>flashImage /tmp/update.bin</li><br>
@@ -73,7 +73,7 @@
 
 <li>After the upgrade, log in with the default root/linux and configure the networking:
     <code>
-        <ul class="list-unstyled"> 
+        <ul class="list-unstyled">
         <li>cli</li>
         <li>cd /network/settings</li>
         <li>set search={{#if dcNet.dcNetDomain}}<strong>{{dcNet.dcNetDomain}}</strong> domain=<strong>{{dcNet.dcNetDomain}}</strong>{{else}}<mark>Check Datacenter Network Domain</mark>{{/if}}</li>
@@ -196,7 +196,7 @@
 
 <div class="col-md-6">
 <blockquote>
-<p><strong>If you expected an ACS Configuration, 
+<p><strong>If you expected an ACS Configuration,
 please check that the vlan exists for {{sysPortType}}-{{sysPortName}} on in this Data Center</strong></p>
 </blockquote>
 </div>

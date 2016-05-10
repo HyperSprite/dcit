@@ -49,7 +49,7 @@ function reduceRoles(element, index, array) {
 */
 // This report requires MongoDB 3.2 or higher for the $lookup (left join).
 module.exports.reportByInserviceEnv = (req, res, next) => {
-  var findThis = (req.query.dcAbbr || 'rsys');
+  var findThis = (req.query.dcAbbr || '0');
   Models.Systemdb.aggregate([
     {$match:
       {$or: [

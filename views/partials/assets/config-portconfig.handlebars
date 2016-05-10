@@ -1,7 +1,8 @@
 <div class="col-md-6">
 <h5>{{systemName}} port config</h5>
+<button class="btn btn-xs btn-danger" data-clipboard-target="#networkPortConfig">Copy</button>
   <ul class="list-unstyled">
-  <blockquote>
+  <blockquote id="networkPortConfig">
   <li><strong>{{systemName}}</strong></li>
   <li>Location: <strong>{{equipLocation}}</strong></li>
   <li>SN: <strong>{{systemEquipSN}}</strong> - {{equipMake}} {{equipModel}} {{equipSubModel}} {{#if equipRUHieght}} {{equipRUHieght}}U {{/if}}{{equipType}}</li>

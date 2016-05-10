@@ -765,7 +765,7 @@ exports.dcSystemPost = (req, res) => {
             thisSubDoc.sysPortEndPointPre = strTgs.multiTrim(bd.sysPortEndPointPre[i], 9, 2);
             thisSubDoc.sysPortEndPointPort = strTgs.multiTrim(bd.sysPortEndPointPort[i], 9, 2);
             thisSubDoc.sysPortVlan = strTgs.multiTrim(bd.sysPortVlan[i], 7, 0);
-            thisSubDoc.sysPortOptions = strTgs.multiTrim(bd.sysPortOptions[i], 4, 2);
+            thisSubDoc.sysPortOptions = strTgs.multiTrim(bd.sysPortOptions[i], 6, 2);
             thisSubDoc.sysPortURL = req.sanitize(bd.sysPortURL[i]);
             /*            thisSubDoc.sysPortCrossover= strTgs.doCheckbox(bd.sysPortCrossover[i]);  future*/
           }

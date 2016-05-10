@@ -5,15 +5,26 @@
         <link rel="stylesheet" type='text/css'href="../vendor/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type='text/css'href="../vendor/bootstrap/css/bootstrap-theme.min.css">
         <script src="../vendor/js/jquery-2.1.4.min.js"></script>
-        <script src='script.js'></script>
+        <script src="../vendor/js/clipboard.min.js"></script>
+
     </head>
     <body>
         <div class="container-fluid">
-            <form>
+          <form>
             Enter the e0 MAC address:<br> <input type="text" name="message">
-            </form>
-            <button  class='btn btn-danger btn-xs' >Submit</button><br/>
-            <div id="messages">This MAC Address sequence tool is experimental. It was designed with Oracle Sun x4-2 and x5-2 x86 servers in mind but will work on other servers with sequential MAC addresses. Enter the e0 MAC and it will return e0 through e3 and ilom MACs.</div>
+          </form>
+          <button class='btn btn-danger btn-xs'>Submit</button><br/>
+          <div id="messages" class="col-md-3">
+              <p>This MAC Address sequence tool is experimental. The example is for a Sun x4-2 with 4 nics and an ilom. Here are some common MAC formats to try:
+              <ul><strong>
+                <li>00:11:22:11:D3:EF</li>
+                <li>0011.2211.D3EF</li>
+                <li>00112211D3EF</li>
+            </strong>
+              </ul>.
+            </p>
+          </div>
         </div>
+      <script src='script.js'></script>
     </body>
 </html>

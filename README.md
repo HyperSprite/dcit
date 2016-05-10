@@ -34,7 +34,7 @@ See the [Wiki](https://github.com/HyperSprite/dcit/wiki) for installation instru
 
 ##About Development
 
-DCIT was originally based on the book "Web Development with Node & Express by [Ethan Brown](https://github.com/EthanRBrown/web-development-with-node-and-express). There is probably a little bit of that code left lurking in the shadows but probably not much, although the folder structure and route file was retained.
+DCIT was originally based on the book "Web Development with Node & Express" by [Ethan Brown](https://github.com/EthanRBrown/web-development-with-node-and-express). There is probably a little bit of that code left lurking in the shadows but probably not much, although the folder structure and route file was retained.
 
 Somewhere along the way I stopped following the book and started building DCIT. As the sole developer, the work has been on my free time, nights and weekends since I began.
 

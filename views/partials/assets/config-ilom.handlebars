@@ -4,13 +4,14 @@
   {{#if sysPortisNetMgmt}}
   <div class="col-md-6">
   <h5>Ilom Config</h5>
+  <button class="btn btn-xs btn-danger" data-clipboard-target="#ilomConfigCode">Copy</button>
     <blockquote>
     <ol>
       <li>Using a console connection set to "cisco" type, 9600, 8, none, 1. </li>
       <li>Login to the SP with a privileged user.</li>
       <li>Paste the following commands:</li>
     </ol>
-      <p><code>
+      <code id="ilomConfigCode">
       set /SP hostname=<strong>{{../../systemName}}-{{sysPortName}}</strong><br>
       cd /SP/network<br>
       set pendingipdiscovery=static<br>
@@ -20,7 +21,7 @@
       set commitpending=true<br>
       set /SP/services/ssh state=enabled<br>
       set /SP/services/https servicestate=enabled port=443<br>
-      </code></p>
+      </code>
       </blockquote>
     </div>
   {{/if}}
