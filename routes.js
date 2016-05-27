@@ -47,7 +47,7 @@ function accChecks(req, res, next) {
 }
 
 module.exports = (app) => {
-  app.post('/admin/uploadpost', isLoggedIn, handlers.admin.uploadPost);
+  // app.post('/admin/uploadpost', isLoggedIn, handlers.admin.uploadPost);
 // cross-site request forgery protection
   app.use(require('csurf')());
   app.use((req, res, next) => {
@@ -167,7 +167,7 @@ module.exports = (app) => {
   app.get('/admin/optionsedit/:data', accChecks, isLoggedIn, handlers.admin.optionsEdit);
   app.post('/admin/userprofileupdate', accChecks, isLoggedIn, handlers.admin.userEditPost);
   app.post('/admin/optionspost', accChecks, isLoggedIn, handlers.admin.optionsEditPost);
-
+  app.post('/admin/uploadpost', isLoggedIn, handlers.admin.uploadPost);
   app.post('/admin/uploaddelete', accChecks, isLoggedIn, handlers.admin.uploadDeletePost);
   app.post('/admin/userprofile', accChecks, isLoggedIn, handlers.admin.userEdit);
   app.post('/admin/logdelete', accChecks, isLoggedIn, handlers.admin.logdelete);

@@ -1,8 +1,8 @@
 <div>  <!-- upload.1 -->
-<form id="fileupload" class="form-horizontal" role="form" 
+<form id="fileupload" class="form-horizontal" role="form"
 		enctype="multipart/form-data" method="POST"
-		action="/admin/uploadpost">
-	
+		action="/admin/uploadpost?_csrf={{_csrfToken}}">
+
 	<input type="hidden" name="fileType" value="csv">
 
 
@@ -31,5 +31,5 @@
                         <button type="reset" class="btn btn-warning btn-xs"value="Reset">Reset</button>
              </div>   <!-- upload.7 -->
         </div>   <!-- upload.6 -->
-     </form><form id="formCancel"></form> 
+     </form><form id="formCancel"></form>
 </div>   <!-- /upload.1 -->
