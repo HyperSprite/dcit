@@ -777,7 +777,7 @@ module.exports.multiAggr = (req, res, next) => {
     equipProjectNum: { $match: { 'equipProjectNum': { '$regex': findThis, '$options': 'i' } } },
     equipTicketNumber: { $match: { 'equipTicketNumber': { '$regex': findThis, '$options': 'i' } } },
     equipModifiedBy: { $match: { 'modifiedBy': { '$regex': findThis, '$options': 'i' } } },
-    equipPortsAddr: { $match: { 'equipPorts.equipPortsAddr': { '$regex': findThis, '$options': 'i' } } },
+    equipPortsAddr: { $match: { 'equipPorts.equipPortsAddr': { $regex: findThis, $options: 'i' } } },
     systemName: { 'systemName': { '$regex': findThis, '$options': 'i' } },
     systemRole: { 'systemRole': { '$regex': findThis, '$options': 'i' } },
     systemEnviron: { 'systemEnviron': { '$regex': findThis, '$options': 'i' } },

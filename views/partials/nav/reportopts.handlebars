@@ -5,6 +5,14 @@
                 <ul class="dropdown-menu option-drop pull-right form-horizontal">
                   <li><h4>Search Toolbox</h4></li>
                   <li>
+                    <p>
+                      Top Bar Search hints<br>
+                      Use ^(Search Term) for "Starts With"<br>
+                      Use (Search Term)$ for "Ends with"<br>
+                    </p>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
                     <div class="form-group">
                       <label for="field-equipLocation" class="col-sm-4 control-label" >Equipment Location</label>
                       <div class="col-sm-8">
@@ -49,6 +57,15 @@
                       <label for="field-sortField" class="col-sm-3 control-label" >Sort</label>
                       <div class="col-sm-9">
                         <input type="text" class="form-control" id="field-sortField" name="sortField"  placeholder='{"systemEnviron":1,"equip.equipMake":1}' data-toggle="tooltip" data-delay='{"show":1500}'  title="JSON format, -1 for desc.">
+                      </div>
+                    </div>
+                  </li>
+                  <li class="divider"></li>
+                   <li>
+                    <div class="form-group">
+                      <label for="field-sortField" class="col-sm-3 control-label" >End of Life</label>
+                      <div class="col-sm-9">
+                        <input type="checkbox" id="field-equipEOL" name="equipEOL" value="true" data-toggle="tooltip" data-delay='{"show":1500}'  title="Search EOL">
                       </div>
                     </div>
                   </li>
