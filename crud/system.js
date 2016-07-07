@@ -157,7 +157,7 @@ module.exports.systemdbPortsCreate = (data, req) => {
           } else if (portArray.indexOf(sDataSysPort.sysPortName) === -1) {
             sys.systemPorts.push({
               sysPortType: strTgs.multiTrim(sDataSysPort.sysPortType, 7, 0),
-              sysPortName: strTgs.multiTrim(sDataSysPort.sysPortName, 9, 2),
+              sysPortName: strTgs.multiTrim(sDataSysPort.sysPortName, 3, 2),
               sysPortAddress: strTgs.multiTrim(sDataSysPort.sysPortAddress, 7, 0),
               sysPortCablePath: strTgs.multiTrim(sDataSysPort.sysPortCablePath, 4, 2),
               sysPortEndPoint: strTgs.multiTrim(sDataSysPort.sysPortEndPoint, 9, 2),

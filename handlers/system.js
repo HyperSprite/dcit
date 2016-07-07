@@ -646,7 +646,7 @@ exports.dcSystemPost = (req, res) => {
           // logger.info('sysPortName.length '+bd.sysPortName.length);
           Ports[i] = ({
             sysPortType: strTgs.multiTrim(bd.sysPortType[i], 7, 0),
-            sysPortName: strTgs.multiTrim(bd.sysPortName[i], 9, 2),
+            sysPortName: strTgs.multiTrim(bd.sysPortName[i], 3, 2),
             sysPortAddress: strTgs.multiTrim(bd.sysPortAddress[i], 7, 0),
             sysPortCablePath: strTgs.multiTrim(bd.sysPortCablePath[i], 4, 2),
             sysPortEndPoint: strTgs.multiTrim(bd.sysPortEndPoint[i], 9, 2),
@@ -743,7 +743,7 @@ exports.dcSystemPost = (req, res) => {
           // logger.info('new port >'+bd.sysPortId[i]);
             sys.systemPorts.push({
               sysPortType: strTgs.multiTrim(bd.sysPortType[i], 7, 0),
-              sysPortName: strTgs.multiTrim(bd.sysPortName[i], 9, 2),
+              sysPortName: strTgs.multiTrim(bd.sysPortName[i], 3, 2),
               sysPortAddress: strTgs.multiTrim(bd.sysPortAddress[i], 7, 0),
               sysPortCablePath: strTgs.multiTrim(bd.sysPortCablePath[i], 4, 2),
               sysPortEndPoint: strTgs.multiTrim(bd.sysPortEndPoint[i], 9, 2),
@@ -758,7 +758,7 @@ exports.dcSystemPost = (req, res) => {
             //        logger.info('existing port');
             var thisSubDoc = sys.systemPorts.id(bd.sysPortId[i]);
             thisSubDoc.sysPortType = strTgs.multiTrim(bd.sysPortType[i], 7, 0);
-            thisSubDoc.sysPortName = strTgs.multiTrim(bd.sysPortName[i], 9, 2);
+            thisSubDoc.sysPortName = strTgs.multiTrim(bd.sysPortName[i], 3, 2);
             thisSubDoc.sysPortAddress = strTgs.multiTrim(bd.sysPortAddress[i], 7, 0);
             thisSubDoc.sysPortCablePath = strTgs.multiTrim(bd.sysPortCablePath[i], 4, 2);
             thisSubDoc.sysPortEndPoint = strTgs.multiTrim(bd.sysPortEndPoint[i], 9, 2);
