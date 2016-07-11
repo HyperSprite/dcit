@@ -17,7 +17,7 @@ What is Responsible Flexibility and why should you care? In working with various
 
 ###2 - Make documenting easier than not documenting
 How many times have you heard "*We will go back and document this later*", now ask yourself, how often does that really happen?
-With DCIT, documenting things as you go will then output items such as port configuration requests for change management tickets and console and net management configuration scripts. See this [Avocent ACS](https://dcit.hypersprite.com/system/con-ny01-aa04-01) on DCIT example site.
+With DCIT, documenting things as you go will then output items such as port configuration requests for change management tickets and console and net management configuration scripts. See this [Avocent ACS](https://dcit.hypersprite.com/system/con-ny01-aa04-01) on the DCIT example site.
 
 ###3 - Availability
 A Sev 1 is not the time to have to try and figure out how things are configured in some remote location. Finding anything should be easy and once you find it, it should be easy for anyone to understand.
@@ -36,8 +36,8 @@ There is a lot more to do with DCIT. For instance:
  - Project management module to keep track of new builds.
  - Small Parts inventory module to keep track on existing spare parts/cables and build BOMs for new build and replenishment.
 
-##Installation
-See the [Wiki](https://github.com/HyperSprite/dcit/wiki) for installation instructions.
+##Installation and Further Resources
+See the [Wiki](https://github.com/HyperSprite/dcit/wiki) for installation instructions, Slack channel and other information.
 
 ##About Development
 
