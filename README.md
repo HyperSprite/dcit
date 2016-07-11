@@ -5,26 +5,32 @@
 
 
 
-DCIT is a Data Center Information Management system built because I wanted documenting the data center life cycle to not be a burden to the people doing the work and easy enough to use that someone unfamiliar with the data center can still find the information they are looking for.
+DCIT is a DCIM (Data Center Information Management) system built because I wanted documenting the data center life cycle to be easy for the people entering the information and useful to the people who need it.
 
-##Goals
+##Key Goals and Design Philosophy
 
-###1 Remove Excuses
+###1 - Remove Excuses
 Make it easy enough to document changes that there is no excuse not to.
 
-###2 Make the documentation do work for you down the line
-Make documenting things in the first place help you do things in the second place. The reason people don't follow through with documentation is that it always has the lowest priority. I tried to flip that on its head. By documenting things as you do them, the harder part of creating tickets and port configurations is made easier.
+To this end, DCIT is implemented with what I call **Responsible Flexibility**.
+What is Responsible Flexibility and why should you care? In working with various tools, I have found most are overly rigid. An example: from a server, you can not plug a cable into a switch until it exists, you can't install the switch until the rack exists, etc. This makes total sense when designing the application, and in a perfect world, this should never happen. The problem is the world is not perfect. The moment the flow is broken, there is an opportunity for something to be forgotten. This is where I feel most inventory systems fail, and when I say "system", I am referring both to the tool and the people using it. *Responsible* people need to be given the *Flexibility* to enter the data they think is correct at the time they have it. DCIT will suggest possible responses in many places but not enforce them.
 
-For instance, configuring a fresh out of the box Avocent Cyclades ACS 6000 from start to finish, no kickstarts, no DHCP, just a console connection and following the device specific instructions.
+###2 - Make documenting easier than not documenting
+How many times have you heard "*We will go back and document this later*", now ask yourself, how often does that really happen?
+With DCIT, documenting things as you go will then output items such as port configuration requests for change management tickets and console and net management configuration scripts. See this [Avocent ACS](https://dcit.hypersprite.com/system/con-ny01-aa04-01) on DCIT example site.
 
-###3 Availability
-A Sev 1 is not the time to have to try and figure out how things are configured in some remote location. Finding anything should be easy and once you find it, it should be easy to understand. For instance, if you use serial numbers for your cables, and collect them in DCIT, having to replace a fully populated 48 port copper switch is actually easy.
+###3 - Availability
+A Sev 1 is not the time to have to try and figure out how things are configured in some remote location. Finding anything should be easy and once you find it, it should be easy for anyone to understand.
+
+###4 - Equipment and Systems are not the same thing
+Most asset tracking systems I have seen combine Equipment and Systems. The problem is Equipment and Systems are two separate entities with separate life-cycles. For instance, lets say you have a System named [sf01-dock1001](https://dcit.hypersprite.com/system/sf01-dock1001) setup on Equipment [BZR297130](https://dcit.hypersprite.com/equipment/BZR297130) and BZR297130 needs to be removed for RMA and want to replace it with [BZR297383](https://dcit.hypersprite.com/equipment/BZR297383). In most systems, how would you do that? Would you have to re-enter all of equipment specific things, like ram, cpu, drives, line of business owner etc.? Would you have to re-enter all of the System specific things, like OS, software, and cabling information? Any time you have to re-enter things you have an opportunity for mistakes. With DCIT, you simply move the equipment into the proper location and change what Equipment the System is pointed to.
 
 ##Roadmap
 There is a lot more to do with DCIT. For instance:
 
  - Fix bugs
  - Building a modular system configuration for adding new device configs. Right now this is hard coded in a way that won't scale but it is not so deep in the code that it can't be changed relatively easily.
+ - System and Equipment change history.
  -  Moving System views over to mongodb aggregate $lookup and getting more information with less fetches from the db.
  - Moving the front end to React/Redux, less server side rendering.
  - Project management module to keep track of new builds.
